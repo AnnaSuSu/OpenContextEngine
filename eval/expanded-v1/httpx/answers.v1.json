@@ -1,0 +1,732 @@
+{
+  "schemaVersion": 1,
+  "dataset": "httpx-semantic-expanded-v1",
+  "answerVersion": "v1",
+  "repository": "encode/httpx",
+  "commit": "26d48e0634e6ee9cdc0533996db289ce4b430177",
+  "annotator": "Codex reading the frozen source before any retrieval output",
+  "status": "source-reviewed; not human or independent multi-annotator ground truth",
+  "coverageRule": "Any alternative may satisfy a unit; all exact source lines in that alternative are required.",
+  "answers": [
+    {
+      "id": "redirect-security",
+      "units": [
+        {
+          "id": "limit",
+          "fact": "通过历史长度限制重定向次数并构造下一次请求。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 970,
+                  "endLine": 974,
+                  "quote": "        while True:\n            if len(history) > self.max_redirects:\n                raise TooManyRedirects(\n                    \"Exceeded maximum allowed redirects.\", request=request\n                )",
+                  "sha256": "3089bcd357ffa91a8dafdcc4082fe5a1b3d90fe135e1238b897589d4b09862e3"
+                },
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 985,
+                  "endLine": 989,
+                  "quote": "                if not response.has_redirect_location:\n                    return response\n\n                request = self._build_redirect_request(request, response)\n                history = history + [response]",
+                  "sha256": "bb85292469b20d7868443c7c8c1794152187db0c1cc39b2e00ee161fafa8c08d"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "method-body",
+          "fact": "按重定向状态改写方法，变为 GET 时丢弃请求体。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 502,
+                  "endLine": 513,
+                  "quote": "        if response.status_code == codes.SEE_OTHER and method != \"HEAD\":\n            method = \"GET\"\n\n        # Do what the browsers do, despite standards...\n        # Turn 302s into GETs.\n        if response.status_code == codes.FOUND and method != \"HEAD\":\n            method = \"GET\"\n\n        # If a POST is responded to with a 301, turn it into a GET.\n        # This bizarre behaviour is explained in 'requests' issue 1704.\n        if response.status_code == codes.MOVED_PERMANENTLY and method == \"POST\":\n            method = \"GET\"",
+                  "sha256": "10751398ee1cb34217e0dbb5b9ecc046208cecb26edb2100ea51199c8d832925"
+                },
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 579,
+                  "endLine": 582,
+                  "quote": "        if method != request.method and method == \"GET\":\n            return None\n\n        return request.stream",
+                  "sha256": "cf661698e74280aafabd4a0a81cb4f839021fcf806c60b3000994f75f3b4e81d"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "credentials",
+          "fact": "跨源且不是直接 HTTP 到 HTTPS 跳转时移除认证头。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 552,
+                  "endLine": 559,
+                  "quote": "        if not _same_origin(url, request.url):\n            if not _is_https_redirect(request.url, url):\n                # Strip Authorization headers when responses are redirected\n                # away from the origin. (Except for direct HTTP to HTTPS redirects.)\n                headers.pop(\"Authorization\", None)\n\n            # Update the Host header.\n            headers[\"Host\"] = url.netloc.decode(\"ascii\")",
+                  "sha256": "5d00152ba7e897db4b6c0f2aa23762d7a57b8dab7b610efe4981ba87447e09c1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "digest-auth",
+      "units": [
+        {
+          "id": "challenge",
+          "fact": "只对带摘要认证挑战的 401 响应继续认证流程。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_auth.py",
+                  "startLine": 199,
+                  "endLine": 208,
+                  "quote": "        response = yield request\n\n        if response.status_code != 401 or \"www-authenticate\" not in response.headers:\n            # If the response is not a 401 then we don't\n            # need to build an authenticated request.\n            return\n\n        for auth_header in response.headers.get_list(\"www-authenticate\"):\n            if auth_header.lower().startswith(\"digest \"):\n                break",
+                  "sha256": "56c844999e90ebe4795595ae65fe5303fdff910e29ef121a81c7d0c6bb969c33"
+                },
+                {
+                  "path": "httpx/_auth.py",
+                  "startLine": 214,
+                  "endLine": 219,
+                  "quote": "        self._last_challenge = self._parse_challenge(request, response, auth_header)\n        self._nonce_count = 1\n\n        request.headers[\"Authorization\"] = self._build_auth_header(\n            request, self._last_challenge\n        )",
+                  "sha256": "6675c97710dd0600bb0bef6119ca207c86fb5e57e86dc21b344d2129662782ac"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "parse",
+          "fact": "解析挑战字段并提取 realm、nonce、算法等信息。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_auth.py",
+                  "startLine": 237,
+                  "endLine": 250,
+                  "quote": "        header_dict: dict[str, str] = {}\n        for field in parse_http_list(fields):\n            key, value = field.strip().split(\"=\", 1)\n            header_dict[key] = unquote(value)\n\n        try:\n            realm = header_dict[\"realm\"].encode()\n            nonce = header_dict[\"nonce\"].encode()\n            algorithm = header_dict.get(\"algorithm\", \"MD5\")\n            opaque = header_dict[\"opaque\"].encode() if \"opaque\" in header_dict else None\n            qop = header_dict[\"qop\"].encode() if \"qop\" in header_dict else None\n            return _DigestAuthChallenge(\n                realm=realm, nonce=nonce, algorithm=algorithm, opaque=opaque, qop=qop\n            )",
+                  "sha256": "5f1dd1eb197590bb6caee08d5699802a51de510b360d07dce27651f4fc00eb53"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "header",
+          "fact": "根据凭据、请求方法与路径和挑战计算摘要并返回认证头。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_auth.py",
+                  "startLine": 263,
+                  "endLine": 268,
+                  "quote": "        A1 = b\":\".join((self._username, challenge.realm, self._password))\n\n        path = request.url.raw_path\n        A2 = b\":\".join((request.method.encode(), path))\n        # TODO: implement auth-int\n        HA2 = digest(A2)",
+                  "sha256": "0a5b3f6945df48fd75262f5e3ab09e28750a0072253be20789140bf065dc575c"
+                },
+                {
+                  "path": "httpx/_auth.py",
+                  "startLine": 278,
+                  "endLine": 291,
+                  "quote": "        qop = self._resolve_qop(challenge.qop, request=request)\n        if qop is None:\n            # Following RFC 2069\n            digest_data = [HA1, challenge.nonce, HA2]\n        else:\n            # Following RFC 2617/7616\n            digest_data = [HA1, challenge.nonce, nc_value, cnonce, qop, HA2]\n\n        format_args = {\n            \"username\": self._username,\n            \"realm\": challenge.realm,\n            \"nonce\": challenge.nonce,\n            \"uri\": path,\n            \"response\": digest(b\":\".join(digest_data)),",
+                  "sha256": "60bfd2c0705ebe5b8778fda94f35ed91acd418ec394cf0d020be1e81a2e0d41b"
+                },
+                {
+                  "path": "httpx/_auth.py",
+                  "startLine": 301,
+                  "endLine": 301,
+                  "quote": "        return \"Digest \" + self._get_header_value(format_args)",
+                  "sha256": "cddada92d8e0d7b8179eadefd85bb90e4dd417eb5f882687bb37c5d224be76cc"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cookie-retry",
+          "fact": "将响应 cookie 加入请求并再次提交请求。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_auth.py",
+                  "startLine": 220,
+                  "endLine": 222,
+                  "quote": "        if response.cookies:\n            Cookies(response.cookies).set_cookie_header(request=request)\n        yield request",
+                  "sha256": "ad8c2816fde5566193e75857990defce3ec76a778cb9fd9dce79fc595965a11e"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "request-merging",
+      "units": [
+        {
+          "id": "url",
+          "fact": "相对 URL 拼接基础路径，绝对 URL 保持自身。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 396,
+                  "endLine": 397,
+                  "quote": "        merge_url = URL(url)\n        if merge_url.is_relative_url:",
+                  "sha256": "a305250d46f641f6f51a9f089c3fc895218fa5714aeaa133319857bdca5713b0"
+                },
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 409,
+                  "endLine": 411,
+                  "quote": "            merge_raw_path = self.base_url.raw_path + merge_url.raw_path.lstrip(b\"/\")\n            return self.base_url.copy_with(raw_path=merge_raw_path)\n        return merge_url",
+                  "sha256": "0429ba12cb34e43ebc64054d8eac76774ec2dbfd38a61be5e570f38a43d6b501"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "headers-cookies",
+          "fact": "复制客户端头和 cookie，再用请求级数据更新。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 418,
+                  "endLine": 422,
+                  "quote": "        if cookies or self.cookies:\n            merged_cookies = Cookies(self.cookies)\n            merged_cookies.update(cookies)\n            return merged_cookies\n        return cookies",
+                  "sha256": "dede27007a9ef3fafdabbdbd1a58a0e754b1defc14ab294ed4313fa7743f0e18"
+                },
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 429,
+                  "endLine": 431,
+                  "quote": "        merged_headers = Headers(self.headers)\n        merged_headers.update(headers)\n        return merged_headers",
+                  "sha256": "5beb8a8f6635f849c4347500fa890f50d0c131cf8a571ca645d89bb8eeb2581f"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "query-params",
+          "fact": "复制客户端查询参数并合并请求级参数。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 440,
+                  "endLine": 443,
+                  "quote": "        if params or self.params:\n            merged_queryparams = QueryParams(self.params)\n            return merged_queryparams.merge(params)\n        return params",
+                  "sha256": "496db411bffd4e6538319f0bb66eed26d9c085a8217ae054b1a0432128466832"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "response-decoding",
+      "units": [
+        {
+          "id": "decompress",
+          "fact": "根据 Content-Encoding 创建解码器，对原始字节解码并刷新尾部。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_models.py",
+                  "startLine": 704,
+                  "endLine": 711,
+                  "quote": "        if not hasattr(self, \"_decoder\"):\n            decoders: list[ContentDecoder] = []\n            values = self.headers.get_list(\"content-encoding\", split_commas=True)\n            for value in values:\n                value = value.strip().lower()\n                try:\n                    decoder_cls = SUPPORTED_DECODERS[value]\n                    decoders.append(decoder_cls())",
+                  "sha256": "4fb2c5a6e24ec31062be92c22222cd8ce54669645d60013b059e8383e76d98c5"
+                },
+                {
+                  "path": "httpx/_models.py",
+                  "startLine": 894,
+                  "endLine": 905,
+                  "quote": "            decoder = self._get_content_decoder()\n            chunker = ByteChunker(chunk_size=chunk_size)\n            with request_context(request=self._request):\n                for raw_bytes in self.iter_raw():\n                    decoded = decoder.decode(raw_bytes)\n                    for chunk in chunker.decode(decoded):\n                        yield chunk\n                decoded = decoder.flush()\n                for chunk in chunker.decode(decoded):\n                    yield chunk  # pragma: no cover\n                for chunk in chunker.flush():\n                    yield chunk",
+                  "sha256": "f2cee01c9367772a279eef9044300bcfbc0984c60c892c43faa63223819bef4a"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "text",
+          "fact": "按响应字符编码把字节转为文本并刷新剩余内容。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_models.py",
+                  "startLine": 913,
+                  "endLine": 924,
+                  "quote": "        decoder = TextDecoder(encoding=self.encoding or \"utf-8\")\n        chunker = TextChunker(chunk_size=chunk_size)\n        with request_context(request=self._request):\n            for byte_content in self.iter_bytes():\n                text_content = decoder.decode(byte_content)\n                for chunk in chunker.decode(text_content):\n                    yield chunk\n            text_content = decoder.flush()\n            for chunk in chunker.decode(text_content):\n                yield chunk  # pragma: no cover\n            for chunk in chunker.flush():\n                yield chunk",
+                  "sha256": "abcac18803457ec25a0d6e619c486537a590bad451b5af45ae155150ca257e2f"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "lines",
+          "fact": "文本经行解码器逐行输出并在结束时刷新。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_models.py",
+                  "startLine": 926,
+                  "endLine": 933,
+                  "quote": "    def iter_lines(self) -> typing.Iterator[str]:\n        decoder = LineDecoder()\n        with request_context(request=self._request):\n            for text in self.iter_text():\n                for line in decoder.decode(text):\n                    yield line\n            for line in decoder.flush():\n                yield line",
+                  "sha256": "cffc2d35215f5119deb48b128ae9c81d613a79d35474597754c263f114f95067"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stream-cleanup",
+      "units": [
+        {
+          "id": "context",
+          "fact": "流式发送后 yield 响应，并在 finally 中关闭。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 868,
+                  "endLine": 877,
+                  "quote": "        response = self.send(\n            request=request,\n            auth=auth,\n            follow_redirects=follow_redirects,\n            stream=True,\n        )\n        try:\n            yield response\n        finally:\n            response.close()",
+                  "sha256": "7e32908d68b90f7d3f6c03c623501b1c42aa83ad419beba546b87cf739200ea7"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "response-close",
+          "fact": "响应仅关闭一次，标记状态并关闭底层流。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_models.py",
+                  "startLine": 969,
+                  "endLine": 972,
+                  "quote": "        if not self.is_closed:\n            self.is_closed = True\n            with request_context(request=self._request):\n                self.stream.close()",
+                  "sha256": "6945c9ec6b0a8c8556e0db8757753164bea8025c82ae6fd0838c729eba6edbb6"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "timing",
+          "fact": "包装流关闭时写入耗时，再关闭其底层流。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 156,
+                  "endLine": 159,
+                  "quote": "    def close(self) -> None:\n        elapsed = time.perf_counter() - self._start\n        self._response.elapsed = datetime.timedelta(seconds=elapsed)\n        self._stream.close()",
+                  "sha256": "db8ca1d04493e7d4c24a43f4c5a5b6733e1cacc482862cfe96651dfde060bee1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cookie-persistence",
+      "units": [
+        {
+          "id": "extract",
+          "fact": "客户端收到响应后提取 cookie，交由标准 cookie jar 处理。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 1022,
+                  "endLine": 1022,
+                  "quote": "        self.cookies.extract_cookies(response)",
+                  "sha256": "5a9b2a3e1c3dcb7c8bf59d9c8244090fd00bc2b6017cc694833e6dc649ae2cc8"
+                },
+                {
+                  "path": "httpx/_models.py",
+                  "startLine": 1105,
+                  "endLine": 1108,
+                  "quote": "        urllib_response = self._CookieCompatResponse(response)\n        urllib_request = self._CookieCompatRequest(response.request)\n\n        self.jar.extract_cookies(urllib_response, urllib_request)  # type: ignore",
+                  "sha256": "e68d55677a1d15ab1d00707dc9ca11633e0119d29d01f43b8bf4d5ce575f38f7"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "merge",
+          "fact": "构造请求时合并客户端与请求级 cookie，并设置请求头。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 368,
+                  "endLine": 368,
+                  "quote": "        cookies = self._merge_cookies(cookies)",
+                  "sha256": "f79aba5a92a05fc22ab2e967d07b7696015790cecc2ffafa56fe19419a0235eb"
+                },
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 418,
+                  "endLine": 421,
+                  "quote": "        if cookies or self.cookies:\n            merged_cookies = Cookies(self.cookies)\n            merged_cookies.update(cookies)\n            return merged_cookies",
+                  "sha256": "c89026d242a72fed4ebacfd71a0c4e82c9583a2504c88b09fde36633bc85f22c"
+                },
+                {
+                  "path": "httpx/_models.py",
+                  "startLine": 403,
+                  "endLine": 404,
+                  "quote": "        if cookies:\n            Cookies(cookies).set_cookie_header(self)",
+                  "sha256": "591c0c2cb5bc3f0e1cc6d975b6d003b45aea6eeee5aebcb8e46f257ce0194070"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "policy",
+          "fact": "使用 cookie jar 的 add_cookie_header 为目标请求选择适用 cookie。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_models.py",
+                  "startLine": 1114,
+                  "endLine": 1115,
+                  "quote": "        urllib_request = self._CookieCompatRequest(request)\n        self.jar.add_cookie_header(urllib_request)",
+                  "sha256": "dc2b7b11d09d52042a2bfa5077215e7849baaf1fee24231ea0d7e19586952874"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "multipart-upload",
+      "units": [
+        {
+          "id": "boundary",
+          "fact": "为 multipart 生成边界并写入 Content-Type。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_multipart.py",
+                  "startLine": 235,
+                  "endLine": 241,
+                  "quote": "        if boundary is None:\n            boundary = os.urandom(16).hex().encode(\"ascii\")\n\n        self.boundary = boundary\n        self.content_type = \"multipart/form-data; boundary=%s\" % boundary.decode(\n            \"ascii\"\n        )",
+                  "sha256": "23515f4a802e480898d740e6c6f44e43531e708fedaeee19305b45564cfc50b7"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "fields",
+          "fact": "表单和文件转换为字段，并按边界逐个序列化。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_multipart.py",
+                  "startLine": 247,
+                  "endLine": 263,
+                  "quote": "        for name, value in data.items():\n            if isinstance(value, (tuple, list)):\n                for item in value:\n                    yield DataField(name=name, value=item)\n            else:\n                yield DataField(name=name, value=value)\n\n        file_items = files.items() if isinstance(files, typing.Mapping) else files\n        for name, value in file_items:\n            yield FileField(name=name, value=value)\n\n    def iter_chunks(self) -> typing.Iterator[bytes]:\n        for field in self.fields:\n            yield b\"--%s\\r\\n\" % self.boundary\n            yield from field.render()\n            yield b\"\\r\\n\"\n        yield b\"--%s--\\r\\n\" % self.boundary",
+                  "sha256": "787a9e6f9d02518e0d961863117b5aa36b53409c8cf9a2bade759d0f1c066f7e"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "file-data",
+          "fact": "文件字段输出头部后，分块读取并输出文件内容。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_multipart.py",
+                  "startLine": 214,
+                  "endLine": 221,
+                  "quote": "        chunk = self.file.read(self.CHUNK_SIZE)\n        while chunk:\n            yield to_bytes(chunk)\n            chunk = self.file.read(self.CHUNK_SIZE)\n\n    def render(self) -> typing.Iterator[bytes]:\n        yield self.render_headers()\n        yield from self.render_data()",
+                  "sha256": "0f7caafe50df54bb0082894225bbdaca515ed9cf72430d731819a91c46a1094a"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "length",
+          "fact": "不能提前计算长度时返回分块传输头，否则给出 Content-Length。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_multipart.py",
+                  "startLine": 273,
+                  "endLine": 276,
+                  "quote": "        for field in self.fields:\n            field_length = field.get_length()\n            if field_length is None:\n                return None",
+                  "sha256": "b30eeffc575340f906492cbbef9ee3dd586d4da7ae1d6aa282857b1c81b77238"
+                },
+                {
+                  "path": "httpx/_multipart.py",
+                  "startLine": 287,
+                  "endLine": 292,
+                  "quote": "    def get_headers(self) -> dict[str, str]:\n        content_length = self.get_content_length()\n        content_type = self.content_type\n        if content_length is None:\n            return {\"Transfer-Encoding\": \"chunked\", \"Content-Type\": content_type}\n        return {\"Content-Length\": str(content_length), \"Content-Type\": content_type}",
+                  "sha256": "c0534c81e9a5cdae28cffa6dff0d0cebc490fb9ea85485480d44a567d45c941f"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "timeout-overrides",
+      "units": [
+        {
+          "id": "defaults",
+          "fact": "未单独设置的超时分量继承默认值，独立设置覆盖默认。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_config.py",
+                  "startLine": 127,
+                  "endLine": 130,
+                  "quote": "            self.connect = timeout if isinstance(connect, UnsetType) else connect\n            self.read = timeout if isinstance(read, UnsetType) else read\n            self.write = timeout if isinstance(write, UnsetType) else write\n            self.pool = timeout if isinstance(pool, UnsetType) else pool",
+                  "sha256": "5329f1bf74ed7e7b0ea531a29de27f8c26b8f68effe3b3341cf04e225b5d74ff"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "request",
+          "fact": "构建请求时选择客户端超时或请求覆盖值，并保留已提供的 timeout 扩展。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 370,
+                  "endLine": 377,
+                  "quote": "        extensions = {} if extensions is None else extensions\n        if \"timeout\" not in extensions:\n            timeout = (\n                self.timeout\n                if isinstance(timeout, UseClientDefault)\n                else Timeout(timeout)\n            )\n            extensions = dict(**extensions, timeout=timeout.as_dict())",
+                  "sha256": "6ff3859804d674c10df41472787a85d714d8bb180b7f234ad344f232de324ef2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "transport",
+          "fact": "四种超时以字典形式传入请求扩展。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_config.py",
+                  "startLine": 132,
+                  "endLine": 138,
+                  "quote": "    def as_dict(self) -> dict[str, float | None]:\n        return {\n            \"connect\": self.connect,\n            \"read\": self.read,\n            \"write\": self.write,\n            \"pool\": self.pool,\n        }",
+                  "sha256": "e2520506edba89c0db59c8289bcc235c2ffd9cb518527701532abe517f01f8e1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "proxy-bypass",
+      "units": [
+        {
+          "id": "environment",
+          "fact": "启用环境代理时读取系统环境代理并构造映射。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 242,
+                  "endLine": 247,
+                  "quote": "        if proxy is None:\n            if allow_env_proxies:\n                return {\n                    key: None if url is None else Proxy(url=url)\n                    for key, url in get_environment_proxies().items()\n                }",
+                  "sha256": "a74dd5c9f2f8464e0d40d7b6e942e7925f51b93f2c9adb289947c898a3316953"
+                },
+                {
+                  "path": "httpx/_utils.py",
+                  "startLine": 37,
+                  "endLine": 45,
+                  "quote": "    proxy_info = getproxies()\n    mounts: dict[str, str | None] = {}\n\n    for scheme in (\"http\", \"https\", \"all\"):\n        if proxy_info.get(scheme):\n            hostname = proxy_info[scheme]\n            mounts[f\"{scheme}://\"] = (\n                hostname if \"://\" in hostname else f\"http://{hostname}\"\n            )",
+                  "sha256": "afd840aad089e2502c0bd06f1bcb0786d6c7dc5a22f67bcd3422a93d1eece1f9"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "bypass",
+          "fact": "NO_PROXY 全通配符取消代理，其他主机映射到无代理。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_utils.py",
+                  "startLine": 47,
+                  "endLine": 51,
+                  "quote": "    no_proxy_hosts = [host.strip() for host in proxy_info.get(\"no\", \"\").split(\",\")]\n    for hostname in no_proxy_hosts:\n        # See https://curl.haxx.se/libcurl/c/CURLOPT_NOPROXY.html for details\n        # on how names in `NO_PROXY` are handled.\n        if hostname == \"*\":",
+                  "sha256": "c92c231efefa23cb3aea7738f7110744592bb8093439d22c286ccc3cb833136a"
+                },
+                {
+                  "path": "httpx/_utils.py",
+                  "startLine": 56,
+                  "endLine": 57,
+                  "quote": "            return {}\n        elif hostname:",
+                  "sha256": "33f4537f25b06798a3c8068d57f545ddd6495a679d166241a4f35248040fc65b"
+                },
+                {
+                  "path": "httpx/_utils.py",
+                  "startLine": 65,
+                  "endLine": 74,
+                  "quote": "            if \"://\" in hostname:\n                mounts[hostname] = None\n            elif is_ipv4_hostname(hostname):\n                mounts[f\"all://{hostname}\"] = None\n            elif is_ipv6_hostname(hostname):\n                mounts[f\"all://[{hostname}]\"] = None\n            elif hostname.lower() == \"localhost\":\n                mounts[f\"all://{hostname}\"] = None\n            else:\n                mounts[f\"all://*{hostname}\"] = None",
+                  "sha256": "88c108525afdbecc8d0a69e520a2c6bac1775c9263c8d559250dca83268034fa"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "match",
+          "fact": "按 scheme、host 和 port 匹配模式，并选择代理或直接传输。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_utils.py",
+                  "startLine": 192,
+                  "endLine": 203,
+                  "quote": "    def matches(self, other: URL) -> bool:\n        if self.scheme and self.scheme != other.scheme:\n            return False\n        if (\n            self.host\n            and self.host_regex is not None\n            and not self.host_regex.match(other.host)\n        ):\n            return False\n        if self.port is not None and self.port != other.port:\n            return False\n        return True",
+                  "sha256": "403ff6fcfcd3294562e8d9d71ac2b08b9e8329f13ddb50cda4bbb113317f044c"
+                },
+                {
+                  "path": "httpx/_client.py",
+                  "startLine": 765,
+                  "endLine": 769,
+                  "quote": "        for pattern, transport in self._mounts.items():\n            if pattern.matches(url):\n                return self._transport if transport is None else transport\n\n        return self._transport",
+                  "sha256": "a1447b3e6552fcedc031c8233fbc5e8205dd34cdb97e5bda70c8e285f651c152"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "status-errors",
+      "units": [
+        {
+          "id": "success",
+          "fact": "成功状态直接返回响应。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_models.py",
+                  "startLine": 805,
+                  "endLine": 806,
+                  "quote": "        if self.is_success:\n            return self",
+                  "sha256": "202f04fd436bcd0b6261c2ab7c741a8e6d466c2614960e5f2629b3624296a9c5"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "messages",
+          "fact": "重定向可包含目标位置，并按状态类别构建错误消息。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_models.py",
+                  "startLine": 808,
+                  "endLine": 813,
+                  "quote": "        if self.has_redirect_location:\n            message = (\n                \"{error_type} '{0.status_code} {0.reason_phrase}' for url '{0.url}'\\n\"\n                \"Redirect location: '{0.headers[location]}'\\n\"\n                \"For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/{0.status_code}\"\n            )",
+                  "sha256": "8218e2656e8c17a6450761ddc0e36089605b4384a4466c0693582e87c7257acb"
+                },
+                {
+                  "path": "httpx/_models.py",
+                  "startLine": 820,
+                  "endLine": 828,
+                  "quote": "        status_class = self.status_code // 100\n        error_types = {\n            1: \"Informational response\",\n            3: \"Redirect response\",\n            4: \"Client error\",\n            5: \"Server error\",\n        }\n        error_type = error_types.get(status_class, \"Invalid status code\")\n        message = message.format(self, error_type=error_type)",
+                  "sha256": "1faf02aaf193ba4e786ee7a51498b6d0dd43e8381bea1b4aaa506925597b56bd"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "exception",
+          "fact": "异常保留请求和响应实例。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "httpx/_models.py",
+                  "startLine": 829,
+                  "endLine": 829,
+                  "quote": "        raise HTTPStatusError(message, request=request, response=self)",
+                  "sha256": "8440876e235eacb49285040ab32c5cda0c92329c25b2736f0868bcd3e82273da"
+                },
+                {
+                  "path": "httpx/_exceptions.py",
+                  "startLine": 265,
+                  "endLine": 268,
+                  "quote": "    def __init__(self, message: str, *, request: Request, response: Response) -> None:\n        super().__init__(message)\n        self.request = request\n        self.response = response",
+                  "sha256": "a99b9ff05e1d9abfebcafc05492b2faa4ff8568e7235c3a826045184312958f2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

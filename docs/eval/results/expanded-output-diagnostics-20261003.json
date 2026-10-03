@@ -1,0 +1,59 @@
+{
+  "invalidRawLines": [
+    {
+      "repo": "httpx",
+      "task": "redirect-security",
+      "language": "zh",
+      "path": "httpx/_utils.py",
+      "line": 239,
+      "reason": "truncated-final-line",
+      "rawCharacters": 20000
+    },
+    {
+      "repo": "httpx",
+      "task": "digest-auth",
+      "language": "zh",
+      "path": "httpx/_models.py",
+      "line": 271,
+      "reason": "truncated-final-line",
+      "rawCharacters": 20000
+    },
+    {
+      "repo": "httpx",
+      "task": "response-decoding",
+      "language": "en",
+      "path": "httpx/_models.py",
+      "line": 1060,
+      "reason": "truncated-final-line",
+      "rawCharacters": 20000
+    },
+    {
+      "repo": "httpx",
+      "task": "stream-cleanup",
+      "language": "en",
+      "path": "httpx/_utils.py",
+      "line": 167,
+      "reason": "truncated-final-line",
+      "rawCharacters": 20000
+    },
+    {
+      "repo": "httpx",
+      "task": "multipart-upload",
+      "language": "zh",
+      "path": "httpx/_models.py",
+      "line": 720,
+      "reason": "truncated-final-line",
+      "rawCharacters": 20000
+    },
+    {
+      "repo": "zod",
+      "task": "missing-null-default",
+      "language": "en",
+      "path": "src/helpers/parseUtil.ts",
+      "line": 191,
+      "reason": "truncated-final-line",
+      "rawCharacters": 20000
+    }
+  ],
+  "invalidAtPrimaryBudget": 0
+}

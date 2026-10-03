@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "dataset": "httpx-semantic-expanded-v1",
+  "commit": "26d48e0634e6ee9cdc0533996db289ce4b430177",
+  "cases": [
+    {
+      "id": "redirect-security",
+      "category": "cross-file-flow",
+      "queries": {
+        "zh": "找到同步客户端处理重定向的代码：怎样限制跳转次数，改写请求方法和请求体，并避免把认证信息泄露到其他站点？",
+        "en": "Find redirect handling in the synchronous client: how are redirect counts limited, methods and request bodies rewritten, and credentials kept from leaking to another site?"
+      }
+    },
+    {
+      "id": "digest-auth",
+      "category": "authentication",
+      "queries": {
+        "zh": "找到摘要认证收到服务器挑战后重试请求的代码：如何解析挑战、构造认证头，并处理服务器设置的 cookie？",
+        "en": "Find digest authentication retries after a server challenge: how is the challenge parsed, the authorization header built, and any server-set cookie handled?"
+      }
+    },
+    {
+      "id": "request-merging",
+      "category": "configuration",
+      "queries": {
+        "zh": "找到客户端构造请求的代码：相对地址如何与基础地址合并？请求级的查询参数、头和 cookie 如何与客户端默认值合并？",
+        "en": "Find client request construction: how is a relative address merged with the base URL, and how are per-request query parameters, headers, and cookies combined with client defaults?"
+      }
+    },
+    {
+      "id": "response-decoding",
+      "category": "cross-file-flow",
+      "queries": {
+        "zh": "找到同步流式响应解码的代码：压缩后的字节如何解压、转换成文本并按行输出？流结束时如何处理解码器剩余内容？",
+        "en": "Find synchronous streaming response decoding: how are compressed bytes decompressed, converted to text, and yielded as lines? How is buffered decoder output flushed at the end?"
+      }
+    },
+    {
+      "id": "stream-cleanup",
+      "category": "resource-lifecycle",
+      "queries": {
+        "zh": "找到同步客户端流式请求的资源清理代码：进入和退出流式上下文时做什么，关闭响应如何关闭底层流并记录耗时？",
+        "en": "Find cleanup for synchronous streaming requests: what happens when entering and leaving the streaming context, and how does closing a response close the underlying stream and record elapsed time?"
+      }
+    },
+    {
+      "id": "cookie-persistence",
+      "category": "cross-file-flow",
+      "queries": {
+        "zh": "找到同步客户端接收和发送 cookie 的代码：响应中的 cookie 如何保存到客户端，后续请求又怎样带上符合域名和路径规则的 cookie？",
+        "en": "Find cookie persistence in the synchronous client: how are response cookies stored, and how do later requests receive cookies subject to domain and path rules?"
+      }
+    },
+    {
+      "id": "multipart-upload",
+      "category": "cross-file-flow",
+      "queries": {
+        "zh": "找到 multipart 文件上传的编码代码：如何生成分隔符、序列化表单和文件字段，并决定使用内容长度还是分块传输？",
+        "en": "Find multipart file upload encoding: how are boundaries generated, form and file fields serialized, and content length or chunked transfer selected?"
+      }
+    },
+    {
+      "id": "timeout-overrides",
+      "category": "configuration",
+      "queries": {
+        "zh": "找到请求超时配置的处理代码：一个默认值怎样展开为连接、读取、写入和连接池等待超时？请求级设置怎样覆盖客户端设置？",
+        "en": "Find request timeout configuration: how does one default expand into connect, read, write, and pool timeouts, and how do request-level settings override client settings?"
+      }
+    },
+    {
+      "id": "proxy-bypass",
+      "category": "configuration",
+      "queries": {
+        "zh": "找到同步客户端使用环境代理和绕过代理的代码：如何读取环境设置，匹配无需代理的地址，并为请求选出传输实现？",
+        "en": "Find environment proxy and proxy-bypass handling in the synchronous client: how are environment settings read, bypass addresses matched, and a transport selected for a request?"
+      }
+    },
+    {
+      "id": "status-errors",
+      "category": "error-handling",
+      "queries": {
+        "zh": "找到响应状态转成异常的代码：什么情况下不报错，重定向与客户端或服务器错误怎样生成不同消息，异常如何保留请求和响应？",
+        "en": "Find conversion of response status into exceptions: when is no error raised, how do redirect and client/server errors get different messages, and how does the exception retain the request and response?"
+      }
+    }
+  ]
+}

@@ -1,0 +1,753 @@
+{
+  "schemaVersion": 1,
+  "dataset": "zod-semantic-expanded-v1",
+  "answerVersion": "v1",
+  "repository": "colinhacks/zod",
+  "commit": "e30870369d5b8f31ff4d0130d4439fd997deb523",
+  "annotator": "Codex reading the frozen source before any retrieval output",
+  "status": "source-reviewed; not human or independent multi-annotator ground truth",
+  "coverageRule": "Any alternative may satisfy a unit; all exact source lines in that alternative are required.",
+  "answers": [
+    {
+      "id": "safe-parsing",
+      "units": [
+        {
+          "id": "context",
+          "fact": "不抛异常解析建立 issues、路径、类型和错误映射上下文，再调用解析。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 251,
+                  "endLine": 265,
+                  "quote": "    const ctx: ParseContext = {\n      common: {\n        issues: [],\n        async: params?.async ?? false,\n        contextualErrorMap: params?.errorMap,\n      },\n      path: params?.path || [],\n      schemaErrorMap: this._def.errorMap,\n      parent: null,\n      data,\n      parsedType: getParsedType(data),\n    };\n    const result = this._parseSync({ data, path: ctx.path, parent: ctx });\n\n    return handleResult(ctx, result);",
+                  "sha256": "2ee7bc57c73b4b4670d8f9ac544ea62040685915bfb50586fb3db6fea00f03e8"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "result",
+          "fact": "有效结果返回 success/data，无效结果用收集的 issues 构造错误。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 98,
+                  "endLine": 99,
+                  "quote": "  if (isValid(result)) {\n    return { success: true, data: result.value };",
+                  "sha256": "0f683293d84fd4196b5b89b215d031600c8ef9da280375595a26944537f6d35b"
+                },
+                {
+                  "path": "src/types.ts",
+                  "startLine": 105,
+                  "endLine": 111,
+                  "quote": "    return {\n      success: false,\n      get error() {\n        if ((this as any)._error) return (this as any)._error as Error;\n        const error = new ZodError(ctx.common.issues);\n        (this as any)._error = error;\n        return (this as any)._error;",
+                  "sha256": "60bece07e914ad9885b749ef2b7ec9374d27ec3e1f37d4f8cf312c787f14ab6c"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "throwing",
+          "fact": "抛异常入口复用不抛异常解析，成功取数据，失败抛出错误。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 241,
+                  "endLine": 245,
+                  "quote": "  parse(data: unknown, params?: Partial<ParseParams>): Output {\n    const result = this.safeParse(data, params);\n    if (result.success) return result.data;\n    throw result.error;\n  }",
+                  "sha256": "f4646466098b14a6c7b915ad49ca3875c1be9f084bf3e088bb39d1cc49cbc282"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unknown-properties",
+      "units": [
+        {
+          "id": "strip",
+          "fact": "strip 模式不收集额外键，解析时不为额外键添加结果。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 2605,
+                  "endLine": 2615,
+                  "quote": "    if (\n      !(\n        this._def.catchall instanceof ZodNever &&\n        this._def.unknownKeys === \"strip\"\n      )\n    ) {\n      for (const key in ctx.data) {\n        if (!shapeKeys.includes(key)) {\n          extraKeys.push(key);\n        }\n      }",
+                  "sha256": "b97d0c2ae7ae1737c7921299006acd3608abb2f08bff95dec1c0f6d05ff741f8"
+                },
+                {
+                  "path": "src/types.ts",
+                  "startLine": 2653,
+                  "endLine": 2654,
+                  "quote": "      } else if (unknownKeys === \"strip\") {\n      } else {",
+                  "sha256": "881b5b0c6a0a19baa8f3524b12534423f14f1061da04e111dd7397895b49531c"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "passthrough",
+          "fact": "passthrough 将额外键及原始值加入结果对。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 2638,
+                  "endLine": 2644,
+                  "quote": "      if (unknownKeys === \"passthrough\") {\n        for (const key of extraKeys) {\n          pairs.push({\n            key: { status: \"valid\", value: key },\n            value: { status: \"valid\", value: ctx.data[key] },\n          });\n        }",
+                  "sha256": "2eb15eb705b3ce6ee5e3a632f8b6507b61786758ebf9d8b479cfed70799b9ab2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "strict",
+          "fact": "strict 将额外键记录为 unrecognized_keys 并标记 dirty。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 2645,
+                  "endLine": 2652,
+                  "quote": "      } else if (unknownKeys === \"strict\") {\n        if (extraKeys.length > 0) {\n          addIssueToContext(ctx, {\n            code: ZodIssueCode.unrecognized_keys,\n            keys: extraKeys,\n          });\n          status.dirty();\n        }",
+                  "sha256": "34d72b70af4f23a5af5e8368930f50a90802ad1fd635b61c5f2998ff6056a652"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "async-refinement",
+      "units": [
+        {
+          "id": "execute",
+          "fact": "执行 refinement，异步模式将其结果包装为 Promise。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4679,
+                  "endLine": 4684,
+                  "quote": "    if (effect.type === \"refinement\") {\n      const executeRefinement = (acc: unknown): any => {\n        const result = effect.refinement(acc, checkCtx);\n        if (ctx.common.async) {\n          return Promise.resolve(result);\n        }",
+                  "sha256": "363f3c20a0be7213a79bb57b67c6e1869a2ce73e88496dc8c424df3274382273"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sync-error",
+          "fact": "同步模式收到 Promise 时明确报错。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4685,
+                  "endLine": 4689,
+                  "quote": "        if (result instanceof Promise) {\n          throw new Error(\n            \"Async refinement encountered during synchronous parse operation. Use .parseAsync instead.\"\n          );\n        }",
+                  "sha256": "e96d3cdd1e2a86c4897b156a169d92b73030a0a5f46092a16f07458cdeddaf31"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "await",
+          "fact": "异步先解析内部模式，再等待 refinement，保留解析状态。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4706,
+                  "endLine": 4715,
+                  "quote": "        return this._def.schema\n          ._parseAsync({ data: ctx.data, path: ctx.path, parent: ctx })\n          .then((inner) => {\n            if (inner.status === \"aborted\") return INVALID;\n            if (inner.status === \"dirty\") status.dirty();\n\n            return executeRefinement(inner.value).then(() => {\n              return { status: status.value, value: inner.value };\n            });\n          });",
+                  "sha256": "e358054e4e1276c15133ce51e554de13d19dcc2e5057751a243e6c91f451371d"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tagged-union",
+      "units": [
+        {
+          "id": "mapping",
+          "fact": "从各分支提取标签，拒绝重复值并建立标签到分支的映射。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3352,
+                  "endLine": 3356,
+                  "quote": "    const optionsMap: Map<Primitive, Types[number]> = new Map();\n\n    // try {\n    for (const type of options) {\n      const discriminatorValues = getDiscriminator(type.shape[discriminator]);",
+                  "sha256": "fdbe1fdd91ef27c2c05ce7819fd8a891f0c204bf103ad0216112b5f08367b972"
+                },
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3362,
+                  "endLine": 3368,
+                  "quote": "      for (const value of discriminatorValues) {\n        if (optionsMap.has(value)) {\n          throw new Error(\n            `Discriminator property ${String(\n              discriminator\n            )} has duplicate value ${String(value)}`\n          );",
+                  "sha256": "c24f5dece6c36a00f99894fd1bdaee9398420da78fa823d12a852f86c0d2b0ff"
+                },
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3371,
+                  "endLine": 3372,
+                  "quote": "        optionsMap.set(value, type);\n      }",
+                  "sha256": "1526a48c2e5dfd7f25d912363a31dc4aceafa9afdb17d636d40cfb100b0e9af2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "select",
+          "fact": "读取输入标签并查找分支，再按同步或异步模式解析。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3290,
+                  "endLine": 3294,
+                  "quote": "    const discriminator = this.discriminator;\n\n    const discriminatorValue: string = ctx.data[discriminator];\n\n    const option = this.optionsMap.get(discriminatorValue);",
+                  "sha256": "d5194a053fc926c938b7e5316063bf5cd6bcb89ce3c2365ad53663258ca7d447"
+                },
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3305,
+                  "endLine": 3316,
+                  "quote": "    if (ctx.common.async) {\n      return option._parseAsync({\n        data: ctx.data,\n        path: ctx.path,\n        parent: ctx,\n      }) as any;\n    } else {\n      return option._parseSync({\n        data: ctx.data,\n        path: ctx.path,\n        parent: ctx,\n      }) as any;",
+                  "sha256": "912290b09c8f4450fedddd91b62c0580d5536350db55a6675d19a6fccb59bfff"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "invalid",
+          "fact": "未找到分支时报告有效标签列表和标签字段路径。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3296,
+                  "endLine": 3302,
+                  "quote": "    if (!option) {\n      addIssueToContext(ctx, {\n        code: ZodIssueCode.invalid_union_discriminator,\n        options: Array.from(this.optionsMap.keys()),\n        path: [discriminator],\n      });\n      return INVALID;",
+                  "sha256": "554677962df22a5ccf5405a8e9a7f4c8cdfa9da6d22d2c3ced7f674ea46f568e"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "union-failures",
+      "units": [
+        {
+          "id": "success",
+          "fact": "按分支尝试时优先返回第一个 valid 结果。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3168,
+                  "endLine": 3172,
+                  "quote": "        if (result.status === \"valid\") {\n          return result;\n        } else if (result.status === \"dirty\" && !dirty) {\n          dirty = { result, ctx: childCtx };\n        }",
+                  "sha256": "1e54e04ae8047a849c4573610be6f62c800c5b7d43bb06d1fb286ad32e513f64"
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3101,
+                  "endLine": 3105,
+                  "quote": "      for (const result of results) {\n        if (result.result.status === \"valid\") {\n          return result.result;\n        }\n      }",
+                  "sha256": "c688be6956c2ddb847bb94bb002a4fc3d7053059e5eecb54004e8fd8fb35f256"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dirty",
+          "fact": "没有 valid 时使用 dirty 分支并合并其 issues。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3179,
+                  "endLine": 3182,
+                  "quote": "      if (dirty) {\n        ctx.common.issues.push(...dirty.ctx.common.issues);\n        return dirty.result;\n      }",
+                  "sha256": "96faa429f46aabed538d022e751715e52824951eabeccddeeb93397d53c93d50"
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3107,
+                  "endLine": 3113,
+                  "quote": "      for (const result of results) {\n        if (result.result.status === \"dirty\") {\n          // add issues from dirty option\n\n          ctx.common.issues.push(...result.ctx.common.issues);\n          return result.result;\n        }",
+                  "sha256": "b1bf4ff0cd43f7a8bd14bb269fc13b553979ced5d19ab36b8f09bf82b3675135"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "errors",
+          "fact": "全部无效时按各分支 issues 构造联合类型错误。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3184,
+                  "endLine": 3190,
+                  "quote": "      const unionErrors = issues.map((issues) => new ZodError(issues));\n      addIssueToContext(ctx, {\n        code: ZodIssueCode.invalid_union,\n        unionErrors,\n      });\n\n      return INVALID;",
+                  "sha256": "c46044c6404c7c91e0d96659bf0cd27e1f405cf9317f663e789fd7ef01d0e103"
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3117,
+                  "endLine": 3125,
+                  "quote": "      const unionErrors = results.map(\n        (result) => new ZodError(result.ctx.common.issues)\n      );\n\n      addIssueToContext(ctx, {\n        code: ZodIssueCode.invalid_union,\n        unionErrors,\n      });\n      return INVALID;",
+                  "sha256": "6bc0d42ca47d919d5a8a9182de7663dfdf63a890b88d0fb1e485817338307675"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "missing-null-default",
+      "units": [
+        {
+          "id": "optional",
+          "fact": "undefined 被可选包装直接接受，否则调用内部解析。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4802,
+                  "endLine": 4808,
+                  "quote": "  _parse(input: ParseInput): ParseReturnType<this[\"_output\"]> {\n    const parsedType = this._getType(input);\n    if (parsedType === ZodParsedType.undefined) {\n      return OK(undefined);\n    }\n    return this._def.innerType._parse(input);\n  }",
+                  "sha256": "90821e4c44fcb9986fe3b25986db3b00e45b76bd5f14794a880f0f85862943ad"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "nullable",
+          "fact": "null 被可空包装直接接受，否则调用内部解析。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4846,
+                  "endLine": 4852,
+                  "quote": "  _parse(input: ParseInput): ParseReturnType<this[\"_output\"]> {\n    const parsedType = this._getType(input);\n    if (parsedType === ZodParsedType.null) {\n      return OK(null);\n    }\n    return this._def.innerType._parse(input);\n  }",
+                  "sha256": "f9d88e67a1011fcfc407b7b9189b2fc885ad3ec185124e1ee25189c14ab379ac"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "default",
+          "fact": "缺失时求默认值，然后将替换后的值继续交给内部模式。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4889,
+                  "endLine": 4899,
+                  "quote": "  _parse(input: ParseInput): ParseReturnType<this[\"_output\"]> {\n    const { ctx } = this._processInputParams(input);\n    let data = ctx.data;\n    if (ctx.parsedType === ZodParsedType.undefined) {\n      data = this._def.defaultValue();\n    }\n    return this._def.innerType._parse({\n      data,\n      path: ctx.path,\n      parent: ctx,\n    });",
+                  "sha256": "c79371f5a0653ae703cf6f222ff0226d17bd4084ad48966d5658f6707fa5f8aa"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "preprocess-transform",
+      "units": [
+        {
+          "id": "preprocess",
+          "fact": "预处理先对原始输入运行转换，再解析处理后的值。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4649,
+                  "endLine": 4650,
+                  "quote": "    if (effect.type === \"preprocess\") {\n      const processed = effect.transform(ctx.data, checkCtx);",
+                  "sha256": "f537905cdcbc53b609ee9dd9deb42592c275735624ed001d39730b00647608e7"
+                },
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4667,
+                  "endLine": 4672,
+                  "quote": "        if (status.value === \"aborted\") return INVALID;\n        const result = this._def.schema._parseSync({\n          data: processed,\n          path: ctx.path,\n          parent: ctx,\n        });",
+                  "sha256": "2e44e499314f4e1c82cf0b12dc7864a90ddd0fbd7dc2733f1bec6a350c35a780"
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4649,
+                  "endLine": 4650,
+                  "quote": "    if (effect.type === \"preprocess\") {\n      const processed = effect.transform(ctx.data, checkCtx);",
+                  "sha256": "f537905cdcbc53b609ee9dd9deb42592c275735624ed001d39730b00647608e7"
+                },
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4652,
+                  "endLine": 4660,
+                  "quote": "      if (ctx.common.async) {\n        return Promise.resolve(processed).then(async (processed) => {\n          if (status.value === \"aborted\") return INVALID;\n\n          const result = await this._def.schema._parseAsync({\n            data: processed,\n            path: ctx.path,\n            parent: ctx,\n          });",
+                  "sha256": "e1f6b51bd412ffebd9812e00bce7585fc0620724ddae671bd3e766dc0b350cef"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "status",
+          "fact": "自定义 issue 可以中止或标脏，预处理和内部解析的状态继续向外传播。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4633,
+                  "endLine": 4640,
+                  "quote": "    const checkCtx: RefinementCtx = {\n      addIssue: (arg: IssueData) => {\n        addIssueToContext(ctx, arg);\n        if (arg.fatal) {\n          status.abort();\n        } else {\n          status.dirty();\n        }",
+                  "sha256": "121fb4a606783ba51b9329e24f31db1404ddd78593a2b7f3a3f77cf83b456107"
+                },
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4673,
+                  "endLine": 4676,
+                  "quote": "        if (result.status === \"aborted\") return INVALID;\n        if (result.status === \"dirty\") return DIRTY(result.value);\n        if (status.value === \"dirty\") return DIRTY(result.value);\n        return result;",
+                  "sha256": "25366af0424be789579dd88f018b4c7fb678d586c7c02179e15b2adc181172cb"
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4633,
+                  "endLine": 4640,
+                  "quote": "    const checkCtx: RefinementCtx = {\n      addIssue: (arg: IssueData) => {\n        addIssueToContext(ctx, arg);\n        if (arg.fatal) {\n          status.abort();\n        } else {\n          status.dirty();\n        }",
+                  "sha256": "121fb4a606783ba51b9329e24f31db1404ddd78593a2b7f3a3f77cf83b456107"
+                },
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4661,
+                  "endLine": 4664,
+                  "quote": "          if (result.status === \"aborted\") return INVALID;\n          if (result.status === \"dirty\") return DIRTY(result.value);\n          if (status.value === \"dirty\") return DIRTY(result.value);\n          return result;",
+                  "sha256": "19813782bdaf3d1d284749b318702eab80e348c29b7a33bb6eabaf0c13a59e01"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "transform",
+          "fact": "转换阶段先完成内部解析，仅对有效结果执行转换。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4719,
+                  "endLine": 4729,
+                  "quote": "    if (effect.type === \"transform\") {\n      if (ctx.common.async === false) {\n        const base = this._def.schema._parseSync({\n          data: ctx.data,\n          path: ctx.path,\n          parent: ctx,\n        });\n\n        if (!isValid(base)) return base;\n\n        const result = effect.transform(base.value, checkCtx);",
+                  "sha256": "b2fadf7b655df625171b1c9f93b0afe67506dc9c81d1ed5e47bc9c7a0b0d45eb"
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4719,
+                  "endLine": 4719,
+                  "quote": "    if (effect.type === \"transform\") {",
+                  "sha256": "d567317246626390a676b7dbb200d2a2def8461c2809a7f3d8da6bd98ec3440a"
+                },
+                {
+                  "path": "src/types.ts",
+                  "startLine": 4738,
+                  "endLine": 4745,
+                  "quote": "        return this._def.schema\n          ._parseAsync({ data: ctx.data, path: ctx.path, parent: ctx })\n          .then((base) => {\n            if (!isValid(base)) return base;\n\n            return Promise.resolve(effect.transform(base.value, checkCtx)).then(\n              (result) => ({ status: status.value, value: result })\n            );",
+                  "sha256": "02ff5627c68f2bc0289f8a9769a8259c0b2f6ea1e0e4a146673fe32a13a306af"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nested-errors",
+      "units": [
+        {
+          "id": "path",
+          "fact": "构造 issue 时合并上下文路径和自定义路径，再存入公共问题列表。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/helpers/parseUtil.ts",
+                  "startLine": 12,
+                  "endLine": 17,
+                  "quote": "  const { data, path, errorMaps, issueData } = params;\n  const fullPath = [...path, ...(issueData.path || [])];\n  const fullIssue = {\n    ...issueData,\n    path: fullPath,\n  };",
+                  "sha256": "b6361b6fa82fe1cd2373c4741963eb116ee354d78f396a9603a3d61624c362b9"
+                },
+                {
+                  "path": "src/helpers/parseUtil.ts",
+                  "startLine": 77,
+                  "endLine": 80,
+                  "quote": "  const issue = makeIssue({\n    issueData: issueData,\n    data: ctx.data,\n    path: ctx.path,",
+                  "sha256": "e4ea819ba2ca23f9ce35252862c7b17fde207d1ece1429313ef680a420292e10"
+                },
+                {
+                  "path": "src/helpers/parseUtil.ts",
+                  "startLine": 88,
+                  "endLine": 88,
+                  "quote": "  ctx.common.issues.push(issue);",
+                  "sha256": "cc14efa948eb17b7789ed407ded4e655855bc435852ace795426bec0dcd00597"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tree",
+          "fact": "错误格式化沿路径建立嵌套节点并在末端添加错误。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/ZodError.ts",
+                  "startLine": 241,
+                  "endLine": 248,
+                  "quote": "          let curr: any = fieldErrors;\n          let i = 0;\n          while (i < issue.path.length) {\n            const el = issue.path[i];\n            const terminal = i === issue.path.length - 1;\n\n            if (!terminal) {\n              curr[el] = curr[el] || { _errors: [] };",
+                  "sha256": "6c4e99d58ce90c41cc4db6c929299e688e50615137deaedd48fef5feb7c2991c"
+                },
+                {
+                  "path": "src/ZodError.ts",
+                  "startLine": 256,
+                  "endLine": 263,
+                  "quote": "            } else {\n              curr[el] = curr[el] || { _errors: [] };\n              curr[el]._errors.push(mapper(issue));\n            }\n\n            curr = curr[el];\n            i++;\n          }",
+                  "sha256": "7e53d1f6331ee1d5b39d5325ba720c3602cb87952cc4b79d403d2576cae78e93"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "flat",
+          "fact": "扁平格式按路径首元素分组，无路径错误进入表单错误列表。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/ZodError.ts",
+                  "startLine": 307,
+                  "endLine": 317,
+                  "quote": "    const fieldErrors: any = {};\n    const formErrors: U[] = [];\n    for (const sub of this.issues) {\n      if (sub.path.length > 0) {\n        fieldErrors[sub.path[0]] = fieldErrors[sub.path[0]] || [];\n        fieldErrors[sub.path[0]].push(mapper(sub));\n      } else {\n        formErrors.push(mapper(sub));\n      }\n    }\n    return { formErrors, fieldErrors };",
+                  "sha256": "5303c1042172abd7e5038b77cb31ddb58181879fec3261b7ae857ded3c022e48"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "partial-required",
+      "units": [
+        {
+          "id": "partial",
+          "fact": "按掩码保留未选字段，选中的字段添加 optional 包装。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 2963,
+                  "endLine": 2971,
+                  "quote": "    util.objectKeys(this.shape).forEach((key) => {\n      const fieldSchema = this.shape[key];\n\n      if (mask && !mask[key]) {\n        newShape[key] = fieldSchema;\n      } else {\n        newShape[key] = fieldSchema.optional();\n      }\n    });",
+                  "sha256": "92b27f6ae2996a3a7375cfa7e537e2980278cfde61f1a7f7d82e2e8dfb16d257"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "required",
+          "fact": "按掩码选择字段并循环移除 optional 包装。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 2996,
+                  "endLine": 3008,
+                  "quote": "    util.objectKeys(this.shape).forEach((key) => {\n      if (mask && !mask[key]) {\n        newShape[key] = this.shape[key];\n      } else {\n        const fieldSchema = this.shape[key];\n        let newField = fieldSchema;\n\n        while (newField instanceof ZodOptional) {\n          newField = (newField as ZodOptional<any>)._def.innerType;\n        }\n\n        newShape[key] = newField;\n      }",
+                  "sha256": "16b9f0a30d9c1178e1c513f9acb276817334567dd56ed16877d12521a7ab41ab"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "deep",
+          "fact": "嵌套对象字段递归可选化，数组递归处理元素类型。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 2543,
+                  "endLine": 2558,
+                  "quote": "  if (schema instanceof ZodObject) {\n    const newShape: any = {};\n\n    for (const key in schema.shape) {\n      const fieldSchema = schema.shape[key];\n      newShape[key] = ZodOptional.create(deepPartialify(fieldSchema));\n    }\n    return new ZodObject({\n      ...schema._def,\n      shape: () => newShape,\n    }) as any;\n  } else if (schema instanceof ZodArray) {\n    return new ZodArray({\n      ...schema._def,\n      type: deepPartialify(schema.element),\n    });",
+                  "sha256": "e4362dd11f9dd94e84cdaca5981951de286b99c0428bdafda67c502b2f1b10fa"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "intersection-merging",
+      "units": [
+        {
+          "id": "objects",
+          "fact": "两侧对象的公共字段递归合并，冲突会返回无效。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3414,
+                  "endLine": 3429,
+                  "quote": "  } else if (aType === ZodParsedType.object && bType === ZodParsedType.object) {\n    const bKeys = util.objectKeys(b);\n    const sharedKeys = util\n      .objectKeys(a)\n      .filter((key) => bKeys.indexOf(key) !== -1);\n\n    const newObj: any = { ...a, ...b };\n    for (const key of sharedKeys) {\n      const sharedValue = mergeValues(a[key], b[key]);\n      if (!sharedValue.valid) {\n        return { valid: false };\n      }\n      newObj[key] = sharedValue.data;\n    }\n\n    return { valid: true, data: newObj };",
+                  "sha256": "2e55ead11351a5884563ccd9dac7843b42dc2370f3fa99ca29bd47a9e3df6273"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "arrays",
+          "fact": "数组要求长度一致，并逐项递归合并。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3430,
+                  "endLine": 3445,
+                  "quote": "  } else if (aType === ZodParsedType.array && bType === ZodParsedType.array) {\n    if (a.length !== b.length) {\n      return { valid: false };\n    }\n\n    const newArray: unknown[] = [];\n    for (let index = 0; index < a.length; index++) {\n      const itemA = a[index];\n      const itemB = b[index];\n      const sharedValue = mergeValues(itemA, itemB);\n\n      if (!sharedValue.valid) {\n        return { valid: false };\n      }\n\n      newArray.push(sharedValue.data);",
+                  "sha256": "15ff7b6feb68e4077d7510e0bc8701f39b721f0d694069fb6bdbcb494abec707"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "status",
+          "fact": "任一侧中止则失败，dirty 状态传播到最终结果。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3474,
+                  "endLine": 3476,
+                  "quote": "      if (isAborted(parsedLeft) || isAborted(parsedRight)) {\n        return INVALID;\n      }",
+                  "sha256": "077342555f43182ff9ed4dbae09f4de1c0edf3adf5ba3121bfdecd60a586f9c1"
+                },
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3487,
+                  "endLine": 3491,
+                  "quote": "      if (isDirty(parsedLeft) || isDirty(parsedRight)) {\n        status.dirty();\n      }\n\n      return { status: status.value, value: merged.data as any };",
+                  "sha256": "1e026c3c8a81829fa2f5bbdf461c408e8b70ddce9bf8f512d6101dca513b9e0d"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "conflict",
+          "fact": "两侧值合并失败时报告交叉类型错误。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/types.ts",
+                  "startLine": 3478,
+                  "endLine": 3484,
+                  "quote": "      const merged = mergeValues(parsedLeft.value, parsedRight.value);\n\n      if (!merged.valid) {\n        addIssueToContext(ctx, {\n          code: ZodIssueCode.invalid_intersection_types,\n        });\n        return INVALID;",
+                  "sha256": "59893c7d25aeffbfa41da1c3142b9bf494fbbd71886e2412bbc341003d2e2fcc"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

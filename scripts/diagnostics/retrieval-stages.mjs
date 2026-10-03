@@ -1,0 +1,12 @@
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
+import {parseEnv} from 'node:util';
+import {spawn} from 'node:child_process';
+import {projectRoot} from '../../src/pilot/config.mjs';
+const env={...parseEnv(readFileSync(resolve(projectRoot,'.env'),'utf8')),...process.env};
+const tasks=JSON.parse(readFileSync(resolve(projectRoot,'.pilot-state/expanded-v1/diagnostic-input.json')));
+if(tasks.length!==4)throw Error('Expected four frozen diagnostic queries');
+const child=spawn('/root/reponerve-baselines/worker/.pilot-state/baselines/cocoindex-venv/bin/python',[resolve(projectRoot,'scripts/diagnostics/retrieval-stages.py')],{env:{...process.env,OPENBLAS_NUM_THREADS:'2',OMP_NUM_THREADS:'2'},stdio:['pipe','inherit','inherit']});
+child.stdin.end(JSON.stringify({tasks,embeddingUrl:'http://127.0.0.1:42002/v1',embeddingKey:env.EMBEDDING_API_KEY,reranker:{baseUrl:'http://127.0.0.1:23504/v1',model:'Qwen3-Reranker-4B',apiKey:env.RERANK_API_KEY}})+'\n');
+const timer=setTimeout(()=>child.kill('SIGTERM'),90000);
+child.on('exit',code=>{clearTimeout(timer);process.exitCode=code??1;});

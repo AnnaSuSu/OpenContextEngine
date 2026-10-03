@@ -1,0 +1,78 @@
+{
+  "kind": "diagnostic-only-ignore-blank-lines",
+  "officialScoresUnchanged": true,
+  "changes": [
+    {
+      "system": "reponerve",
+      "repo": "httpx",
+      "task": "multipart-upload",
+      "language": "zh",
+      "oldCoverage": 0.5,
+      "diagnosticCoverage": 1.0,
+      "recovered": [
+        {
+          "unit": "fields",
+          "missing": [
+            {
+              "path": "httpx/_multipart.py",
+              "line": 257,
+              "blank": true
+            }
+          ]
+        },
+        {
+          "unit": "file-data",
+          "missing": [
+            {
+              "path": "httpx/_multipart.py",
+              "line": 218,
+              "blank": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "system": "reponerve",
+      "repo": "httpx",
+      "task": "multipart-upload",
+      "language": "en",
+      "oldCoverage": 0.5,
+      "diagnosticCoverage": 1.0,
+      "recovered": [
+        {
+          "unit": "fields",
+          "missing": [
+            {
+              "path": "httpx/_multipart.py",
+              "line": 257,
+              "blank": true
+            }
+          ]
+        },
+        {
+          "unit": "file-data",
+          "missing": [
+            {
+              "path": "httpx/_multipart.py",
+              "line": 218,
+              "blank": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "systems": {
+    "ace": {
+      "coverage": 0.8569444444444444,
+      "completeCount": 40,
+      "queries": 60
+    },
+    "reponerve": {
+      "coverage": 0.9180555555555555,
+      "completeCount": 50,
+      "queries": 60
+    }
+  }
+}

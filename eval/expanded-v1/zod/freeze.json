@@ -1,0 +1,9 @@
+{
+  "frozenAt": "2026-10-03T15:27:31.369429+00:00",
+  "sha256": {
+    "snapshot.json": "ae80d9552ad630041030ed380ba8cfeca253fb65060b57297409a1051d670c44",
+    "queries.json": "4e994f86c29d7bbe599f664447e1250d8162fda38c1cec1844a9179de8e40e00",
+    "answers.v1.json": "b9c6ae677a500239e7f260cd53862681d2b4b0be55d7c728d13611c8510f038e",
+    "protocol.json": "87def83bbfb33d18b27fa6e71c78d38c14db7ce6846a07cc6a8f844507f4dd68"
+  }
+}

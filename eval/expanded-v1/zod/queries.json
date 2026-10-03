@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "dataset": "zod-semantic-expanded-v1",
+  "commit": "e30870369d5b8f31ff4d0130d4439fd997deb523",
+  "cases": [
+    {
+      "id": "safe-parsing",
+      "category": "error-handling",
+      "queries": {
+        "zh": "找到校验输入时返回成功或失败结果的代码：解析上下文怎样建立，错误怎样汇总，抛异常接口与不抛异常接口如何衔接？",
+        "en": "Find validation that returns success or failure: how is the parse context created, how are issues collected, and how do throwing and non-throwing entry points relate?"
+      }
+    },
+    {
+      "id": "unknown-properties",
+      "category": "input-validation",
+      "queries": {
+        "zh": "找到对象包含未声明属性时的处理代码：默认丢弃、允许保留和严格报错三种模式怎样影响最终结果？",
+        "en": "Find handling of undeclared object properties: how do default stripping, allowing extra properties, and strict rejection affect the parsed result?"
+      }
+    },
+    {
+      "id": "async-refinement",
+      "category": "control-flow",
+      "queries": {
+        "zh": "找到异步自定义校验的执行代码：异步解析如何等待校验结果，同步解析遇到返回 Promise 的校验时如何处理？",
+        "en": "Find execution of asynchronous custom validation: how does async parsing await refinements, and what happens when synchronous parsing encounters a refinement that returns a Promise?"
+      }
+    },
+    {
+      "id": "tagged-union",
+      "category": "input-validation",
+      "queries": {
+        "zh": "找到根据对象标签选择联合类型分支的代码：如何建立标签映射，选择对应分支，并报告无效标签值？",
+        "en": "Find selection of a union branch by an object tag: how is the tag mapping built, the matching branch selected, and an invalid tag value reported?"
+      }
+    },
+    {
+      "id": "union-failures",
+      "category": "error-handling",
+      "queries": {
+        "zh": "找到普通联合类型尝试多个候选的代码：怎样优先返回成功分支，在只有部分有效或全部失败时怎样选择结果和汇总错误？",
+        "en": "Find ordinary union validation across multiple alternatives: how is a successful branch preferred, and how are results and errors selected when only partial validation succeeds or all branches fail?"
+      }
+    },
+    {
+      "id": "missing-null-default",
+      "category": "input-validation",
+      "queries": {
+        "zh": "找到缺失值、空值和默认值包装的处理代码：允许缺失、允许 null 与提供默认值分别何时直接返回，何时继续调用内部校验？",
+        "en": "Find wrappers for missing values, nulls, and defaults: when do optional, nullable, and defaulted values return directly, and when do they continue into inner validation?"
+      }
+    },
+    {
+      "id": "preprocess-transform",
+      "category": "control-flow",
+      "queries": {
+        "zh": "找到预处理和转换组成校验流程的代码：预处理何时运行，失败状态如何传播，转换为什么只在前面的校验成功后执行？",
+        "en": "Find validation pipelines with preprocessing and transformation: when does preprocessing run, how does failure status propagate, and why does transformation run only after earlier validation succeeds?"
+      }
+    },
+    {
+      "id": "nested-errors",
+      "category": "cross-file-flow",
+      "queries": {
+        "zh": "找到嵌套字段错误组织成结果的代码：字段路径怎样附加到错误上，怎样得到嵌套错误树和按顶层字段分组的扁平结果？",
+        "en": "Find organization of nested field errors: how are field paths attached to issues, and how are a nested error tree and a flat grouping by top-level field produced?"
+      }
+    },
+    {
+      "id": "partial-required",
+      "category": "schema-construction",
+      "queries": {
+        "zh": "找到对象字段变成可选或必填的代码：如何按掩码处理指定字段，移除可选包装，以及递归处理嵌套对象和数组的可选化？",
+        "en": "Find making object fields optional or required: how are selected fields handled by a mask, optional wrappers removed, and nested objects and arrays recursively made partial?"
+      }
+    },
+    {
+      "id": "intersection-merging",
+      "category": "input-validation",
+      "queries": {
+        "zh": "找到交叉类型合并两边校验结果的代码：对象和数组怎样递归合并，两边状态如何影响结果，冲突时怎样报告错误？",
+        "en": "Find merging of intersection validation results: how are objects and arrays recursively merged, how do the two parse statuses affect the result, and how are conflicts reported?"
+      }
+    }
+  ]
+}

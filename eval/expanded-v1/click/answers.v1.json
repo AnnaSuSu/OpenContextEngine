@@ -1,0 +1,655 @@
+{
+  "schemaVersion": 1,
+  "dataset": "click-semantic-expanded-v1",
+  "answerVersion": "v1",
+  "repository": "pallets/click",
+  "commit": "934813e4d421071a1b3db3973c02fe2721359a6e",
+  "annotator": "Codex reading the frozen source before any retrieval output",
+  "status": "source-reviewed; not human or independent multi-annotator ground truth",
+  "coverageRule": "Any alternative may satisfy a unit; all exact source lines in that alternative are required.",
+  "answers": [
+    {
+      "id": "value-precedence",
+      "units": [
+        {
+          "id": "cli-env",
+          "fact": "命令行值优先，缺失时才读取环境变量。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 2281,
+                  "endLine": 2286,
+                  "quote": "        value = opts.get(self.name)  # type: ignore\n        source = ParameterSource.COMMANDLINE\n\n        if value is None:\n            value = self.value_from_envvar(ctx)\n            source = ParameterSource.ENVIRONMENT",
+                  "sha256": "cf94ed0ba9ab242e9bb308a0eb1be0efe6547b94f8e040107dfc7d5a0be33935"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "defaults",
+          "fact": "环境变量仍缺失时依次使用默认映射和声明默认值。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 2288,
+                  "endLine": 2296,
+                  "quote": "        if value is None:\n            value = ctx.lookup_default(self.name)  # type: ignore\n            source = ParameterSource.DEFAULT_MAP\n\n        if value is None:\n            value = self.get_default(ctx)\n            source = ParameterSource.DEFAULT\n\n        return value, source",
+                  "sha256": "44267cdac25de9a0d5e97459890f5224c42662e43364f83fc9b5a3487750ca56"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "source",
+          "fact": "解析处理记录所选值的来源并进入值处理。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 2398,
+                  "endLine": 2403,
+                  "quote": "        with augment_usage_errors(ctx, param=self):\n            value, source = self.consume_value(ctx, opts)\n            ctx.set_parameter_source(self.name, source)  # type: ignore\n\n            try:\n                value = self.process_value(ctx, value)",
+                  "sha256": "454ef650bb60caa02c0ccb42f5341061eaa4d2c6b68921b317160a74235575f4"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "prompt-validation",
+      "units": [
+        {
+          "id": "prompt",
+          "fact": "默认或未设置的值在启用提示且需要输入、非宽容解析时触发交互。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 2962,
+                  "endLine": 2969,
+                  "quote": "        elif (\n            source in {None, ParameterSource.DEFAULT}\n            and self.prompt is not None\n            and (self.required or self.prompt_required)\n            and not ctx.resilient_parsing\n        ):\n            value = self.prompt_for_value(ctx)\n            source = ParameterSource.PROMPT",
+                  "sha256": "066da7174635f75de327061f8e5b85054509ce4a9c4b50170a72bb78af0c2a59"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "convert-required",
+          "fact": "值先转换类型，必填而缺失则抛参数异常。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 2358,
+                  "endLine": 2362,
+                  "quote": "    def process_value(self, ctx: Context, value: t.Any) -> t.Any:\n        value = self.type_cast_value(ctx, value)\n\n        if self.required and self.value_is_missing(value):\n            raise MissingParameter(ctx=ctx, param=self)",
+                  "sha256": "495652d593806622fb421fe579aba47994c41635f908d605d7ab3fb141a77a99"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "callback",
+          "fact": "存在自定义回调时调用并采用回调返回值。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 2364,
+                  "endLine": 2367,
+                  "quote": "        if self.callback is not None:\n            value = self.callback(ctx, self, value)\n\n        return value",
+                  "sha256": "2f8d149cc7e02a8d5284f4ef80a1cef2ef1077fc3b2fb7832fc08b5a5e7457bc"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "subcommand-dispatch",
+      "units": [
+        {
+          "id": "resolve",
+          "fact": "根据首个参数查找子命令，必要时规范化名称后重试。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 1734,
+                  "endLine": 1744,
+                  "quote": "        cmd_name = make_str(args[0])\n        original_cmd_name = cmd_name\n\n        # Get the command\n        cmd = self.get_command(ctx, cmd_name)\n\n        # If we can't find the command but there is a normalization\n        # function available, we try with that one.\n        if cmd is None and ctx.token_normalize_func is not None:\n            cmd_name = ctx.token_normalize_func(cmd_name)\n            cmd = self.get_command(ctx, cmd_name)",
+                  "sha256": "0a9f679db6cf2d951fe391e18f2a9628d92eab5993530fc72f39149c95fc3648"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "parent",
+          "fact": "记录被调用子命令并先调用父命令。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 1691,
+                  "endLine": 1694,
+                  "quote": "                cmd_name, cmd, args = self.resolve_command(ctx, args)\n                assert cmd is not None\n                ctx.invoked_subcommand = cmd_name\n                super().invoke(ctx)",
+                  "sha256": "45daf96f139be050875f34e166116c85f6629d4144717e6089d7c1654910b017"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "child",
+          "fact": "为子命令建立带父上下文的上下文并调用它。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 1695,
+                  "endLine": 1697,
+                  "quote": "                sub_ctx = cmd.make_context(cmd_name, args, parent=ctx)\n                with sub_ctx:\n                    return _process_result(sub_ctx.command.invoke(sub_ctx))",
+                  "sha256": "b02e7813afacb80aaef0efbabee55d1ca8636ad68d49ce6ac18dfc9b8782c86b"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "command-chain",
+      "units": [
+        {
+          "id": "parse",
+          "fact": "循环建立子上下文，把剩余参数交给后续命令。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 1711,
+                  "endLine": 1723,
+                  "quote": "            contexts = []\n            while args:\n                cmd_name, cmd, args = self.resolve_command(ctx, args)\n                assert cmd is not None\n                sub_ctx = cmd.make_context(\n                    cmd_name,\n                    args,\n                    parent=ctx,\n                    allow_extra_args=True,\n                    allow_interspersed_args=False,\n                )\n                contexts.append(sub_ctx)\n                args, sub_ctx.args = sub_ctx.args, []",
+                  "sha256": "9fc198a4b3d82f39dfd2657f4f9040172b6d3742c1146269b641cc5187ba8c9d"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ordered",
+          "fact": "顺序进入子上下文并收集每次调用结果。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 1725,
+                  "endLine": 1729,
+                  "quote": "            rv = []\n            for sub_ctx in contexts:\n                with sub_ctx:\n                    rv.append(sub_ctx.command.invoke(sub_ctx))\n            return _process_result(rv)",
+                  "sha256": "2e0fab49b4508cfc2f399b9c519c6c28066d7891ea08dc3c2b437d69c1f7b8d4"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "result",
+          "fact": "结果回调接收收集的值以及父上下文参数。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 1664,
+                  "endLine": 1667,
+                  "quote": "        def _process_result(value: t.Any) -> t.Any:\n            if self._result_callback is not None:\n                value = ctx.invoke(self._result_callback, value, **ctx.params)\n            return value",
+                  "sha256": "7254279706b0ce70bf0f4970cf79e64e84db8f1c3d3b67ffc7a83c2e648e6b9b"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "resource-cleanup",
+      "units": [
+        {
+          "id": "managed",
+          "fact": "通过退出栈进入资源上下文管理器。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 585,
+                  "endLine": 585,
+                  "quote": "        return self._exit_stack.enter_context(context_manager)",
+                  "sha256": "2aeb2ceb038a197568d8491d7eaa34c5632a522c62e909841764b141aa298095"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "callback",
+          "fact": "清理回调注册到同一个退出栈。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 597,
+                  "endLine": 597,
+                  "quote": "        return self._exit_stack.callback(f)",
+                  "sha256": "d0b131e957bf881b05f5df80d689c2b506d29b23185ac4ba09bc604f06b54507"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "close",
+          "fact": "最外层上下文退出触发关闭，执行退出栈后重建栈。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 473,
+                  "endLine": 476,
+                  "quote": "        self._depth -= 1\n        if self._depth == 0:\n            self.close()\n        pop_context()",
+                  "sha256": "7c78e4885145119f0aa36e9176aa8b633d1a5343282710003913f6d9715be078"
+                },
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 604,
+                  "endLine": 606,
+                  "quote": "        self._exit_stack.close()\n        # In case the context is reused, create a new exit stack.\n        self._exit_stack = ExitStack()",
+                  "sha256": "f1d0112a667e4cb1557957151cc11a2216db78c3b8b35b708e77c6246dceb5e1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lazy-atomic-file",
+      "units": [
+        {
+          "id": "register",
+          "fact": "延迟文件参数创建包装对象，并将智能关闭登记到上下文。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/types.py",
+                  "startLine": 718,
+                  "endLine": 726,
+                  "quote": "            if lazy:\n                lf = LazyFile(\n                    value, self.mode, self.encoding, self.errors, atomic=self.atomic\n                )\n\n                if ctx is not None:\n                    ctx.call_on_close(lf.close_intelligently)\n\n                return t.cast(t.IO[t.Any], lf)",
+                  "sha256": "5e0dc3079deaba28c9a02f38d27c81c3b929817d53a5f119cd001b76b4e0c714"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "open",
+          "fact": "延迟包装在需要访问时打开底层流，已有打开的流直接复用。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/utils.py",
+                  "startLine": 140,
+                  "endLine": 141,
+                  "quote": "    def __getattr__(self, name: str) -> t.Any:\n        return getattr(self.open(), name)",
+                  "sha256": "5fb44b58370854304baf05335b5443dbd84399086ae474c54ebf3bcbe0fe8f8d"
+                },
+                {
+                  "path": "src/click/utils.py",
+                  "startLine": 153,
+                  "endLine": 158,
+                  "quote": "        if self._f is not None:\n            return self._f\n        try:\n            rv, self.should_close = open_stream(\n                self.name, self.mode, self.encoding, self.errors, atomic=self.atomic\n            )",
+                  "sha256": "18bfe1d3a42f8edee2a2a046e87baaba01c1b90e3ae6f617af9e41e666181a5f"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "temporary",
+          "fact": "原子写在目标目录创建临时文件，并包装为原子文件。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/_compat.py",
+                  "startLine": 428,
+                  "endLine": 435,
+                  "quote": "    while True:\n        tmp_filename = os.path.join(\n            os.path.dirname(filename),\n            f\".__atomic-write{random.randrange(1 << 32):08x}\",\n        )\n        try:\n            fd = os.open(tmp_filename, flags, 0o666 if perm is None else perm)\n            break",
+                  "sha256": "9414a272c88458babec4fc352e586118e87eb97ee8cfaf99b30fcf35ecc27d44"
+                },
+                {
+                  "path": "src/click/_compat.py",
+                  "startLine": 449,
+                  "endLine": 451,
+                  "quote": "    f = _wrap_io_open(fd, mode, encoding, errors)\n    af = _AtomicFile(f, tmp_filename, os.path.realpath(filename))\n    return t.cast(t.IO[t.Any], af), True",
+                  "sha256": "dc81a4e30246b0e7c5643f8ff4743a22acc7bc4aa26e212324bdd40074ca7e8d"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "replace",
+          "fact": "关闭原子文件时先关闭底层文件，再替换目标路径。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/_compat.py",
+                  "startLine": 465,
+                  "endLine": 470,
+                  "quote": "    def close(self, delete: bool = False) -> None:\n        if self.closed:\n            return\n        self._f.close()\n        os.replace(self._tmp_filename, self._real_filename)\n        self.closed = True",
+                  "sha256": "07c9f17e7847f45a849fa4e886cb21990ba6cb3f5f789755e511f389f36189a3"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "path-validation",
+      "units": [
+        {
+          "id": "missing",
+          "fact": "stat 失败时按是否要求存在决定返回还是报错。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/types.py",
+                  "startLine": 875,
+                  "endLine": 880,
+                  "quote": "            try:\n                st = os.stat(rv)\n            except OSError:\n                if not self.exists:\n                    return self.coerce_path_result(rv)\n                self.fail(",
+                  "sha256": "b50f1772fc62e46c64ef95bc86b89c3a455b4474ebde9f69c9627ef8ea1cc0f3"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "kind",
+          "fact": "按文件和目录允许标记拒绝不匹配的路径类型。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/types.py",
+                  "startLine": 888,
+                  "endLine": 889,
+                  "quote": "            if not self.file_okay and stat.S_ISREG(st.st_mode):\n                self.fail(",
+                  "sha256": "f82de9b31ac8308d8c820e0379d68e16b925e3a75db07a6d7ea3d1f291f18087"
+                },
+                {
+                  "path": "src/click/types.py",
+                  "startLine": 896,
+                  "endLine": 897,
+                  "quote": "            if not self.dir_okay and stat.S_ISDIR(st.st_mode):\n                self.fail(",
+                  "sha256": "0ead5965ea976a0e3fb555400409c2efe4e0f6d1e5cc8cfe5a87130dbcdec89e"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "permissions",
+          "fact": "按 readable 和 writable 配置检查访问权限。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/types.py",
+                  "startLine": 905,
+                  "endLine": 906,
+                  "quote": "            if self.readable and not os.access(rv, os.R_OK):\n                self.fail(",
+                  "sha256": "ce23603822e7b5987aefded89dacde6ca215644a38ba7601a62f9a342bd3bfa1"
+                },
+                {
+                  "path": "src/click/types.py",
+                  "startLine": 914,
+                  "endLine": 915,
+                  "quote": "            if self.writable and not os.access(rv, os.W_OK):\n                self.fail(",
+                  "sha256": "3c100244c4064d3099d09330da315c03e0e9bf7b4691326dd2a8e3f0eb3c168b"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "choice-normalization",
+      "units": [
+        {
+          "id": "normalize",
+          "fact": "输入和候选经过上下文规范化，并可同时做 casefold。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/types.py",
+                  "startLine": 279,
+                  "endLine": 291,
+                  "quote": "        if ctx is not None and ctx.token_normalize_func is not None:\n            normed_value = ctx.token_normalize_func(value)\n            normed_choices = {\n                ctx.token_normalize_func(normed_choice): original\n                for normed_choice, original in normed_choices.items()\n            }\n\n        if not self.case_sensitive:\n            normed_value = normed_value.casefold()\n            normed_choices = {\n                normed_choice.casefold(): original\n                for normed_choice, original in normed_choices.items()\n            }",
+                  "sha256": "7f02aacc9068a95cdc81551b4e4bb92090a36ef057a222e70ae5529ec41be2da"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "original",
+          "fact": "匹配后返回保存的原始候选值。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/types.py",
+                  "startLine": 293,
+                  "endLine": 294,
+                  "quote": "        if normed_value in normed_choices:\n            return normed_choices[normed_value]",
+                  "sha256": "b2cadc8064c4f550dbcc5626997be51abdd4658a2e16f23ae87faf4baa893325"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "invalid",
+          "fact": "未匹配时通过参数错误报告输入及可选值。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/types.py",
+                  "startLine": 296,
+                  "endLine": 302,
+                  "quote": "        choices_str = \", \".join(map(repr, self.choices))\n        self.fail(\n            ngettext(\n                \"{value!r} is not {choice}.\",\n                \"{value!r} is not one of {choices}.\",\n                len(self.choices),\n            ).format(value=value, choice=choices_str, choices=choices_str),",
+                  "sha256": "1e2fed171f22ac72f9e42ee60d106de4396ed2a60d2c468e8177bfd809341f87"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "command-errors",
+      "units": [
+        {
+          "id": "interrupt",
+          "fact": "EOF 或键盘中断转换为 Abort，独立模式输出终止并退出。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 1093,
+                  "endLine": 1095,
+                  "quote": "            except (EOFError, KeyboardInterrupt) as e:\n                echo(file=sys.stderr)\n                raise Abort() from e",
+                  "sha256": "5a7362e887ad9b31d2e8a428b7d033a2cb43d5d6aa3c1e9569782e2d05518085"
+                },
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 1121,
+                  "endLine": 1125,
+                  "quote": "        except Abort:\n            if not standalone_mode:\n                raise\n            echo(_(\"Aborted!\"), file=sys.stderr)\n            sys.exit(1)",
+                  "sha256": "4fd261b9145f77bca5e06f207c53d248f302aa02b03f4bfb9764b95bd91ef9d0"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "usage",
+          "fact": "Click 异常在独立模式显示并使用异常退出码，否则向上传播。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 1096,
+                  "endLine": 1100,
+                  "quote": "            except ClickException as e:\n                if not standalone_mode:\n                    raise\n                e.show()\n                sys.exit(e.exit_code)",
+                  "sha256": "ed6891591d38b8099b8821894c12ffe48d88b803da5f655ee83c136b7760a356"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "exit",
+          "fact": "显式退出在独立模式退出进程，否则返回退出码。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 1108,
+                  "endLine": 1110,
+                  "quote": "        except Exit as e:\n            if standalone_mode:\n                sys.exit(e.exit_code)",
+                  "sha256": "8a46e0273f1752c27dc70cd97fc7da53bdb3c7e17ced20e10d58738133051c4c"
+                },
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 1120,
+                  "endLine": 1120,
+                  "quote": "                return e.exit_code",
+                  "sha256": "9d0d006ad622eafcdd5d0455603ebec9ca4d1fd576f1587b5d587f2c2ae6dd45"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "return",
+          "fact": "非独立运行返回命令调用结果。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/core.py",
+                  "startLine": 1081,
+                  "endLine": 1084,
+                  "quote": "                with self.make_context(prog_name, args, **extra) as ctx:\n                    rv = self.invoke(ctx)\n                    if not standalone_mode:\n                        return rv",
+                  "sha256": "560e2c3bada1a387cd08fb3c1a1edbaca9bcea6f27a02397c58836bbdaad0f58"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shell-completion",
+      "units": [
+        {
+          "id": "instruction",
+          "fact": "按 shell 和指令选择实现，分别处理脚本生成与补全。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/shell_completion.py",
+                  "startLine": 36,
+                  "endLine": 50,
+                  "quote": "    shell, _, instruction = instruction.partition(\"_\")\n    comp_cls = get_completion_class(shell)\n\n    if comp_cls is None:\n        return 1\n\n    comp = comp_cls(cli, ctx_args, prog_name, complete_var)\n\n    if instruction == \"source\":\n        echo(comp.source())\n        return 0\n\n    if instruction == \"complete\":\n        echo(comp.complete())\n        return 0",
+                  "sha256": "30f0d173e588127a48c0a7289ea118553138f078d3e03c7f459600771e165256"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dispatch",
+          "fact": "解析上下文和待补全部分后调用目标的 shell_complete。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/shell_completion.py",
+                  "startLine": 273,
+                  "endLine": 275,
+                  "quote": "        ctx = _resolve_context(self.cli, self.ctx_args, self.prog_name, args)\n        obj, incomplete = _resolve_incomplete(ctx, args, incomplete)\n        return obj.shell_complete(ctx, incomplete)",
+                  "sha256": "88b40f37754c1c1fc6f5edd4ec92645062648eb14ebc76d3b2b0dcbeae62cc8d"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "target",
+          "fact": "未完成选项或位置参数优先提供补全，否则交给命令。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "src/click/shell_completion.py",
+                  "startLine": 591,
+                  "endLine": 603,
+                  "quote": "    for param in params:\n        if _is_incomplete_option(ctx, args, param):\n            return param, incomplete\n\n    # It's not an option name or value. The first argument without a\n    # parsed value will provide value completions.\n    for param in params:\n        if _is_incomplete_argument(ctx, param):\n            return param, incomplete\n\n    # There were no unparsed arguments, the command may be a group that\n    # will provide command name completions.\n    return ctx.command, incomplete",
+                  "sha256": "7cc1507e79cf32427532261f3ce9645b480ee061c26dfe9feab0cb665b34bda1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

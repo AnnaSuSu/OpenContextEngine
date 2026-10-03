@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "repository": "colinhacks/zod",
+  "tag": "v3.24.2",
+  "commit": "e30870369d5b8f31ff4d0130d4439fd997deb523",
+  "language": "typescript",
+  "scope": "src/ production source; no tests, benchmarks, examples, docs or dependencies",
+  "files": [
+    {
+      "path": "src/ZodError.ts",
+      "bytes": 8909,
+      "sha256": "fdc5a8114a138f8eda17d58a83dc9f46c2db885397c953da3c86069e90326612"
+    },
+    {
+      "path": "src/errors.ts",
+      "bytes": 299,
+      "sha256": "c744e98e5586c29dbebddd9bab6b46886e67e313321793edabc3106ec7c7c438"
+    },
+    {
+      "path": "src/external.ts",
+      "bytes": 187,
+      "sha256": "f5ef066942e4f0bd98200aa6a6694b831e73200c9b3ade77ad0aa2409e8fe1b1"
+    },
+    {
+      "path": "src/helpers/enumUtil.ts",
+      "bytes": 612,
+      "sha256": "54efc393cc9860e687d8b81ff52e980def00fa67377ad0bf8b3104f8a5bf698c"
+    },
+    {
+      "path": "src/helpers/errorUtil.ts",
+      "bytes": 338,
+      "sha256": "7a77328240be7b847af6de9189963bd9f79cab32bbc61502a9db4fe6683e2ea7"
+    },
+    {
+      "path": "src/helpers/parseUtil.ts",
+      "bytes": 5323,
+      "sha256": "2d8d845fbeb48634ea926223d530fdcef141ea5c9e97cbd3abe030e0832e2c24"
+    },
+    {
+      "path": "src/helpers/partialUtil.ts",
+      "bytes": 2579,
+      "sha256": "45ea3afb272487961758dac5c37d53df741804d389dfc62e048ebccd4eea15ed"
+    },
+    {
+      "path": "src/helpers/typeAliases.ts",
+      "bytes": 151,
+      "sha256": "0fda31a063c6736fc3cf9090dd94865c811dfff4f3cb8707b932bf937c6f2c3e"
+    },
+    {
+      "path": "src/helpers/util.ts",
+      "bytes": 5625,
+      "sha256": "30c273131661ca5dc973f2cfb196fa23caf3a43e224cdde7a683b72e101a31fc"
+    },
+    {
+      "path": "src/index.ts",
+      "bytes": 93,
+      "sha256": "b9e99cd94f4166a245f5158f7286c05406e2a4c694619bceb7a4f3519d1d768e"
+    },
+    {
+      "path": "src/locales/en.ts",
+      "bytes": 5228,
+      "sha256": "5e32b6ce594b5b09ab73612e4a008143b7f5dfda5850b4922292ff76e78bfa29"
+    },
+    {
+      "path": "src/standard-schema.ts",
+      "bytes": 2706,
+      "sha256": "4abb2e7bd784fb95d219584673971bb317e74fb4fd0c74c196b558ba46df4456"
+    },
+    {
+      "path": "src/types.ts",
+      "bytes": 160475,
+      "sha256": "cc882eb615bc708bbe20e870cdd37701be55b352f42fde66585d72e498d23282"
+    }
+  ]
+}

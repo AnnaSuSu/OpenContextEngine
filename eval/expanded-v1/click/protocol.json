@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "id": "click-semantic-expanded-v1-protocol",
+  "stage": "frozen-cross-repository-evaluation",
+  "primaryLanguage": "zh",
+  "languageOrder": "Alternate zh/en and en/zh by task; one query per language and task. No repetition.",
+  "tokenizer": {
+    "package": "js-tiktoken",
+    "version": "1.0.21",
+    "encoding": "cl100k_base"
+  },
+  "primaryBudgetTokens": 4000,
+  "supplementalBudgetsTokens": [
+    2000,
+    8000
+  ],
+  "budgetRule": "Preserve returned order and formatted text, count metadata and line numbers; truncate to a token prefix, then drop an incomplete trailing line. Never select by reference labels.",
+  "coverageRule": "Any alternative may satisfy a unit; all source lines in that alternative are required. Validate returned line text against the fixed snapshot before credit.",
+  "aggregation": "Equal weight evidence units within each task, then equal weight tasks within each repository; equal weight repositories in overall summary, separately for zh/en.",
+  "emptyOrFailedQueryCoverage": 0,
+  "ace": {
+    "sdkVersion": "0.2.0",
+    "method": "DirectContext.search",
+    "maxOutputLength": 40000
+  },
+  "limits": {
+    "totalMs": 600000,
+    "indexingMs": 240000,
+    "queryMs": 60000,
+    "requestMs": 45000,
+    "httpRequests": 160,
+    "retrievalRequests": 24,
+    "queries": 20,
+    "files": 1000,
+    "uploadBytes": 7000000,
+    "singleFileBytes": 1000000
+  },
+  "notes": [
+    "No Agent or query rewriting outside each engine; frozen same source and bilingual queries for both systems.",
+    "Source-derived tasks authored by Codex before outputs; not independently annotated or a hidden public benchmark.",
+    "Engine configuration frozen before querying these repositories; no tuning during the comparison.",
+    "ACE and RepoNerve are called from the same Mac; provider hardware and indexing implementations differ.",
+    "Single run per task/language/system; no statistical significance or concurrency claim."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "frozenAt": "2026-10-03T15:22:22.080230+00:00",
+  "engine": "batched-dag-v4",
+  "indexVersion": "structural-units-v2",
+  "reranker": {
+    "model": "Qwen3-Reranker-4B",
+    "maxBatchSize": 32,
+    "batchTokenBudget": 8192
+  },
+  "sha256": {
+    "package-lock.json": "065677f461c32fb634789a369adc41fb48ad3e7466402649402c9cc3953ff86c",
+    "package.json": "1ff5222e23da3e6ce863be9965fdaf522d3bee11f5161d774a4103e78b5a7341",
+    "scripts/embedding-gateway.mjs": "7944f9b2dbfb0abadb37a798935ccbefe9651f72b38b8d58ee87fcb5884a22ed",
+    "scripts/expanded/serve.mjs": "bb43908f81bc60852720ce5841c0b5cc641a009a49e4d053a21a2890417f7264",
+    "scripts/expanded/worker.py": "7ccb316b4f55d6898b16472c7b1879ba22d1652fcaf41c7e16c8af1bdc414a4f",
+    "scripts/retrieval-server.py": "3686bceb5e1bede832f31685a9dda31c88a3b29cee3a747399baa95dacf0e65f",
+    "src/client.mjs": "754fde093941f2c404c5af690b3be329fb44665049854f7268e021acb67be8d5",
+    "src/eval/embedding-transport.mjs": "8174a013adea52b29dfdf1d1d7d6416b1a37d9e220349454b686a5b32b0851f4",
+    "src/eval/evidence.mjs": "76cb50cfac376f3ae8d3fa17a83558f17a8a8f5e9256c4b5d8f9c4b2d01b79d0",
+    "src/eval/normalize.mjs": "84dfdfce549bccc9c66f48f64b313124086279197f2f32d8bd8a12ab7d3ee328",
+    "src/eval/remote-models.mjs": "241cb6378c26010aa170e484a683a2fc46efe246856ef760716be36e371f8d95",
+    "src/pilot/codex.mjs": "bb5cdbeb3abf9a1817aa0fdfc05dcb5fe2d0051267c41e2301211e9ef4731145",
+    "src/pilot/config.mjs": "bfd7d7cfb35785102be3e836e303ede88031d69b4b56f109371f8c7b66c4380f",
+    "src/pilot/responses.mjs": "89a80b79f49f9c052c8dbb7bffed9a9222c7ec4596a45b2ab2f3c3ecb072e874",
+    "src/pilot/score.mjs": "a9cb41863225e3eb182ed02e0509cc09b76c8480cab52729fd663bdcac74e4fb",
+    "src/retrieval/batched.py": "914f7879dc8ae07f3971d82a948f8103ac25046d52e566b94505888be684fdeb",
+    "src/retrieval/cascade.py": "3e66d2a6c6abafb7a5c09714c04845571a4bcf171b6576c913bfd4978baec999",
+    "src/retrieval/engine.py": "8290534337b16161d5142e34df5f210591e600daaa2de74caa1e8ee8d714da8b",
+    "src/retrieval/entities.py": "40aeaab65537ffb644a653cef57b35509d873e69a5ebe7663c99568abdda4319",
+    "src/retrieval/languages/__init__.py": "061a52434ceb0258d92c3d185c3260f7a39bb80e832bac85e0943844177ff7cf",
+    "src/retrieval/languages/python.py": "5154ce726d88028eba118c887604737ffb42adccd4653e69679b3ec897fd27ff",
+    "src/retrieval/languages/schema.py": "fdae889aefef76c1520fc1f818b9345e8bc2082413d10793c5fdb43c0ca49a90",
+    "src/retrieval/languages/typescript.mjs": "782ac128bf2897d875da23eea4272e14ac03a6e8bca0f87ac054e99515681d24",
+    "src/retrieval/languages/typescript.py": "ffa77209f4a2304794c4dba13914f6cf960f9abbe8da8cc01e2a2c6795fbfbcc"
+  }
+}

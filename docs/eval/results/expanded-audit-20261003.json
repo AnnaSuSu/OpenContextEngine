@@ -1,0 +1,42 @@
+{
+  "engineUnchanged": true,
+  "rawAndInputsVerified": true,
+  "queries": 120,
+  "runs": [
+    {
+      "run": "runs/ace-click-expanded-2026-10-03T15-32-08.412Z",
+      "queries": 20,
+      "verified": true
+    },
+    {
+      "run": "runs/ace-httpx-expanded-2026-10-03T15-35-01.321Z",
+      "queries": 20,
+      "verified": true
+    },
+    {
+      "run": "runs/ace-zod-expanded-2026-10-03T15-37-49.629Z",
+      "queries": 20,
+      "verified": true
+    },
+    {
+      "run": "runs/reponerve-click-expanded-2026-10-03T15-32-00.397Z",
+      "queries": 20,
+      "verified": true
+    },
+    {
+      "run": "runs/reponerve-httpx-expanded-2026-10-03T15-33-33.211Z",
+      "queries": 20,
+      "verified": true
+    },
+    {
+      "run": "runs/reponerve-zod-expanded-2026-10-03T15-34-56.318Z",
+      "queries": 20,
+      "verified": true
+    }
+  ],
+  "independentPrimaryScoreRecomputation": {
+    "language": "python",
+    "queries": 120,
+    "matches": 120
+  }
+}

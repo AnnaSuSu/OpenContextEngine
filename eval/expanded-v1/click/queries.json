@@ -1,0 +1,87 @@
+{
+  "schemaVersion": 1,
+  "dataset": "click-semantic-expanded-v1",
+  "commit": "934813e4d421071a1b3db3973c02fe2721359a6e",
+  "cases": [
+    {
+      "id": "value-precedence",
+      "category": "configuration",
+      "queries": {
+        "zh": "找到命令选项值来源的处理代码：命令行、环境变量、默认值映射和声明默认值如何确定优先顺序？最后如何记录来源？",
+        "en": "Find how command option values are obtained: how are command-line input, environment variables, a defaults mapping, and declared defaults prioritized? How is the chosen source recorded?"
+      }
+    },
+    {
+      "id": "prompt-validation",
+      "category": "input-validation",
+      "queries": {
+        "zh": "找到缺少命令选项时交互提示的处理代码：什么时候询问用户？输入如何转换类型、检查必填项并调用校验回调？",
+        "en": "Find interactive prompting for missing command options: when is the user prompted? How is the value converted, checked for required input, and passed to a validation callback?"
+      }
+    },
+    {
+      "id": "subcommand-dispatch",
+      "category": "cross-file-flow",
+      "queries": {
+        "zh": "找到子命令分发代码：如何从剩余参数找到子命令，为它创建子上下文，再调用父命令和子命令？",
+        "en": "Find subcommand dispatch: how is a subcommand resolved from the remaining arguments, given a child context, and invoked after the parent command?"
+      }
+    },
+    {
+      "id": "command-chain",
+      "category": "control-flow",
+      "queries": {
+        "zh": "找到连续执行多个子命令的处理代码：如何解析后续子命令，按顺序执行，并将所有结果交给结果回调？",
+        "en": "Find chained subcommand execution: how are subsequent commands parsed and invoked in order, and how are their collected results passed to the result callback?"
+      }
+    },
+    {
+      "id": "resource-cleanup",
+      "category": "resource-lifecycle",
+      "queries": {
+        "zh": "找到命令上下文管理资源的代码：如何注册上下文管理器和清理回调？命令退出时如何执行清理？",
+        "en": "Find resource management in command contexts: how are context managers and cleanup callbacks registered, and how is cleanup triggered when the command exits?"
+      }
+    },
+    {
+      "id": "lazy-atomic-file",
+      "category": "cross-file-flow",
+      "queries": {
+        "zh": "找到文件参数延迟打开和原子写入的处理代码：何时真正打开文件，如何登记关闭操作，写入何时替换目标文件？",
+        "en": "Find lazy opening and atomic writing for file parameters: when is the file actually opened, how is closing registered, and when does a write replace the destination file?"
+      }
+    },
+    {
+      "id": "path-validation",
+      "category": "input-validation",
+      "queries": {
+        "zh": "找到路径参数校验的代码：如何处理路径不存在、文件与目录类型限制，以及可读可写权限？",
+        "en": "Find path argument validation: how are missing paths, file-versus-directory restrictions, and readable or writable permissions handled?"
+      }
+    },
+    {
+      "id": "choice-normalization",
+      "category": "input-validation",
+      "queries": {
+        "zh": "找到枚举选项忽略大小写的处理代码：怎样规范化输入和候选值，返回原始候选值，并报告无效输入？",
+        "en": "Find case-insensitive choice handling: how are input and choices normalized, how is the original choice returned, and how is invalid input reported?"
+      }
+    },
+    {
+      "id": "command-errors",
+      "category": "error-handling",
+      "queries": {
+        "zh": "找到命令入口的异常处理代码：用户中断、参数错误和正常退出分别怎样转换成终端输出与退出状态？非独立运行模式有什么不同？",
+        "en": "Find exception handling at the command entry point: how are user interrupts, usage errors, and normal exits converted into terminal output and exit status? What changes outside standalone mode?"
+      }
+    },
+    {
+      "id": "shell-completion",
+      "category": "cross-file-flow",
+      "queries": {
+        "zh": "找到 shell 补全请求的处理代码：如何识别补全指令、定位当前命令或参数，再调用对应的补全逻辑？",
+        "en": "Find shell completion handling: how is a completion instruction recognized, how is the active command or parameter resolved, and how is its completion logic called?"
+      }
+    }
+  ]
+}

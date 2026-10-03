@@ -1,0 +1,1749 @@
+{
+  "kind": "development-regression-after-failure-analysis",
+  "engine": "batched-dag-v6",
+  "independentTasks": 30,
+  "queries": 60,
+  "primaryBudget": 4000,
+  "notHeldOut": true,
+  "summary": {
+    "all": {
+      "before": {
+        "queries": 60,
+        "coverage": 0.9013888888888889,
+        "completeCount": 48,
+        "blankAdjustedCoverage": 0.9180555555555555,
+        "blankAdjustedCompleteCount": 50,
+        "medianMs": 3757.5,
+        "p95Ms": 5942
+      },
+      "after": {
+        "queries": 60,
+        "coverage": 0.9402777777777778,
+        "completeCount": 51,
+        "blankAdjustedCoverage": 0.9569444444444445,
+        "blankAdjustedCompleteCount": 53,
+        "medianMs": 4508.5,
+        "p95Ms": 6984
+      }
+    },
+    "click": {
+      "before": {
+        "queries": 20,
+        "coverage": 0.9875,
+        "completeCount": 19,
+        "blankAdjustedCoverage": 0.9875,
+        "blankAdjustedCompleteCount": 19,
+        "medianMs": 4369.5,
+        "p95Ms": 6090
+      },
+      "after": {
+        "queries": 20,
+        "coverage": 0.9875,
+        "completeCount": 19,
+        "blankAdjustedCoverage": 0.9875,
+        "blankAdjustedCompleteCount": 19,
+        "medianMs": 5088.5,
+        "p95Ms": 7285
+      }
+    },
+    "httpx": {
+      "before": {
+        "queries": 20,
+        "coverage": 0.85,
+        "completeCount": 13,
+        "blankAdjustedCoverage": 0.9,
+        "blankAdjustedCompleteCount": 15,
+        "medianMs": 3845.0,
+        "p95Ms": 5598
+      },
+      "after": {
+        "queries": 20,
+        "coverage": 0.85,
+        "completeCount": 13,
+        "blankAdjustedCoverage": 0.9,
+        "blankAdjustedCompleteCount": 15,
+        "medianMs": 4518.0,
+        "p95Ms": 6584
+      }
+    },
+    "zod": {
+      "before": {
+        "queries": 20,
+        "coverage": 0.8666666666666667,
+        "completeCount": 16,
+        "blankAdjustedCoverage": 0.8666666666666667,
+        "blankAdjustedCompleteCount": 16,
+        "medianMs": 3264.5,
+        "p95Ms": 4205
+      },
+      "after": {
+        "queries": 20,
+        "coverage": 0.9833333333333333,
+        "completeCount": 19,
+        "blankAdjustedCoverage": 0.9833333333333333,
+        "blankAdjustedCompleteCount": 19,
+        "medianMs": 3977.5,
+        "p95Ms": 4921
+      }
+    }
+  },
+  "wins": 3,
+  "losses": 0,
+  "changes": [
+    {
+      "repo": "zod",
+      "id": "safe-parsing",
+      "language": "zh",
+      "before": {
+        "coverage": 0,
+        "complete": false,
+        "elapsedMs": 3292,
+        "blankAdjusted": {
+          "coverage": 0.0,
+          "complete": false
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3968,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 8,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "safe-parsing",
+      "language": "en",
+      "before": {
+        "coverage": 0,
+        "complete": false,
+        "elapsedMs": 4239,
+        "blankAdjusted": {
+          "coverage": 0.0,
+          "complete": false
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5003,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 7,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "tagged-union",
+      "language": "zh",
+      "before": {
+        "coverage": 0.6666666666666666,
+        "complete": false,
+        "elapsedMs": 2776,
+        "blankAdjusted": {
+          "coverage": 0.6666666666666666,
+          "complete": false
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3707,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 2,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    }
+  ],
+  "rows": [
+    {
+      "repo": "click",
+      "id": "value-precedence",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3949,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4934,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 71,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "value-precedence",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4205,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4912,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 74,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "prompt-validation",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4461,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5039,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "prompt-validation",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4763,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5517,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "subcommand-dispatch",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5942,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 7215,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "subcommand-dispatch",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3771,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4581,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 64,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "command-chain",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4845,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5313,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "command-chain",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5428,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 6362,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "resource-cleanup",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3031,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3837,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 62,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "resource-cleanup",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5700,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 6578,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "lazy-atomic-file",
+      "language": "zh",
+      "before": {
+        "coverage": 0.75,
+        "complete": false,
+        "elapsedMs": 4558,
+        "blankAdjusted": {
+          "coverage": 0.75,
+          "complete": false
+        }
+      },
+      "after": {
+        "coverage": 0.75,
+        "complete": false,
+        "elapsedMs": 5821,
+        "blankAdjusted": {
+          "coverage": 0.75,
+          "complete": false
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "lazy-atomic-file",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4162,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5138,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 69,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "path-validation",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4193,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4985,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "path-validation",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4244,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4076,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 71,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "choice-normalization",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4922,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5739,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "choice-normalization",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 6855,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 7847,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "command-errors",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3484,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4258,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 68,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "command-errors",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4278,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4643,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 71,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "shell-completion",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3668,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4390,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 62,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "click",
+      "id": "shell-completion",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 6090,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 7285,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "redirect-security",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 7250,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 6984,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "redirect-security",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3255,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4036,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 65,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "digest-auth",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4113,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4849,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "digest-auth",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3725,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4287,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 69,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "request-merging",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3965,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4600,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 76,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "request-merging",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5476,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5943,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "response-decoding",
+      "language": "zh",
+      "before": {
+        "coverage": 0.6666666666666666,
+        "complete": false,
+        "elapsedMs": 2609,
+        "blankAdjusted": {
+          "coverage": 0.6666666666666666,
+          "complete": false
+        }
+      },
+      "after": {
+        "coverage": 0.6666666666666666,
+        "complete": false,
+        "elapsedMs": 3205,
+        "blankAdjusted": {
+          "coverage": 0.6666666666666666,
+          "complete": false
+        }
+      },
+      "rerankedCount": 79,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "response-decoding",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3172,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3864,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "stream-cleanup",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3616,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4310,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 1,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "stream-cleanup",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4484,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5222,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 1,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "cookie-persistence",
+      "language": "zh",
+      "before": {
+        "coverage": 0.6666666666666666,
+        "complete": false,
+        "elapsedMs": 3170,
+        "blankAdjusted": {
+          "coverage": 0.6666666666666666,
+          "complete": false
+        }
+      },
+      "after": {
+        "coverage": 0.6666666666666666,
+        "complete": false,
+        "elapsedMs": 4204,
+        "blankAdjusted": {
+          "coverage": 0.6666666666666666,
+          "complete": false
+        }
+      },
+      "rerankedCount": 63,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "cookie-persistence",
+      "language": "en",
+      "before": {
+        "coverage": 0.3333333333333333,
+        "complete": false,
+        "elapsedMs": 4976,
+        "blankAdjusted": {
+          "coverage": 0.3333333333333333,
+          "complete": false
+        }
+      },
+      "after": {
+        "coverage": 0.3333333333333333,
+        "complete": false,
+        "elapsedMs": 5899,
+        "blankAdjusted": {
+          "coverage": 0.3333333333333333,
+          "complete": false
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "multipart-upload",
+      "language": "zh",
+      "before": {
+        "coverage": 0.5,
+        "complete": false,
+        "elapsedMs": 3510,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 0.5,
+        "complete": false,
+        "elapsedMs": 4089,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 73,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "multipart-upload",
+      "language": "en",
+      "before": {
+        "coverage": 0.5,
+        "complete": false,
+        "elapsedMs": 2261,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 0.5,
+        "complete": false,
+        "elapsedMs": 2943,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 57,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "timeout-overrides",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 2868,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3641,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 63,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "timeout-overrides",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5128,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 6114,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "proxy-bypass",
+      "language": "zh",
+      "before": {
+        "coverage": 0.6666666666666666,
+        "complete": false,
+        "elapsedMs": 5598,
+        "blankAdjusted": {
+          "coverage": 0.6666666666666666,
+          "complete": false
+        }
+      },
+      "after": {
+        "coverage": 0.6666666666666666,
+        "complete": false,
+        "elapsedMs": 6489,
+        "blankAdjusted": {
+          "coverage": 0.6666666666666666,
+          "complete": false
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "proxy-bypass",
+      "language": "en",
+      "before": {
+        "coverage": 0.6666666666666666,
+        "complete": false,
+        "elapsedMs": 3628,
+        "blankAdjusted": {
+          "coverage": 0.6666666666666666,
+          "complete": false
+        }
+      },
+      "after": {
+        "coverage": 0.6666666666666666,
+        "complete": false,
+        "elapsedMs": 4436,
+        "blankAdjusted": {
+          "coverage": 0.6666666666666666,
+          "complete": false
+        }
+      },
+      "rerankedCount": 68,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "status-errors",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4376,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5229,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "httpx",
+      "id": "status-errors",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5582,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 6584,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 1,
+      "run": "runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z"
+    },
+    {
+      "repo": "zod",
+      "id": "safe-parsing",
+      "language": "zh",
+      "before": {
+        "coverage": 0,
+        "complete": false,
+        "elapsedMs": 3292,
+        "blankAdjusted": {
+          "coverage": 0.0,
+          "complete": false
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3968,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 8,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "safe-parsing",
+      "language": "en",
+      "before": {
+        "coverage": 0,
+        "complete": false,
+        "elapsedMs": 4239,
+        "blankAdjusted": {
+          "coverage": 0.0,
+          "complete": false
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 5003,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 7,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "unknown-properties",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 2826,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3170,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "unknown-properties",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 2563,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 2871,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 2,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "async-refinement",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3382,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4130,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "async-refinement",
+      "language": "en",
+      "before": {
+        "coverage": 0.6666666666666666,
+        "complete": false,
+        "elapsedMs": 3237,
+        "blankAdjusted": {
+          "coverage": 0.6666666666666666,
+          "complete": false
+        }
+      },
+      "after": {
+        "coverage": 0.6666666666666666,
+        "complete": false,
+        "elapsedMs": 3894,
+        "blankAdjusted": {
+          "coverage": 0.6666666666666666,
+          "complete": false
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 4,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "tagged-union",
+      "language": "zh",
+      "before": {
+        "coverage": 0.6666666666666666,
+        "complete": false,
+        "elapsedMs": 2776,
+        "blankAdjusted": {
+          "coverage": 0.6666666666666666,
+          "complete": false
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3707,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 2,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "tagged-union",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 2521,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 2959,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "union-failures",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 2834,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3585,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 7,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "union-failures",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3597,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4037,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 9,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "missing-null-default",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3397,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3987,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 6,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "missing-null-default",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 2573,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3127,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 2,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "preprocess-transform",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3665,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4121,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 8,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "preprocess-transform",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4205,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4921,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 1,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "nested-errors",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 2733,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3488,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 77,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "nested-errors",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 2988,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4126,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "partial-required",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3578,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4194,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "partial-required",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 2469,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 2931,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 71,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "intersection-merging",
+      "language": "zh",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4027,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4891,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    },
+    {
+      "repo": "zod",
+      "id": "intersection-merging",
+      "language": "en",
+      "before": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 3744,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "after": {
+        "coverage": 1,
+        "complete": true,
+        "elapsedMs": 4752,
+        "blankAdjusted": {
+          "coverage": 1.0,
+          "complete": true
+        }
+      },
+      "rerankedCount": 80,
+      "contextOnlyPieces": 0,
+      "run": "runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z"
+    }
+  ],
+  "validation": {
+    "frozenSourceQueriesAnswersMatched": true,
+    "localAndRemoteEngineHashesMatched": true,
+    "rawResponseHashesMatched": true,
+    "sourceLinesVerified": true,
+    "noDuplicateOutputUnits": true,
+    "rerankMax80": true,
+    "embeddingCalls1": true,
+    "rerankCallsMax2": true,
+    "queryCacheFalse": true,
+    "tokensMax4000": true,
+    "independentPythonPrimaryScoreRecomputationMatches": 60,
+    "pythonTestsPassed": 16,
+    "nodeTestsPassed": 23
+  }
+}
