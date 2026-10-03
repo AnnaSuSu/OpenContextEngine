@@ -1,6 +1,8 @@
 """Snapshot-bound language adapters; downstream retrieval consumes only CodeUnit."""
 from collections import defaultdict
+from copy import deepcopy
 import hashlib
+import json
 from pathlib import Path, PurePosixPath
 import sys
 
@@ -40,7 +42,7 @@ def adapter_manifest(files, language_options=None):
             'sourceSha256': {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in paths}}
 
 
-def source_units(root, files, max_lines=65, language_options=None, report=None):
+def source_units(root, files, max_lines=65, language_options=None, report=None, cache=None):
     if type(max_lines) is not int or max_lines < 1:
         raise ValueError('max_lines must be a positive integer')
     root = Path(root).resolve()
@@ -75,6 +77,7 @@ def source_units(root, files, max_lines=65, language_options=None, report=None):
         groups['typescript' if language == 'javascript' else language].append(source)
     by_path = defaultdict(list)
     identities = {}
+    pending_cache = {}
     for language, subset in groups.items():
         settings = options.get(language)
         if language == 'go':
@@ -83,7 +86,28 @@ def source_units(root, files, max_lines=65, language_options=None, report=None):
             if settings is not None and settings != options['javascript']:
                 raise ValueError('JavaScript and TypeScript share compiler options')
             settings = options['javascript']
-        units = ADAPTERS[language].extract(subset, max_lines, settings)
+        # Bound cache lifetime to the current snapshot. Structural languages are
+        # invalidated together so imports and callers in unchanged files refresh.
+        batches = [[source] for source in subset] if cache is not None and language == 'text' else [subset]
+        units = []
+        for batch in batches:
+            key = (language, batch[0].path if language == 'text' else '')
+            fingerprint = (hashlib.sha256(json.dumps([
+                [(s.path, s.sha256) for s in batch], max_lines, settings,
+                adapter_manifest([{'path': s.path} for s in batch], options),
+            ], sort_keys=True).encode()).hexdigest() if cache is not None else None)
+            previous = cache.get(key) if cache is not None else None
+            extracted = (deepcopy(previous[1]) if previous and previous[0] == fingerprint
+                         else ADAPTERS[language].extract(batch, max_lines, settings))
+            if cache is not None:
+                pending_cache[key] = (fingerprint, deepcopy(extracted))
+            offset = len(units)
+            for unit in extracted:
+                unit['id'] += offset
+                for relation in unit['relations']:
+                    relation['target'] += offset
+                unit['edges'] = [target + offset for target in unit['edges']]
+            units.extend(extracted)
         validate_units(units, subset)
         for unit in units:
             by_path[unit['path']].append(unit)
@@ -96,6 +120,9 @@ def source_units(root, files, max_lines=65, language_options=None, report=None):
             relation['target'] = remap[(identities[id(unit)][0], relation['target'])]
         unit['edges'] = sorted({relation['target'] for relation in unit['relations']})
     validate_units(units, sources)
+    if cache is not None:
+        cache.clear()
+        cache.update(pending_cache)
     if report is not None:
         report.update(inputFiles=len(files), acceptedFiles=len(sources), excluded=excluded,
                       fallbackFiles=sum(language_for(source.path) == 'text' for source in sources))

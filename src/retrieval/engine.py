@@ -37,10 +37,11 @@ def document(u, limit=2200):
 
 
 class Engine:
-    def __init__(self, units, vectors, embed_url, reranker, embedding_key='local-only'):
+    def __init__(self, units, vectors, embed_url, reranker, embedding_key='local-only', embedding_model='Qwen3-Embedding-4B'):
         self.units, self.vectors = units, vectors
         self.embed_url, self.reranker = embed_url, reranker
         self.embedding_key = embedding_key
+        self.embedding_model = embedding_model
         self.encoding = tiktoken.get_encoding('cl100k_base')
         self.postings = defaultdict(list)
         lengths = []
@@ -88,7 +89,7 @@ class Engine:
         start = time.monotonic()
         facets = plan['facets']
         queries = [plan['intent']] + [f['question'] for f in facets]
-        embedded = post(self.embed_url + '/embeddings', {'model': 'Qwen3-Embedding-4B',
+        embedded = post(self.embed_url + '/embeddings', {'model': self.embedding_model,
             'input': ['Instruct: Retrieve source code implementing the requested behavior.\nQuery: ' + q for q in queries]}, self.embedding_key)
         qvectors = np.asarray([r['embedding'] for r in sorted(embedded['data'], key=lambda r: r['index'])], dtype=np.float32)
         dense = self.vectors @ qvectors.T

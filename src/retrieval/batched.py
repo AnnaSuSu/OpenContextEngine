@@ -115,7 +115,7 @@ class BatchedEngine(Engine):
         facets = plan['facets']
         queries = [plan['intent']] + [f['question'] for f in facets]
         unique = list(dict.fromkeys(queries))
-        embedded = post(self.embed_url+'/embeddings',{'model':'Qwen3-Embedding-4B',
+        embedded = post(self.embed_url+'/embeddings',{'model':self.embedding_model,
             'input':['Instruct: Retrieve source code implementing the requested behavior.\nQuery: '+q for q in unique]},self.embedding_key)
         vectors = [r['embedding'] for r in sorted(embedded['data'],key=lambda r:r['index'])]
         embedding_at = time.monotonic()
