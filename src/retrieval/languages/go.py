@@ -4,6 +4,7 @@ from functools import lru_cache
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -25,10 +26,29 @@ def compiler():
     return binary, toolchain(binary)
 
 
-def parse(sources):
+def settings(options=None, sources=()):
+    options = {} if options is None else options
+    if not isinstance(options, dict) or set(options)-{'mode', 'modulePath', 'goos', 'goarch'}:
+        raise ValueError('Go options support mode, modulePath, goos and goarch')
+    result = {'mode': 'syntax', 'modulePath': 'snapshot', 'goos': 'linux', 'goarch': 'amd64', **options}
+    if result['mode'] not in {'syntax', 'types'} or result['goos'] not in {'linux', 'darwin', 'windows', 'freebsd'} or result['goarch'] not in {'amd64', 'arm64', '386', 'arm'}:
+        raise ValueError('Unsupported Go analysis mode or build target')
+    if 'modulePath' not in options:
+        for source in sources:
+            if source.path == 'go.mod':
+                match = re.search(r'(?m)^module\s+("[^"\n]+"|[^\s/]+(?:/[^\s]+)*)', source.text)
+                if match:
+                    result['modulePath'] = match[1].strip('"')
+    if not isinstance(result['modulePath'], str) or not re.fullmatch(r'[A-Za-z0-9_.~/-]+', result['modulePath']) or '..' in result['modulePath'].split('/') or result['modulePath'].startswith('/'):
+        raise ValueError('Invalid Go modulePath')
+    return result
+
+
+def parse(sources, options):
     binary, version = compiler()
     source = Path(__file__).with_name('go_ast.go')
-    identity = hashlib.sha256(source.read_bytes()+version.encode()).hexdigest()
+    semantic = source.with_name('go_types.go')
+    identity = hashlib.sha256(source.read_bytes()+semantic.read_bytes()+version.encode()).hexdigest()
     cache = Path(tempfile.gettempdir())/f'reponerve-go-adapter-{getattr(os, "getuid", lambda: 0)()}'
     cache.mkdir(mode=0o700, exist_ok=True)
     if cache.is_symlink() or (os.name == 'posix' and
@@ -43,12 +63,12 @@ def parse(sources):
             env = {**os.environ, 'GOENV': 'off', 'GOWORK': 'off', 'GOTOOLCHAIN': 'local',
                    'GOPROXY': 'off', 'GO111MODULE': 'off', 'CGO_ENABLED': '0', 'GOFLAGS': '',
                    'GOCACHE': str(cache/'build')}
-            built = subprocess.run([binary, 'build', '-o', str(target), str(source)],
+            built = subprocess.run([binary, 'build', '-o', str(target), str(source), str(semantic)],
                                    env=env, capture_output=True, text=True, timeout=120)
             if built.returncode:
                 raise RuntimeError('Go parser build failed: '+built.stderr[:2000])
             os.replace(target, executable)
-    result = subprocess.run([str(executable)], input=json.dumps({'files': [
+    result = subprocess.run([str(executable)], input=json.dumps({'options': options, 'files': [
         {'path': source.path, 'text': source.text} for source in sources]}),
         text=True, capture_output=True, timeout=120)
     if result.returncode:
@@ -57,9 +77,8 @@ def parse(sources):
 
 
 def extract(sources, max_lines=65, options=None):
-    if options:
-        raise ValueError('Go syntax adapter has no options')
-    parsed = parse(sources)
+    options = settings(options)
+    parsed = parse(sources, options)
     units, records, targets = [], {}, defaultdict(list)
     source_by_path = {source.path: source for source in sources}
     for file in parsed['files']:
@@ -99,6 +118,9 @@ def extract(sources, max_lines=65, options=None):
                         line_units[i] = uid
                 start = stop+1
         records[path] = line_units
+        if line_units:
+            units[next(iter(line_units.values()))]['goAnalysis'] = {
+                **options, 'selectedForTypes': file['semantic'], 'diagnostics': file['diagnostics']}
     def add(uid, others, kind, resolution):
         for target in others:
             if uid != target:
@@ -109,6 +131,11 @@ def extract(sources, max_lines=65, options=None):
             for uid in ids:
                 add(uid, ids, 'same_symbol', 'syntax')
     for file in parsed['files']:
+        for reference in file['references']:
+            uid = records[file['path']].get(reference['line'])
+            if uid is not None:
+                add(uid, targets.get((reference['targetPath'], reference['targetLine']), []),
+                    'references_type', reference['resolution'])
         for call in file['calls']:
             uid = records[file['path']].get(call['line'])
             if uid is None:

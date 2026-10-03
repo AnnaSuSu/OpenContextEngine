@@ -1,0 +1,3563 @@
+{
+  "kind": "source-derived development evaluation; not independent benchmark",
+  "runReportSha256": "4ddeb174ed10f378e4483a16456e9aea66567bc27405150e2874e585ed486ef2",
+  "code": {
+    "src/retrieval/engine.py": "6254dbfd0da6caf95a5aaae7d7ffbe92457153f105ae6f79c92a8e6381d41979",
+    "src/retrieval/batched.py": "ad9c9f357554bb9b4852af5d4d5ddb87e2214bf72b322a0bf0041fac4cb083fc",
+    "src/retrieval/routed.py": "a0398285c754d12618ff5fcf10e808b841747d1624ef983b2e4192ea7064c22e",
+    "scripts/retrieval-server.py": "4b50f42bf59acce665f461a7eafad10430fc67a6a4e975181aa3c684490b9f4f",
+    "scripts/roadmap/structure.py": "2eb3c6b083f9d7253b9d7910541b63ecd7848820da2f9c25526a6eaad99e5f3e"
+  },
+  "indexes": {
+    "cobra": {
+      "structure": {
+        "preparedSha256": "a68595667b02d2998408c9983ea86b522a4c9cf93e21b0a8d7e979eab89f3b3f",
+        "snapshotSha256": "3d4e7a8585058505d97f3e697a88a54a413ce1fb22deca568ef3ba34485d1426",
+        "units": 846,
+        "languageUnits": {
+          "text": 84,
+          "go": 762
+        },
+        "edges": 1007,
+        "embeddingRequests": 0,
+        "reusedEmbeddingUnits": 846,
+        "indexingMs": 18,
+        "adapters": {
+          "schemaVersion": "source-units-v2",
+          "languages": [
+            "go",
+            "text"
+          ],
+          "options": {},
+          "parsers": {
+            "go": "go version go1.27.1 darwin/arm64",
+            "text": "line-chunks-v1"
+          },
+          "sourceSha256": {
+            "__init__.py": "460cc3fdc627b3e7e2255c9de4a7444cd6b3f1a1c5770e57855dfc9e4d9690ac",
+            "schema.py": "bbf7a80e5c1f822335b229c4b739bc2aa5861822540d4023effe135b44c88f73",
+            "files.py": "e2a0f5d071101456bf19687f0d8826a23769dc86c083f4fd3c06f644846dec8d",
+            "go.py": "6c8ddbe439f5d4d8579e61554c4ef9102bbc472f701be8dfcacdab0d61bceb2b",
+            "go_ast.go": "dfae33e05caa836f61eb75e08295d2a0f2aced848956005d0680811eb16f1c26",
+            "text.py": "a5d99d6def8a2d68d708e48efe6b79de9b66a97e4508d39580b4810bd37e2822"
+          }
+        },
+        "queryCache": false
+      },
+      "types": {
+        "preparedSha256": "3096dfadd2e4516cc47336c49b7b7d1c75eb1fc809991b84fc9df06d2c296958",
+        "snapshotSha256": "3d4e7a8585058505d97f3e697a88a54a413ce1fb22deca568ef3ba34485d1426",
+        "units": 846,
+        "languageUnits": {
+          "text": 84,
+          "go": 762
+        },
+        "edges": 1773,
+        "embeddingRequests": 0,
+        "reusedEmbeddingUnits": 846,
+        "indexingMs": 18,
+        "adapters": {
+          "schemaVersion": "source-units-v2",
+          "languages": [
+            "go",
+            "text"
+          ],
+          "options": {},
+          "parsers": {
+            "go": "go version go1.27.1 darwin/arm64",
+            "text": "line-chunks-v1"
+          },
+          "sourceSha256": {
+            "__init__.py": "fd111a1ae2aa18f3e3f002a9e8d7e862cf3b297adedc4ed3c3a487bd96c96123",
+            "schema.py": "bbf7a80e5c1f822335b229c4b739bc2aa5861822540d4023effe135b44c88f73",
+            "files.py": "e2a0f5d071101456bf19687f0d8826a23769dc86c083f4fd3c06f644846dec8d",
+            "go.py": "525c03ea455b1619ef4f4b012da5627f88f4f0b6481a80d03f458dc3429b264e",
+            "go_ast.go": "cede21e3f0e0d6190f84d9d46a420e7e229797e322260c09e650913f34bf7012",
+            "go_types.go": "241d6524b712210ca4e3da8e5251b458efff63358185b4fd9c3231514b54b156",
+            "text.py": "a5d99d6def8a2d68d708e48efe6b79de9b66a97e4508d39580b4810bd37e2822"
+          }
+        },
+        "queryCache": false
+      }
+    },
+    "commander": {
+      "structure": {
+        "preparedSha256": "73a373646622337c1294996d7ac42633fdde93a1fc887d2c926e35b1d251f71e",
+        "snapshotSha256": "31dc01d165e327ebfc14b0bcab3de997732a22bc3e24c9df699615b08b7dc214",
+        "units": 1090,
+        "languageUnits": {
+          "text": 139,
+          "javascript": 675,
+          "typescript": 276
+        },
+        "edges": 2702,
+        "embeddingRequests": 0,
+        "reusedEmbeddingUnits": 1090,
+        "indexingMs": 32,
+        "adapters": {
+          "schemaVersion": "source-units-v2",
+          "languages": [
+            "javascript",
+            "text",
+            "typescript"
+          ],
+          "options": {},
+          "parsers": {
+            "javascript": "typescript-5.9.3",
+            "text": "line-chunks-v1",
+            "typescript": "typescript-5.9.3"
+          },
+          "sourceSha256": {
+            "__init__.py": "460cc3fdc627b3e7e2255c9de4a7444cd6b3f1a1c5770e57855dfc9e4d9690ac",
+            "schema.py": "bbf7a80e5c1f822335b229c4b739bc2aa5861822540d4023effe135b44c88f73",
+            "files.py": "e2a0f5d071101456bf19687f0d8826a23769dc86c083f4fd3c06f644846dec8d",
+            "typescript.py": "ffa77209f4a2304794c4dba13914f6cf960f9abbe8da8cc01e2a2c6795fbfbcc",
+            "typescript.mjs": "6ac5d376b5c863aaf77d041ff9c55c5c41a601cdb079a6cda80a5c7b07f41678",
+            "text.py": "a5d99d6def8a2d68d708e48efe6b79de9b66a97e4508d39580b4810bd37e2822"
+          }
+        },
+        "queryCache": false
+      }
+    },
+    "esbuild": {
+      "structure": {
+        "preparedSha256": "6301bf0702975f39904d6f0e606d011f2534c3dd9e86fe1ff7865cb3812650d9",
+        "snapshotSha256": "c55b73abdbeee00298301eb4bb764aa15e43f182ed8f97fa4b5bea22d7f24173",
+        "units": 11295,
+        "languageUnits": {
+          "text": 1464,
+          "go": 5233,
+          "typescript": 2275,
+          "javascript": 2323
+        },
+        "edges": 190458,
+        "embeddingRequests": 0,
+        "reusedEmbeddingUnits": 11295,
+        "indexingMs": 521,
+        "adapters": {
+          "schemaVersion": "source-units-v2",
+          "languages": [
+            "go",
+            "javascript",
+            "text",
+            "typescript"
+          ],
+          "options": {},
+          "parsers": {
+            "go": "go version go1.27.1 darwin/arm64",
+            "javascript": "typescript-5.9.3",
+            "text": "line-chunks-v1",
+            "typescript": "typescript-5.9.3"
+          },
+          "sourceSha256": {
+            "__init__.py": "460cc3fdc627b3e7e2255c9de4a7444cd6b3f1a1c5770e57855dfc9e4d9690ac",
+            "schema.py": "bbf7a80e5c1f822335b229c4b739bc2aa5861822540d4023effe135b44c88f73",
+            "files.py": "e2a0f5d071101456bf19687f0d8826a23769dc86c083f4fd3c06f644846dec8d",
+            "go.py": "6c8ddbe439f5d4d8579e61554c4ef9102bbc472f701be8dfcacdab0d61bceb2b",
+            "go_ast.go": "dfae33e05caa836f61eb75e08295d2a0f2aced848956005d0680811eb16f1c26",
+            "typescript.py": "ffa77209f4a2304794c4dba13914f6cf960f9abbe8da8cc01e2a2c6795fbfbcc",
+            "typescript.mjs": "6ac5d376b5c863aaf77d041ff9c55c5c41a601cdb079a6cda80a5c7b07f41678",
+            "text.py": "a5d99d6def8a2d68d708e48efe6b79de9b66a97e4508d39580b4810bd37e2822"
+          }
+        },
+        "queryCache": false
+      },
+      "types": {
+        "preparedSha256": "899a5c2692f7258ed019428c05817605b37dce2d78642f42938627b5708d60bd",
+        "snapshotSha256": "c55b73abdbeee00298301eb4bb764aa15e43f182ed8f97fa4b5bea22d7f24173",
+        "units": 11295,
+        "languageUnits": {
+          "text": 1464,
+          "go": 5233,
+          "typescript": 2275,
+          "javascript": 2323
+        },
+        "edges": 207403,
+        "embeddingRequests": 0,
+        "reusedEmbeddingUnits": 11295,
+        "indexingMs": 559,
+        "adapters": {
+          "schemaVersion": "source-units-v2",
+          "languages": [
+            "go",
+            "javascript",
+            "text",
+            "typescript"
+          ],
+          "options": {},
+          "parsers": {
+            "go": "go version go1.27.1 darwin/arm64",
+            "javascript": "typescript-5.9.3",
+            "text": "line-chunks-v1",
+            "typescript": "typescript-5.9.3"
+          },
+          "sourceSha256": {
+            "__init__.py": "fd111a1ae2aa18f3e3f002a9e8d7e862cf3b297adedc4ed3c3a487bd96c96123",
+            "schema.py": "bbf7a80e5c1f822335b229c4b739bc2aa5861822540d4023effe135b44c88f73",
+            "files.py": "e2a0f5d071101456bf19687f0d8826a23769dc86c083f4fd3c06f644846dec8d",
+            "go.py": "525c03ea455b1619ef4f4b012da5627f88f4f0b6481a80d03f458dc3429b264e",
+            "go_ast.go": "cede21e3f0e0d6190f84d9d46a420e7e229797e322260c09e650913f34bf7012",
+            "go_types.go": "241d6524b712210ca4e3da8e5251b458efff63358185b4fd9c3231514b54b156",
+            "typescript.py": "ffa77209f4a2304794c4dba13914f6cf960f9abbe8da8cc01e2a2c6795fbfbcc",
+            "typescript.mjs": "6ac5d376b5c863aaf77d041ff9c55c5c41a601cdb079a6cda80a5c7b07f41678",
+            "text.py": "a5d99d6def8a2d68d708e48efe6b79de9b66a97e4508d39580b4810bd37e2822"
+          }
+        },
+        "queryCache": false
+      }
+    }
+  },
+  "summary": {
+    "cobra": {
+      "structure": {
+        "queries": 8,
+        "coverage": 0.8750000000000001,
+        "complete": 5,
+        "medianMs": 2027,
+        "p95Ms": 2520
+      },
+      "types": {
+        "queries": 8,
+        "coverage": 0.9166666666666667,
+        "complete": 6,
+        "medianMs": 2149,
+        "p95Ms": 2555
+      }
+    },
+    "commander": {
+      "structure": {
+        "queries": 8,
+        "coverage": 1,
+        "complete": 8,
+        "medianMs": 2766.5,
+        "p95Ms": 3007
+      }
+    },
+    "esbuild": {
+      "structure": {
+        "queries": 16,
+        "coverage": 0.84375,
+        "complete": 13,
+        "medianMs": 2426,
+        "p95Ms": 3510
+      },
+      "types": {
+        "queries": 16,
+        "coverage": 0.8125,
+        "complete": 13,
+        "medianMs": 2434.5,
+        "p95Ms": 3535
+      }
+    }
+  },
+  "rows": [
+    {
+      "dataset": "cobra",
+      "id": "argument-bounds",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "cobra.argument-bounds.zh.structure.txt",
+      "nativeFile": "cobra.argument-bounds.zh.structure.json",
+      "sha256": "e97f882e3cc2dc1463bffd9d027a341c8d6d068b1b85eb9e0105b448acbfe71a",
+      "elapsedMs": 2078,
+      "tokens": 3878,
+      "score": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "minimum",
+            "fact": "minimum",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "maximum",
+            "fact": "maximum",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "range",
+            "fact": "range",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "combined",
+            "fact": "combined",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 297,
+          "verifiedOccurrences": 297,
+          "uniqueVerifiedLines": 297,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "cobra",
+      "id": "argument-bounds",
+      "language": "zh",
+      "variant": "types",
+      "rawFile": "cobra.argument-bounds.zh.types.txt",
+      "nativeFile": "cobra.argument-bounds.zh.types.json",
+      "sha256": "69e4a7dff78161ff7589e0efb0eef06f47c77253d7dbf1505d14d5553fecd61f",
+      "elapsedMs": 2214,
+      "tokens": 3900,
+      "score": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "minimum",
+            "fact": "minimum",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "maximum",
+            "fact": "maximum",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "range",
+            "fact": "range",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "combined",
+            "fact": "combined",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 298,
+          "verifiedOccurrences": 298,
+          "uniqueVerifiedLines": 298,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "cobra",
+      "id": "argument-bounds",
+      "language": "en",
+      "variant": "types",
+      "rawFile": "cobra.argument-bounds.en.types.txt",
+      "nativeFile": "cobra.argument-bounds.en.types.json",
+      "sha256": "367f7f9407f863ece460fc6c61eb4b64eb6865c83a1112c8fba0415ea7d552a4",
+      "elapsedMs": 2084,
+      "tokens": 3853,
+      "score": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "minimum",
+            "fact": "minimum",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "maximum",
+            "fact": "maximum",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "range",
+            "fact": "range",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "combined",
+            "fact": "combined",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 316,
+          "verifiedOccurrences": 316,
+          "uniqueVerifiedLines": 316,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "cobra",
+      "id": "argument-bounds",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "cobra.argument-bounds.en.structure.txt",
+      "nativeFile": "cobra.argument-bounds.en.structure.json",
+      "sha256": "5ccbc11fcf7ae9028579af1079704d974ee099c9497fb4f5a6dcab860525ce3f",
+      "elapsedMs": 1971,
+      "tokens": 3887,
+      "score": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "minimum",
+            "fact": "minimum",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "maximum",
+            "fact": "maximum",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "range",
+            "fact": "range",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "combined",
+            "fact": "combined",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 298,
+          "verifiedOccurrences": 298,
+          "uniqueVerifiedLines": 298,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "cobra",
+      "id": "execution-hooks",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "cobra.execution-hooks.zh.structure.txt",
+      "nativeFile": "cobra.execution-hooks.zh.structure.json",
+      "sha256": "bd7217f60420177f59ad4996ce3d43852a537bc1e047aae31323b671295f4941",
+      "elapsedMs": 2153,
+      "tokens": 3964,
+      "score": {
+        "covered": 5,
+        "total": 5,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "arguments",
+            "fact": "arguments",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "parents",
+            "fact": "parents",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "pre",
+            "fact": "pre",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "action",
+            "fact": "action",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "post",
+            "fact": "post",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 401,
+          "verifiedOccurrences": 401,
+          "uniqueVerifiedLines": 401,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "cobra",
+      "id": "execution-hooks",
+      "language": "zh",
+      "variant": "types",
+      "rawFile": "cobra.execution-hooks.zh.types.txt",
+      "nativeFile": "cobra.execution-hooks.zh.types.json",
+      "sha256": "ac5cf96c53d48c6fca3e5a6d2c647ea1c5aa3ffe68116f387a454eadb7d993be",
+      "elapsedMs": 2255,
+      "tokens": 3968,
+      "score": {
+        "covered": 5,
+        "total": 5,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "arguments",
+            "fact": "arguments",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "parents",
+            "fact": "parents",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "pre",
+            "fact": "pre",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "action",
+            "fact": "action",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "post",
+            "fact": "post",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 404,
+          "verifiedOccurrences": 404,
+          "uniqueVerifiedLines": 404,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "cobra",
+      "id": "execution-hooks",
+      "language": "en",
+      "variant": "types",
+      "rawFile": "cobra.execution-hooks.en.types.txt",
+      "nativeFile": "cobra.execution-hooks.en.types.json",
+      "sha256": "856099758b98d69e9cb31833f1a224e10b766d123fef002721517ddc42187aaf",
+      "elapsedMs": 1869,
+      "tokens": 3976,
+      "score": {
+        "covered": 5,
+        "total": 5,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "arguments",
+            "fact": "arguments",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "parents",
+            "fact": "parents",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "pre",
+            "fact": "pre",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "action",
+            "fact": "action",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "post",
+            "fact": "post",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 405,
+          "verifiedOccurrences": 405,
+          "uniqueVerifiedLines": 405,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "cobra",
+      "id": "execution-hooks",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "cobra.execution-hooks.en.structure.txt",
+      "nativeFile": "cobra.execution-hooks.en.structure.json",
+      "sha256": "856099758b98d69e9cb31833f1a224e10b766d123fef002721517ddc42187aaf",
+      "elapsedMs": 1972,
+      "tokens": 3976,
+      "score": {
+        "covered": 5,
+        "total": 5,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "arguments",
+            "fact": "arguments",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "parents",
+            "fact": "parents",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "pre",
+            "fact": "pre",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "action",
+            "fact": "action",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "post",
+            "fact": "post",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 405,
+          "verifiedOccurrences": 405,
+          "uniqueVerifiedLines": 405,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "cobra",
+      "id": "help-priority",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "cobra.help-priority.zh.structure.txt",
+      "nativeFile": "cobra.help-priority.zh.structure.json",
+      "sha256": "307e6d95cb9fe44757cf6c4da9a42bc55aadbc2929f43dd8775d19db387e21b1",
+      "elapsedMs": 1976,
+      "tokens": 3948,
+      "score": {
+        "covered": 3,
+        "total": 3,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "parse",
+            "fact": "parse",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "stop",
+            "fact": "stop",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "display",
+            "fact": "display",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 403,
+          "verifiedOccurrences": 403,
+          "uniqueVerifiedLines": 403,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "cobra",
+      "id": "help-priority",
+      "language": "zh",
+      "variant": "types",
+      "rawFile": "cobra.help-priority.zh.types.txt",
+      "nativeFile": "cobra.help-priority.zh.types.json",
+      "sha256": "72f5f4e706fe98a05877f07bfc2073b097e7341a162c2d7580e6cc85e52f09a3",
+      "elapsedMs": 1806,
+      "tokens": 3937,
+      "score": {
+        "covered": 3,
+        "total": 3,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "parse",
+            "fact": "parse",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "stop",
+            "fact": "stop",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "display",
+            "fact": "display",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 401,
+          "verifiedOccurrences": 401,
+          "uniqueVerifiedLines": 401,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "cobra",
+      "id": "help-priority",
+      "language": "en",
+      "variant": "types",
+      "rawFile": "cobra.help-priority.en.types.txt",
+      "nativeFile": "cobra.help-priority.en.types.json",
+      "sha256": "127d9f766dfac68056589907853556a8f55b03c6107f624d93bdfea9c06ec9b6",
+      "elapsedMs": 2436,
+      "tokens": 3971,
+      "score": {
+        "covered": 3,
+        "total": 3,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "parse",
+            "fact": "parse",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "stop",
+            "fact": "stop",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "display",
+            "fact": "display",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 399,
+          "verifiedOccurrences": 399,
+          "uniqueVerifiedLines": 399,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "cobra",
+      "id": "help-priority",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "cobra.help-priority.en.structure.txt",
+      "nativeFile": "cobra.help-priority.en.structure.json",
+      "sha256": "2fc0ea9e2fe3e1489078cb66a39b079d16d10e6f5994e0b1a4efeedd6b866c3a",
+      "elapsedMs": 2445,
+      "tokens": 3952,
+      "score": {
+        "covered": 2,
+        "total": 3,
+        "coverage": 0.6666666666666666,
+        "omission": 0.33333333333333337,
+        "complete": false,
+        "units": [
+          {
+            "id": "parse",
+            "fact": "parse",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "stop",
+            "fact": "stop",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "display",
+            "fact": "display",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "command.go",
+                    "missingLines": [
+                      1152,
+                      1153,
+                      1154,
+                      1155
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 394,
+          "verifiedOccurrences": 394,
+          "uniqueVerifiedLines": 394,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "cobra",
+      "id": "context-inheritance",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "cobra.context-inheritance.zh.structure.txt",
+      "nativeFile": "cobra.context-inheritance.zh.structure.json",
+      "sha256": "03f882cc17fa8319c29a9bc62719b433ce3fae7896a75e20804366728211dfc2",
+      "elapsedMs": 2520,
+      "tokens": 3935,
+      "score": {
+        "covered": 2,
+        "total": 3,
+        "coverage": 0.6666666666666666,
+        "omission": 0.33333333333333337,
+        "complete": false,
+        "units": [
+          {
+            "id": "explicit",
+            "fact": "explicit",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "default",
+            "fact": "default",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "inherit",
+            "fact": "inherit",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "command.go",
+                    "missingLines": [
+                      1148
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 386,
+          "verifiedOccurrences": 386,
+          "uniqueVerifiedLines": 386,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "cobra",
+      "id": "context-inheritance",
+      "language": "zh",
+      "variant": "types",
+      "rawFile": "cobra.context-inheritance.zh.types.txt",
+      "nativeFile": "cobra.context-inheritance.zh.types.json",
+      "sha256": "1f533647afbca42ed1a4c2e6cae38bfd50b2f80b85988b926d409eb90b56703f",
+      "elapsedMs": 2555,
+      "tokens": 3937,
+      "score": {
+        "covered": 2,
+        "total": 3,
+        "coverage": 0.6666666666666666,
+        "omission": 0.33333333333333337,
+        "complete": false,
+        "units": [
+          {
+            "id": "explicit",
+            "fact": "explicit",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "default",
+            "fact": "default",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "inherit",
+            "fact": "inherit",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "command.go",
+                    "missingLines": [
+                      1148
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 385,
+          "verifiedOccurrences": 385,
+          "uniqueVerifiedLines": 385,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "cobra",
+      "id": "context-inheritance",
+      "language": "en",
+      "variant": "types",
+      "rawFile": "cobra.context-inheritance.en.types.txt",
+      "nativeFile": "cobra.context-inheritance.en.types.json",
+      "sha256": "594ccd9d2f65c069d054f6a4d86e4ea5079dfc64c7fe2ee3586c2721d961f87d",
+      "elapsedMs": 1972,
+      "tokens": 3936,
+      "score": {
+        "covered": 2,
+        "total": 3,
+        "coverage": 0.6666666666666666,
+        "omission": 0.33333333333333337,
+        "complete": false,
+        "units": [
+          {
+            "id": "explicit",
+            "fact": "explicit",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "default",
+            "fact": "default",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "inherit",
+            "fact": "inherit",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "command.go",
+                    "missingLines": [
+                      1148
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 382,
+          "verifiedOccurrences": 382,
+          "uniqueVerifiedLines": 382,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "cobra",
+      "id": "context-inheritance",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "cobra.context-inheritance.en.structure.txt",
+      "nativeFile": "cobra.context-inheritance.en.structure.json",
+      "sha256": "bf8a327bbe40b7a15ba87641c1cbb04a4dad08e3d5eae358fdf31f8dfd074129",
+      "elapsedMs": 1797,
+      "tokens": 3947,
+      "score": {
+        "covered": 2,
+        "total": 3,
+        "coverage": 0.6666666666666666,
+        "omission": 0.33333333333333337,
+        "complete": false,
+        "units": [
+          {
+            "id": "explicit",
+            "fact": "explicit",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "default",
+            "fact": "default",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "inherit",
+            "fact": "inherit",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "command.go",
+                    "missingLines": [
+                      1148
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 382,
+          "verifiedOccurrences": 382,
+          "uniqueVerifiedLines": 382,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "commander",
+      "id": "environment-priority",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "commander.environment-priority.zh.structure.txt",
+      "nativeFile": "commander.environment-priority.zh.structure.json",
+      "sha256": "ffe428bdfa977d68470a6e38c9f6b5e82eb17beb6b31cb2da4e1ab3d26ddda45",
+      "elapsedMs": 2909,
+      "tokens": 3936,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "priority",
+            "fact": "priority",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "events",
+            "fact": "events",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 422,
+          "verifiedOccurrences": 422,
+          "uniqueVerifiedLines": 422,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "commander",
+      "id": "environment-priority",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "commander.environment-priority.en.structure.txt",
+      "nativeFile": "commander.environment-priority.en.structure.json",
+      "sha256": "ebfc2953f11a9bea5d53bd9339142f8abc947a52289e5e9dba4ff795d9a74063",
+      "elapsedMs": 2689,
+      "tokens": 3934,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "priority",
+            "fact": "priority",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "events",
+            "fact": "events",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 402,
+          "verifiedOccurrences": 402,
+          "uniqueVerifiedLines": 402,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "commander",
+      "id": "implied-options",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "commander.implied-options.zh.structure.txt",
+      "nativeFile": "commander.implied-options.zh.structure.json",
+      "sha256": "22cacb35fedc415c360257cd9341babdbdbb2f53c03e261ab26ba4b24ae3a48f",
+      "elapsedMs": 2879,
+      "tokens": 3945,
+      "score": {
+        "covered": 3,
+        "total": 3,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "custom",
+            "fact": "custom",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "trigger",
+            "fact": "trigger",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "write",
+            "fact": "write",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 393,
+          "verifiedOccurrences": 393,
+          "uniqueVerifiedLines": 393,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "commander",
+      "id": "implied-options",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "commander.implied-options.en.structure.txt",
+      "nativeFile": "commander.implied-options.en.structure.json",
+      "sha256": "76c30699c071bd8efb550721515cef7cad3c4bede184b807a8f437bf091c1c1b",
+      "elapsedMs": 2194,
+      "tokens": 3945,
+      "score": {
+        "covered": 3,
+        "total": 3,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "custom",
+            "fact": "custom",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "trigger",
+            "fact": "trigger",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "write",
+            "fact": "write",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 397,
+          "verifiedOccurrences": 397,
+          "uniqueVerifiedLines": 397,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "commander",
+      "id": "parse-reset",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "commander.parse-reset.zh.structure.txt",
+      "nativeFile": "commander.parse-reset.zh.structure.json",
+      "sha256": "0660e8b34fd49f95dc3d7323e7d589ec80547c36fc9305029c656bc2c55993c2",
+      "elapsedMs": 3007,
+      "tokens": 3951,
+      "score": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "dispatch",
+            "fact": "dispatch",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "save",
+            "fact": "save",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "guard",
+            "fact": "guard",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "reset",
+            "fact": "reset",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 400,
+          "verifiedOccurrences": 400,
+          "uniqueVerifiedLines": 400,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "commander",
+      "id": "parse-reset",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "commander.parse-reset.en.structure.txt",
+      "nativeFile": "commander.parse-reset.en.structure.json",
+      "sha256": "86cdf39a8df0003592d049fea24123471057d1d7f09a416cceb5ba0ae0c4bee2",
+      "elapsedMs": 2413,
+      "tokens": 3924,
+      "score": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "dispatch",
+            "fact": "dispatch",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "save",
+            "fact": "save",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "guard",
+            "fact": "guard",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "reset",
+            "fact": "reset",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 413,
+          "verifiedOccurrences": 413,
+          "uniqueVerifiedLines": 413,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "commander",
+      "id": "conflicting-options",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "commander.conflicting-options.zh.structure.txt",
+      "nativeFile": "commander.conflicting-options.zh.structure.json",
+      "sha256": "905cd616d58a0951275432390f1d97baf7937b0399f6ab854193744d0046d3ef",
+      "elapsedMs": 2844,
+      "tokens": 3947,
+      "score": {
+        "covered": 3,
+        "total": 3,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "filter",
+            "fact": "filter",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "conflict",
+            "fact": "conflict",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "parents",
+            "fact": "parents",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 432,
+          "verifiedOccurrences": 432,
+          "uniqueVerifiedLines": 432,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "commander",
+      "id": "conflicting-options",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "commander.conflicting-options.en.structure.txt",
+      "nativeFile": "commander.conflicting-options.en.structure.json",
+      "sha256": "29faed617c19b629700983f5e698387c46786a24635b9574f59ce4ff74e4c25e",
+      "elapsedMs": 2207,
+      "tokens": 3937,
+      "score": {
+        "covered": 3,
+        "total": 3,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "filter",
+            "fact": "filter",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "conflict",
+            "fact": "conflict",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "parents",
+            "fact": "parents",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 423,
+          "verifiedOccurrences": 423,
+          "uniqueVerifiedLines": 423,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "boolean-flags",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "esbuild.boolean-flags.zh.structure.txt",
+      "nativeFile": "esbuild.boolean-flags.zh.structure.json",
+      "sha256": "cb47b421fd6ec5575e1d8d772100ee509a391efc1c9ab1c4ead418d4d39c3f51",
+      "elapsedMs": 3189,
+      "tokens": 3974,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "default",
+            "fact": "Use the default when no equals sign is supplied",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "values",
+            "fact": "Accept true and false and explain invalid values",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 401,
+          "verifiedOccurrences": 401,
+          "uniqueVerifiedLines": 401,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "boolean-flags",
+      "language": "zh",
+      "variant": "types",
+      "rawFile": "esbuild.boolean-flags.zh.types.txt",
+      "nativeFile": "esbuild.boolean-flags.zh.types.json",
+      "sha256": "203575336c37a64142e8b5de881f209069bc9e353160b50e191a761786b3dcf1",
+      "elapsedMs": 3281,
+      "tokens": 3974,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "default",
+            "fact": "Use the default when no equals sign is supplied",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "values",
+            "fact": "Accept true and false and explain invalid values",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 404,
+          "verifiedOccurrences": 404,
+          "uniqueVerifiedLines": 404,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "boolean-flags",
+      "language": "en",
+      "variant": "types",
+      "rawFile": "esbuild.boolean-flags.en.types.txt",
+      "nativeFile": "esbuild.boolean-flags.en.types.json",
+      "sha256": "bbe52aec8d6296ae721e249c5949e14fb7d879f2c93292d84be9459d38baaf52",
+      "elapsedMs": 3535,
+      "tokens": 3969,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "default",
+            "fact": "Use the default when no equals sign is supplied",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "values",
+            "fact": "Accept true and false and explain invalid values",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 387,
+          "verifiedOccurrences": 387,
+          "uniqueVerifiedLines": 387,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "boolean-flags",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "esbuild.boolean-flags.en.structure.txt",
+      "nativeFile": "esbuild.boolean-flags.en.structure.json",
+      "sha256": "92a67ac27f72fc6d3b65e32d8e89e060a63ea50991d3b90f0dd53cdac92d69f9",
+      "elapsedMs": 3510,
+      "tokens": 3969,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "default",
+            "fact": "Use the default when no equals sign is supplied",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "values",
+            "fact": "Accept true and false and explain invalid values",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 384,
+          "verifiedOccurrences": 384,
+          "uniqueVerifiedLines": 384,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "watch-lifetime",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "esbuild.watch-lifetime.zh.structure.txt",
+      "nativeFile": "esbuild.watch-lifetime.zh.structure.json",
+      "sha256": "dcb500aed7ed452d5f62bce13c0d5da65aadced8a2d5a2224f3e6b51c27ce160",
+      "elapsedMs": 2336,
+      "tokens": 3979,
+      "score": {
+        "covered": 1,
+        "total": 2,
+        "coverage": 0.5,
+        "omission": 0.5,
+        "complete": false,
+        "units": [
+          {
+            "id": "validation",
+            "fact": "Create a context and reject invalid build options",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "lifetime",
+            "fact": "Start watching and block instead of exiting",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1334
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 362,
+          "verifiedOccurrences": 362,
+          "uniqueVerifiedLines": 362,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "watch-lifetime",
+      "language": "zh",
+      "variant": "types",
+      "rawFile": "esbuild.watch-lifetime.zh.types.txt",
+      "nativeFile": "esbuild.watch-lifetime.zh.types.json",
+      "sha256": "93acdb811f40d9cce9fe9ea1a5fda9bedd86aba3283414d60a1e245e06f32d7d",
+      "elapsedMs": 2274,
+      "tokens": 3973,
+      "score": {
+        "covered": 0,
+        "total": 2,
+        "coverage": 0,
+        "omission": 1,
+        "complete": false,
+        "units": [
+          {
+            "id": "validation",
+            "fact": "Create a context and reject invalid build options",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1323,
+                      1324
+                    ]
+                  },
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1326,
+                      1327,
+                      1328,
+                      1329
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "lifetime",
+            "fact": "Start watching and block instead of exiting",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1331
+                    ]
+                  },
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1333,
+                      1334
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 359,
+          "verifiedOccurrences": 359,
+          "uniqueVerifiedLines": 359,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "watch-lifetime",
+      "language": "en",
+      "variant": "types",
+      "rawFile": "esbuild.watch-lifetime.en.types.txt",
+      "nativeFile": "esbuild.watch-lifetime.en.types.json",
+      "sha256": "a13efc52be423e0d0f7599815d55f82dc219e4adfa76189ff11f09b899b478d4",
+      "elapsedMs": 3336,
+      "tokens": 3976,
+      "score": {
+        "covered": 0,
+        "total": 2,
+        "coverage": 0,
+        "omission": 1,
+        "complete": false,
+        "units": [
+          {
+            "id": "validation",
+            "fact": "Create a context and reject invalid build options",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1323,
+                      1324
+                    ]
+                  },
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1326,
+                      1327,
+                      1328,
+                      1329
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "lifetime",
+            "fact": "Start watching and block instead of exiting",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1331
+                    ]
+                  },
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1333,
+                      1334
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 394,
+          "verifiedOccurrences": 394,
+          "uniqueVerifiedLines": 394,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "watch-lifetime",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "esbuild.watch-lifetime.en.structure.txt",
+      "nativeFile": "esbuild.watch-lifetime.en.structure.json",
+      "sha256": "17d1942818ef687f6d6ec0d506f493a8b4ffcb59c5b28f4c32399931d9d5db7c",
+      "elapsedMs": 3324,
+      "tokens": 3967,
+      "score": {
+        "covered": 0,
+        "total": 2,
+        "coverage": 0,
+        "omission": 1,
+        "complete": false,
+        "units": [
+          {
+            "id": "validation",
+            "fact": "Create a context and reject invalid build options",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1323,
+                      1324
+                    ]
+                  },
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1326,
+                      1327,
+                      1328,
+                      1329
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "lifetime",
+            "fact": "Start watching and block instead of exiting",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1331
+                    ]
+                  },
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1333,
+                      1334
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 406,
+          "verifiedOccurrences": 406,
+          "uniqueVerifiedLines": 406,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "worker-input-close",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "esbuild.worker-input-close.zh.structure.txt",
+      "nativeFile": "esbuild.worker-input-close.zh.structure.json",
+      "sha256": "27cd4c74960f07c121489ab176e1af129ac00023bfb9ff42ecb6d454aae9013b",
+      "elapsedMs": 1862,
+      "tokens": 3961,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "process",
+            "fact": "Start the asynchronous compiler process and handle completion",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "close",
+            "fact": "Write the generated input and close stdin",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 341,
+          "verifiedOccurrences": 341,
+          "uniqueVerifiedLines": 341,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "worker-input-close",
+      "language": "zh",
+      "variant": "types",
+      "rawFile": "esbuild.worker-input-close.zh.types.txt",
+      "nativeFile": "esbuild.worker-input-close.zh.types.json",
+      "sha256": "27cd4c74960f07c121489ab176e1af129ac00023bfb9ff42ecb6d454aae9013b",
+      "elapsedMs": 1865,
+      "tokens": 3961,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "process",
+            "fact": "Start the asynchronous compiler process and handle completion",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "close",
+            "fact": "Write the generated input and close stdin",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 341,
+          "verifiedOccurrences": 341,
+          "uniqueVerifiedLines": 341,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "worker-input-close",
+      "language": "en",
+      "variant": "types",
+      "rawFile": "esbuild.worker-input-close.en.types.txt",
+      "nativeFile": "esbuild.worker-input-close.en.types.json",
+      "sha256": "b540c4d22baeb0fcf47fef674128370df21c6ce421c69fd9a9c7b622f65fa307",
+      "elapsedMs": 2241,
+      "tokens": 3961,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "process",
+            "fact": "Start the asynchronous compiler process and handle completion",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "close",
+            "fact": "Write the generated input and close stdin",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 334,
+          "verifiedOccurrences": 334,
+          "uniqueVerifiedLines": 334,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "worker-input-close",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "esbuild.worker-input-close.en.structure.txt",
+      "nativeFile": "esbuild.worker-input-close.en.structure.json",
+      "sha256": "541f4de67fc7c973b3d3f99b8e0d90ef0c71f7c8729c9ede18e3ee45c6656749",
+      "elapsedMs": 2287,
+      "tokens": 3969,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "process",
+            "fact": "Start the asynchronous compiler process and handle completion",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "close",
+            "fact": "Write the generated input and close stdin",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 328,
+          "verifiedOccurrences": 328,
+          "uniqueVerifiedLines": 328,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "optional-platforms",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "esbuild.optional-platforms.zh.structure.txt",
+      "nativeFile": "esbuild.optional-platforms.zh.structure.json",
+      "sha256": "0107085dfd052f9f329c401c8a0ac64f7c3ef54e68ee44b3574e6a1e5e6bb8cc",
+      "elapsedMs": 2210,
+      "tokens": 3965,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "platforms",
+            "fact": "Collect and sort platform packages with the release version",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "write",
+            "fact": "Write optional dependencies to package configuration",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 342,
+          "verifiedOccurrences": 342,
+          "uniqueVerifiedLines": 342,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "optional-platforms",
+      "language": "zh",
+      "variant": "types",
+      "rawFile": "esbuild.optional-platforms.zh.types.txt",
+      "nativeFile": "esbuild.optional-platforms.zh.types.json",
+      "sha256": "0107085dfd052f9f329c401c8a0ac64f7c3ef54e68ee44b3574e6a1e5e6bb8cc",
+      "elapsedMs": 2168,
+      "tokens": 3965,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "platforms",
+            "fact": "Collect and sort platform packages with the release version",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "write",
+            "fact": "Write optional dependencies to package configuration",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 342,
+          "verifiedOccurrences": 342,
+          "uniqueVerifiedLines": 342,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "optional-platforms",
+      "language": "en",
+      "variant": "types",
+      "rawFile": "esbuild.optional-platforms.en.types.txt",
+      "nativeFile": "esbuild.optional-platforms.en.types.json",
+      "sha256": "163dd7bcc857dc8f2389988c707c386ac01041704dd71ff1893bacb08bba01eb",
+      "elapsedMs": 2725,
+      "tokens": 3962,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "platforms",
+            "fact": "Collect and sort platform packages with the release version",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "write",
+            "fact": "Write optional dependencies to package configuration",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 327,
+          "verifiedOccurrences": 327,
+          "uniqueVerifiedLines": 327,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "optional-platforms",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "esbuild.optional-platforms.en.structure.txt",
+      "nativeFile": "esbuild.optional-platforms.en.structure.json",
+      "sha256": "163dd7bcc857dc8f2389988c707c386ac01041704dd71ff1893bacb08bba01eb",
+      "elapsedMs": 2751,
+      "tokens": 3962,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "platforms",
+            "fact": "Collect and sort platform packages with the release version",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "write",
+            "fact": "Write optional dependencies to package configuration",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 327,
+          "verifiedOccurrences": 327,
+          "uniqueVerifiedLines": 327,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "sync-worker-reuse",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "esbuild.sync-worker-reuse.zh.structure.txt",
+      "nativeFile": "esbuild.sync-worker-reuse.zh.structure.json",
+      "sha256": "b07426c8d992573775a8b8fa6348f93ed5f63e4ed98446b740c1d74c3bf28fa0",
+      "elapsedMs": 2352,
+      "tokens": 3926,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "worker",
+            "fact": "Reuse or start the worker service outside the internal worker",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "fallback",
+            "fact": "Run the synchronous service and return its result",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 353,
+          "verifiedOccurrences": 353,
+          "uniqueVerifiedLines": 353,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "sync-worker-reuse",
+      "language": "zh",
+      "variant": "types",
+      "rawFile": "esbuild.sync-worker-reuse.zh.types.txt",
+      "nativeFile": "esbuild.sync-worker-reuse.zh.types.json",
+      "sha256": "b07426c8d992573775a8b8fa6348f93ed5f63e4ed98446b740c1d74c3bf28fa0",
+      "elapsedMs": 2362,
+      "tokens": 3926,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "worker",
+            "fact": "Reuse or start the worker service outside the internal worker",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "fallback",
+            "fact": "Run the synchronous service and return its result",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 353,
+          "verifiedOccurrences": 353,
+          "uniqueVerifiedLines": 353,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "sync-worker-reuse",
+      "language": "en",
+      "variant": "types",
+      "rawFile": "esbuild.sync-worker-reuse.en.types.txt",
+      "nativeFile": "esbuild.sync-worker-reuse.en.types.json",
+      "sha256": "e07379fa04a928fd7849dc60bf2d0b5312ad9b7586bcd9ebbcd41cb19923969d",
+      "elapsedMs": 2220,
+      "tokens": 3919,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "worker",
+            "fact": "Reuse or start the worker service outside the internal worker",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "fallback",
+            "fact": "Run the synchronous service and return its result",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 337,
+          "verifiedOccurrences": 337,
+          "uniqueVerifiedLines": 337,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "sync-worker-reuse",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "esbuild.sync-worker-reuse.en.structure.txt",
+      "nativeFile": "esbuild.sync-worker-reuse.en.structure.json",
+      "sha256": "e07379fa04a928fd7849dc60bf2d0b5312ad9b7586bcd9ebbcd41cb19923969d",
+      "elapsedMs": 2220,
+      "tokens": 3919,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "worker",
+            "fact": "Reuse or start the worker service outside the internal worker",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "fallback",
+            "fact": "Run the synchronous service and return its result",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 337,
+          "verifiedOccurrences": 337,
+          "uniqueVerifiedLines": 337,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "release-validation",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "esbuild.release-validation.zh.structure.txt",
+      "nativeFile": "esbuild.release-validation.zh.structure.json",
+      "sha256": "eda17f298be4876385e6f8c3ef10d029259323105e27f52a840d362174ed6cdc",
+      "elapsedMs": 1815,
+      "tokens": 3796,
+      "score": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "triggers",
+            "fact": "Version tags and manual dispatch trigger validation",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "runner",
+            "fact": "Use the Ubuntu runner",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "go",
+            "fact": "Install the pinned Go version",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "command",
+            "fact": "Run the build validation make target",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 364,
+          "verifiedOccurrences": 364,
+          "uniqueVerifiedLines": 364,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "release-validation",
+      "language": "zh",
+      "variant": "types",
+      "rawFile": "esbuild.release-validation.zh.types.txt",
+      "nativeFile": "esbuild.release-validation.zh.types.json",
+      "sha256": "eda17f298be4876385e6f8c3ef10d029259323105e27f52a840d362174ed6cdc",
+      "elapsedMs": 1834,
+      "tokens": 3796,
+      "score": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "triggers",
+            "fact": "Version tags and manual dispatch trigger validation",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "runner",
+            "fact": "Use the Ubuntu runner",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "go",
+            "fact": "Install the pinned Go version",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "command",
+            "fact": "Run the build validation make target",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 364,
+          "verifiedOccurrences": 364,
+          "uniqueVerifiedLines": 364,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "release-validation",
+      "language": "en",
+      "variant": "types",
+      "rawFile": "esbuild.release-validation.en.types.txt",
+      "nativeFile": "esbuild.release-validation.en.types.json",
+      "sha256": "93564258a91c00b40ac19231255b30df7bbd0b087f0f90a1a3285b6bfa636f44",
+      "elapsedMs": 2675,
+      "tokens": 3752,
+      "score": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "triggers",
+            "fact": "Version tags and manual dispatch trigger validation",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "runner",
+            "fact": "Use the Ubuntu runner",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "go",
+            "fact": "Install the pinned Go version",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "command",
+            "fact": "Run the build validation make target",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 307,
+          "verifiedOccurrences": 307,
+          "uniqueVerifiedLines": 307,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "release-validation",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "esbuild.release-validation.en.structure.txt",
+      "nativeFile": "esbuild.release-validation.en.structure.json",
+      "sha256": "93564258a91c00b40ac19231255b30df7bbd0b087f0f90a1a3285b6bfa636f44",
+      "elapsedMs": 2642,
+      "tokens": 3752,
+      "score": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "triggers",
+            "fact": "Version tags and manual dispatch trigger validation",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "runner",
+            "fact": "Use the Ubuntu runner",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "go",
+            "fact": "Install the pinned Go version",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "command",
+            "fact": "Run the build validation make target",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 307,
+          "verifiedOccurrences": 307,
+          "uniqueVerifiedLines": 307,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "test-targets",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "esbuild.test-targets.zh.structure.txt",
+      "nativeFile": "esbuild.test-targets.zh.structure.json",
+      "sha256": "cbe981a5c6728ff0e272f249bbde49792595a546089347adb8eba39b87f52c3c",
+      "elapsedMs": 2648,
+      "tokens": 3941,
+      "score": {
+        "covered": 0,
+        "total": 2,
+        "coverage": 0,
+        "omission": 1,
+        "complete": false,
+        "units": [
+          {
+            "id": "development",
+            "fact": "Run the common development test targets with six parallel jobs",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "Makefile",
+                    "missingLines": [
+                      12,
+                      13
+                    ]
+                  },
+                  {
+                    "path": "Makefile",
+                    "missingLines": [
+                      15,
+                      16
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "release",
+            "fact": "Add the slower release test targets",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "Makefile",
+                    "missingLines": [
+                      18,
+                      19,
+                      20
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 404,
+          "verifiedOccurrences": 404,
+          "uniqueVerifiedLines": 404,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "test-targets",
+      "language": "zh",
+      "variant": "types",
+      "rawFile": "esbuild.test-targets.zh.types.txt",
+      "nativeFile": "esbuild.test-targets.zh.types.json",
+      "sha256": "cbe981a5c6728ff0e272f249bbde49792595a546089347adb8eba39b87f52c3c",
+      "elapsedMs": 2648,
+      "tokens": 3941,
+      "score": {
+        "covered": 0,
+        "total": 2,
+        "coverage": 0,
+        "omission": 1,
+        "complete": false,
+        "units": [
+          {
+            "id": "development",
+            "fact": "Run the common development test targets with six parallel jobs",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "Makefile",
+                    "missingLines": [
+                      12,
+                      13
+                    ]
+                  },
+                  {
+                    "path": "Makefile",
+                    "missingLines": [
+                      15,
+                      16
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "release",
+            "fact": "Add the slower release test targets",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "Makefile",
+                    "missingLines": [
+                      18,
+                      19,
+                      20
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 404,
+          "verifiedOccurrences": 404,
+          "uniqueVerifiedLines": 404,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "test-targets",
+      "language": "en",
+      "variant": "types",
+      "rawFile": "esbuild.test-targets.en.types.txt",
+      "nativeFile": "esbuild.test-targets.en.types.json",
+      "sha256": "48d897a54e6b95cd925306aef3eecaaec71279fca934aebf8a1148a510bcd938",
+      "elapsedMs": 2859,
+      "tokens": 3957,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "development",
+            "fact": "Run the common development test targets with six parallel jobs",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "release",
+            "fact": "Add the slower release test targets",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 376,
+          "verifiedOccurrences": 376,
+          "uniqueVerifiedLines": 376,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "test-targets",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "esbuild.test-targets.en.structure.txt",
+      "nativeFile": "esbuild.test-targets.en.structure.json",
+      "sha256": "48d897a54e6b95cd925306aef3eecaaec71279fca934aebf8a1148a510bcd938",
+      "elapsedMs": 2862,
+      "tokens": 3957,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "development",
+            "fact": "Run the common development test targets with six parallel jobs",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "release",
+            "fact": "Add the slower release test targets",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 376,
+          "verifiedOccurrences": 376,
+          "uniqueVerifiedLines": 376,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "binary-download",
+      "language": "zh",
+      "variant": "structure",
+      "rawFile": "esbuild.binary-download.zh.structure.txt",
+      "nativeFile": "esbuild.binary-download.zh.structure.json",
+      "sha256": "b20c5717e4b4bddc6a1ef80ea58a3330afebb0ab77c02896d6b277986eacde90",
+      "elapsedMs": 2500,
+      "tokens": 3954,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "select",
+            "fact": "Identify the platform and choose a package or reject it",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "extract",
+            "fact": "Extract and move the executable and remove the archive",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 361,
+          "verifiedOccurrences": 361,
+          "uniqueVerifiedLines": 361,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "binary-download",
+      "language": "zh",
+      "variant": "types",
+      "rawFile": "esbuild.binary-download.zh.types.txt",
+      "nativeFile": "esbuild.binary-download.zh.types.json",
+      "sha256": "b20c5717e4b4bddc6a1ef80ea58a3330afebb0ab77c02896d6b277986eacde90",
+      "elapsedMs": 2507,
+      "tokens": 3954,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "select",
+            "fact": "Identify the platform and choose a package or reject it",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "extract",
+            "fact": "Extract and move the executable and remove the archive",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 361,
+          "verifiedOccurrences": 361,
+          "uniqueVerifiedLines": 361,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "binary-download",
+      "language": "en",
+      "variant": "types",
+      "rawFile": "esbuild.binary-download.en.types.txt",
+      "nativeFile": "esbuild.binary-download.en.types.json",
+      "sha256": "314c621a549a718b4c5c72145a49df9214a9caa973e22878288c812955d8c09d",
+      "elapsedMs": 2223,
+      "tokens": 3961,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "select",
+            "fact": "Identify the platform and choose a package or reject it",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "extract",
+            "fact": "Extract and move the executable and remove the archive",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 249,
+          "verifiedOccurrences": 249,
+          "uniqueVerifiedLines": 249,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "dataset": "esbuild",
+      "id": "binary-download",
+      "language": "en",
+      "variant": "structure",
+      "rawFile": "esbuild.binary-download.en.structure.txt",
+      "nativeFile": "esbuild.binary-download.en.structure.json",
+      "sha256": "314c621a549a718b4c5c72145a49df9214a9caa973e22878288c812955d8c09d",
+      "elapsedMs": 2227,
+      "tokens": 3961,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "select",
+            "fact": "Identify the platform and choose a package or reject it",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "extract",
+            "fact": "Extract and move the executable and remove the archive",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 249,
+          "verifiedOccurrences": 249,
+          "uniqueVerifiedLines": 249,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    }
+  ],
+  "validation": {
+    "frozenInputs": true,
+    "rawHashes": true,
+    "queryIdentity": true,
+    "exactSourceLines": true,
+    "budgets": true
+  },
+  "bindingSummary": [
+    {
+      "repository": "cobra",
+      "units": 846,
+      "sourceSpansUnchanged": true,
+      "callsBefore": 723,
+      "callsAfter": 562,
+      "addedCalls": 407,
+      "removedCalls": 568,
+      "selectedGoFiles": 18,
+      "buildTarget": "linux/amd64; CGO disabled; no extra build tags",
+      "externalDependencies": "not loaded; diagnostics retained"
+    },
+    {
+      "repository": "esbuild",
+      "units": 11295,
+      "sourceSpansUnchanged": true,
+      "callsBefore": 13561,
+      "callsAfter": 22173,
+      "addedCalls": 9522,
+      "removedCalls": 910,
+      "selectedGoFiles": 109,
+      "buildTarget": "linux/amd64; CGO disabled; no extra build tags",
+      "externalDependencies": "not loaded; diagnostics retained"
+    }
+  ],
+  "finalModeValidation": [
+    {
+      "repository": "cobra",
+      "explicitTypesAllUnitsIdenticalToEvaluated": true,
+      "defaultSyntaxRetrievalFieldsIdenticalToEvaluated": true
+    },
+    {
+      "repository": "esbuild",
+      "explicitTypesAllUnitsIdenticalToEvaluated": true,
+      "defaultSyntaxRetrievalFieldsIdenticalToEvaluated": true
+    }
+  ],
+  "decision": {
+    "defaultGoMode": "syntax",
+    "optionalGoMode": "types",
+    "reason": "Compiler bindings are more precise; retrieval gains are mixed across the two Go corpora."
+  }
+}

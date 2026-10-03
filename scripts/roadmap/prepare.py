@@ -53,9 +53,10 @@ def views(name, corpus, snapshot):
             if variant == 'text':
                 languages.EXTENSIONS.update({ext: 'text' for ext, lang in original.items() if lang in {'go', 'javascript'}})
             report = {}
-            units = languages.source_units(corpus, snapshot['files'], report=report)
+            options = {'go': {'mode': 'syntax'}} if variant == 'structure' else None
+            units = languages.source_units(corpus, snapshot['files'], language_options=options, report=report)
             write(target/(variant+'-units.json'), {'units': units, 'selection': report,
-                'languageAdapters': languages.adapter_manifest(snapshot['files']), 'variant': variant})
+                'languageAdapters': languages.adapter_manifest(snapshot['files'], options), 'variant': variant})
         finally:
             languages.EXTENSIONS.clear(); languages.EXTENSIONS.update(original)
 

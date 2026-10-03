@@ -19,7 +19,14 @@ type Source struct {
 	Text string `json:"text"`
 }
 type Input struct {
-	Files []Source `json:"files"`
+	Files   []Source `json:"files"`
+	Options Settings `json:"options"`
+}
+type Settings struct {
+	Mode       string `json:"mode"`
+	ModulePath string `json:"modulePath"`
+	GOOS       string `json:"goos"`
+	GOARCH     string `json:"goarch"`
 }
 type Entry struct {
 	Name  string `json:"name"`
@@ -36,11 +43,14 @@ type Call struct {
 	Resolution string `json:"resolution,omitempty"`
 }
 type File struct {
-	Path       string  `json:"path"`
-	Package    string  `json:"package"`
-	Entries    []Entry `json:"entries"`
-	Boundaries []int   `json:"boundaries"`
-	Calls      []Call  `json:"calls"`
+	Path        string   `json:"path"`
+	Package     string   `json:"package"`
+	Entries     []Entry  `json:"entries"`
+	Boundaries  []int    `json:"boundaries"`
+	Calls       []Call   `json:"calls"`
+	References  []Call   `json:"references"`
+	Diagnostics []string `json:"diagnostics"`
+	Semantic    bool     `json:"semantic"`
 }
 type Target struct {
 	path string
@@ -83,10 +93,18 @@ func run() error {
 			}
 		}
 	}
+	var typed TypeEvidence
+	if input.Options.Mode == "types" {
+		typed = resolveTypes(fset, trees, texts, input.Options.ModulePath, input.Options.GOOS, input.Options.GOARCH)
+	}
 	files := []File{}
 	for _, src := range input.Files {
 		tree := trees[src.Path]
-		out := File{Path: src.Path, Package: tree.Name.Name, Entries: []Entry{}, Boundaries: []int{}, Calls: []Call{}}
+		out := File{Path: src.Path, Package: tree.Name.Name, Entries: []Entry{}, Boundaries: []int{}, Calls: []Call{}, References: []Call{}, Diagnostics: []string{}}
+		if input.Options.Mode == "types" {
+			out.Semantic = typed.Selected[src.Path]
+			out.Diagnostics = append(out.Diagnostics, typed.Diagnostics[src.Path]...)
+		}
 		add := func(node ast.Node, name, kind string, doc *ast.CommentGroup) {
 			start := line(node.Pos())
 			if doc != nil {
@@ -160,7 +178,22 @@ func run() error {
 						c.Resolution = "syntax-binding"
 					}
 				}
+				if input.Options.Mode == "types" {
+					c.Path = ""
+					c.Decl = 0
+					c.Resolution = ""
+					if target, ok := typed.Calls[call.Pos()]; ok {
+						c.Path = target.path
+						c.Decl = target.line
+						c.Resolution = "compiler-symbol"
+					}
+				}
 				out.Calls = append(out.Calls, c)
+			}
+			if input.Options.Mode == "types" {
+				if target, ok := typed.References[node.Pos()]; ok {
+					out.References = append(out.References, Call{Line: line(node.Pos()), Path: target.path, Decl: target.line, Resolution: "compiler-symbol"})
+				}
 			}
 			return true
 		})

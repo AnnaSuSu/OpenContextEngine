@@ -30,6 +30,7 @@ def adapter_manifest(files, language_options=None):
             paths.append(Path(typescript.__file__).with_suffix('.mjs'))
         if language == 'go':
             paths.append(Path(go.__file__).with_name('go_ast.go'))
+            paths.append(Path(go.__file__).with_name('go_types.go'))
     return {'schemaVersion': SCHEMA_VERSION, 'languages': languages, 'options': options,
             'parsers': {language: (f'python-ast-{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}'
                                   if language == 'python' else f'typescript-{typescript.COMPILER_VERSION}'
@@ -76,6 +77,8 @@ def source_units(root, files, max_lines=65, language_options=None, report=None):
     identities = {}
     for language, subset in groups.items():
         settings = options.get(language)
+        if language == 'go':
+            settings = go.settings(settings, sources)
         if language == 'typescript' and 'javascript' in options:
             if settings is not None and settings != options['javascript']:
                 raise ValueError('JavaScript and TypeScript share compiler options')

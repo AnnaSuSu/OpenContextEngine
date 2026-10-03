@@ -75,7 +75,8 @@ for dataset in config['datasets']:
             'adapters': data['languageAdapters'], 'queryCache': False}
         (state/'metadata.json').write_text(json.dumps(metadata, indent=2)+'\n')
         report['indexes'][name][variant] = metadata
-        retrievers[variant] = BatchedEngine(units, vectors, config['embeddingUrl'], config['reranker'], config['embeddingKey'])
+        kind = RoutedEngine if config.get('engine') == 'routed' else BatchedEngine
+        retrievers[variant] = kind(units, vectors, config['embeddingUrl'], config['reranker'], config['embeddingKey'])
     for task in read(base/'queries.json')['cases']:
         for language, query in task['queries'].items():
             variants = list(retrievers) if language == 'zh' else list(reversed(retrievers))

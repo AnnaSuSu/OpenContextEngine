@@ -54,7 +54,7 @@ class JavaScriptGoTest(unittest.TestCase):
             'pkg/a_linux.go': 'package p\nfunc Save() {}\n',
             'pkg/a_windows.go': 'package p\nfunc Save() {}\n',
             'pkg/main.go': 'package p\nfunc run(client interface { Save() }) {\n Save()\n client.Save()\n}\n',
-        })
+        }, options={'go': {'mode': 'syntax'}})
         self.assertEqual(self.targets(units, 'run', 'calls'), set())
 
     def test_go_physical_lines_ignore_line_directives_and_unicode(self):

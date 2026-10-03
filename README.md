@@ -12,7 +12,7 @@ RepoNerve 是面向 AI 编程 Agent 的代码上下文引擎研究项目，目�
 
 Git 历史实验未观察到准确率增益，已撤掉功能接入，继续使用纯源码检索；[实验结果](docs/eval/GIT_HISTORY.md)和代码归档保留供查阅。
 
-已增加 [JavaScript 与 Go 结构解析](docs/eval/JS_GO.md)，支持 JS/TS 混合绑定、Go 函数与方法边界及有依据的静态关系。
+已增加 [JavaScript 与 Go 结构解析](docs/eval/JS_GO.md)，支持 JS/TS 混合绑定、Go 函数与方法边界及可选的 Go 类型分析。最终默认配置在 Cobra、Commander、esbuild 上的证据覆盖率为 87.5%、100%、84.38%，远程查询中位耗时为 2.03、2.77、2.43 秒。类型关系对不同仓库收益有差异，默认保留基础结构解析。
 
 语言适配层与检索流程分离，Python/TypeScript 已通过真实远程索引和同一检索引擎完成本轮对照。其他合格 UTF-8 源码、配置和脚本现可使用[通用文本保底](docs/eval/TEXT_FALLBACK.md)：保留原始行号，共用召回与重排，不生成猜测的语义关系。接口与支持边界见[技术报告](TECHNICAL_REPORT.md#已实现的语言适配边界)。
 

@@ -34,7 +34,7 @@ def serve(config):
             ['src/retrieval/engine.py','src/retrieval/batched.py','src/retrieval/routed.py','scripts/retrieval-server.py',
              'src/retrieval/languages/__init__.py','src/retrieval/languages/schema.py',
              'src/retrieval/languages/text.py','src/retrieval/languages/files.py',
-             'src/retrieval/languages/python.py','src/retrieval/languages/go.py','src/retrieval/languages/go_ast.go',
+             'src/retrieval/languages/python.py','src/retrieval/languages/go.py','src/retrieval/languages/go_ast.go','src/retrieval/languages/go_types.go',
              'src/retrieval/languages/typescript.py',
              'src/retrieval/languages/typescript.mjs','package.json','package-lock.json']}}
     model_base = config['reranker']['baseUrl'].removesuffix('/v1')
