@@ -15,7 +15,8 @@
     "ace-pilot": "node scripts/ace-pilot.mjs",
     "prepare-django": "node scripts/prepare-django.mjs",
     "ace-django": "node scripts/ace-django.mjs",
-    "score-django": "node scripts/score-django.mjs"
+    "score-django": "node scripts/score-django.mjs",
+    "baseline": "node scripts/run-baseline.mjs"
   },
   "dependencies": {
     "@augmentcode/auggie-sdk": "0.2.0",
