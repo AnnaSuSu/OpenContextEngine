@@ -1,0 +1,330 @@
+{
+  "schemaVersion": 1,
+  "kind": "language-adapter-compatibility",
+  "python": {
+    "snapshotCommit": "f59aef2ee9b5c988fd4179d8f2835030bd76297c",
+    "files": 883,
+    "units": 12333,
+    "edges": 40205,
+    "legacyFieldsEqual": true,
+    "legacyUnitsSha256": "385d57a3f7243f55ba114e694c5fba7a7326a692852d571e79debc172bb50e64",
+    "recordedContextsReconstructedExactly": 60,
+    "recordedRuns": [
+      "reponerve-service-django-2026-10-03T14-01-40.683Z",
+      "reponerve-service-django-2026-10-03T14-02-46.718Z",
+      "reponerve-service-django-2026-10-03T14-03-52.661Z"
+    ],
+    "adapters": {
+      "schemaVersion": "source-units-v2",
+      "languages": [
+        "python"
+      ],
+      "options": {},
+      "parsers": {
+        "python": "python-ast-3.14.6"
+      },
+      "sourceSha256": {
+        "__init__.py": "061a52434ceb0258d92c3d185c3260f7a39bb80e832bac85e0943844177ff7cf",
+        "schema.py": "fdae889aefef76c1520fc1f818b9345e8bc2082413d10793c5fdb43c0ca49a90",
+        "python.py": "5154ce726d88028eba118c887604737ffb42adccd4653e69679b3ec897fd27ff"
+      }
+    }
+  },
+  "typescript": {
+    "snapshot": {
+      "repository": "https://github.com/hsingjui/ContextWeaver",
+      "commit": "42375d315e180da258ebb983215004dbbf98c00d",
+      "scope": "All available src/**/*.ts in the pinned research checkout; structure validation only.",
+      "files": [
+        {
+          "path": "src/api/embedding.ts",
+          "sha256": "0ba03920771d264df081ea7e7cab8d0bd37ebd5b164d41aec49d001502c503bd"
+        },
+        {
+          "path": "src/api/localEmbedding.ts",
+          "sha256": "3e8e34273f798a2063d42b303825507aab365148c69e6c0e524399a334495e56"
+        },
+        {
+          "path": "src/api/reranker.ts",
+          "sha256": "10f039993a6bc3291e79a2fff3c9fa2c119c7d5317973c76b7e76b3ea0f46a24"
+        },
+        {
+          "path": "src/chunking/LanguageSpec.ts",
+          "sha256": "1c9c7fd9f4f15c6d73db9d383bc302d69bea7e87a56fbcd24ce0b95793babe18"
+        },
+        {
+          "path": "src/chunking/ParserPool.ts",
+          "sha256": "da9ea590366fa378cb5a17409e70aa2a39a75d64550e18c5d1b6856c1c5d0185"
+        },
+        {
+          "path": "src/chunking/SemanticSplitter.ts",
+          "sha256": "27fd5d5559b33a65b87900d8436aa56f7eef5f89b59b90a44fb8b28aeb1d2749"
+        },
+        {
+          "path": "src/chunking/SourceAdapter.ts",
+          "sha256": "1917b65fa4ed113688afc31aaa4a3238748bf12384570f10a1c009c5948a92ac"
+        },
+        {
+          "path": "src/chunking/index.ts",
+          "sha256": "3a4d37cd61ae1c347f79a9f2732ab71839966900e60bad722c256417063f2d03"
+        },
+        {
+          "path": "src/chunking/types.ts",
+          "sha256": "262103e4b71731783ec26f0a772f193bb8cb3efedd8d7c961ae06377a2696d32"
+        },
+        {
+          "path": "src/cli/doctor.ts",
+          "sha256": "7d12f82b5e7e6146fd155d6ba06d563fedceda12f947587cefe9bd04bea8c0d4"
+        },
+        {
+          "path": "src/cli/index.ts",
+          "sha256": "06f814c4a61475030032deb75861bc3f9c45be003f903686d74bb6b2576bbb46"
+        },
+        {
+          "path": "src/cli/init.ts",
+          "sha256": "454ce1a335c217b23089fe9e0d887723554a2aa12227b8e8bed9677b66a67235"
+        },
+        {
+          "path": "src/cli/model.ts",
+          "sha256": "cb5210f6d3a1a208f9029432865c8f4fe5919975e6d19c43b5fd5cf903286d38"
+        },
+        {
+          "path": "src/cli/probe.ts",
+          "sha256": "ba8f1fcd318aa016a2974472cf37d5a3c0550c77902827d871c3e8e527b39651"
+        },
+        {
+          "path": "src/cli/progress.ts",
+          "sha256": "31f662ba9b98f50c0d14ea52dd914d7a2319ccdf17085370c720831f5f622efa"
+        },
+        {
+          "path": "src/cli/prompts.ts",
+          "sha256": "45a535d7af8abf6844a25a53f49c8b01bab50ccaa5aa6990dff78fe5cdb4b058"
+        },
+        {
+          "path": "src/cli/searchResult.ts",
+          "sha256": "1e8860ea1260130706d570bcbb84c3d39f02aee2390e13e82df6aea6a3d86650"
+        },
+        {
+          "path": "src/cli/theme.ts",
+          "sha256": "c3bcc6099eb930ce4cf76b8ef3fcb3676467e0d8222297b35512505a3a985fc2"
+        },
+        {
+          "path": "src/config.ts",
+          "sha256": "17d8e1943d2d0514938bba551411ba3a5875702bb2ec09a0d495aceedc89608f"
+        },
+        {
+          "path": "src/db/index.ts",
+          "sha256": "b4b27323cb94d5cd3f11a711bba240d29fcd9409c302bbddca43bec833df098f"
+        },
+        {
+          "path": "src/index.ts",
+          "sha256": "4a0868c5784aced7c3ff2c0280d66f013e01b23fc18d32722a61ed7efeb76cdb"
+        },
+        {
+          "path": "src/indexer/DependencyIndexer.ts",
+          "sha256": "e8550b8cbb25746f80f800674989234e7f874e5dc83a7ec9b0e556d63dde1be0"
+        },
+        {
+          "path": "src/indexer/SymbolExtractor.ts",
+          "sha256": "2a54834040a6cc0cc27c5288d537e55532cbf449067252931fd9725bde260a78"
+        },
+        {
+          "path": "src/indexer/index.ts",
+          "sha256": "558c6eaf63a07301fdcb553ef5e4fa4de22891c00817cd1afc151606c5cbc90d"
+        },
+        {
+          "path": "src/mcp/server.ts",
+          "sha256": "1f1480b7685e97a580c8334a6a9aec826b953f46991493eae325a2c6f16a7241"
+        },
+        {
+          "path": "src/mcp/tools/codebaseRetrieval.ts",
+          "sha256": "cfc4b77f7bfc359f62bfa5e564b687ce4c6e8cd8a1d3f1afcc93c17a237635fa"
+        },
+        {
+          "path": "src/mcp/tools/index.ts",
+          "sha256": "b716d15b1c7dd19c0a17e79846c354f2ed9b506adf45b980719e5d4c0b4cbdce"
+        },
+        {
+          "path": "src/models/index.ts",
+          "sha256": "a82e00338d7d9e8bd85c77d85ab24e8f52c3bdb744ea285176077ae4cb060c50"
+        },
+        {
+          "path": "src/scanner/crawler.ts",
+          "sha256": "3cd7443f424c0b4303b16e75b3456105523959d4931787023ac3ee26aba33e21"
+        },
+        {
+          "path": "src/scanner/filter.ts",
+          "sha256": "c2ac7d8aa56a2306c7396ffe31824036bc06a50b8b93dc0054fdd3c743adb40a"
+        },
+        {
+          "path": "src/scanner/hash.ts",
+          "sha256": "aabb6b96df5741c1679db9bdbb79429834ba1afb25e459417bf8d814e5ea8d2e"
+        },
+        {
+          "path": "src/scanner/index.ts",
+          "sha256": "2e9bf6d162b41c76268d19848cbc2c7f2ed46f95a4ac03fa7ac052279d33bbc5"
+        },
+        {
+          "path": "src/scanner/language.ts",
+          "sha256": "9f82499fa5b8c46ba18eaa54da3851449fe6de16dfec0c56af12f57978fabf8a"
+        },
+        {
+          "path": "src/scanner/processor.ts",
+          "sha256": "960b3a577a49c26ea9489449640e7e019ee4a95ec32538c512a86e57ad42fd1e"
+        },
+        {
+          "path": "src/search/ContextPacker.ts",
+          "sha256": "6cb91b60d82734394acb984344347d29a63b64e0b1ef149bf57ee8fe24e4af04"
+        },
+        {
+          "path": "src/search/CoverageSelector.ts",
+          "sha256": "295b3c9248d25692c86515e86d41268a4e7753d4201447a6ecc24fbd8258f0e6"
+        },
+        {
+          "path": "src/search/GraphExpander.ts",
+          "sha256": "42fc55188b80604486d511cf9f29942f94b04fc50816dc177da2388ae5922d84"
+        },
+        {
+          "path": "src/search/PathRecall.ts",
+          "sha256": "234e3e959d98900cd5eac6ce6c34101e58c57335b1e2333b18ca332db3d7e55b"
+        },
+        {
+          "path": "src/search/QueryDecomposer.ts",
+          "sha256": "cf86d851a1cd84e4817cb0fd8e4224c7fbfc5ba89859df8a59816aa4c92980b9"
+        },
+        {
+          "path": "src/search/RetrievalPlan.ts",
+          "sha256": "29736d4c054f9f737eb6e7eb12d18be255b9364feae70d17659abeeaccfd2e28"
+        },
+        {
+          "path": "src/search/SearchService.ts",
+          "sha256": "244194ad0b09569e11691cd2b4a45f25acdfb2268fe371952c9bf688ec678556"
+        },
+        {
+          "path": "src/search/config.ts",
+          "sha256": "2bf9560b97c6f768118c38c8bb49a2858b75a7fcca515ecc4f8747a9f07e6bc9"
+        },
+        {
+          "path": "src/search/fts.ts",
+          "sha256": "314092d5c20e7fa4fd346e27c254c56435cab828828b8c039c84287fc6f05b80"
+        },
+        {
+          "path": "src/search/resolvers/CSharpResolver.ts",
+          "sha256": "ff607e32b61b31aa373fb96d2341b89be03a2e78cc8241435a70e7504d85fe9c"
+        },
+        {
+          "path": "src/search/resolvers/CppResolver.ts",
+          "sha256": "263235d7f1842989cac466d2a999df66274e32fc4e775a69076350911dbf1d5a"
+        },
+        {
+          "path": "src/search/resolvers/GoResolver.ts",
+          "sha256": "98e7eff85eb05c5b05a9174fc23e5e1841942376b157267cbd7d9ddc34760478"
+        },
+        {
+          "path": "src/search/resolvers/JavaResolver.ts",
+          "sha256": "325e76b85211c579cd36d723944f4209d61eb74e9ba9ebd8d58493d92f0d7479"
+        },
+        {
+          "path": "src/search/resolvers/JsTsResolver.ts",
+          "sha256": "27f60effc8ead3301fefeff4fc567c11cf1f9b8739594a793bb3760163413909"
+        },
+        {
+          "path": "src/search/resolvers/PythonResolver.ts",
+          "sha256": "cccdf467ece691bcb79c2364d8bb6832df00bc2e24840a9961b346eb4adace7c"
+        },
+        {
+          "path": "src/search/resolvers/RustResolver.ts",
+          "sha256": "dda18b206609ea3bc9294f5be7689cc2badec10b7159d8564a1ce44536619a40"
+        },
+        {
+          "path": "src/search/resolvers/index.ts",
+          "sha256": "8c421927bb43fdcab485b085533b3a9901a8a0fd5a9d9b4146f4bb5e5bbf7725"
+        },
+        {
+          "path": "src/search/resolvers/types.ts",
+          "sha256": "b288ad0def551d8eebd888d7c5f334492a41c5ccd1f06f99a57bfff2081aa342"
+        },
+        {
+          "path": "src/search/types.ts",
+          "sha256": "83268289a04de3f4ead31eb953242f285b43a1a304dbf0ec71c9af494965493f"
+        },
+        {
+          "path": "src/utils/encoding.ts",
+          "sha256": "ffb868e89ab503627ce4eadad87691c59f4d5d334f4df1ce8ce4285619adcb0c"
+        },
+        {
+          "path": "src/utils/endpointUrl.ts",
+          "sha256": "26c34501bb8c791d965f914f66e5a3dbd2b9b887f87a1d55406f106d64090aec"
+        },
+        {
+          "path": "src/utils/envTemplate.ts",
+          "sha256": "ee601a59823d711b04de1a5f296e3c98b2e50cd6592b1d9c91b39f103305558c"
+        },
+        {
+          "path": "src/utils/lock.ts",
+          "sha256": "250d5d41847e24515c5aafca15e1b8a82d456177c5821ccb8b7b223f8f7a00e3"
+        },
+        {
+          "path": "src/utils/logger.ts",
+          "sha256": "2c372057a8a8e5c9f5c37ab453ffc8bd765b134b9ba02205c909a7dcc72567ec"
+        },
+        {
+          "path": "src/utils/terminal.ts",
+          "sha256": "14cb1155ed2d2d00f9df92e42f6da18afb960fd8bb694ec063f514e71c957909"
+        },
+        {
+          "path": "src/vectorStore/index.ts",
+          "sha256": "c9d3939efa532f7eb667f39546e7f635ee963856538865748656621eb8cf7abe"
+        }
+      ]
+    },
+    "summary": {
+      "files": 60,
+      "units": 1621,
+      "languages": {
+        "typescript": 1621
+      },
+      "edges": 6296,
+      "relations": {
+        "same_symbol": 1196,
+        "imports": 554,
+        "member_of": 2794,
+        "references_type": 758,
+        "calls": 969,
+        "implements": 46,
+        "inherits": 12
+      },
+      "unresolved": 2470,
+      "elapsedMs": 487
+    },
+    "adapters": {
+      "schemaVersion": "source-units-v2",
+      "languages": [
+        "typescript"
+      ],
+      "options": {},
+      "parsers": {
+        "typescript": "typescript-5.9.3"
+      },
+      "sourceSha256": {
+        "__init__.py": "061a52434ceb0258d92c3d185c3260f7a39bb80e832bac85e0943844177ff7cf",
+        "schema.py": "fdae889aefef76c1520fc1f818b9345e8bc2082413d10793c5fdb43c0ca49a90",
+        "typescript.py": "ffa77209f4a2304794c4dba13914f6cf960f9abbe8da8cc01e2a2c6795fbfbcc",
+        "typescript.mjs": "782ac128bf2897d875da23eea4272e14ac03a6e8bca0f87ac054e99515681d24"
+      }
+    }
+  },
+  "notes": [
+    "All Python legacy fields match an execution of the unmodified v1 extractor on the same frozen corpus.",
+    "Sixty historical contexts were reconstructed from stored selections; no live model rerun or new quality metric is claimed.",
+    "TypeScript parsing and static relations were validated on a real source snapshot; this is not retrieval recall or an ACE comparison.",
+    "Unresolved external/dynamic references are recorded and do not create guessed call edges."
+  ],
+  "verification": {
+    "pythonTestsPassed": 11,
+    "nodeTestsPassed": 23,
+    "sourceCoverageAndRelationsValidated": true,
+    "liveModelRerun": false,
+    "deployed": false
+  }
+}
