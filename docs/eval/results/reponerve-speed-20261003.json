@@ -1,0 +1,857 @@
+{
+  "schemaVersion": 1,
+  "kind": "development-pilot-speed-comparison",
+  "date": "2026-10-03",
+  "commit": "f59aef2ee9b5c988fd4179d8f2835030bd76297c",
+  "referenceSha256": "6923b8d2558dd151adac538dbecf5f4384af104fe6a8262fc566de0790409ab5",
+  "primaryBudgetTokens": 4000,
+  "independentTasks": 10,
+  "pairedQueries": 20,
+  "chosen": "batched-mac-32",
+  "chosenConfiguration": {
+    "maxBatchSize": 32,
+    "batchTokenBudget": 8192,
+    "queryCache": false
+  },
+  "medianSpeedupOverV1": 4.657238954288335,
+  "finalDeployment": {
+    "status": "ready",
+    "engine": "batched-dag-v4",
+    "index": {
+      "identity": "a2f2b07a5e9be04c6d5471a872e9556adf815395e9bc92b54097a9e3da023745",
+      "version": "ast-facets-v1",
+      "units": 12333,
+      "files": 883,
+      "nonemptyFiles": 736,
+      "resolvedEdges": 40205,
+      "indexingMs": 346166,
+      "cacheHit": false
+    },
+    "queryCache": false,
+    "initializationMs": 1884,
+    "sourceSha256": {
+      "src/retrieval/engine.py": "6830a49953a5e0c11e4791776181a986f8109ccd51b58e52238df839d43349f4",
+      "src/retrieval/batched.py": "914f7879dc8ae07f3971d82a948f8103ac25046d52e566b94505888be684fdeb",
+      "scripts/retrieval-server.py": "3bf6e76cbc2a9452e9d11c8ab1a3cd01d8cf4e9417357c2d11949fa54c339a13"
+    },
+    "reranker": {
+      "status": "ok",
+      "model_loaded": true,
+      "model": "Qwen3-Reranker-4B",
+      "source": "ModelScope",
+      "max_input_tokens": 8192,
+      "dtype": "bfloat16",
+      "max_documents": 128,
+      "max_batch_size": 32,
+      "batch_token_budget": 8192,
+      "scoring": "softmax(no,yes)",
+      "pair_batch": true,
+      "source_sha256": "6a4fe44490c172139504e3f2bf2d4b395498c7e6542d152d6ae00477f196fde9",
+      "instruction_sha256": "0d618dd8ee6916f68f14073bdfb08bc987361386c84e5400f38fa499baef2896"
+    }
+  },
+  "notes": [
+    "P95 uses nearest rank; P50 averages the central two values for even samples.",
+    "Three client rounds repeat the same 20 queries, not 60 independent tasks.",
+    "Models and index are warm; each query reruns embedding and neural ranking, with no result cache.",
+    "Original v1 and final client differ in execution batching, persistence and transport; this is not an isolated algorithm ablation.",
+    "The final deployment adds health metadata; recorded run source hashes remain preserved.",
+    "Development queries informed architecture selection; no held-out or cross-repository claim."
+  ],
+  "systems": {
+    "ace": {
+      "rounds": [
+        {
+          "run": "runs/ace-django-2026-10-03T09-25-00.710Z",
+          "timingMs": {
+            "count": 20,
+            "min": 2301,
+            "p50": 2823.5,
+            "p95": 3629,
+            "max": 4497,
+            "mean": 2926.75
+          },
+          "coverage": {
+            "zh": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.865,
+              "completeRecall": 0.5
+            },
+            "en": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8400000000000001,
+              "completeRecall": 0.5
+            },
+            "englishMinusChinese": -0.02499999999999991
+          },
+          "reportSha256": "bf6e9b8fc97e9c02518e34041c8ef314c351b86fbbbc8dbb33a83e8d7ef6908b",
+          "scoreSha256": "81a614e5ed69d1b7c92014770e259276691076a0159309f28eba97c1a1b93779",
+          "config": null
+        }
+      ],
+      "timingMs": {
+        "count": 20,
+        "min": 2301,
+        "p50": 2823.5,
+        "p95": 3629,
+        "max": 4497,
+        "mean": 2926.75
+      },
+      "invalidSourceOccurrences": 7,
+      "maxRawTokens": 5057
+    },
+    "reference-v1": {
+      "rounds": [
+        {
+          "run": "runs/reponerve-django-2026-10-03T12-53-21.093Z",
+          "timingMs": {
+            "count": 20,
+            "min": 5003,
+            "p50": 15231.5,
+            "p95": 68279,
+            "max": 72300,
+            "mean": 21568.35
+          },
+          "coverage": {
+            "zh": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8633333333333333,
+              "completeRecall": 0.5
+            },
+            "en": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8466666666666667,
+              "completeRecall": 0.5
+            },
+            "englishMinusChinese": -0.016666666666666607
+          },
+          "reportSha256": "460cd3a5e6f7dfa36d6452699fa95d22ad5acb915c05bf9b4ad5e0252cf6a2a1",
+          "scoreSha256": "3946c9f1145907fdf286c34070b9b0fab0fbaefc8e71b567eefe645d948b469c",
+          "config": {
+            "engine": "ast-facets-v1",
+            "primaryBudgetTokens": 4000,
+            "executionHost": {
+              "hostname": "development-6159-wb6fthqz-f48b7d654-j9rmq",
+              "platform": "linux"
+            },
+            "embedding": {
+              "model": "Qwen3-Embedding-4B",
+              "dimensions": 1024,
+              "transport": {
+                "baseUrl": "https://embedding.example.com/v1",
+                "requestBaseUrl": "http://127.0.0.1:42002/v1",
+                "transport": "ssh-tunnel",
+                "remote": "operator@model-host.example:22"
+              }
+            },
+            "reranker": {
+              "baseUrl": "https://rerank.example.com/v1",
+              "model": "Qwen3-Reranker-4B"
+            },
+            "planner": {
+              "model": null,
+              "mode": "literal-clause-split-v1"
+            },
+            "plansSha256": "6fa08cdc70bd78120b0979b24b9be213a3e54d6b34b4b80e6e55641c8e452656",
+            "harnessSha256": {
+              "src/retrieval/engine.py": "9304732120cd33c63b7c03d76b1414e9fcb5c75cf53d65ae8c7bf67e3ed4b8a7",
+              "scripts/reponerve-worker.py": "b6f0f86d420f37bea3e1b76d14f2bfc4e158bf640cc6bbca45f52f2c0d515441",
+              "scripts/run-reponerve.mjs": "0d210d5561fb2ebf340d5a8dd0e7efaec9aa8db172cf022bc7463ee0c16b1809",
+              "scripts/plan-retrieval.mjs": "9631e055c3c86026cb7df0d787ec31b78a38154c8a1ece2c7e8a0b0e64d8e319",
+              "scripts/literal-retrieval-plans.mjs": "0adf6c19054ac334713ea9764bb823cb6c21e592515e467ce73d764008635222",
+              "scripts/embedding-gateway.mjs": "7944f9b2dbfb0abadb37a798935ccbefe9651f72b38b8d58ee87fcb5884a22ed"
+            }
+          }
+        }
+      ],
+      "timingMs": {
+        "count": 20,
+        "min": 5003,
+        "p50": 15231.5,
+        "p95": 68279,
+        "max": 72300,
+        "mean": 21568.35
+      },
+      "invalidSourceOccurrences": 0,
+      "maxRawTokens": 3960
+    },
+    "single-stage": {
+      "rounds": [
+        {
+          "run": "runs/reponerve-cascade-django-2026-10-03T13-24-22.142Z",
+          "timingMs": {
+            "count": 20,
+            "min": 860,
+            "p50": 1408.0,
+            "p95": 1998,
+            "max": 1999,
+            "mean": 1420.9
+          },
+          "coverage": {
+            "zh": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8633333333333333,
+              "completeRecall": 0.5
+            },
+            "en": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.7916666666666667,
+              "completeRecall": 0.5
+            },
+            "englishMinusChinese": -0.07166666666666655
+          },
+          "reportSha256": "c4dcb71b7d123f7e277bce3ecc1ff224511adca367656fdec2e5056bd823dc21",
+          "scoreSha256": "080bc0a5d45f0c378040a0c9fa03cbd555fde0c7b975723ffb7ddf10ccf2d00c",
+          "config": {
+            "engine": "structural-cascade-v2",
+            "primaryBudgetTokens": 4000,
+            "executionHost": {
+              "hostname": "development-6159-wb6fthqz-f48b7d654-j9rmq",
+              "platform": "linux"
+            },
+            "embedding": {
+              "model": "Qwen3-Embedding-4B",
+              "dimensions": 1024,
+              "transport": {
+                "baseUrl": "https://embedding.example.com/v1",
+                "requestBaseUrl": "http://127.0.0.1:42002/v1",
+                "transport": "ssh-tunnel",
+                "remote": "operator@model-host.example:22"
+              },
+              "queryCache": false
+            },
+            "reranker": {
+              "model": "Qwen3-Reranker-4B",
+              "baseUrl": "https://rerank.example.com/v1",
+              "requestBaseUrl": "http://127.0.0.1:23504/v1",
+              "transport": "authorized-remote-host-loopback",
+              "executionHost": "development-6159-wb6fthqz-f48b7d654-j9rmq"
+            },
+            "planner": {
+              "model": null,
+              "mode": "literal-clause-split-v1"
+            },
+            "plansSha256": "6fa08cdc70bd78120b0979b24b9be213a3e54d6b34b4b80e6e55641c8e452656",
+            "harnessSha256": {
+              "src/retrieval/engine.py": "6830a49953a5e0c11e4791776181a986f8109ccd51b58e52238df839d43349f4",
+              "src/retrieval/cascade.py": "3e66d2a6c6abafb7a5c09714c04845571a4bcf171b6576c913bfd4978baec999",
+              "src/eval/remote-models.mjs": "241cb6378c26010aa170e484a683a2fc46efe246856ef760716be36e371f8d95",
+              "scripts/reponerve-worker.py": "40fda5d19e171b6f76888957739afb26dd4d434d0d7a663c13b6f20f3a7189cc",
+              "scripts/run-reponerve.mjs": "1a1047bb39cc8f017c550ee7dec886356c79ab66d834bc464b4af7c1a5fcfd07",
+              "scripts/plan-retrieval.mjs": "9631e055c3c86026cb7df0d787ec31b78a38154c8a1ece2c7e8a0b0e64d8e319",
+              "scripts/literal-retrieval-plans.mjs": "0adf6c19054ac334713ea9764bb823cb6c21e592515e467ce73d764008635222",
+              "scripts/embedding-gateway.mjs": "7944f9b2dbfb0abadb37a798935ccbefe9651f72b38b8d58ee87fcb5884a22ed"
+            }
+          }
+        }
+      ],
+      "timingMs": {
+        "count": 20,
+        "min": 860,
+        "p50": 1408.0,
+        "p95": 1998,
+        "max": 1999,
+        "mean": 1420.9
+      },
+      "invalidSourceOccurrences": 0,
+      "maxRawTokens": 3954
+    },
+    "function-entities": {
+      "rounds": [
+        {
+          "run": "runs/reponerve-entity-django-2026-10-03T13-34-18.147Z",
+          "timingMs": {
+            "count": 20,
+            "min": 1037,
+            "p50": 1591.5,
+            "p95": 1891,
+            "max": 2056,
+            "mean": 1529.95
+          },
+          "coverage": {
+            "zh": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8083333333333333,
+              "completeRecall": 0.5
+            },
+            "en": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.7916666666666667,
+              "completeRecall": 0.5
+            },
+            "englishMinusChinese": -0.016666666666666607
+          },
+          "reportSha256": "a1893c0a501e8c4d64a77d8f04555a13d1b517623004b6372878ba1a6896db7b",
+          "scoreSha256": "f5052f06dbfe4c475fc152a9ef501bab3ba5ed5ff3a8eb4b3c6a6352d3a47f3b",
+          "config": {
+            "engine": "entity-cascade-v3",
+            "primaryBudgetTokens": 4000,
+            "executionHost": {
+              "hostname": "development-6159-wb6fthqz-f48b7d654-j9rmq",
+              "platform": "linux"
+            },
+            "embedding": {
+              "model": "Qwen3-Embedding-4B",
+              "dimensions": 1024,
+              "transport": {
+                "baseUrl": "https://embedding.example.com/v1",
+                "requestBaseUrl": "http://127.0.0.1:42002/v1",
+                "transport": "ssh-tunnel",
+                "remote": "operator@model-host.example:22"
+              },
+              "queryCache": false
+            },
+            "reranker": {
+              "model": "Qwen3-Reranker-4B",
+              "baseUrl": "https://rerank.example.com/v1",
+              "requestBaseUrl": "http://127.0.0.1:23504/v1",
+              "transport": "authorized-remote-host-loopback",
+              "executionHost": "development-6159-wb6fthqz-f48b7d654-j9rmq"
+            },
+            "planner": {
+              "model": null,
+              "mode": "literal-clause-split-v1"
+            },
+            "plansSha256": "6fa08cdc70bd78120b0979b24b9be213a3e54d6b34b4b80e6e55641c8e452656",
+            "harnessSha256": {
+              "src/retrieval/engine.py": "6830a49953a5e0c11e4791776181a986f8109ccd51b58e52238df839d43349f4",
+              "src/retrieval/cascade.py": "3e66d2a6c6abafb7a5c09714c04845571a4bcf171b6576c913bfd4978baec999",
+              "src/retrieval/entities.py": "40aeaab65537ffb644a653cef57b35509d873e69a5ebe7663c99568abdda4319",
+              "src/eval/remote-models.mjs": "241cb6378c26010aa170e484a683a2fc46efe246856ef760716be36e371f8d95",
+              "scripts/reponerve-worker.py": "38c85939eb1962e9166873a2ee0f1e9cfc5cd710456f94c9362ec0730104a28b",
+              "scripts/run-reponerve.mjs": "eb4e374844c9b979a6a232afdebf4e463d0aa021d5bf4757f8fc21ba757ac3f7",
+              "scripts/plan-retrieval.mjs": "9631e055c3c86026cb7df0d787ec31b78a38154c8a1ece2c7e8a0b0e64d8e319",
+              "scripts/literal-retrieval-plans.mjs": "0adf6c19054ac334713ea9764bb823cb6c21e592515e467ce73d764008635222",
+              "scripts/embedding-gateway.mjs": "7944f9b2dbfb0abadb37a798935ccbefe9651f72b38b8d58ee87fcb5884a22ed"
+            }
+          }
+        }
+      ],
+      "timingMs": {
+        "count": 20,
+        "min": 1037,
+        "p50": 1591.5,
+        "p95": 1891,
+        "max": 2056,
+        "mean": 1529.95
+      },
+      "invalidSourceOccurrences": 0,
+      "maxRawTokens": 3952
+    },
+    "batched-server": {
+      "rounds": [
+        {
+          "run": "runs/reponerve-batched-django-2026-10-03T13-44-25.710Z",
+          "timingMs": {
+            "count": 20,
+            "min": 971,
+            "p50": 3093.0,
+            "p95": 4380,
+            "max": 4671,
+            "mean": 3130.9
+          },
+          "coverage": {
+            "zh": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8633333333333333,
+              "completeRecall": 0.5
+            },
+            "en": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8466666666666667,
+              "completeRecall": 0.5
+            },
+            "englishMinusChinese": -0.016666666666666607
+          },
+          "reportSha256": "d6ff4d5e6edb183e943bd513808c276c3422a1e2c172874c1fb7dc9dc23baef7",
+          "scoreSha256": "e87ca4b340ec167b21b0d52122ffd2307766fa8ebf47b568aa5aa6f72c8dcf2c",
+          "config": {
+            "engine": "batched-dag-v4",
+            "primaryBudgetTokens": 4000,
+            "executionHost": {
+              "hostname": "development-6159-wb6fthqz-f48b7d654-j9rmq",
+              "platform": "linux"
+            },
+            "embedding": {
+              "model": "Qwen3-Embedding-4B",
+              "dimensions": 1024,
+              "transport": {
+                "baseUrl": "https://embedding.example.com/v1",
+                "requestBaseUrl": "http://127.0.0.1:42002/v1",
+                "transport": "ssh-tunnel",
+                "remote": "operator@model-host.example:22"
+              },
+              "queryCache": false
+            },
+            "reranker": {
+              "model": "Qwen3-Reranker-4B",
+              "baseUrl": "https://rerank.example.com/v1",
+              "requestBaseUrl": "http://127.0.0.1:23504/v1",
+              "transport": "authorized-remote-host-loopback",
+              "executionHost": "development-6159-wb6fthqz-f48b7d654-j9rmq"
+            },
+            "planner": {
+              "model": null,
+              "mode": "literal-clause-split-v1"
+            },
+            "plansSha256": "6fa08cdc70bd78120b0979b24b9be213a3e54d6b34b4b80e6e55641c8e452656",
+            "harnessSha256": {
+              "src/retrieval/engine.py": "6830a49953a5e0c11e4791776181a986f8109ccd51b58e52238df839d43349f4",
+              "src/retrieval/cascade.py": "3e66d2a6c6abafb7a5c09714c04845571a4bcf171b6576c913bfd4978baec999",
+              "src/retrieval/entities.py": "40aeaab65537ffb644a653cef57b35509d873e69a5ebe7663c99568abdda4319",
+              "src/retrieval/batched.py": "2d422931d9a2ae9589740a02eddb43539f5522441e0b10777eb89b021107b3d2",
+              "src/eval/remote-models.mjs": "241cb6378c26010aa170e484a683a2fc46efe246856ef760716be36e371f8d95",
+              "deploy/reranker/server.py": "6dd8e6bc2f7b6c239c9c474383c2e0b3121c4aeec7508f235fb2cbfee667077c",
+              "scripts/reponerve-worker.py": "07dff91bc59b51cff59b41117c37d51644e6254df26e1afedd776c2b5ac55904",
+              "scripts/run-reponerve.mjs": "4b9531eb03231494483264bb0b17b9ea1fda066b7cd5623c1b941d645742315e",
+              "scripts/plan-retrieval.mjs": "9631e055c3c86026cb7df0d787ec31b78a38154c8a1ece2c7e8a0b0e64d8e319",
+              "scripts/literal-retrieval-plans.mjs": "0adf6c19054ac334713ea9764bb823cb6c21e592515e467ce73d764008635222",
+              "scripts/embedding-gateway.mjs": "7944f9b2dbfb0abadb37a798935ccbefe9651f72b38b8d58ee87fcb5884a22ed"
+            }
+          }
+        }
+      ],
+      "timingMs": {
+        "count": 20,
+        "min": 971,
+        "p50": 3093.0,
+        "p95": 4380,
+        "max": 4671,
+        "mean": 3130.9
+      },
+      "invalidSourceOccurrences": 0,
+      "maxRawTokens": 3954
+    },
+    "batched-mac-32": {
+      "rounds": [
+        {
+          "run": "runs/reponerve-service-django-2026-10-03T14-01-40.683Z",
+          "timingMs": {
+            "count": 20,
+            "min": 1123,
+            "p50": 3206.5,
+            "p95": 4835,
+            "max": 4841,
+            "mean": 3299.75
+          },
+          "coverage": {
+            "zh": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8633333333333333,
+              "completeRecall": 0.5
+            },
+            "en": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8466666666666667,
+              "completeRecall": 0.5
+            },
+            "englishMinusChinese": -0.016666666666666607
+          },
+          "reportSha256": "203cef09cea5aa467e53a2c461102126f8b00974a231b9607e82b833abd82366",
+          "scoreSha256": "837d3ac9ad1b167586f296d55b3a0edc35a0d90ce609c52db9e618ddce426462",
+          "config": {
+            "engine": "batched-dag-v4",
+            "primaryBudgetTokens": 4000,
+            "repeat": 1,
+            "clientLocation": "user-Mac",
+            "transport": "authenticated-SSH-forward",
+            "baseUrl": "http://127.0.0.1:45005",
+            "queryCache": false,
+            "workerHealth": {
+              "status": "ready",
+              "engine": "batched-dag-v4",
+              "index": {
+                "identity": "a2f2b07a5e9be04c6d5471a872e9556adf815395e9bc92b54097a9e3da023745",
+                "version": "ast-facets-v1",
+                "units": 12333,
+                "files": 883,
+                "nonemptyFiles": 736,
+                "resolvedEdges": 40205,
+                "indexingMs": 346166,
+                "cacheHit": false
+              },
+              "queryCache": false,
+              "initializationMs": 2152,
+              "sourceSha256": {
+                "src/retrieval/engine.py": "6830a49953a5e0c11e4791776181a986f8109ccd51b58e52238df839d43349f4",
+                "src/retrieval/batched.py": "2d422931d9a2ae9589740a02eddb43539f5522441e0b10777eb89b021107b3d2",
+                "scripts/retrieval-server.py": "4f4c3f9ff202fe90517199a5b301f1f4451c19984407c5aca2c01d8da6a1c6ff"
+              }
+            }
+          }
+        },
+        {
+          "run": "runs/reponerve-service-django-2026-10-03T14-02-46.718Z",
+          "timingMs": {
+            "count": 20,
+            "min": 1160,
+            "p50": 3270.5,
+            "p95": 4503,
+            "max": 4904,
+            "mean": 3294.9
+          },
+          "coverage": {
+            "zh": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8633333333333333,
+              "completeRecall": 0.5
+            },
+            "en": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8466666666666667,
+              "completeRecall": 0.5
+            },
+            "englishMinusChinese": -0.016666666666666607
+          },
+          "reportSha256": "ac8f326dbe1a0b4bf3bade88eb87d73f0bd9062de2910de3ad75f4c2c7ce14c6",
+          "scoreSha256": "6e058508db9096b0c28afa1cecd41d75eaa139e15e245c2beb6a24a8da2f89a1",
+          "config": {
+            "engine": "batched-dag-v4",
+            "primaryBudgetTokens": 4000,
+            "repeat": 2,
+            "clientLocation": "user-Mac",
+            "transport": "authenticated-SSH-forward",
+            "baseUrl": "http://127.0.0.1:45005",
+            "queryCache": false,
+            "workerHealth": {
+              "status": "ready",
+              "engine": "batched-dag-v4",
+              "index": {
+                "identity": "a2f2b07a5e9be04c6d5471a872e9556adf815395e9bc92b54097a9e3da023745",
+                "version": "ast-facets-v1",
+                "units": 12333,
+                "files": 883,
+                "nonemptyFiles": 736,
+                "resolvedEdges": 40205,
+                "indexingMs": 346166,
+                "cacheHit": false
+              },
+              "queryCache": false,
+              "initializationMs": 2152,
+              "sourceSha256": {
+                "src/retrieval/engine.py": "6830a49953a5e0c11e4791776181a986f8109ccd51b58e52238df839d43349f4",
+                "src/retrieval/batched.py": "2d422931d9a2ae9589740a02eddb43539f5522441e0b10777eb89b021107b3d2",
+                "scripts/retrieval-server.py": "4f4c3f9ff202fe90517199a5b301f1f4451c19984407c5aca2c01d8da6a1c6ff"
+              }
+            }
+          }
+        },
+        {
+          "run": "runs/reponerve-service-django-2026-10-03T14-03-52.661Z",
+          "timingMs": {
+            "count": 20,
+            "min": 1235,
+            "p50": 3274.0,
+            "p95": 4485,
+            "max": 4790,
+            "mean": 3263.25
+          },
+          "coverage": {
+            "zh": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8633333333333333,
+              "completeRecall": 0.5
+            },
+            "en": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8466666666666667,
+              "completeRecall": 0.5
+            },
+            "englishMinusChinese": -0.016666666666666607
+          },
+          "reportSha256": "ba3c64092848ad81cf944458c0378d38445ce0da2176491a7a50e7d9ec586ff5",
+          "scoreSha256": "0ab8f1d70b5c74880f2eca0390e9c953826769523799719448208d6d15512ad0",
+          "config": {
+            "engine": "batched-dag-v4",
+            "primaryBudgetTokens": 4000,
+            "repeat": 3,
+            "clientLocation": "user-Mac",
+            "transport": "authenticated-SSH-forward",
+            "baseUrl": "http://127.0.0.1:45005",
+            "queryCache": false,
+            "workerHealth": {
+              "status": "ready",
+              "engine": "batched-dag-v4",
+              "index": {
+                "identity": "a2f2b07a5e9be04c6d5471a872e9556adf815395e9bc92b54097a9e3da023745",
+                "version": "ast-facets-v1",
+                "units": 12333,
+                "files": 883,
+                "nonemptyFiles": 736,
+                "resolvedEdges": 40205,
+                "indexingMs": 346166,
+                "cacheHit": false
+              },
+              "queryCache": false,
+              "initializationMs": 2152,
+              "sourceSha256": {
+                "src/retrieval/engine.py": "6830a49953a5e0c11e4791776181a986f8109ccd51b58e52238df839d43349f4",
+                "src/retrieval/batched.py": "2d422931d9a2ae9589740a02eddb43539f5522441e0b10777eb89b021107b3d2",
+                "scripts/retrieval-server.py": "4f4c3f9ff202fe90517199a5b301f1f4451c19984407c5aca2c01d8da6a1c6ff"
+              }
+            }
+          }
+        }
+      ],
+      "timingMs": {
+        "count": 60,
+        "min": 1123,
+        "p50": 3270.5,
+        "p95": 4790,
+        "max": 4904,
+        "mean": 3285.9666666666667
+      },
+      "invalidSourceOccurrences": 0,
+      "maxRawTokens": 3954
+    },
+    "batched-mac-64": {
+      "rounds": [
+        {
+          "run": "runs/reponerve-service-django-2026-10-03T14-11-07.269Z",
+          "timingMs": {
+            "count": 20,
+            "min": 1321,
+            "p50": 3843.5,
+            "p95": 5219,
+            "max": 5589,
+            "mean": 3871.7
+          },
+          "coverage": {
+            "zh": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8633333333333333,
+              "completeRecall": 0.5
+            },
+            "en": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8466666666666667,
+              "completeRecall": 0.5
+            },
+            "englishMinusChinese": -0.016666666666666607
+          },
+          "reportSha256": "39964c9ba01279d608c124551545bdfbe30d5778f5059ed0793531365bebc245",
+          "scoreSha256": "0b850476b0d5bc738bd8f4b3e579c96d619b525f032fd760284701c8a1ebbfab",
+          "config": {
+            "engine": "batched-dag-v4",
+            "primaryBudgetTokens": 4000,
+            "repeat": 1,
+            "clientLocation": "user-Mac",
+            "transport": "authenticated-SSH-forward",
+            "baseUrl": "http://127.0.0.1:45005",
+            "queryCache": false,
+            "workerHealth": {
+              "status": "ready",
+              "engine": "batched-dag-v4",
+              "index": {
+                "identity": "a2f2b07a5e9be04c6d5471a872e9556adf815395e9bc92b54097a9e3da023745",
+                "version": "ast-facets-v1",
+                "units": 12333,
+                "files": 883,
+                "nonemptyFiles": 736,
+                "resolvedEdges": 40205,
+                "indexingMs": 346166,
+                "cacheHit": false
+              },
+              "queryCache": false,
+              "initializationMs": 1852,
+              "sourceSha256": {
+                "src/retrieval/engine.py": "6830a49953a5e0c11e4791776181a986f8109ccd51b58e52238df839d43349f4",
+                "src/retrieval/batched.py": "914f7879dc8ae07f3971d82a948f8103ac25046d52e566b94505888be684fdeb",
+                "scripts/retrieval-server.py": "3bf6e76cbc2a9452e9d11c8ab1a3cd01d8cf4e9417357c2d11949fa54c339a13"
+              },
+              "reranker": {
+                "status": "ok",
+                "model_loaded": true,
+                "model": "Qwen3-Reranker-4B",
+                "source": "ModelScope",
+                "max_input_tokens": 8192,
+                "dtype": "bfloat16",
+                "max_documents": 128,
+                "max_batch_size": 64,
+                "batch_token_budget": 16384,
+                "scoring": "softmax(no,yes)",
+                "pair_batch": true,
+                "source_sha256": "e169fa1d966509fc4a7e828c79176b6f20f6e3473b0136ba458c7e7d4e5e6ad4",
+                "instruction_sha256": "0d618dd8ee6916f68f14073bdfb08bc987361386c84e5400f38fa499baef2896"
+              }
+            }
+          }
+        },
+        {
+          "run": "runs/reponerve-service-django-2026-10-03T14-12-24.744Z",
+          "timingMs": {
+            "count": 20,
+            "min": 1335,
+            "p50": 3804.5,
+            "p95": 5016,
+            "max": 5378,
+            "mean": 3732
+          },
+          "coverage": {
+            "zh": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8633333333333333,
+              "completeRecall": 0.5
+            },
+            "en": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8466666666666667,
+              "completeRecall": 0.5
+            },
+            "englishMinusChinese": -0.016666666666666607
+          },
+          "reportSha256": "972e1b2f8f4eba16700144b3402eb88d33b08e2020463754921daff3e9b921bb",
+          "scoreSha256": "f313b965a063c17a4da8f9fa8cbcbb271211f6d5afe4e88109fa9b2497cfc5e8",
+          "config": {
+            "engine": "batched-dag-v4",
+            "primaryBudgetTokens": 4000,
+            "repeat": 2,
+            "clientLocation": "user-Mac",
+            "transport": "authenticated-SSH-forward",
+            "baseUrl": "http://127.0.0.1:45005",
+            "queryCache": false,
+            "workerHealth": {
+              "status": "ready",
+              "engine": "batched-dag-v4",
+              "index": {
+                "identity": "a2f2b07a5e9be04c6d5471a872e9556adf815395e9bc92b54097a9e3da023745",
+                "version": "ast-facets-v1",
+                "units": 12333,
+                "files": 883,
+                "nonemptyFiles": 736,
+                "resolvedEdges": 40205,
+                "indexingMs": 346166,
+                "cacheHit": false
+              },
+              "queryCache": false,
+              "initializationMs": 1852,
+              "sourceSha256": {
+                "src/retrieval/engine.py": "6830a49953a5e0c11e4791776181a986f8109ccd51b58e52238df839d43349f4",
+                "src/retrieval/batched.py": "914f7879dc8ae07f3971d82a948f8103ac25046d52e566b94505888be684fdeb",
+                "scripts/retrieval-server.py": "3bf6e76cbc2a9452e9d11c8ab1a3cd01d8cf4e9417357c2d11949fa54c339a13"
+              },
+              "reranker": {
+                "status": "ok",
+                "model_loaded": true,
+                "model": "Qwen3-Reranker-4B",
+                "source": "ModelScope",
+                "max_input_tokens": 8192,
+                "dtype": "bfloat16",
+                "max_documents": 128,
+                "max_batch_size": 64,
+                "batch_token_budget": 16384,
+                "scoring": "softmax(no,yes)",
+                "pair_batch": true,
+                "source_sha256": "e169fa1d966509fc4a7e828c79176b6f20f6e3473b0136ba458c7e7d4e5e6ad4",
+                "instruction_sha256": "0d618dd8ee6916f68f14073bdfb08bc987361386c84e5400f38fa499baef2896"
+              }
+            }
+          }
+        },
+        {
+          "run": "runs/reponerve-service-django-2026-10-03T14-13-39.425Z",
+          "timingMs": {
+            "count": 20,
+            "min": 1435,
+            "p50": 3826.5,
+            "p95": 5109,
+            "max": 5421,
+            "mean": 3744.5
+          },
+          "coverage": {
+            "zh": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8633333333333333,
+              "completeRecall": 0.5
+            },
+            "en": {
+              "tasks": 10,
+              "completed": 10,
+              "coverage": 0.8466666666666667,
+              "completeRecall": 0.5
+            },
+            "englishMinusChinese": -0.016666666666666607
+          },
+          "reportSha256": "bb759f1c5e9a536681f4e0591356a4cf60f072b19a671e853a41499608e5172e",
+          "scoreSha256": "40c785f65cd7529281c2364d5c897bad8fa846d8ca7b23a66d9136973edcd791",
+          "config": {
+            "engine": "batched-dag-v4",
+            "primaryBudgetTokens": 4000,
+            "repeat": 3,
+            "clientLocation": "user-Mac",
+            "transport": "authenticated-SSH-forward",
+            "baseUrl": "http://127.0.0.1:45005",
+            "queryCache": false,
+            "workerHealth": {
+              "status": "ready",
+              "engine": "batched-dag-v4",
+              "index": {
+                "identity": "a2f2b07a5e9be04c6d5471a872e9556adf815395e9bc92b54097a9e3da023745",
+                "version": "ast-facets-v1",
+                "units": 12333,
+                "files": 883,
+                "nonemptyFiles": 736,
+                "resolvedEdges": 40205,
+                "indexingMs": 346166,
+                "cacheHit": false
+              },
+              "queryCache": false,
+              "initializationMs": 1852,
+              "sourceSha256": {
+                "src/retrieval/engine.py": "6830a49953a5e0c11e4791776181a986f8109ccd51b58e52238df839d43349f4",
+                "src/retrieval/batched.py": "914f7879dc8ae07f3971d82a948f8103ac25046d52e566b94505888be684fdeb",
+                "scripts/retrieval-server.py": "3bf6e76cbc2a9452e9d11c8ab1a3cd01d8cf4e9417357c2d11949fa54c339a13"
+              },
+              "reranker": {
+                "status": "ok",
+                "model_loaded": true,
+                "model": "Qwen3-Reranker-4B",
+                "source": "ModelScope",
+                "max_input_tokens": 8192,
+                "dtype": "bfloat16",
+                "max_documents": 128,
+                "max_batch_size": 64,
+                "batch_token_budget": 16384,
+                "scoring": "softmax(no,yes)",
+                "pair_batch": true,
+                "source_sha256": "e169fa1d966509fc4a7e828c79176b6f20f6e3473b0136ba458c7e7d4e5e6ad4",
+                "instruction_sha256": "0d618dd8ee6916f68f14073bdfb08bc987361386c84e5400f38fa499baef2896"
+              }
+            }
+          }
+        }
+      ],
+      "timingMs": {
+        "count": 60,
+        "min": 1321,
+        "p50": 3842.5,
+        "p95": 5219,
+        "max": 5589,
+        "mean": 3782.733333333333
+      },
+      "invalidSourceOccurrences": 0,
+      "maxRawTokens": 3954
+    }
+  }
+}

@@ -16,7 +16,10 @@
     "prepare-django": "node scripts/prepare-django.mjs",
     "ace-django": "node scripts/ace-django.mjs",
     "score-django": "node scripts/score-django.mjs",
-    "baseline": "node scripts/run-baseline.mjs"
+    "baseline": "node scripts/run-baseline.mjs",
+    "search": "node scripts/search-reponerve.mjs",
+    "serve-retrieval": "node scripts/serve-reponerve.mjs",
+    "benchmark-service": "node scripts/benchmark-service.mjs"
   },
   "dependencies": {
     "@augmentcode/auggie-sdk": "0.2.0",

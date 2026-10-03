@@ -1,0 +1,36 @@
+{
+  "status": "ready",
+  "engine": "batched-dag-v4",
+  "index": {
+    "identity": "a2f2b07a5e9be04c6d5471a872e9556adf815395e9bc92b54097a9e3da023745",
+    "version": "ast-facets-v1",
+    "units": 12333,
+    "files": 883,
+    "nonemptyFiles": 736,
+    "resolvedEdges": 40205,
+    "indexingMs": 346166,
+    "cacheHit": false
+  },
+  "queryCache": false,
+  "initializationMs": 1884,
+  "sourceSha256": {
+    "src/retrieval/engine.py": "6830a49953a5e0c11e4791776181a986f8109ccd51b58e52238df839d43349f4",
+    "src/retrieval/batched.py": "914f7879dc8ae07f3971d82a948f8103ac25046d52e566b94505888be684fdeb",
+    "scripts/retrieval-server.py": "3bf6e76cbc2a9452e9d11c8ab1a3cd01d8cf4e9417357c2d11949fa54c339a13"
+  },
+  "reranker": {
+    "status": "ok",
+    "model_loaded": true,
+    "model": "Qwen3-Reranker-4B",
+    "source": "ModelScope",
+    "max_input_tokens": 8192,
+    "dtype": "bfloat16",
+    "max_documents": 128,
+    "max_batch_size": 32,
+    "batch_token_budget": 8192,
+    "scoring": "softmax(no,yes)",
+    "pair_batch": true,
+    "source_sha256": "6a4fe44490c172139504e3f2bf2d4b395498c7e6542d152d6ae00477f196fde9",
+    "instruction_sha256": "0d618dd8ee6916f68f14073bdfb08bc987361386c84e5400f38fa499baef2896"
+  }
+}
