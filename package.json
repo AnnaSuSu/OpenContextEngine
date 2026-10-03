@@ -1,0 +1,23 @@
+{
+  "name": "reponerve",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.14"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "probe": "node scripts/probe.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "prepare-pilot": "node scripts/prepare-pilot.mjs",
+    "pilot": "node scripts/pilot.mjs",
+    "ace-pilot": "node scripts/ace-pilot.mjs"
+  },
+  "dependencies": {
+    "@augmentcode/auggie-sdk": "0.2.0",
+    "@openai/codex-sdk": "0.160.0",
+    "js-tiktoken": "1.0.21",
+    "typescript": "5.9.3"
+  }
+}

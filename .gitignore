@@ -1,3 +1,8 @@
 .env
 .env.*
 !.env.example
+node_modules/
+runs/
+.pilot-state/
+__pycache__/
+*.pyc
