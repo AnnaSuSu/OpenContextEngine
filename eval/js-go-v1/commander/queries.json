@@ -1,0 +1,32 @@
+{
+  "cases": [
+    {
+      "id": "environment-priority",
+      "queries": {
+        "zh": "找到从环境变量读取选项的代码：什么来源的现有值允许覆盖，带参数选项和布尔选项分别怎样触发事件？",
+        "en": "Find option loading from environment variables: which existing value sources may be overridden, and how are events emitted for value-taking and boolean options?"
+      }
+    },
+    {
+      "id": "implied-options",
+      "queries": {
+        "zh": "找到隐含选项处理：如何识别用户自定义值，决定哪些选项能触发隐含值，并避免覆盖用户已经设置的值？",
+        "en": "Find implied option handling: how are custom values identified, triggering options chosen, and existing user values protected from being overwritten?"
+      }
+    },
+    {
+      "id": "parse-reset",
+      "queries": {
+        "zh": "找到重复解析命令行的状态管理：首次怎样保存选项及来源，后续怎样恢复和清空参数，哪种配置禁止再次解析？",
+        "en": "Find state management for repeated command-line parsing: how are values and sources saved initially, restored with cleared arguments later, and which configuration forbids parsing again?"
+      }
+    },
+    {
+      "id": "conflicting-options",
+      "queries": {
+        "zh": "找到互斥选项检查：怎样排除未设置及默认值，发现冲突组合，以及把检查扩展到父命令？",
+        "en": "Find conflicting option checks: how are missing and default values excluded, conflicting combinations detected, and checks extended to parent commands?"
+      }
+    }
+  ]
+}

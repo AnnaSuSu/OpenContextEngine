@@ -48,7 +48,7 @@ class CodeUnit(TypedDict):
 
 def validate_units(units, sources):
     """Require lossless source coordinates, non-overlapping spans and valid graph IDs."""
-    text_paths = {unit['path'] for unit in units if unit['language'] == 'text'}
+    text_paths = {unit['path'] for unit in units if unit['language'] in {'text', 'javascript', 'typescript', 'go'}}
     lines = {source.path: (physical_lines(source.text) if source.path in text_paths
                           else source.text.splitlines()) for source in sources}
     covered = {path: set() for path in lines}

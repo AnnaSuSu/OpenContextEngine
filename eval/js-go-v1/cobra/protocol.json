@@ -1,0 +1,12 @@
+{
+  "budget": 4000,
+  "kind": "source-derived paired structural ablation",
+  "languages": [
+    "zh",
+    "en"
+  ],
+  "queryCache": false,
+  "referencesKeptLocal": true,
+  "notAnIndependentBenchmark": true,
+  "selection": "all eligible files, no query-specific file filtering"
+}

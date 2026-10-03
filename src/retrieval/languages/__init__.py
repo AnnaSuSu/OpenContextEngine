@@ -4,13 +4,14 @@ import hashlib
 from pathlib import Path, PurePosixPath
 import sys
 
-from . import python, typescript, text
+from . import python, typescript, text, go
 from .files import path_exclusion, read_text
 from .schema import SCHEMA_VERSION, SourceFile, validate_units
 
-ADAPTERS = {'python': python, 'typescript': typescript, 'text': text}
+ADAPTERS = {'python': python, 'typescript': typescript, 'javascript': typescript, 'go': go, 'text': text}
 EXTENSIONS = {'.py': 'python', '.ts': 'typescript', '.tsx': 'typescript',
-              '.mts': 'typescript', '.cts': 'typescript'}
+              '.mts': 'typescript', '.cts': 'typescript',
+              '.go': 'go', '.js': 'javascript', '.jsx': 'javascript', '.mjs': 'javascript', '.cjs': 'javascript'}
 
 
 def language_for(path):
@@ -25,12 +26,15 @@ def adapter_manifest(files, language_options=None):
     paths = [Path(__file__), Path(__file__).with_name('schema.py'), Path(__file__).with_name('files.py')]
     for language in languages:
         paths.append(Path(ADAPTERS[language].__file__))
-        if language == 'typescript':
+        if language in {'typescript', 'javascript'}:
             paths.append(Path(typescript.__file__).with_suffix('.mjs'))
+        if language == 'go':
+            paths.append(Path(go.__file__).with_name('go_ast.go'))
     return {'schemaVersion': SCHEMA_VERSION, 'languages': languages, 'options': options,
             'parsers': {language: (f'python-ast-{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}'
                                   if language == 'python' else f'typescript-{typescript.COMPILER_VERSION}'
-                                  if language == 'typescript' else text.VERSION)
+                                  if language in {'typescript', 'javascript'} else go.compiler()[1]
+                                  if language == 'go' else text.VERSION)
                         for language in languages},
             'sourceSha256': {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in paths}}
 
@@ -66,19 +70,27 @@ def source_units(root, files, max_lines=65, language_options=None, report=None):
             raise ValueError('Source changed: ' + name)
         source = SourceFile(name, content, file['sha256'])
         sources.append(source)
-        groups[language_for(name)].append(source)
+        language = language_for(name)
+        groups['typescript' if language == 'javascript' else language].append(source)
     by_path = defaultdict(list)
+    identities = {}
     for language, subset in groups.items():
-        units = ADAPTERS[language].extract(subset, max_lines, options.get(language))
+        settings = options.get(language)
+        if language == 'typescript' and 'javascript' in options:
+            if settings is not None and settings != options['javascript']:
+                raise ValueError('JavaScript and TypeScript share compiler options')
+            settings = options['javascript']
+        units = ADAPTERS[language].extract(subset, max_lines, settings)
         validate_units(units, subset)
         for unit in units:
             by_path[unit['path']].append(unit)
+            identities[id(unit)] = (language, unit['id'])
     units = [unit for source in sources for unit in by_path[source.path]]
-    remap = {(unit['language'], unit['id']): i for i, unit in enumerate(units)}
+    remap = {identities[id(unit)]: i for i, unit in enumerate(units)}
     for i, unit in enumerate(units):
         unit['id'] = i
         for relation in unit['relations']:
-            relation['target'] = remap[(unit['language'], relation['target'])]
+            relation['target'] = remap[(identities[id(unit)][0], relation['target'])]
         unit['edges'] = sorted({relation['target'] for relation in unit['relations']})
     validate_units(units, sources)
     if report is not None:

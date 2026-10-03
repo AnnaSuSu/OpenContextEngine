@@ -1,0 +1,128 @@
+{
+  "kind": "source-only adapter validation",
+  "existingLanguages": [
+    {
+      "repository": "click",
+      "files": 16,
+      "units": 598,
+      "allFieldsUnchanged": true
+    },
+    {
+      "repository": "httpx",
+      "files": 23,
+      "units": 583,
+      "allFieldsUnchanged": true
+    },
+    {
+      "repository": "zod",
+      "files": 13,
+      "units": 1152,
+      "allFieldsUnchanged": true
+    }
+  ],
+  "newCorpora": [
+    {
+      "repository": "cobra",
+      "units": 846,
+      "files": 64,
+      "languages": {
+        "go": 762,
+        "text": 84
+      },
+      "validatedSourceCoverage": true,
+      "adapters": {
+        "schemaVersion": "source-units-v2",
+        "languages": [
+          "go",
+          "text"
+        ],
+        "options": {},
+        "parsers": {
+          "go": "go version go1.27.1 darwin/arm64",
+          "text": "line-chunks-v1"
+        },
+        "sourceSha256": {
+          "__init__.py": "460cc3fdc627b3e7e2255c9de4a7444cd6b3f1a1c5770e57855dfc9e4d9690ac",
+          "schema.py": "bbf7a80e5c1f822335b229c4b739bc2aa5861822540d4023effe135b44c88f73",
+          "files.py": "e2a0f5d071101456bf19687f0d8826a23769dc86c083f4fd3c06f644846dec8d",
+          "go.py": "6c8ddbe439f5d4d8579e61554c4ef9102bbc472f701be8dfcacdab0d61bceb2b",
+          "go_ast.go": "dfae33e05caa836f61eb75e08295d2a0f2aced848956005d0680811eb16f1c26",
+          "text.py": "a5d99d6def8a2d68d708e48efe6b79de9b66a97e4508d39580b4810bd37e2822"
+        }
+      }
+    },
+    {
+      "repository": "commander",
+      "units": 1090,
+      "files": 215,
+      "languages": {
+        "javascript": 675,
+        "text": 139,
+        "typescript": 276
+      },
+      "validatedSourceCoverage": true,
+      "adapters": {
+        "schemaVersion": "source-units-v2",
+        "languages": [
+          "javascript",
+          "text",
+          "typescript"
+        ],
+        "options": {},
+        "parsers": {
+          "javascript": "typescript-5.9.3",
+          "text": "line-chunks-v1",
+          "typescript": "typescript-5.9.3"
+        },
+        "sourceSha256": {
+          "__init__.py": "460cc3fdc627b3e7e2255c9de4a7444cd6b3f1a1c5770e57855dfc9e4d9690ac",
+          "schema.py": "bbf7a80e5c1f822335b229c4b739bc2aa5861822540d4023effe135b44c88f73",
+          "files.py": "e2a0f5d071101456bf19687f0d8826a23769dc86c083f4fd3c06f644846dec8d",
+          "typescript.py": "ffa77209f4a2304794c4dba13914f6cf960f9abbe8da8cc01e2a2c6795fbfbcc",
+          "typescript.mjs": "6ac5d376b5c863aaf77d041ff9c55c5c41a601cdb079a6cda80a5c7b07f41678",
+          "text.py": "a5d99d6def8a2d68d708e48efe6b79de9b66a97e4508d39580b4810bd37e2822"
+        }
+      }
+    },
+    {
+      "repository": "esbuild",
+      "units": 11295,
+      "files": 321,
+      "languages": {
+        "go": 5233,
+        "javascript": 2323,
+        "text": 1464,
+        "typescript": 2275
+      },
+      "validatedSourceCoverage": true,
+      "adapters": {
+        "schemaVersion": "source-units-v2",
+        "languages": [
+          "go",
+          "javascript",
+          "text",
+          "typescript"
+        ],
+        "options": {},
+        "parsers": {
+          "go": "go version go1.27.1 darwin/arm64",
+          "javascript": "typescript-5.9.3",
+          "text": "line-chunks-v1",
+          "typescript": "typescript-5.9.3"
+        },
+        "sourceSha256": {
+          "__init__.py": "460cc3fdc627b3e7e2255c9de4a7444cd6b3f1a1c5770e57855dfc9e4d9690ac",
+          "schema.py": "bbf7a80e5c1f822335b229c4b739bc2aa5861822540d4023effe135b44c88f73",
+          "files.py": "e2a0f5d071101456bf19687f0d8826a23769dc86c083f4fd3c06f644846dec8d",
+          "go.py": "6c8ddbe439f5d4d8579e61554c4ef9102bbc472f701be8dfcacdab0d61bceb2b",
+          "go_ast.go": "dfae33e05caa836f61eb75e08295d2a0f2aced848956005d0680811eb16f1c26",
+          "typescript.py": "ffa77209f4a2304794c4dba13914f6cf960f9abbe8da8cc01e2a2c6795fbfbcc",
+          "typescript.mjs": "6ac5d376b5c863aaf77d041ff9c55c5c41a601cdb079a6cda80a5c7b07f41678",
+          "text.py": "a5d99d6def8a2d68d708e48efe6b79de9b66a97e4508d39580b4810bd37e2822"
+        }
+      }
+    }
+  ],
+  "pythonTests": 36,
+  "nodeTests": 23
+}

@@ -42,10 +42,10 @@ class TextFallbackTest(unittest.TestCase):
             report = {}
             units = source_units(directory, files, max_lines=8, report=report)
         validate_units(units, [SourceFile(name, value.lstrip('\ufeff'), '') for name, value in sources.items()])
-        self.assertEqual(report['fallbackFiles'], 7)
+        self.assertEqual(report['fallbackFiles'], 5)
         self.assertEqual(report['acceptedFiles'], 9)
         self.assertEqual(report['excluded'], [])
-        self.assertEqual({u['language'] for u in units}, {'python', 'typescript', 'text'})
+        self.assertEqual({u['language'] for u in units}, {'python', 'typescript', 'javascript', 'go', 'text'})
         fallback = [u for u in units if u['language'] == 'text']
         self.assertTrue(all(not u['edges'] and not u['relations'] and u['owner'] is None for u in fallback))
         self.assertEqual(len({u['symbol'] for u in fallback}), len(fallback))
@@ -132,7 +132,7 @@ class TextFallbackTest(unittest.TestCase):
                 _, _, cached = build_index(root, {'files': files}, state, 'http://unused')
                 self.assertTrue(cached['cacheHit'])
                 self.assertEqual(indexing.call_count, 1)
-            self.assertEqual(info['selection']['fallbackFiles'], 2)
+            self.assertEqual(info['selection']['fallbackFiles'], 1)
             def models(url, payload, *args, **kwargs):
                 if url.endswith('/embeddings'):
                     return embed(url, payload)

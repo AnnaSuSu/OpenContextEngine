@@ -1,0 +1,32 @@
+{
+  "cases": [
+    {
+      "id": "argument-bounds",
+      "queries": {
+        "zh": "找到位置参数数量校验：最少、最多和区间限制如何返回错误，组合校验何时停止？",
+        "en": "Find positional argument count validation: how do minimum, maximum and range limits report errors, and when does combined validation stop?"
+      }
+    },
+    {
+      "id": "execution-hooks",
+      "queries": {
+        "zh": "找到命令执行的生命周期：怎样先检查位置参数，再执行继承的前置钩子和命令主体，最后执行后置钩子？",
+        "en": "Find the command execution lifecycle: how are positional arguments checked before inherited pre-run hooks, the command action, and post-run hooks?"
+      }
+    },
+    {
+      "id": "help-priority",
+      "queries": {
+        "zh": "找到帮助选项的处理路径：解析选项失败怎样处理，用户请求帮助时怎样提前退出执行并显示帮助？",
+        "en": "Find help option handling: how are flag parsing failures handled, and how does a help request stop execution early and display help?"
+      }
+    },
+    {
+      "id": "context-inheritance",
+      "queries": {
+        "zh": "找到执行上下文的传递：显式上下文如何设置，没有上下文如何补默认值，子命令如何继承父上下文后执行？",
+        "en": "Find execution context propagation: how is an explicit context set, a missing context defaulted, and a parent context inherited before a child command runs?"
+      }
+    }
+  ]
+}

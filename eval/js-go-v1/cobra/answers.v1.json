@@ -1,0 +1,286 @@
+{
+  "answers": [
+    {
+      "id": "argument-bounds",
+      "units": [
+        {
+          "id": "minimum",
+          "fact": "minimum",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "args.go",
+                  "startLine": 74,
+                  "endLine": 80,
+                  "quote": "func MinimumNArgs(n int) PositionalArgs {\n\treturn func(cmd *Command, args []string) error {\n\t\tif len(args) < n {\n\t\t\treturn fmt.Errorf(\"requires at least %d arg(s), only received %d\", n, len(args))\n\t\t}\n\t\treturn nil\n\t}",
+                  "sha256": "a4b9c2e0c0a588f5c5794c28386f83b8d685f86553deb40a7bc52615311386ed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "maximum",
+          "fact": "maximum",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "args.go",
+                  "startLine": 84,
+                  "endLine": 90,
+                  "quote": "func MaximumNArgs(n int) PositionalArgs {\n\treturn func(cmd *Command, args []string) error {\n\t\tif len(args) > n {\n\t\t\treturn fmt.Errorf(\"accepts at most %d arg(s), received %d\", n, len(args))\n\t\t}\n\t\treturn nil\n\t}",
+                  "sha256": "dd72ea492c0f5d7b8e51a049b20251219f3c5ce6fdfeade1e1e5915f5e084b06"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "range",
+          "fact": "range",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "args.go",
+                  "startLine": 104,
+                  "endLine": 110,
+                  "quote": "func RangeArgs(min int, max int) PositionalArgs {\n\treturn func(cmd *Command, args []string) error {\n\t\tif len(args) < min || len(args) > max {\n\t\t\treturn fmt.Errorf(\"accepts between %d and %d arg(s), received %d\", min, max, len(args))\n\t\t}\n\t\treturn nil\n\t}",
+                  "sha256": "12cfe02dcb2450e2a4526544d05a5089e10eacb28fc71da278b9b6fc5aa36531"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "combined",
+          "fact": "combined",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "args.go",
+                  "startLine": 114,
+                  "endLine": 122,
+                  "quote": "func MatchAll(pargs ...PositionalArgs) PositionalArgs {\n\treturn func(cmd *Command, args []string) error {\n\t\tfor _, parg := range pargs {\n\t\t\tif err := parg(cmd, args); err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t}\n\t\treturn nil\n\t}",
+                  "sha256": "6bb837afbf9070a798ffa3aa2ba5888cdbf96a39da6e2d523015eb72f4421a6c"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "execution-hooks",
+      "units": [
+        {
+          "id": "arguments",
+          "fact": "arguments",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "command.go",
+                  "startLine": 968,
+                  "endLine": 970,
+                  "quote": "\tif err := c.ValidateArgs(argWoFlags); err != nil {\n\t\treturn err\n\t}",
+                  "sha256": "4d60f6a7f7451948b44d901a940bfb49448df3ffbb7af6f01606215b43dea28a"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "parents",
+          "fact": "parents",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "command.go",
+                  "startLine": 972,
+                  "endLine": 983,
+                  "quote": "\tparents := make([]*Command, 0, 5)\n\tfor p := c; p != nil; p = p.Parent() {\n\t\tif EnableTraverseRunHooks {\n\t\t\t// When EnableTraverseRunHooks is set:\n\t\t\t// - Execute all persistent pre-runs from the root parent till this command.\n\t\t\t// - Execute all persistent post-runs from this command till the root parent.\n\t\t\tparents = append([]*Command{p}, parents...)\n\t\t} else {\n\t\t\t// Otherwise, execute only the first found persistent hook.\n\t\t\tparents = append(parents, p)\n\t\t}\n\t}",
+                  "sha256": "aeea7c81c0b4feed4bec1d85c3960e4687f8478d9ec128e4ae38957de2e6c135"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pre",
+          "fact": "pre",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "command.go",
+                  "startLine": 984,
+                  "endLine": 997,
+                  "quote": "\tfor _, p := range parents {\n\t\tif p.PersistentPreRunE != nil {\n\t\t\tif err := p.PersistentPreRunE(c, argWoFlags); err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t\tif !EnableTraverseRunHooks {\n\t\t\t\tbreak\n\t\t\t}\n\t\t} else if p.PersistentPreRun != nil {\n\t\t\tp.PersistentPreRun(c, argWoFlags)\n\t\t\tif !EnableTraverseRunHooks {\n\t\t\t\tbreak\n\t\t\t}\n\t\t}",
+                  "sha256": "2e6849e0def5504afeb8c1734eda03b3472e85df0d21d0d18d11304d32747021"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "action",
+          "fact": "action",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "command.go",
+                  "startLine": 1014,
+                  "endLine": 1020,
+                  "quote": "\tif c.RunE != nil {\n\t\tif err := c.RunE(c, argWoFlags); err != nil {\n\t\t\treturn err\n\t\t}\n\t} else {\n\t\tc.Run(c, argWoFlags)\n\t}",
+                  "sha256": "34f3876a36149081f2a685ec03ab6f7c8d18bf362c6babe3fbf1f76afe6fc9a8"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "post",
+          "fact": "post",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "command.go",
+                  "startLine": 1021,
+                  "endLine": 1041,
+                  "quote": "\tif c.PostRunE != nil {\n\t\tif err := c.PostRunE(c, argWoFlags); err != nil {\n\t\t\treturn err\n\t\t}\n\t} else if c.PostRun != nil {\n\t\tc.PostRun(c, argWoFlags)\n\t}\n\tfor p := c; p != nil; p = p.Parent() {\n\t\tif p.PersistentPostRunE != nil {\n\t\t\tif err := p.PersistentPostRunE(c, argWoFlags); err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t\tif !EnableTraverseRunHooks {\n\t\t\t\tbreak\n\t\t\t}\n\t\t} else if p.PersistentPostRun != nil {\n\t\t\tp.PersistentPostRun(c, argWoFlags)\n\t\t\tif !EnableTraverseRunHooks {\n\t\t\t\tbreak\n\t\t\t}\n\t\t}",
+                  "sha256": "4bf97c342ec56c039bdb6a477552d26b9a2cdc47e7653c05eaed46afaa4e6828"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "help-priority",
+      "units": [
+        {
+          "id": "parse",
+          "fact": "parse",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "command.go",
+                  "startLine": 919,
+                  "endLine": 922,
+                  "quote": "\terr = c.ParseFlags(a)\n\tif err != nil {\n\t\treturn c.FlagErrorFunc()(c, err)\n\t}",
+                  "sha256": "3925330d0c8b31c40f779f958ebecac613fc1e7d830af15ba92dd5eae4dfd238"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "stop",
+          "fact": "stop",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "command.go",
+                  "startLine": 934,
+                  "endLine": 936,
+                  "quote": "\tif helpVal {\n\t\treturn flag.ErrHelp\n\t}",
+                  "sha256": "9aaa4d3956d6d344e0509bd95f1561a6c5ee320bd2747f26c45d94de06f46fbd"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "display",
+          "fact": "display",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "command.go",
+                  "startLine": 1152,
+                  "endLine": 1155,
+                  "quote": "\t\tif errors.Is(err, flag.ErrHelp) {\n\t\t\tcmd.HelpFunc()(cmd, args)\n\t\t\treturn cmd, nil\n\t\t}",
+                  "sha256": "701a0bd58f7c7fe71c7f4732c7047be96aa851d13b15c4278c8f5e5ef947c8a0"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "context-inheritance",
+      "units": [
+        {
+          "id": "explicit",
+          "fact": "explicit",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "command.go",
+                  "startLine": 1078,
+                  "endLine": 1081,
+                  "quote": "func (c *Command) ExecuteContextC(ctx context.Context) (*Command, error) {\n\tc.ctx = ctx\n\treturn c.ExecuteC()\n}",
+                  "sha256": "0bfce3a775709d919cb929f9f83a73c058af1f0d30c1918623e24db91e59d50f"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "default",
+          "fact": "default",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "command.go",
+                  "startLine": 1084,
+                  "endLine": 1087,
+                  "quote": "func (c *Command) ExecuteC() (cmd *Command, err error) {\n\tif c.ctx == nil {\n\t\tc.ctx = context.Background()\n\t}",
+                  "sha256": "023547559e4725f786c9fc8ec18fbffe9039343c10ae4634d816eb3c26a44e27"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "inherit",
+          "fact": "inherit",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "command.go",
+                  "startLine": 1144,
+                  "endLine": 1146,
+                  "quote": "\tif cmd.ctx == nil {\n\t\tcmd.ctx = c.ctx\n\t}",
+                  "sha256": "d262bd2e89b7b224ba33add078515e5d6227edc46fd6ed1de55f23f2b58e7bba"
+                },
+                {
+                  "path": "command.go",
+                  "startLine": 1148,
+                  "endLine": 1148,
+                  "quote": "\terr = cmd.execute(flags)",
+                  "sha256": "aaba65ae13b1eb4509ac388246c01513adc1a1fd3be063a9efa71db372d5a016"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

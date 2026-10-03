@@ -31,6 +31,7 @@ export function extract(files, maxLines = 65, settings = {}) {
   const options = { target: ts.ScriptTarget.ESNext, module: ts.ModuleKind.ESNext,
     moduleResolution: ts.ModuleResolutionKind.Bundler, jsx: ts.JsxEmit.Preserve,
     noEmit: true, noLib: true, skipLibCheck: true, allowImportingTsExtensions: true,
+    ...(files.some(f => /\.(?:jsx?|mjs|cjs)$/.test(f.path)) ? { allowJs: true, checkJs: true } : {}),
     experimentalDecorators: true, baseUrl, paths: settings.paths };
   const host = {
     getSourceFile: (name, version) => texts.has(name) ? ts.createSourceFile(name, texts.get(name), version, true) : undefined,
@@ -75,8 +76,18 @@ export function extract(files, maxLines = 65, settings = {}) {
     const lines = slashLines(file.text);
     // Python splitlines() omits the final empty line; use the same span convention.
     if (lines.at(-1) === '') lines.pop();
-    const module = file.path.replace(/\.(?:tsx?|mts|cts)$/, '');
-    const lineOf = position => sf.getLineAndCharacterOfPosition(position).line + 1;
+    const module = file.path.replace(/\.(?:tsx?|mts|cts|jsx?|mjs|cjs)$/, '');
+    // Source citations use physical CR/LF lines, including when JavaScript
+    // treats a Unicode separator as a lexical line terminator. Offsets are UTF-16.
+    const starts = [0, ...[...file.text.matchAll(/\r\n|\r|\n/g)].map(m => m.index + m[0].length)];
+    const lineOf = position => {
+      let low = 0, high = starts.length;
+      while (low + 1 < high) {
+        const middle = (low + high) >>> 1;
+        if (starts[middle] <= position) low = middle; else high = middle;
+      }
+      return low + 1;
+    };
     const root = { node: sf, name: '', symbol: module + '::', kind: 'module', start: 1,
       end: lines.length, parent: null, depth: 0, ids: [] };
     const entries = [root], boundaries = new Set();
@@ -118,7 +129,7 @@ export function extract(files, maxLines = 65, settings = {}) {
         const text = lines.slice(start - 1, stop).join('\n');
         if (text.trim()) {
           const id = units.length;
-          const unit = { id, language: 'typescript', path: file.path, module, name: owner.name,
+          const unit = { id, language: /\.(?:jsx?|mjs|cjs)$/.test(file.path) ? 'javascript' : 'typescript', path: file.path, module, name: owner.name,
             symbol: owner.symbol, kind: owner.kind, scope: owner.parent?.symbol ?? root.symbol,
             owner: owner.parent && owner.parent !== root ? owner.parent.symbol : null,
             start, end: stop, text, calls: [], relations: [], edges: [], unresolved: [] };

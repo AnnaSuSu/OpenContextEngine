@@ -1,0 +1,235 @@
+{
+  "answers": [
+    {
+      "id": "environment-priority",
+      "units": [
+        {
+          "id": "priority",
+          "fact": "priority",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "lib/command.js",
+                  "startLine": 1927,
+                  "endLine": 1936,
+                  "quote": "    this.options.forEach((option) => {\n      if (option.envVar && option.envVar in process.env) {\n        const optionKey = option.attributeName();\n        // Priority check. Do not overwrite cli or options from unknown source (client-code).\n        if (\n          this.getOptionValue(optionKey) === undefined ||\n          ['default', 'config', 'env'].includes(\n            this.getOptionValueSource(optionKey),\n          )\n        ) {",
+                  "sha256": "c463e61d7897557e5972b8e9a3796b287ed06316a3306bc05a874c9e6f934136"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "events",
+          "fact": "events",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "lib/command.js",
+                  "startLine": 1937,
+                  "endLine": 1945,
+                  "quote": "          if (option.required || option.optional) {\n            // option can take a value\n            // keep very simple, optional always takes value\n            this.emit(`optionEnv:${option.name()}`, process.env[option.envVar]);\n          } else {\n            // boolean\n            // keep very simple, only care that envVar defined and not the value\n            this.emit(`optionEnv:${option.name()}`);\n          }",
+                  "sha256": "cf5054f5ff5dc555afd3973524f2f604a1ddd0882851f11b05691304c62ca28c"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "implied-options",
+      "units": [
+        {
+          "id": "custom",
+          "fact": "custom",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "lib/command.js",
+                  "startLine": 1958,
+                  "endLine": 1963,
+                  "quote": "    const hasCustomOptionValue = (optionKey) => {\n      return (\n        this.getOptionValue(optionKey) !== undefined &&\n        !['default', 'implied'].includes(this.getOptionValueSource(optionKey))\n      );\n    };",
+                  "sha256": "089de843ab35c2e85b436eb28d9e14c9ea4277deb7a38e911f69596099fbedef"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "trigger",
+          "fact": "trigger",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "lib/command.js",
+                  "startLine": 1964,
+                  "endLine": 1973,
+                  "quote": "    this.options\n      .filter(\n        (option) =>\n          option.implied !== undefined &&\n          hasCustomOptionValue(option.attributeName()) &&\n          dualHelper.valueFromOption(\n            this.getOptionValue(option.attributeName()),\n            option,\n          ),\n      )",
+                  "sha256": "ec3cc5d8c06a4b8429ffe37b8b8bf71d397e786cb13612971b6e625da797720f"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "write",
+          "fact": "write",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "lib/command.js",
+                  "startLine": 1974,
+                  "endLine": 1983,
+                  "quote": "      .forEach((option) => {\n        Object.keys(option.implied)\n          .filter((impliedKey) => !hasCustomOptionValue(impliedKey))\n          .forEach((impliedKey) => {\n            this.setOptionValueWithSource(\n              impliedKey,\n              option.implied[impliedKey],\n              'implied',\n            );\n          });",
+                  "sha256": "4e5fb6a5b1f16b8b901b8b05318fa876718779f44866e7d6b7cf270940893b38"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "parse-reset",
+      "units": [
+        {
+          "id": "dispatch",
+          "fact": "dispatch",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "lib/command.js",
+                  "startLine": 1109,
+                  "endLine": 1115,
+                  "quote": "  _prepareForParse() {\n    if (this._savedState === null) {\n      this.saveStateBeforeParse();\n    } else {\n      this.restoreStateBeforeParse();\n    }\n  }",
+                  "sha256": "70e0234fa3985f2ba2d7ed618675e5ef1013d2e00f7fadbfb57e96478aaccb2b"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "save",
+          "fact": "save",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "lib/command.js",
+                  "startLine": 1123,
+                  "endLine": 1132,
+                  "quote": "  saveStateBeforeParse() {\n    this._savedState = {\n      // name is stable if supplied by author, but may be unspecified for root command and deduced during parsing\n      _name: this._name,\n      // option values before parse have default values (including false for negated options)\n      // shallow clones\n      _optionValues: { ...this._optionValues },\n      _optionValueSources: { ...this._optionValueSources },\n    };\n  }",
+                  "sha256": "cd74febc9d97379edc536d38356032f156bee11d6f52c0416809ffe74e5d9272"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "guard",
+          "fact": "guard",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "lib/command.js",
+                  "startLine": 1140,
+                  "endLine": 1143,
+                  "quote": "  restoreStateBeforeParse() {\n    if (this._storeOptionsAsProperties)\n      throw new Error(`Can not call parse again when storeOptionsAsProperties is true.\n- either make a new Command for each call to parse, or stop storing options as properties`);",
+                  "sha256": "6ae894dc369f180746ead310e404cf00dec168963db38bad362c1c3b4353b44b"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "reset",
+          "fact": "reset",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "lib/command.js",
+                  "startLine": 1145,
+                  "endLine": 1155,
+                  "quote": "    // clear state from _prepareUserArgs\n    this._name = this._savedState._name;\n    this._scriptPath = null;\n    this.rawArgs = [];\n    // clear state from setOptionValueWithSource\n    this._optionValues = { ...this._savedState._optionValues };\n    this._optionValueSources = { ...this._savedState._optionValueSources };\n    // clear state from _parseCommand\n    this.args = [];\n    // clear state from _processArguments\n    this.processedArgs = [];",
+                  "sha256": "049029be3214fcd0aa199d9b9fff26a93fea09f7623a44596eb3d34460022846"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "conflicting-options",
+      "units": [
+        {
+          "id": "filter",
+          "fact": "filter",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "lib/command.js",
+                  "startLine": 1677,
+                  "endLine": 1683,
+                  "quote": "    const definedNonDefaultOptions = this.options.filter((option) => {\n      const optionKey = option.attributeName();\n      if (this.getOptionValue(optionKey) === undefined) {\n        return false;\n      }\n      return this.getOptionValueSource(optionKey) !== 'default';\n    });",
+                  "sha256": "7359deb3027c233d029583dacdee46cd1bcef6ad456f9afa61a6e9d852ebf48b"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "conflict",
+          "fact": "conflict",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "lib/command.js",
+                  "startLine": 1685,
+                  "endLine": 1687,
+                  "quote": "    const optionsWithConflicting = definedNonDefaultOptions.filter(\n      (option) => option.conflictsWith.length > 0,\n    );",
+                  "sha256": "a78766437a05832e37d4c8f1e1f298ee55963f5adb05938f096aeab2420a63a2"
+                },
+                {
+                  "path": "lib/command.js",
+                  "startLine": 1689,
+                  "endLine": 1696,
+                  "quote": "    optionsWithConflicting.forEach((option) => {\n      const conflictingAndDefined = definedNonDefaultOptions.find((defined) =>\n        option.conflictsWith.includes(defined.attributeName()),\n      );\n      if (conflictingAndDefined) {\n        this._conflictingOption(option, conflictingAndDefined);\n      }\n    });",
+                  "sha256": "863977e1cc89f5f7fab460d5c85077c9b5f5330b8ed03bbca0279841fee228b8"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "parents",
+          "fact": "parents",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "lib/command.js",
+                  "startLine": 1705,
+                  "endLine": 1710,
+                  "quote": "  _checkForConflictingOptions() {\n    // Walk up hierarchy so can call in subcommand after checking for displaying help.\n    this._getCommandAndAncestors().forEach((cmd) => {\n      cmd._checkForConflictingLocalOptions();\n    });\n  }",
+                  "sha256": "0cbecbdd8d36f5bb71b19838b78d0ab93d19e6a9e1248bc46aafd4167535543e"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

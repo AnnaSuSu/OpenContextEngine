@@ -60,7 +60,7 @@ class Engine:
     @staticmethod
     def render(u):
         # Text units preserve Unicode separators inside a physical source line.
-        lines = u['text'].split('\n') if u.get('language') == 'text' else u['text'].splitlines()
+        lines = u['text'].split('\n') if u.get('language') in {'text', 'javascript', 'typescript', 'go'} else u['text'].splitlines()
         return f"Path: {u['path']}\n" + '\n'.join(f'{i}\t{line}' for i, line in
             enumerate(lines, u['start'])) + '\n'
 
