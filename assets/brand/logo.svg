@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">OpenContextEngine</title>
+  <desc id="desc">Two open, chamfered brackets surround a green code block.</desc>
+  <g fill="none" stroke="#193C34" stroke-width="56" stroke-linecap="square" stroke-linejoin="round">
+    <path d="M208 112H176L112 176V336L176 400H208"/>
+    <path d="M304 112H336L400 176V336L336 400H304"/>
+  </g>
+  <rect x="212" y="212" width="88" height="88" rx="12" fill="#35CE8D"/>
+</svg>

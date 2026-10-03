@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="240" viewBox="0 0 1320 240" role="img" aria-labelledby="title desc">
+  <title id="title">OpenContextEngine</title>
+  <desc id="desc">The OpenContextEngine bracket symbol beside the project name.</desc>
+  <g transform="translate(24 24) scale(.375)">
+    <g fill="none" stroke="#193C34" stroke-width="56" stroke-linecap="square" stroke-linejoin="round">
+      <path d="M208 112H176L112 176V336L176 400H208"/>
+      <path d="M304 112H336L400 176V336L336 400H304"/>
+    </g>
+    <rect x="212" y="212" width="88" height="88" rx="12" fill="#35CE8D"/>
+  </g>
+  <text x="246" y="146" fill="#193C34" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="82" font-weight="600" letter-spacing="-3">OpenContextEngine</text>
+</svg>
