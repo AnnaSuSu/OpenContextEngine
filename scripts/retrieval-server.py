@@ -13,7 +13,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src' / 'retrieval'))
-from batched import BatchedEngine, VERSION
+from routed import RoutedEngine, VERSION
 
 
 def plan_query(query):
@@ -27,11 +27,11 @@ def serve(config):
     state = Path(config['state'])
     units = json.loads((state / 'units.json').read_text())
     index = json.loads((state / 'metadata.json').read_text())
-    retrieval = BatchedEngine(units, np.load(state/'vectors.npy'), config['embeddingUrl'], config['reranker'], config['embeddingKey'])
+    retrieval = RoutedEngine(units, np.load(state/'vectors.npy'), config['embeddingUrl'], config['reranker'], config['embeddingKey'])
     health = {'status':'ready','engine':VERSION,'index':index,'queryCache':False,
         'initializationMs':round((time.monotonic()-initialized)*1000),
         'sourceSha256':{name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in
-            ['src/retrieval/engine.py','src/retrieval/batched.py','scripts/retrieval-server.py',
+            ['src/retrieval/engine.py','src/retrieval/batched.py','src/retrieval/routed.py','scripts/retrieval-server.py',
              'src/retrieval/languages/__init__.py','src/retrieval/languages/schema.py',
              'src/retrieval/languages/text.py','src/retrieval/languages/files.py',
              'src/retrieval/languages/python.py','src/retrieval/languages/typescript.py',

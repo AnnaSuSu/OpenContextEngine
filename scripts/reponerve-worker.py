@@ -9,6 +9,7 @@ from engine import Engine, build_index
 from cascade import CascadeEngine
 from entities import EntityEngine
 from batched import BatchedEngine
+from routed import RoutedEngine
 
 
 config = json.loads(sys.stdin.readline())
@@ -31,7 +32,7 @@ try:
     report['stage'] = 'querying'
     save()
     initialized = time.monotonic()
-    kind = {'batched': BatchedEngine, 'entity': EntityEngine, 'cascade': CascadeEngine}.get(config.get('engine'), Engine)
+    kind = {'routed': RoutedEngine, 'batched': BatchedEngine, 'entity': EntityEngine, 'cascade': CascadeEngine}.get(config.get('engine'), Engine)
     engine = kind(units, vectors, config.get('embeddingQueryUrl', config['embeddingUrl']), config['reranker'], config.get('embeddingKey', 'local-only'))
     report['initializationMs'] = round((time.monotonic() - initialized) * 1000)
     for task in plans['results']:

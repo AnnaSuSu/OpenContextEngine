@@ -1,0 +1,4859 @@
+{
+  "kind": "development comparison, same source indexes and questions, later final validation run",
+  "referenceRuns": [
+    "runs/roadmap-routing-v2",
+    "runs/roadmap-routing-v2-regression"
+  ],
+  "finalRun": "runs/roadmap-routing-v4",
+  "queries": 76,
+  "referenceMedianMs": 4713.0,
+  "finalMedianMs": 1896.5,
+  "referenceCoverage": 0.9133771929824561,
+  "finalCoverage": 0.9166666666666666,
+  "changes": [
+    {
+      "dataset": "click",
+      "id": "lazy-atomic-file",
+      "language": "zh",
+      "before": 0.75,
+      "after": 1
+    }
+  ],
+  "results": {
+    "kind": "source-derived development evaluation; not independent benchmark",
+    "runReportSha256": "a55340e3532f4f4c2ae8de9b89a01491fe3f5c663560464257464c0c9e1a9f66",
+    "code": {
+      "src/retrieval/engine.py": "42a721f8663962f52d2715ce1e8d30bdf8ea70f003cfa2cd280ee88649259288",
+      "src/retrieval/batched.py": "ad9c9f357554bb9b4852af5d4d5ddb87e2214bf72b322a0bf0041fac4cb083fc",
+      "src/retrieval/routed.py": "a0398285c754d12618ff5fcf10e808b841747d1624ef983b2e4192ea7064c22e",
+      "scripts/retrieval-server.py": "4b50f42bf59acce665f461a7eafad10430fc67a6a4e975181aa3c684490b9f4f",
+      "scripts/roadmap/compare.py": "19703031915ad8eec41f14a8c1170907b197f6fe23a86b4701b9da97e53d461f"
+    },
+    "indexes": {
+      "esbuild": {
+        "metadata": {
+          "identity": "2be94fb495dc366906ba711acec86ff4326a976e5477dc7b9bb864183d4c2a29",
+          "version": "structural-units-v2",
+          "units": 7865,
+          "files": 321,
+          "nonemptyFiles": 321,
+          "selection": {
+            "inputFiles": 321,
+            "acceptedFiles": 321,
+            "excluded": [],
+            "fallbackFiles": 301
+          },
+          "languageAdapters": {
+            "schemaVersion": "source-units-v2",
+            "languages": [
+              "text",
+              "typescript"
+            ],
+            "options": {},
+            "parsers": {
+              "text": "line-chunks-v1",
+              "typescript": "typescript-5.9.3"
+            },
+            "sourceSha256": {
+              "__init__.py": "2b3b2a13ddc296d21e4b518729daed027d0a7910f42c9872b930dc4291d3da00",
+              "schema.py": "2f26a2d7dece9f3b50f4f0a9aa54ddb64c5716b43c4131e41d279dabf8c70dbb",
+              "files.py": "e2a0f5d071101456bf19687f0d8826a23769dc86c083f4fd3c06f644846dec8d",
+              "text.py": "a5d99d6def8a2d68d708e48efe6b79de9b66a97e4508d39580b4810bd37e2822",
+              "typescript.py": "ffa77209f4a2304794c4dba13914f6cf960f9abbe8da8cc01e2a2c6795fbfbcc",
+              "typescript.mjs": "782ac128bf2897d875da23eea4272e14ac03a6e8bca0f87ac054e99515681d24"
+            }
+          },
+          "languageUnits": {
+            "text": 5590,
+            "typescript": 2275
+          },
+          "resolvedEdges": 63692,
+          "indexingMs": 286587,
+          "cacheHit": false
+        },
+        "unitsSha256": "82ab542587fb7a2b6ee4a3240edddb2f2b1a3826a700dffefef2f0f89064c4da",
+        "queriesSha256": "2f4feae5d34919a6648599cd364b3b10e427e6e26fdfac977c67457266751b8f"
+      },
+      "click": {
+        "metadata": {
+          "identity": "bd3e7b0f5df3cf22a37a0f4771990148f04bda9aaa691ead537b4eb07476ac8d",
+          "version": "structural-units-v2",
+          "units": 598,
+          "files": 16,
+          "nonemptyFiles": 16,
+          "languageAdapters": {
+            "schemaVersion": "source-units-v2",
+            "languages": [
+              "python"
+            ],
+            "options": {},
+            "parsers": {
+              "python": "python-ast-3.12.11"
+            },
+            "sourceSha256": {
+              "__init__.py": "061a52434ceb0258d92c3d185c3260f7a39bb80e832bac85e0943844177ff7cf",
+              "schema.py": "fdae889aefef76c1520fc1f818b9345e8bc2082413d10793c5fdb43c0ca49a90",
+              "python.py": "5154ce726d88028eba118c887604737ffb42adccd4653e69679b3ec897fd27ff"
+            }
+          },
+          "languageUnits": {
+            "python": 598
+          },
+          "resolvedEdges": 1267,
+          "indexingMs": 17785,
+          "cacheHit": false
+        },
+        "unitsSha256": "68135fa7c5b50393e09101584aca9e369913b7e8caaed5e331a64eea777abd07",
+        "queriesSha256": "9ad17e942072fdf2d149f303f6f5260143e8ad6f3d42fb47053ee2b275921125"
+      },
+      "httpx": {
+        "metadata": {
+          "identity": "4cb42f46bd0075a32ff07a0ff3f7a1898e1e0bfa6aa4943a776ad8fb7f6a7efe",
+          "version": "structural-units-v2",
+          "units": 583,
+          "files": 23,
+          "nonemptyFiles": 23,
+          "languageAdapters": {
+            "schemaVersion": "source-units-v2",
+            "languages": [
+              "python"
+            ],
+            "options": {},
+            "parsers": {
+              "python": "python-ast-3.12.11"
+            },
+            "sourceSha256": {
+              "__init__.py": "061a52434ceb0258d92c3d185c3260f7a39bb80e832bac85e0943844177ff7cf",
+              "schema.py": "fdae889aefef76c1520fc1f818b9345e8bc2082413d10793c5fdb43c0ca49a90",
+              "python.py": "5154ce726d88028eba118c887604737ffb42adccd4653e69679b3ec897fd27ff"
+            }
+          },
+          "languageUnits": {
+            "python": 583
+          },
+          "resolvedEdges": 1085,
+          "indexingMs": 16876,
+          "cacheHit": false
+        },
+        "unitsSha256": "56397679888fba36e2d9c11554c2c5159147680848158d48ba24ee0d4b7fbe94",
+        "queriesSha256": "d26320ac45359823faa309cd639109b81013eed3f548d900b13b0adb719b1bae"
+      },
+      "zod": {
+        "metadata": {
+          "identity": "cdc13a316e595950981ddd94d3ad1870eb961dae2ea6ed003b1681f3e8542527",
+          "version": "structural-units-v2",
+          "units": 1152,
+          "files": 13,
+          "nonemptyFiles": 13,
+          "languageAdapters": {
+            "schemaVersion": "source-units-v2",
+            "languages": [
+              "typescript"
+            ],
+            "options": {},
+            "parsers": {
+              "typescript": "typescript-5.9.3"
+            },
+            "sourceSha256": {
+              "__init__.py": "061a52434ceb0258d92c3d185c3260f7a39bb80e832bac85e0943844177ff7cf",
+              "schema.py": "fdae889aefef76c1520fc1f818b9345e8bc2082413d10793c5fdb43c0ca49a90",
+              "typescript.py": "ffa77209f4a2304794c4dba13914f6cf960f9abbe8da8cc01e2a2c6795fbfbcc",
+              "typescript.mjs": "782ac128bf2897d875da23eea4272e14ac03a6e8bca0f87ac054e99515681d24"
+            }
+          },
+          "languageUnits": {
+            "typescript": 1152
+          },
+          "resolvedEdges": 6646,
+          "indexingMs": 32579,
+          "cacheHit": false
+        },
+        "unitsSha256": "d8d524bd1bff8162756686009a1a48041139785aabb2a0e0c76eb5f0cf80cc25",
+        "queriesSha256": "4e994f86c29d7bbe599f664447e1250d8162fda38c1cec1844a9179de8e40e00"
+      }
+    },
+    "summary": {
+      "esbuild": {
+        "routed": {
+          "queries": 16,
+          "coverage": 0.8125,
+          "complete": 12,
+          "medianMs": 2545.5,
+          "p95Ms": 3254
+        }
+      },
+      "click": {
+        "routed": {
+          "queries": 20,
+          "coverage": 1,
+          "complete": 20,
+          "medianMs": 2001,
+          "p95Ms": 2233
+        }
+      },
+      "httpx": {
+        "routed": {
+          "queries": 20,
+          "coverage": 0.85,
+          "complete": 13,
+          "medianMs": 1800.5,
+          "p95Ms": 2163
+        }
+      },
+      "zod": {
+        "routed": {
+          "queries": 20,
+          "coverage": 0.9833333333333334,
+          "complete": 19,
+          "medianMs": 1551,
+          "p95Ms": 2025
+        }
+      }
+    },
+    "rows": [
+      {
+        "dataset": "esbuild",
+        "id": "boolean-flags",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "esbuild.boolean-flags.zh.routed.txt",
+        "nativeFile": "esbuild.boolean-flags.zh.routed.json",
+        "sha256": "662a8deb0d6013856ed915bcb5d452c643eb325a44a43f0b9311cb834525d26f",
+        "elapsedMs": 2935,
+        "pairs": 100,
+        "tokens": 3921,
+        "score": {
+          "covered": 2,
+          "total": 2,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "default",
+              "fact": "Use the default when no equals sign is supplied",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "values",
+              "fact": "Accept true and false and explain invalid values",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 420,
+            "verifiedOccurrences": 420,
+            "uniqueVerifiedLines": 420,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "esbuild",
+        "id": "boolean-flags",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "esbuild.boolean-flags.en.routed.txt",
+        "nativeFile": "esbuild.boolean-flags.en.routed.json",
+        "sha256": "fd5af251ec56b6cd6301a86fc4c7cbd068d4b7e56c3c859a745e6411bf735fce",
+        "elapsedMs": 3129,
+        "pairs": 102,
+        "tokens": 3951,
+        "score": {
+          "covered": 2,
+          "total": 2,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "default",
+              "fact": "Use the default when no equals sign is supplied",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "values",
+              "fact": "Accept true and false and explain invalid values",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 407,
+            "verifiedOccurrences": 407,
+            "uniqueVerifiedLines": 407,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "esbuild",
+        "id": "watch-lifetime",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "esbuild.watch-lifetime.zh.routed.txt",
+        "nativeFile": "esbuild.watch-lifetime.zh.routed.json",
+        "sha256": "38924272f480db0f7f03ee3e3c4441bd0e7949bbffe09a718c3af29a8bf05f2e",
+        "elapsedMs": 2712,
+        "pairs": 110,
+        "tokens": 3968,
+        "score": {
+          "covered": 0,
+          "total": 2,
+          "coverage": 0,
+          "omission": 1,
+          "complete": false,
+          "units": [
+            {
+              "id": "validation",
+              "fact": "Create a context and reject invalid build options",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "pkg/cli/cli_impl.go",
+                      "missingLines": [
+                        1323,
+                        1324
+                      ]
+                    },
+                    {
+                      "path": "pkg/cli/cli_impl.go",
+                      "missingLines": [
+                        1326,
+                        1327,
+                        1328,
+                        1329
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "lifetime",
+              "fact": "Start watching and block instead of exiting",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "pkg/cli/cli_impl.go",
+                      "missingLines": [
+                        1331
+                      ]
+                    },
+                    {
+                      "path": "pkg/cli/cli_impl.go",
+                      "missingLines": [
+                        1333,
+                        1334
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 336,
+            "verifiedOccurrences": 336,
+            "uniqueVerifiedLines": 336,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "esbuild",
+        "id": "watch-lifetime",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "esbuild.watch-lifetime.en.routed.txt",
+        "nativeFile": "esbuild.watch-lifetime.en.routed.json",
+        "sha256": "7bf75e22335cf48ef4ce2382e6d980c992832a89bdcd8f97fd2583ad78af8667",
+        "elapsedMs": 3254,
+        "pairs": 110,
+        "tokens": 3966,
+        "score": {
+          "covered": 0,
+          "total": 2,
+          "coverage": 0,
+          "omission": 1,
+          "complete": false,
+          "units": [
+            {
+              "id": "validation",
+              "fact": "Create a context and reject invalid build options",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "pkg/cli/cli_impl.go",
+                      "missingLines": [
+                        1323,
+                        1324
+                      ]
+                    },
+                    {
+                      "path": "pkg/cli/cli_impl.go",
+                      "missingLines": [
+                        1326,
+                        1327,
+                        1328,
+                        1329
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "lifetime",
+              "fact": "Start watching and block instead of exiting",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "pkg/cli/cli_impl.go",
+                      "missingLines": [
+                        1331
+                      ]
+                    },
+                    {
+                      "path": "pkg/cli/cli_impl.go",
+                      "missingLines": [
+                        1333,
+                        1334
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 396,
+            "verifiedOccurrences": 396,
+            "uniqueVerifiedLines": 396,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "esbuild",
+        "id": "worker-input-close",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "esbuild.worker-input-close.zh.routed.txt",
+        "nativeFile": "esbuild.worker-input-close.zh.routed.json",
+        "sha256": "32a9687e6a0b4e7b00b7df2ae34c7c39fa2e63a82b53ac22b018593640d54b54",
+        "elapsedMs": 1714,
+        "pairs": 80,
+        "tokens": 3967,
+        "score": {
+          "covered": 2,
+          "total": 2,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "process",
+              "fact": "Start the asynchronous compiler process and handle completion",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "fact": "Write the generated input and close stdin",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 328,
+            "verifiedOccurrences": 328,
+            "uniqueVerifiedLines": 328,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "esbuild",
+        "id": "worker-input-close",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "esbuild.worker-input-close.en.routed.txt",
+        "nativeFile": "esbuild.worker-input-close.en.routed.json",
+        "sha256": "1f17a577264183cc332f13f2e58233e076b74fee8920cbcd344f566c52c5c958",
+        "elapsedMs": 2129,
+        "pairs": 80,
+        "tokens": 3972,
+        "score": {
+          "covered": 2,
+          "total": 2,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "process",
+              "fact": "Start the asynchronous compiler process and handle completion",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "fact": "Write the generated input and close stdin",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 341,
+            "verifiedOccurrences": 341,
+            "uniqueVerifiedLines": 341,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "esbuild",
+        "id": "optional-platforms",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "esbuild.optional-platforms.zh.routed.txt",
+        "nativeFile": "esbuild.optional-platforms.zh.routed.json",
+        "sha256": "5f4c90273935c920c0db54c11a52d2ea8d08f22b722ae31283eca6b599ebad51",
+        "elapsedMs": 2154,
+        "pairs": 67,
+        "tokens": 3972,
+        "score": {
+          "covered": 1,
+          "total": 2,
+          "coverage": 0.5,
+          "omission": 0.5,
+          "complete": false,
+          "units": [
+            {
+              "id": "platforms",
+              "fact": "Collect and sort platform packages with the release version",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "write",
+              "fact": "Write optional dependencies to package configuration",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "scripts/esbuild.js",
+                      "missingLines": [
+                        83,
+                        84,
+                        85,
+                        86
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 350,
+            "verifiedOccurrences": 350,
+            "uniqueVerifiedLines": 350,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "esbuild",
+        "id": "optional-platforms",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "esbuild.optional-platforms.en.routed.txt",
+        "nativeFile": "esbuild.optional-platforms.en.routed.json",
+        "sha256": "906ae6f76de8cc1333306dc87d0d953848a8d758990f068b75431a2abfe08c5a",
+        "elapsedMs": 2568,
+        "pairs": 75,
+        "tokens": 3961,
+        "score": {
+          "covered": 1,
+          "total": 2,
+          "coverage": 0.5,
+          "omission": 0.5,
+          "complete": false,
+          "units": [
+            {
+              "id": "platforms",
+              "fact": "Collect and sort platform packages with the release version",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "write",
+              "fact": "Write optional dependencies to package configuration",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "scripts/esbuild.js",
+                      "missingLines": [
+                        83,
+                        84,
+                        85,
+                        86
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 333,
+            "verifiedOccurrences": 333,
+            "uniqueVerifiedLines": 333,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "esbuild",
+        "id": "sync-worker-reuse",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "esbuild.sync-worker-reuse.zh.routed.txt",
+        "nativeFile": "esbuild.sync-worker-reuse.zh.routed.json",
+        "sha256": "45f5199ccde7976829cdcce872206bfd6a670bd250afe517a9e27b5a72e0665f",
+        "elapsedMs": 1925,
+        "pairs": 95,
+        "tokens": 3920,
+        "score": {
+          "covered": 2,
+          "total": 2,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "worker",
+              "fact": "Reuse or start the worker service outside the internal worker",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "fallback",
+              "fact": "Run the synchronous service and return its result",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 342,
+            "verifiedOccurrences": 342,
+            "uniqueVerifiedLines": 342,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "esbuild",
+        "id": "sync-worker-reuse",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "esbuild.sync-worker-reuse.en.routed.txt",
+        "nativeFile": "esbuild.sync-worker-reuse.en.routed.json",
+        "sha256": "616ee7cea53d524826f463c1b8b7c597ac442a1583b07442e19d67332dd6aec8",
+        "elapsedMs": 2239,
+        "pairs": 92,
+        "tokens": 3944,
+        "score": {
+          "covered": 2,
+          "total": 2,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "worker",
+              "fact": "Reuse or start the worker service outside the internal worker",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "fallback",
+              "fact": "Run the synchronous service and return its result",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 338,
+            "verifiedOccurrences": 338,
+            "uniqueVerifiedLines": 338,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "esbuild",
+        "id": "release-validation",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "esbuild.release-validation.zh.routed.txt",
+        "nativeFile": "esbuild.release-validation.zh.routed.json",
+        "sha256": "eda17f298be4876385e6f8c3ef10d029259323105e27f52a840d362174ed6cdc",
+        "elapsedMs": 1925,
+        "pairs": 68,
+        "tokens": 3796,
+        "score": {
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "triggers",
+              "fact": "Version tags and manual dispatch trigger validation",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "runner",
+              "fact": "Use the Ubuntu runner",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "go",
+              "fact": "Install the pinned Go version",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "command",
+              "fact": "Run the build validation make target",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 364,
+            "verifiedOccurrences": 364,
+            "uniqueVerifiedLines": 364,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "esbuild",
+        "id": "release-validation",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "esbuild.release-validation.en.routed.txt",
+        "nativeFile": "esbuild.release-validation.en.routed.json",
+        "sha256": "93564258a91c00b40ac19231255b30df7bbd0b087f0f90a1a3285b6bfa636f44",
+        "elapsedMs": 2655,
+        "pairs": 78,
+        "tokens": 3752,
+        "score": {
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "triggers",
+              "fact": "Version tags and manual dispatch trigger validation",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "runner",
+              "fact": "Use the Ubuntu runner",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "go",
+              "fact": "Install the pinned Go version",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "command",
+              "fact": "Run the build validation make target",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 307,
+            "verifiedOccurrences": 307,
+            "uniqueVerifiedLines": 307,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "esbuild",
+        "id": "test-targets",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "esbuild.test-targets.zh.routed.txt",
+        "nativeFile": "esbuild.test-targets.zh.routed.json",
+        "sha256": "e6984cafe8338c13ba9045f6a1f84a6d7a73a756a160da8c011dc0e8b0ed696a",
+        "elapsedMs": 3057,
+        "pairs": 109,
+        "tokens": 3932,
+        "score": {
+          "covered": 2,
+          "total": 2,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "development",
+              "fact": "Run the common development test targets with six parallel jobs",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "release",
+              "fact": "Add the slower release test targets",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 399,
+            "verifiedOccurrences": 399,
+            "uniqueVerifiedLines": 399,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "esbuild",
+        "id": "test-targets",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "esbuild.test-targets.en.routed.txt",
+        "nativeFile": "esbuild.test-targets.en.routed.json",
+        "sha256": "3b731363d6925585b2996b13f10da6501a09ea86948eb603eed1948c7fe5554e",
+        "elapsedMs": 2977,
+        "pairs": 105,
+        "tokens": 3779,
+        "score": {
+          "covered": 2,
+          "total": 2,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "development",
+              "fact": "Run the common development test targets with six parallel jobs",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "release",
+              "fact": "Add the slower release test targets",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 348,
+            "verifiedOccurrences": 348,
+            "uniqueVerifiedLines": 348,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "esbuild",
+        "id": "binary-download",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "esbuild.binary-download.zh.routed.txt",
+        "nativeFile": "esbuild.binary-download.zh.routed.json",
+        "sha256": "a1fab807a6fa7389447ba204ab74e879b1c49df1f2676dc722c5264bfb4d43d3",
+        "elapsedMs": 2523,
+        "pairs": 94,
+        "tokens": 3951,
+        "score": {
+          "covered": 2,
+          "total": 2,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "select",
+              "fact": "Identify the platform and choose a package or reject it",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "extract",
+              "fact": "Extract and move the executable and remove the archive",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 359,
+            "verifiedOccurrences": 359,
+            "uniqueVerifiedLines": 359,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "esbuild",
+        "id": "binary-download",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "esbuild.binary-download.en.routed.txt",
+        "nativeFile": "esbuild.binary-download.en.routed.json",
+        "sha256": "d642654b882cfc1a4ef35f386983a6b66e0d6af05e6038597d9c5d1859c67aa7",
+        "elapsedMs": 2205,
+        "pairs": 69,
+        "tokens": 3957,
+        "score": {
+          "covered": 2,
+          "total": 2,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "select",
+              "fact": "Identify the platform and choose a package or reject it",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "extract",
+              "fact": "Extract and move the executable and remove the archive",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 247,
+            "verifiedOccurrences": 247,
+            "uniqueVerifiedLines": 247,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "value-precedence",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "click.value-precedence.zh.routed.txt",
+        "nativeFile": "click.value-precedence.zh.routed.json",
+        "sha256": "5155ce66b720e529d21ebb85dce921de4713131d6fdd09323ca561f07fda0593",
+        "elapsedMs": 1972,
+        "pairs": 71,
+        "tokens": 3967,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "cli-env",
+              "fact": "命令行值优先，缺失时才读取环境变量。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "defaults",
+              "fact": "环境变量仍缺失时依次使用默认映射和声明默认值。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "source",
+              "fact": "解析处理记录所选值的来源并进入值处理。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 370,
+            "verifiedOccurrences": 370,
+            "uniqueVerifiedLines": 370,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "value-precedence",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "click.value-precedence.en.routed.txt",
+        "nativeFile": "click.value-precedence.en.routed.json",
+        "sha256": "717c3f0127d3d7bdc1b1164d457dcac14fa1cd1877f57adbe809b0b91c796c06",
+        "elapsedMs": 2073,
+        "pairs": 74,
+        "tokens": 3937,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "cli-env",
+              "fact": "命令行值优先，缺失时才读取环境变量。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "defaults",
+              "fact": "环境变量仍缺失时依次使用默认映射和声明默认值。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "source",
+              "fact": "解析处理记录所选值的来源并进入值处理。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 368,
+            "verifiedOccurrences": 368,
+            "uniqueVerifiedLines": 368,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "prompt-validation",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "click.prompt-validation.zh.routed.txt",
+        "nativeFile": "click.prompt-validation.zh.routed.json",
+        "sha256": "8515af139eeb293aea494e9c540468ddc15248dfa1faae8eace9db8aa72b1b48",
+        "elapsedMs": 2054,
+        "pairs": 80,
+        "tokens": 3965,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "prompt",
+              "fact": "默认或未设置的值在启用提示且需要输入、非宽容解析时触发交互。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "convert-required",
+              "fact": "值先转换类型，必填而缺失则抛参数异常。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "callback",
+              "fact": "存在自定义回调时调用并采用回调返回值。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 378,
+            "verifiedOccurrences": 378,
+            "uniqueVerifiedLines": 378,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "prompt-validation",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "click.prompt-validation.en.routed.txt",
+        "nativeFile": "click.prompt-validation.en.routed.json",
+        "sha256": "d28652e028f1ce0f8589c8b4b9bfed95ebec0d8b9a9a2217d336e07415a2323e",
+        "elapsedMs": 2172,
+        "pairs": 80,
+        "tokens": 3967,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "prompt",
+              "fact": "默认或未设置的值在启用提示且需要输入、非宽容解析时触发交互。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "convert-required",
+              "fact": "值先转换类型，必填而缺失则抛参数异常。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "callback",
+              "fact": "存在自定义回调时调用并采用回调返回值。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 367,
+            "verifiedOccurrences": 367,
+            "uniqueVerifiedLines": 367,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "subcommand-dispatch",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "click.subcommand-dispatch.zh.routed.txt",
+        "nativeFile": "click.subcommand-dispatch.zh.routed.json",
+        "sha256": "9eabaf2672ed38dbb8c38f765bcf50eca1cadd1e36cebf015bf73f6f9cd481ef",
+        "elapsedMs": 2233,
+        "pairs": 91,
+        "tokens": 3962,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "resolve",
+              "fact": "根据首个参数查找子命令，必要时规范化名称后重试。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "parent",
+              "fact": "记录被调用子命令并先调用父命令。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "child",
+              "fact": "为子命令建立带父上下文的上下文并调用它。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 375,
+            "verifiedOccurrences": 375,
+            "uniqueVerifiedLines": 375,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "subcommand-dispatch",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "click.subcommand-dispatch.en.routed.txt",
+        "nativeFile": "click.subcommand-dispatch.en.routed.json",
+        "sha256": "25bd81dd88886d7c4133a8fc4b61f53f31499ad86de002e07bd76618a7c925da",
+        "elapsedMs": 2021,
+        "pairs": 64,
+        "tokens": 3940,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "resolve",
+              "fact": "根据首个参数查找子命令，必要时规范化名称后重试。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "parent",
+              "fact": "记录被调用子命令并先调用父命令。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "child",
+              "fact": "为子命令建立带父上下文的上下文并调用它。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 370,
+            "verifiedOccurrences": 370,
+            "uniqueVerifiedLines": 370,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "command-chain",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "click.command-chain.zh.routed.txt",
+        "nativeFile": "click.command-chain.zh.routed.json",
+        "sha256": "9690c73828ed3b7007e1e3997c6f17e307d5e4cc6b606136fe1d485700c458d4",
+        "elapsedMs": 1981,
+        "pairs": 80,
+        "tokens": 3948,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "parse",
+              "fact": "循环建立子上下文，把剩余参数交给后续命令。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "ordered",
+              "fact": "顺序进入子上下文并收集每次调用结果。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "result",
+              "fact": "结果回调接收收集的值以及父上下文参数。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 371,
+            "verifiedOccurrences": 371,
+            "uniqueVerifiedLines": 371,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "command-chain",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "click.command-chain.en.routed.txt",
+        "nativeFile": "click.command-chain.en.routed.json",
+        "sha256": "547e9a0e5d26bd14df672ee414d398b66711f32c4104d47199cb72593fe4523a",
+        "elapsedMs": 2074,
+        "pairs": 80,
+        "tokens": 3972,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "parse",
+              "fact": "循环建立子上下文，把剩余参数交给后续命令。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "ordered",
+              "fact": "顺序进入子上下文并收集每次调用结果。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "result",
+              "fact": "结果回调接收收集的值以及父上下文参数。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 376,
+            "verifiedOccurrences": 376,
+            "uniqueVerifiedLines": 376,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "resource-cleanup",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "click.resource-cleanup.zh.routed.txt",
+        "nativeFile": "click.resource-cleanup.zh.routed.json",
+        "sha256": "c65a85307ee2d5d7999c23f77c8b2cbe6a314853211e1145f73f1f7ac092e264",
+        "elapsedMs": 1747,
+        "pairs": 62,
+        "tokens": 3942,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "managed",
+              "fact": "通过退出栈进入资源上下文管理器。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "callback",
+              "fact": "清理回调注册到同一个退出栈。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "fact": "最外层上下文退出触发关闭，执行退出栈后重建栈。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 362,
+            "verifiedOccurrences": 362,
+            "uniqueVerifiedLines": 362,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "resource-cleanup",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "click.resource-cleanup.en.routed.txt",
+        "nativeFile": "click.resource-cleanup.en.routed.json",
+        "sha256": "b546658cd81a91a865153c88dfd2f7c8d84fff89399b826793a9ea1a558c1031",
+        "elapsedMs": 2116,
+        "pairs": 80,
+        "tokens": 3966,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "managed",
+              "fact": "通过退出栈进入资源上下文管理器。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "callback",
+              "fact": "清理回调注册到同一个退出栈。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "close",
+              "fact": "最外层上下文退出触发关闭，执行退出栈后重建栈。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 368,
+            "verifiedOccurrences": 368,
+            "uniqueVerifiedLines": 368,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "lazy-atomic-file",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "click.lazy-atomic-file.zh.routed.txt",
+        "nativeFile": "click.lazy-atomic-file.zh.routed.json",
+        "sha256": "601c755a79a7331643ded88292ef1db4be2baf046ce6f4db5abe6235352b2fee",
+        "elapsedMs": 1765,
+        "pairs": 80,
+        "tokens": 3669,
+        "score": {
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "register",
+              "fact": "延迟文件参数创建包装对象，并将智能关闭登记到上下文。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "open",
+              "fact": "延迟包装在需要访问时打开底层流，已有打开的流直接复用。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "temporary",
+              "fact": "原子写在目标目录创建临时文件，并包装为原子文件。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "replace",
+              "fact": "关闭原子文件时先关闭底层文件，再替换目标路径。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 343,
+            "verifiedOccurrences": 343,
+            "uniqueVerifiedLines": 343,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "lazy-atomic-file",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "click.lazy-atomic-file.en.routed.txt",
+        "nativeFile": "click.lazy-atomic-file.en.routed.json",
+        "sha256": "c267d1b1eb80794e8ed3080ae9220c0dce7701ce676f1e6f97826792756ea0a8",
+        "elapsedMs": 1786,
+        "pairs": 71,
+        "tokens": 3736,
+        "score": {
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "register",
+              "fact": "延迟文件参数创建包装对象，并将智能关闭登记到上下文。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "open",
+              "fact": "延迟包装在需要访问时打开底层流，已有打开的流直接复用。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "temporary",
+              "fact": "原子写在目标目录创建临时文件，并包装为原子文件。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "replace",
+              "fact": "关闭原子文件时先关闭底层文件，再替换目标路径。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 354,
+            "verifiedOccurrences": 354,
+            "uniqueVerifiedLines": 354,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "path-validation",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "click.path-validation.zh.routed.txt",
+        "nativeFile": "click.path-validation.zh.routed.json",
+        "sha256": "41cea8acf0be40348d7a816c528f3a1c3ab44af3942eefec962d5b4f880396a1",
+        "elapsedMs": 1874,
+        "pairs": 85,
+        "tokens": 3941,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "missing",
+              "fact": "stat 失败时按是否要求存在决定返回还是报错。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "kind",
+              "fact": "按文件和目录允许标记拒绝不匹配的路径类型。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "permissions",
+              "fact": "按 readable 和 writable 配置检查访问权限。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 404,
+            "verifiedOccurrences": 404,
+            "uniqueVerifiedLines": 404,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "path-validation",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "click.path-validation.en.routed.txt",
+        "nativeFile": "click.path-validation.en.routed.json",
+        "sha256": "68647db516331545928cf992e2144fe92bd5b4cd9284e237b648186a873c20bf",
+        "elapsedMs": 1774,
+        "pairs": 71,
+        "tokens": 3958,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "missing",
+              "fact": "stat 失败时按是否要求存在决定返回还是报错。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "kind",
+              "fact": "按文件和目录允许标记拒绝不匹配的路径类型。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "permissions",
+              "fact": "按 readable 和 writable 配置检查访问权限。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 384,
+            "verifiedOccurrences": 384,
+            "uniqueVerifiedLines": 384,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "choice-normalization",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "click.choice-normalization.zh.routed.txt",
+        "nativeFile": "click.choice-normalization.zh.routed.json",
+        "sha256": "04e6428ff22eaae1a6437c57385980d7dbce0fe19febf26a76f90aa86483dec7",
+        "elapsedMs": 1977,
+        "pairs": 82,
+        "tokens": 1323,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "normalize",
+              "fact": "输入和候选经过上下文规范化，并可同时做 casefold。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "original",
+              "fact": "匹配后返回保存的原始候选值。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "invalid",
+              "fact": "未匹配时通过参数错误报告输入及可选值。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 131,
+            "verifiedOccurrences": 131,
+            "uniqueVerifiedLines": 131,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "choice-normalization",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "click.choice-normalization.en.routed.txt",
+        "nativeFile": "click.choice-normalization.en.routed.json",
+        "sha256": "0f225661bf153d39df047c802668e00857d2cfcc5f05727f0d98baca5ecbecc0",
+        "elapsedMs": 2344,
+        "pairs": 92,
+        "tokens": 3963,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "normalize",
+              "fact": "输入和候选经过上下文规范化，并可同时做 casefold。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "original",
+              "fact": "匹配后返回保存的原始候选值。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "invalid",
+              "fact": "未匹配时通过参数错误报告输入及可选值。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 365,
+            "verifiedOccurrences": 365,
+            "uniqueVerifiedLines": 365,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "command-errors",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "click.command-errors.zh.routed.txt",
+        "nativeFile": "click.command-errors.zh.routed.json",
+        "sha256": "c2e470ffa78d5d91664e364276f66f99d17e8ae163da786233fa96e60ee2e3ce",
+        "elapsedMs": 1685,
+        "pairs": 64,
+        "tokens": 2575,
+        "score": {
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "interrupt",
+              "fact": "EOF 或键盘中断转换为 Abort，独立模式输出终止并退出。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "usage",
+              "fact": "Click 异常在独立模式显示并使用异常退出码，否则向上传播。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "exit",
+              "fact": "显式退出在独立模式退出进程，否则返回退出码。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "fact": "非独立运行返回命令调用结果。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 256,
+            "verifiedOccurrences": 256,
+            "uniqueVerifiedLines": 256,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "command-errors",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "click.command-errors.en.routed.txt",
+        "nativeFile": "click.command-errors.en.routed.json",
+        "sha256": "e09a74103ae5597cafff60534cd9a039e838197896eafc1a2617f51fb7e42d3b",
+        "elapsedMs": 2088,
+        "pairs": 71,
+        "tokens": 3955,
+        "score": {
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "interrupt",
+              "fact": "EOF 或键盘中断转换为 Abort，独立模式输出终止并退出。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "usage",
+              "fact": "Click 异常在独立模式显示并使用异常退出码，否则向上传播。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "exit",
+              "fact": "显式退出在独立模式退出进程，否则返回退出码。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "return",
+              "fact": "非独立运行返回命令调用结果。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 400,
+            "verifiedOccurrences": 400,
+            "uniqueVerifiedLines": 400,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "shell-completion",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "click.shell-completion.zh.routed.txt",
+        "nativeFile": "click.shell-completion.zh.routed.json",
+        "sha256": "b183d1bebdcb1669352a3d583f1b8c5ad81dcb764743d982f58cf07b08c46e83",
+        "elapsedMs": 1584,
+        "pairs": 62,
+        "tokens": 3963,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "instruction",
+              "fact": "按 shell 和指令选择实现，分别处理脚本生成与补全。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "dispatch",
+              "fact": "解析上下文和待补全部分后调用目标的 shell_complete。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "target",
+              "fact": "未完成选项或位置参数优先提供补全，否则交给命令。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 411,
+            "verifiedOccurrences": 411,
+            "uniqueVerifiedLines": 411,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "click",
+        "id": "shell-completion",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "click.shell-completion.en.routed.txt",
+        "nativeFile": "click.shell-completion.en.routed.json",
+        "sha256": "d94683a79b2736bd8fbc04eb9f45877a8174b28a413bb5f4fe1f26287620de33",
+        "elapsedMs": 2218,
+        "pairs": 80,
+        "tokens": 3952,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "instruction",
+              "fact": "按 shell 和指令选择实现，分别处理脚本生成与补全。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "dispatch",
+              "fact": "解析上下文和待补全部分后调用目标的 shell_complete。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "target",
+              "fact": "未完成选项或位置参数优先提供补全，否则交给命令。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 405,
+            "verifiedOccurrences": 405,
+            "uniqueVerifiedLines": 405,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "redirect-security",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "httpx.redirect-security.zh.routed.txt",
+        "nativeFile": "httpx.redirect-security.zh.routed.json",
+        "sha256": "fa4aa78ed8ba77b71b3692e87e6fa25dc7f0d65031b831c0edd9bcc8c6e9b6ad",
+        "elapsedMs": 2481,
+        "pairs": 108,
+        "tokens": 3950,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "limit",
+              "fact": "通过历史长度限制重定向次数并构造下一次请求。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "method-body",
+              "fact": "按重定向状态改写方法，变为 GET 时丢弃请求体。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "credentials",
+              "fact": "跨源且不是直接 HTTP 到 HTTPS 跳转时移除认证头。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 462,
+            "verifiedOccurrences": 462,
+            "uniqueVerifiedLines": 462,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "redirect-security",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "httpx.redirect-security.en.routed.txt",
+        "nativeFile": "httpx.redirect-security.en.routed.json",
+        "sha256": "61aa0ea133d48c116e6bf1b487212c612f780aabbea74d5bd63cc6e8ca7303d8",
+        "elapsedMs": 1804,
+        "pairs": 65,
+        "tokens": 3961,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "limit",
+              "fact": "通过历史长度限制重定向次数并构造下一次请求。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "method-body",
+              "fact": "按重定向状态改写方法，变为 GET 时丢弃请求体。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "credentials",
+              "fact": "跨源且不是直接 HTTP 到 HTTPS 跳转时移除认证头。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 484,
+            "verifiedOccurrences": 484,
+            "uniqueVerifiedLines": 484,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "digest-auth",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "httpx.digest-auth.zh.routed.txt",
+        "nativeFile": "httpx.digest-auth.zh.routed.json",
+        "sha256": "14ee7527477f138e9292c638743e6a0da0a5ea1b0888bccacb48c47ee3936db3",
+        "elapsedMs": 1797,
+        "pairs": 83,
+        "tokens": 3883,
+        "score": {
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "challenge",
+              "fact": "只对带摘要认证挑战的 401 响应继续认证流程。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "parse",
+              "fact": "解析挑战字段并提取 realm、nonce、算法等信息。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "header",
+              "fact": "根据凭据、请求方法与路径和挑战计算摘要并返回认证头。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "cookie-retry",
+              "fact": "将响应 cookie 加入请求并再次提交请求。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 423,
+            "verifiedOccurrences": 423,
+            "uniqueVerifiedLines": 423,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "digest-auth",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "httpx.digest-auth.en.routed.txt",
+        "nativeFile": "httpx.digest-auth.en.routed.json",
+        "sha256": "87008266410c7ce820ba2a5d0175c3da965c95d2e55a18c94f24e8747f82113a",
+        "elapsedMs": 1765,
+        "pairs": 65,
+        "tokens": 3884,
+        "score": {
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "challenge",
+              "fact": "只对带摘要认证挑战的 401 响应继续认证流程。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "parse",
+              "fact": "解析挑战字段并提取 realm、nonce、算法等信息。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "header",
+              "fact": "根据凭据、请求方法与路径和挑战计算摘要并返回认证头。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "cookie-retry",
+              "fact": "将响应 cookie 加入请求并再次提交请求。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 433,
+            "verifiedOccurrences": 433,
+            "uniqueVerifiedLines": 433,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "request-merging",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "httpx.request-merging.zh.routed.txt",
+        "nativeFile": "httpx.request-merging.zh.routed.json",
+        "sha256": "a1132a882f2506fafeb91600ca334cbdd67a8d0038d2d9728f8501abd79fe8ec",
+        "elapsedMs": 2015,
+        "pairs": 77,
+        "tokens": 3961,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "url",
+              "fact": "相对 URL 拼接基础路径，绝对 URL 保持自身。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "headers-cookies",
+              "fact": "复制客户端头和 cookie，再用请求级数据更新。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "query-params",
+              "fact": "复制客户端查询参数并合并请求级参数。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 444,
+            "verifiedOccurrences": 444,
+            "uniqueVerifiedLines": 444,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "request-merging",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "httpx.request-merging.en.routed.txt",
+        "nativeFile": "httpx.request-merging.en.routed.json",
+        "sha256": "ecd956a2e91fc3ba1502afeefadb2d061585b115718f08cad772e31210d36690",
+        "elapsedMs": 2163,
+        "pairs": 85,
+        "tokens": 3951,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "url",
+              "fact": "相对 URL 拼接基础路径，绝对 URL 保持自身。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "headers-cookies",
+              "fact": "复制客户端头和 cookie，再用请求级数据更新。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "query-params",
+              "fact": "复制客户端查询参数并合并请求级参数。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 436,
+            "verifiedOccurrences": 436,
+            "uniqueVerifiedLines": 436,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "response-decoding",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "httpx.response-decoding.zh.routed.txt",
+        "nativeFile": "httpx.response-decoding.zh.routed.json",
+        "sha256": "835f9403beb4b6268c2dd0caa0a809ca9c780ec51177e3e9f6f858fb57e7a98f",
+        "elapsedMs": 1428,
+        "pairs": 78,
+        "tokens": 3909,
+        "score": {
+          "covered": 2,
+          "total": 3,
+          "coverage": 0.6666666666666666,
+          "omission": 0.33333333333333337,
+          "complete": false,
+          "units": [
+            {
+              "id": "decompress",
+              "fact": "根据 Content-Encoding 创建解码器，对原始字节解码并刷新尾部。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "httpx/_models.py",
+                      "missingLines": [
+                        704,
+                        705,
+                        706,
+                        707,
+                        708,
+                        709,
+                        710,
+                        711
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "text",
+              "fact": "按响应字符编码把字节转为文本并刷新剩余内容。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "lines",
+              "fact": "文本经行解码器逐行输出并在结束时刷新。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 377,
+            "verifiedOccurrences": 377,
+            "uniqueVerifiedLines": 377,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "response-decoding",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "httpx.response-decoding.en.routed.txt",
+        "nativeFile": "httpx.response-decoding.en.routed.json",
+        "sha256": "039f454163b179fe52abe1dff0674552ef652a3ffcd60ec4b83444d5ffce3051",
+        "elapsedMs": 1740,
+        "pairs": 80,
+        "tokens": 3902,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "decompress",
+              "fact": "根据 Content-Encoding 创建解码器，对原始字节解码并刷新尾部。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "text",
+              "fact": "按响应字符编码把字节转为文本并刷新剩余内容。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "lines",
+              "fact": "文本经行解码器逐行输出并在结束时刷新。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 379,
+            "verifiedOccurrences": 379,
+            "uniqueVerifiedLines": 379,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "stream-cleanup",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "httpx.stream-cleanup.zh.routed.txt",
+        "nativeFile": "httpx.stream-cleanup.zh.routed.json",
+        "sha256": "349a1ab8df352a8d63434c11aebd1ba407ded3d0b2614fb493a90f3d825afbbe",
+        "elapsedMs": 1598,
+        "pairs": 80,
+        "tokens": 3931,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "context",
+              "fact": "流式发送后 yield 响应，并在 finally 中关闭。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "response-close",
+              "fact": "响应仅关闭一次，标记状态并关闭底层流。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "timing",
+              "fact": "包装流关闭时写入耗时，再关闭其底层流。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 446,
+            "verifiedOccurrences": 446,
+            "uniqueVerifiedLines": 446,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "stream-cleanup",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "httpx.stream-cleanup.en.routed.txt",
+        "nativeFile": "httpx.stream-cleanup.en.routed.json",
+        "sha256": "ed4eaec27acbee62d89562d1c9400ad07bf0ebbd774749c1bc59a4e2eec80029",
+        "elapsedMs": 1839,
+        "pairs": 80,
+        "tokens": 3928,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "context",
+              "fact": "流式发送后 yield 响应，并在 finally 中关闭。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "response-close",
+              "fact": "响应仅关闭一次，标记状态并关闭底层流。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "timing",
+              "fact": "包装流关闭时写入耗时，再关闭其底层流。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 426,
+            "verifiedOccurrences": 426,
+            "uniqueVerifiedLines": 426,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "cookie-persistence",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "httpx.cookie-persistence.zh.routed.txt",
+        "nativeFile": "httpx.cookie-persistence.zh.routed.json",
+        "sha256": "10b1647d3fa58ce43fec54bdaf7b4eef0a1b3e13cc797eee6a074a9e69a7c698",
+        "elapsedMs": 1479,
+        "pairs": 58,
+        "tokens": 1973,
+        "score": {
+          "covered": 2,
+          "total": 3,
+          "coverage": 0.6666666666666666,
+          "omission": 0.33333333333333337,
+          "complete": false,
+          "units": [
+            {
+              "id": "extract",
+              "fact": "客户端收到响应后提取 cookie，交由标准 cookie jar 处理。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "merge",
+              "fact": "构造请求时合并客户端与请求级 cookie，并设置请求头。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "httpx/_client.py",
+                      "missingLines": [
+                        368
+                      ]
+                    },
+                    {
+                      "path": "httpx/_models.py",
+                      "missingLines": [
+                        403,
+                        404
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "policy",
+              "fact": "使用 cookie jar 的 add_cookie_header 为目标请求选择适用 cookie。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 219,
+            "verifiedOccurrences": 219,
+            "uniqueVerifiedLines": 219,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "cookie-persistence",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "httpx.cookie-persistence.en.routed.txt",
+        "nativeFile": "httpx.cookie-persistence.en.routed.json",
+        "sha256": "f00539d536e4485b15cb3655b70f69fd92a47c88b5b098ae6cfc86f820300e5b",
+        "elapsedMs": 1998,
+        "pairs": 80,
+        "tokens": 3956,
+        "score": {
+          "covered": 1,
+          "total": 3,
+          "coverage": 0.3333333333333333,
+          "omission": 0.6666666666666667,
+          "complete": false,
+          "units": [
+            {
+              "id": "extract",
+              "fact": "客户端收到响应后提取 cookie，交由标准 cookie jar 处理。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "merge",
+              "fact": "构造请求时合并客户端与请求级 cookie，并设置请求头。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "httpx/_client.py",
+                      "missingLines": [
+                        368
+                      ]
+                    },
+                    {
+                      "path": "httpx/_models.py",
+                      "missingLines": [
+                        403,
+                        404
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "policy",
+              "fact": "使用 cookie jar 的 add_cookie_header 为目标请求选择适用 cookie。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "httpx/_models.py",
+                      "missingLines": [
+                        1114,
+                        1115
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 428,
+            "verifiedOccurrences": 428,
+            "uniqueVerifiedLines": 428,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "multipart-upload",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "httpx.multipart-upload.zh.routed.txt",
+        "nativeFile": "httpx.multipart-upload.zh.routed.json",
+        "sha256": "4e423cae753eaefee1d41a1ef5b1bb4fe7b1de27a088b30facad9286f4fdac8e",
+        "elapsedMs": 1510,
+        "pairs": 71,
+        "tokens": 3926,
+        "score": {
+          "covered": 2,
+          "total": 4,
+          "coverage": 0.5,
+          "omission": 0.5,
+          "complete": false,
+          "units": [
+            {
+              "id": "boundary",
+              "fact": "为 multipart 生成边界并写入 Content-Type。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "fields",
+              "fact": "表单和文件转换为字段，并按边界逐个序列化。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "httpx/_multipart.py",
+                      "missingLines": [
+                        257
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "file-data",
+              "fact": "文件字段输出头部后，分块读取并输出文件内容。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "httpx/_multipart.py",
+                      "missingLines": [
+                        218
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "length",
+              "fact": "不能提前计算长度时返回分块传输头，否则给出 Content-Length。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 402,
+            "verifiedOccurrences": 402,
+            "uniqueVerifiedLines": 402,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "multipart-upload",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "httpx.multipart-upload.en.routed.txt",
+        "nativeFile": "httpx.multipart-upload.en.routed.json",
+        "sha256": "8fc48ee5b0bf99bdcac3760670808620f1d0c34353bf9efb237aceaf7f5d6819",
+        "elapsedMs": 1399,
+        "pairs": 55,
+        "tokens": 3759,
+        "score": {
+          "covered": 2,
+          "total": 4,
+          "coverage": 0.5,
+          "omission": 0.5,
+          "complete": false,
+          "units": [
+            {
+              "id": "boundary",
+              "fact": "为 multipart 生成边界并写入 Content-Type。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "fields",
+              "fact": "表单和文件转换为字段，并按边界逐个序列化。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "httpx/_multipart.py",
+                      "missingLines": [
+                        257
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "file-data",
+              "fact": "文件字段输出头部后，分块读取并输出文件内容。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "httpx/_multipart.py",
+                      "missingLines": [
+                        218
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "length",
+              "fact": "不能提前计算长度时返回分块传输头，否则给出 Content-Length。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 388,
+            "verifiedOccurrences": 388,
+            "uniqueVerifiedLines": 388,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "timeout-overrides",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "httpx.timeout-overrides.zh.routed.txt",
+        "nativeFile": "httpx.timeout-overrides.zh.routed.json",
+        "sha256": "693874cc21acd720e773b42d677070da9f7d91e8a76726a2b33a2c18a1b453fb",
+        "elapsedMs": 1518,
+        "pairs": 61,
+        "tokens": 3957,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "defaults",
+              "fact": "未单独设置的超时分量继承默认值，独立设置覆盖默认。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "request",
+              "fact": "构建请求时选择客户端超时或请求覆盖值，并保留已提供的 timeout 扩展。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "transport",
+              "fact": "四种超时以字典形式传入请求扩展。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 461,
+            "verifiedOccurrences": 461,
+            "uniqueVerifiedLines": 461,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "timeout-overrides",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "httpx.timeout-overrides.en.routed.txt",
+        "nativeFile": "httpx.timeout-overrides.en.routed.json",
+        "sha256": "c9299b388a2bbfa0ebebc266f21f934446007eb23cea19bdde4b0a383edcac9b",
+        "elapsedMs": 2136,
+        "pairs": 88,
+        "tokens": 3957,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "defaults",
+              "fact": "未单独设置的超时分量继承默认值，独立设置覆盖默认。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "request",
+              "fact": "构建请求时选择客户端超时或请求覆盖值，并保留已提供的 timeout 扩展。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "transport",
+              "fact": "四种超时以字典形式传入请求扩展。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 456,
+            "verifiedOccurrences": 456,
+            "uniqueVerifiedLines": 456,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "proxy-bypass",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "httpx.proxy-bypass.zh.routed.txt",
+        "nativeFile": "httpx.proxy-bypass.zh.routed.json",
+        "sha256": "39859002916da42ce1e95d66ff49a011a308bd3a82bdce8cb457fd5fdc94e45c",
+        "elapsedMs": 2089,
+        "pairs": 92,
+        "tokens": 3964,
+        "score": {
+          "covered": 2,
+          "total": 3,
+          "coverage": 0.6666666666666666,
+          "omission": 0.33333333333333337,
+          "complete": false,
+          "units": [
+            {
+              "id": "environment",
+              "fact": "启用环境代理时读取系统环境代理并构造映射。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "bypass",
+              "fact": "NO_PROXY 全通配符取消代理，其他主机映射到无代理。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "match",
+              "fact": "按 scheme、host 和 port 匹配模式，并选择代理或直接传输。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "httpx/_utils.py",
+                      "missingLines": [
+                        192,
+                        193,
+                        194,
+                        195,
+                        196,
+                        197,
+                        198,
+                        199,
+                        200,
+                        201,
+                        202,
+                        203
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 439,
+            "verifiedOccurrences": 439,
+            "uniqueVerifiedLines": 439,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "proxy-bypass",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "httpx.proxy-bypass.en.routed.txt",
+        "nativeFile": "httpx.proxy-bypass.en.routed.json",
+        "sha256": "273e04e35b396546be740c4bfbb44d6730ea7fe71224f4a6914d89bb7ee787c9",
+        "elapsedMs": 1919,
+        "pairs": 68,
+        "tokens": 3949,
+        "score": {
+          "covered": 2,
+          "total": 3,
+          "coverage": 0.6666666666666666,
+          "omission": 0.33333333333333337,
+          "complete": false,
+          "units": [
+            {
+              "id": "environment",
+              "fact": "启用环境代理时读取系统环境代理并构造映射。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "bypass",
+              "fact": "NO_PROXY 全通配符取消代理，其他主机映射到无代理。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "match",
+              "fact": "按 scheme、host 和 port 匹配模式，并选择代理或直接传输。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "httpx/_utils.py",
+                      "missingLines": [
+                        192,
+                        193,
+                        194,
+                        195,
+                        196,
+                        197,
+                        198,
+                        199,
+                        200,
+                        201,
+                        202,
+                        203
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 431,
+            "verifiedOccurrences": 431,
+            "uniqueVerifiedLines": 431,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "status-errors",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "httpx.status-errors.zh.routed.txt",
+        "nativeFile": "httpx.status-errors.zh.routed.json",
+        "sha256": "f8c69a3ef1f481b98f7731e0dce0a4c83e78d955d02d705508eaa473884c424e",
+        "elapsedMs": 1509,
+        "pairs": 78,
+        "tokens": 3877,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "success",
+              "fact": "成功状态直接返回响应。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "messages",
+              "fact": "重定向可包含目标位置，并按状态类别构建错误消息。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "exception",
+              "fact": "异常保留请求和响应实例。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 464,
+            "verifiedOccurrences": 464,
+            "uniqueVerifiedLines": 464,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "httpx",
+        "id": "status-errors",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "httpx.status-errors.en.routed.txt",
+        "nativeFile": "httpx.status-errors.en.routed.json",
+        "sha256": "8c11630af9df46098a32154bc40d4c0203b7a87b2c3e4690af11eeea533bdf39",
+        "elapsedMs": 2076,
+        "pairs": 94,
+        "tokens": 3922,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "success",
+              "fact": "成功状态直接返回响应。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "messages",
+              "fact": "重定向可包含目标位置，并按状态类别构建错误消息。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "exception",
+              "fact": "异常保留请求和响应实例。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 467,
+            "verifiedOccurrences": 467,
+            "uniqueVerifiedLines": 467,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "safe-parsing",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "zod.safe-parsing.zh.routed.txt",
+        "nativeFile": "zod.safe-parsing.zh.routed.json",
+        "sha256": "bd4cebab1f0b500220f3966be67e15e877b541b3b75199da435bc7c0c98788e4",
+        "elapsedMs": 1626,
+        "pairs": 100,
+        "tokens": 3928,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "context",
+              "fact": "不抛异常解析建立 issues、路径、类型和错误映射上下文，再调用解析。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "result",
+              "fact": "有效结果返回 success/data，无效结果用收集的 issues 构造错误。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "throwing",
+              "fact": "抛异常入口复用不抛异常解析，成功取数据，失败抛出错误。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 448,
+            "verifiedOccurrences": 448,
+            "uniqueVerifiedLines": 448,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "safe-parsing",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "zod.safe-parsing.en.routed.txt",
+        "nativeFile": "zod.safe-parsing.en.routed.json",
+        "sha256": "bae47c23b0fe02fbbaeacae00674f45dc8e3f7c45e40c626c07299f101295478",
+        "elapsedMs": 2025,
+        "pairs": 119,
+        "tokens": 3930,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "context",
+              "fact": "不抛异常解析建立 issues、路径、类型和错误映射上下文，再调用解析。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "result",
+              "fact": "有效结果返回 success/data，无效结果用收集的 issues 构造错误。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "throwing",
+              "fact": "抛异常入口复用不抛异常解析，成功取数据，失败抛出错误。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 460,
+            "verifiedOccurrences": 460,
+            "uniqueVerifiedLines": 460,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "unknown-properties",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "zod.unknown-properties.zh.routed.txt",
+        "nativeFile": "zod.unknown-properties.zh.routed.json",
+        "sha256": "b9a7f62c7a929d09700524ce70490d0c0d373b917accf5ea07b8b4d2c99e31ac",
+        "elapsedMs": 3140,
+        "pairs": 240,
+        "tokens": 3893,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "strip",
+              "fact": "strip 模式不收集额外键，解析时不为额外键添加结果。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "passthrough",
+              "fact": "passthrough 将额外键及原始值加入结果对。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "strict",
+              "fact": "strict 将额外键记录为 unrecognized_keys 并标记 dirty。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 410,
+            "verifiedOccurrences": 410,
+            "uniqueVerifiedLines": 410,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "unknown-properties",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "zod.unknown-properties.en.routed.txt",
+        "nativeFile": "zod.unknown-properties.en.routed.json",
+        "sha256": "bc5b31d9f8c8bbbff7914a4b3c5a8c11cb6b4c8357d04ea79a76922b2cb342e9",
+        "elapsedMs": 1312,
+        "pairs": 80,
+        "tokens": 2069,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "strip",
+              "fact": "strip 模式不收集额外键，解析时不为额外键添加结果。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "passthrough",
+              "fact": "passthrough 将额外键及原始值加入结果对。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "strict",
+              "fact": "strict 将额外键记录为 unrecognized_keys 并标记 dirty。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 213,
+            "verifiedOccurrences": 213,
+            "uniqueVerifiedLines": 213,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "async-refinement",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "zod.async-refinement.zh.routed.txt",
+        "nativeFile": "zod.async-refinement.zh.routed.json",
+        "sha256": "4ac3148ed143270f0999273d407824aa7b8ad401b00cd2dfe2ccb19ac8d0d723",
+        "elapsedMs": 1519,
+        "pairs": 80,
+        "tokens": 3944,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "execute",
+              "fact": "执行 refinement，异步模式将其结果包装为 Promise。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "sync-error",
+              "fact": "同步模式收到 Promise 时明确报错。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "await",
+              "fact": "异步先解析内部模式，再等待 refinement，保留解析状态。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 455,
+            "verifiedOccurrences": 455,
+            "uniqueVerifiedLines": 455,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "async-refinement",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "zod.async-refinement.en.routed.txt",
+        "nativeFile": "zod.async-refinement.en.routed.json",
+        "sha256": "94abffc0f4c16e2dcecd63a697b102cedcb5d3521e2d7de6257d883ea6098f40",
+        "elapsedMs": 1478,
+        "pairs": 80,
+        "tokens": 3927,
+        "score": {
+          "covered": 2,
+          "total": 3,
+          "coverage": 0.6666666666666666,
+          "omission": 0.33333333333333337,
+          "complete": false,
+          "units": [
+            {
+              "id": "execute",
+              "fact": "执行 refinement，异步模式将其结果包装为 Promise。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "sync-error",
+              "fact": "同步模式收到 Promise 时明确报错。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "await",
+              "fact": "异步先解析内部模式，再等待 refinement，保留解析状态。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "src/types.ts",
+                      "missingLines": [
+                        4706,
+                        4707,
+                        4708,
+                        4709,
+                        4710,
+                        4711,
+                        4712,
+                        4713,
+                        4714,
+                        4715
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 439,
+            "verifiedOccurrences": 439,
+            "uniqueVerifiedLines": 439,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "tagged-union",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "zod.tagged-union.zh.routed.txt",
+        "nativeFile": "zod.tagged-union.zh.routed.json",
+        "sha256": "aa0a4f6a32fc2d716098644e1c688b08278e13cac89ee4b55934a5811ed8b375",
+        "elapsedMs": 1538,
+        "pairs": 104,
+        "tokens": 3891,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "mapping",
+              "fact": "从各分支提取标签，拒绝重复值并建立标签到分支的映射。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "select",
+              "fact": "读取输入标签并查找分支，再按同步或异步模式解析。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "invalid",
+              "fact": "未找到分支时报告有效标签列表和标签字段路径。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 416,
+            "verifiedOccurrences": 416,
+            "uniqueVerifiedLines": 416,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "tagged-union",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "zod.tagged-union.en.routed.txt",
+        "nativeFile": "zod.tagged-union.en.routed.json",
+        "sha256": "27a397b5ec571211d993ea7a1c6633a2d4eb96905192f7bbd969e814b6e9803c",
+        "elapsedMs": 1386,
+        "pairs": 80,
+        "tokens": 2146,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "mapping",
+              "fact": "从各分支提取标签，拒绝重复值并建立标签到分支的映射。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "select",
+              "fact": "读取输入标签并查找分支，再按同步或异步模式解析。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "invalid",
+              "fact": "未找到分支时报告有效标签列表和标签字段路径。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 237,
+            "verifiedOccurrences": 237,
+            "uniqueVerifiedLines": 237,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "union-failures",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "zod.union-failures.zh.routed.txt",
+        "nativeFile": "zod.union-failures.zh.routed.json",
+        "sha256": "c51d03ed7214a4c23941f4d2b1eb758580750f6d3117d8c37e464190e4a7c3a0",
+        "elapsedMs": 1459,
+        "pairs": 85,
+        "tokens": 3873,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "success",
+              "fact": "按分支尝试时优先返回第一个 valid 结果。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                },
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "dirty",
+              "fact": "没有 valid 时使用 dirty 分支并合并其 issues。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                },
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "errors",
+              "fact": "全部无效时按各分支 issues 构造联合类型错误。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                },
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 413,
+            "verifiedOccurrences": 413,
+            "uniqueVerifiedLines": 413,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "union-failures",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "zod.union-failures.en.routed.txt",
+        "nativeFile": "zod.union-failures.en.routed.json",
+        "sha256": "5aa0c8fe22587243f5b87cb8db7891bd9acb381eea933b7bebf554703a625525",
+        "elapsedMs": 1697,
+        "pairs": 95,
+        "tokens": 3850,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "success",
+              "fact": "按分支尝试时优先返回第一个 valid 结果。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                },
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "dirty",
+              "fact": "没有 valid 时使用 dirty 分支并合并其 issues。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                },
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "errors",
+              "fact": "全部无效时按各分支 issues 构造联合类型错误。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                },
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 415,
+            "verifiedOccurrences": 415,
+            "uniqueVerifiedLines": 415,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "missing-null-default",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "zod.missing-null-default.zh.routed.txt",
+        "nativeFile": "zod.missing-null-default.zh.routed.json",
+        "sha256": "bd9565e2000a830fd2a54e4655d2fe3b80e7127c042ac291bcfbf250485de74d",
+        "elapsedMs": 1572,
+        "pairs": 83,
+        "tokens": 3905,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "optional",
+              "fact": "undefined 被可选包装直接接受，否则调用内部解析。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "nullable",
+              "fact": "null 被可空包装直接接受，否则调用内部解析。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "default",
+              "fact": "缺失时求默认值，然后将替换后的值继续交给内部模式。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 417,
+            "verifiedOccurrences": 417,
+            "uniqueVerifiedLines": 417,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "missing-null-default",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "zod.missing-null-default.en.routed.txt",
+        "nativeFile": "zod.missing-null-default.en.routed.json",
+        "sha256": "e2eb10127b29839d34e74d9224336389b146bf9e4bdfd530cdded20472943624",
+        "elapsedMs": 1436,
+        "pairs": 80,
+        "tokens": 3876,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "optional",
+              "fact": "undefined 被可选包装直接接受，否则调用内部解析。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "nullable",
+              "fact": "null 被可空包装直接接受，否则调用内部解析。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "default",
+              "fact": "缺失时求默认值，然后将替换后的值继续交给内部模式。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 395,
+            "verifiedOccurrences": 395,
+            "uniqueVerifiedLines": 395,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "preprocess-transform",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "zod.preprocess-transform.zh.routed.txt",
+        "nativeFile": "zod.preprocess-transform.zh.routed.json",
+        "sha256": "57b995e04dcd37a2e2d92e6caf685dd575d75315fe454267a306c084ec584c86",
+        "elapsedMs": 1438,
+        "pairs": 86,
+        "tokens": 3918,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "preprocess",
+              "fact": "预处理先对原始输入运行转换，再解析处理后的值。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                },
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "status",
+              "fact": "自定义 issue 可以中止或标脏，预处理和内部解析的状态继续向外传播。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                },
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "transform",
+              "fact": "转换阶段先完成内部解析，仅对有效结果执行转换。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                },
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 443,
+            "verifiedOccurrences": 443,
+            "uniqueVerifiedLines": 443,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "preprocess-transform",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "zod.preprocess-transform.en.routed.txt",
+        "nativeFile": "zod.preprocess-transform.en.routed.json",
+        "sha256": "346b97a6a097388954da03dbcdf423d00d112a09f0d8330a2d00c72c0fe845f6",
+        "elapsedMs": 1820,
+        "pairs": 102,
+        "tokens": 3915,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "preprocess",
+              "fact": "预处理先对原始输入运行转换，再解析处理后的值。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                },
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "status",
+              "fact": "自定义 issue 可以中止或标脏，预处理和内部解析的状态继续向外传播。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                },
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "transform",
+              "fact": "转换阶段先完成内部解析，仅对有效结果执行转换。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                },
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 431,
+            "verifiedOccurrences": 431,
+            "uniqueVerifiedLines": 431,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "nested-errors",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "zod.nested-errors.zh.routed.txt",
+        "nativeFile": "zod.nested-errors.zh.routed.json",
+        "sha256": "0e147aff495247b0e48a6b9b9efd368c4ce05f6dd3d5b3a6342ac653a1348a65",
+        "elapsedMs": 1398,
+        "pairs": 71,
+        "tokens": 3754,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "path",
+              "fact": "构造 issue 时合并上下文路径和自定义路径，再存入公共问题列表。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "tree",
+              "fact": "错误格式化沿路径建立嵌套节点并在末端添加错误。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "flat",
+              "fact": "扁平格式按路径首元素分组，无路径错误进入表单错误列表。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 370,
+            "verifiedOccurrences": 370,
+            "uniqueVerifiedLines": 370,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "nested-errors",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "zod.nested-errors.en.routed.txt",
+        "nativeFile": "zod.nested-errors.en.routed.json",
+        "sha256": "33cdb212e8bb579f4ded873f195bb8863080f72365afded61a136c52265c99de",
+        "elapsedMs": 1727,
+        "pairs": 82,
+        "tokens": 3681,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "path",
+              "fact": "构造 issue 时合并上下文路径和自定义路径，再存入公共问题列表。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "tree",
+              "fact": "错误格式化沿路径建立嵌套节点并在末端添加错误。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "flat",
+              "fact": "扁平格式按路径首元素分组，无路径错误进入表单错误列表。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 388,
+            "verifiedOccurrences": 388,
+            "uniqueVerifiedLines": 388,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "partial-required",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "zod.partial-required.zh.routed.txt",
+        "nativeFile": "zod.partial-required.zh.routed.json",
+        "sha256": "5a4607ddf33a32de5e9fe033bc1d30e0999f39c2de32bd5761fb99d27e5f63a0",
+        "elapsedMs": 1564,
+        "pairs": 80,
+        "tokens": 3907,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "partial",
+              "fact": "按掩码保留未选字段，选中的字段添加 optional 包装。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "required",
+              "fact": "按掩码选择字段并循环移除 optional 包装。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "deep",
+              "fact": "嵌套对象字段递归可选化，数组递归处理元素类型。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 369,
+            "verifiedOccurrences": 369,
+            "uniqueVerifiedLines": 369,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "partial-required",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "zod.partial-required.en.routed.txt",
+        "nativeFile": "zod.partial-required.en.routed.json",
+        "sha256": "7b103ac8e3620c52770ae8c734b3e18c34cd6b644d2dc2b47e096fc4e2736ebc",
+        "elapsedMs": 1358,
+        "pairs": 72,
+        "tokens": 3923,
+        "score": {
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "partial",
+              "fact": "按掩码保留未选字段，选中的字段添加 optional 包装。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "required",
+              "fact": "按掩码选择字段并循环移除 optional 包装。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "deep",
+              "fact": "嵌套对象字段递归可选化，数组递归处理元素类型。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 363,
+            "verifiedOccurrences": 363,
+            "uniqueVerifiedLines": 363,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "intersection-merging",
+        "language": "zh",
+        "variant": "routed",
+        "rawFile": "zod.intersection-merging.zh.routed.txt",
+        "nativeFile": "zod.intersection-merging.zh.routed.json",
+        "sha256": "8e9cdd845746334b10b806bb2fb6b6b063e46dbd80451d17e28a3fbde9b8df0f",
+        "elapsedMs": 1765,
+        "pairs": 114,
+        "tokens": 3927,
+        "score": {
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "objects",
+              "fact": "两侧对象的公共字段递归合并，冲突会返回无效。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "arrays",
+              "fact": "数组要求长度一致，并逐项递归合并。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "status",
+              "fact": "任一侧中止则失败，dirty 状态传播到最终结果。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "conflict",
+              "fact": "两侧值合并失败时报告交叉类型错误。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 393,
+            "verifiedOccurrences": 393,
+            "uniqueVerifiedLines": 393,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      },
+      {
+        "dataset": "zod",
+        "id": "intersection-merging",
+        "language": "en",
+        "variant": "routed",
+        "rawFile": "zod.intersection-merging.en.routed.txt",
+        "nativeFile": "zod.intersection-merging.en.routed.json",
+        "sha256": "1710b60d4b63a4d97ec173352828142211aa944f9d3968bcc4f3e2a50b777f8b",
+        "elapsedMs": 1827,
+        "pairs": 113,
+        "tokens": 3900,
+        "score": {
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "objects",
+              "fact": "两侧对象的公共字段递归合并，冲突会返回无效。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "arrays",
+              "fact": "数组要求长度一致，并逐项递归合并。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "status",
+              "fact": "任一侧中止则失败，dirty 状态传播到最终结果。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "conflict",
+              "fact": "两侧值合并失败时报告交叉类型错误。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 405,
+            "verifiedOccurrences": 405,
+            "uniqueVerifiedLines": 405,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      }
+    ],
+    "validation": {
+      "frozenInputs": true,
+      "rawHashes": true,
+      "queryIdentity": true,
+      "exactSourceLines": true,
+      "budgets": true
+    }
+  }
+}

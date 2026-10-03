@@ -101,6 +101,15 @@ class BatchedEngine(Engine):
                           'novelGraphCandidates': len(novel),
                           'support': {uid: support.get(uid, 0) for uid in graph}}
 
+    def scoring_policy(self, cache, queries, second_wave):
+        return {}
+
+    def scoring_pairs(self, requested, queries, dense, policy):
+        return requested
+
+    def pair_score(self, cache, query, uid, queries, dense, policy):
+        return cache[(query, uid)]
+
     def search(self, plan, budget=4000):
         start = time.monotonic()
         facets = plan['facets']
@@ -127,7 +136,9 @@ class BatchedEngine(Engine):
 
         def rank_wave(jobs):
             requested = [(query,uid) for query,ids in jobs for uid in ids]
-            needed = list(dict.fromkeys(pair for pair in requested if pair not in pair_cache))
+            policy = self.scoring_policy(pair_cache, queries, bool(waves))
+            scoring = self.scoring_pairs(requested, queries, dense, policy)
+            needed = list(dict.fromkeys(pair for pair in scoring if pair not in pair_cache))
             if needed:
                 query_list = list(dict.fromkeys(q for q,uid in needed))
                 ids = list(dict.fromkeys(uid for q,uid in needed))
@@ -151,8 +162,8 @@ class BatchedEngine(Engine):
                     'modelMs':data.get('meta',{}).get('elapsed_ms'),'pairs':len(needed),
                     'reusedPairs':len(requested)-len(needed),'inputTokens':data.get('usage',{}).get('input_tokens'),
                     'maxBatchSize':data.get('meta',{}).get('max_batch_size'),
-                    'batchTokenBudget':data.get('meta',{}).get('batch_token_budget')})
-            return [{uid:pair_cache[(query,uid)] for uid in ids} for query,ids in jobs]
+                    'batchTokenBudget':data.get('meta',{}).get('batch_token_budget'), 'scoringPolicy': policy})
+            return [{uid:self.pair_score(pair_cache, query, uid, queries, dense, policy) for uid in ids} for query,ids in jobs]
 
         facet_scores = rank_wave(list(zip(queries,pools)))
         seeds = set()
@@ -168,7 +179,7 @@ class BatchedEngine(Engine):
         retained, retention = self.retain_candidates(ranked, expanded, facet_scores, fused)
         expanded.update(retention['graph'])
         candidates.update(retention['graph'])
-        jobs = [(plan['intent'],retained)] + [(facet['question'],[uid for uid in retained if uid not in facet_scores[col]]) for col,facet in enumerate(facets,1)]
+        jobs = [(plan['intent'],retained)] + [(facet['question'],retained) for facet in facets]
         outputs = rank_wave(jobs)
         overall = outputs[0]
         for col,scores in enumerate(outputs[1:],1):
@@ -192,7 +203,7 @@ class BatchedEngine(Engine):
             if not choices:
                 break
             gain,uid,values,bundle,cost = max(choices,key=lambda item:(item[0],-item[1]))
-            if gain<.015:
+            if gain<getattr(self, 'min_gain', .015):
                 break
             available.difference_update(bundle);selected.extend(bundle);selected_set.update(bundle)
             spent+=cost;covered+=values
@@ -203,7 +214,7 @@ class BatchedEngine(Engine):
                     'selectionAnchor':uid,'contextOnly':item not in retained})
         raw = '\n'.join(self.render(self.units[uid]) for uid in selected)
         end = time.monotonic()
-        return raw,{'version':VERSION,'elapsedMs':round((end-start)*1000),'tokens':len(self.encoding.encode(raw)),
+        return raw,{'version':getattr(self, 'version', VERSION),'elapsedMs':round((end-start)*1000),'tokens':len(self.encoding.encode(raw)),
             'candidateCount':len(candidates),'rerankedCount':len(retained),'expandedCount':len(expanded),
             'retention':retention,
             'modelRequests':{'embedding':1,'rerank':len(waves)},'queryCache':False,'pairCacheScope':'one-search-only',
