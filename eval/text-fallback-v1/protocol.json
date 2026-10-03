@@ -1,0 +1,16 @@
+{
+  "kind": "source-derived mixed-language smoke validation; not an independent benchmark",
+  "primaryBudgetTokens": 4000,
+  "queries": 16,
+  "independentTasks": 8,
+  "maxRerankedCandidates": 80,
+  "maxEmbeddingCallsPerQuery": 1,
+  "maxRerankerCallsPerQuery": 2,
+  "queryCache": false,
+  "gold": "Nonblank source spans frozen before querying; references stay local",
+  "timing": "Remote worker internal elapsed time; not comparable with prior Mac client latency",
+  "models": {
+    "embedding": "Qwen3-Embedding-4B",
+    "reranker": "Qwen3-Reranker-4B"
+  }
+}

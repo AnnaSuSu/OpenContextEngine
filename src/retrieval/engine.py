@@ -59,8 +59,10 @@ class Engine:
 
     @staticmethod
     def render(u):
+        # Text units preserve Unicode separators inside a physical source line.
+        lines = u['text'].split('\n') if u.get('language') == 'text' else u['text'].splitlines()
         return f"Path: {u['path']}\n" + '\n'.join(f'{i}\t{line}' for i, line in
-            enumerate(u['text'].splitlines(), u['start'])) + '\n'
+            enumerate(lines, u['start'])) + '\n'
 
     def lexical(self, query):
         scores = np.zeros(len(self.units))
@@ -166,7 +168,10 @@ def build_index(root, snapshot, state, embed_url):
         return json.loads((state / 'units.json').read_text()), np.load(state / 'vectors.npy'), {
             **json.loads(metadata.read_text()), 'cacheHit': True}
     start = time.monotonic()
-    units = source_units(root, snapshot['files'], language_options=snapshot.get('languageOptions'))
+    selection = {}
+    units = source_units(root, snapshot['files'], language_options=snapshot.get('languageOptions'), report=selection)
+    if not units:
+        raise ValueError('No indexable nonempty source text in snapshot')
     vectors = []
     for offset in range(0, len(units), 64):
         result = post(embed_url + '/embeddings', {'model': 'Qwen3-Embedding-4B',
@@ -182,6 +187,7 @@ def build_index(root, snapshot, state, embed_url):
     np.save(state / 'vectors.npy', matrix)
     summary = {'identity': identity, 'version': VERSION, 'units': len(units),
         'files': len(snapshot['files']), 'nonemptyFiles': len({u['path'] for u in units}),
+        'selection': selection,
         'languageAdapters': adapters, 'languageUnits': dict(Counter(u['language'] for u in units)),
         'resolvedEdges': sum(len(u['edges']) for u in units), 'indexingMs': round((time.monotonic()-start)*1000), 'cacheHit': False}
     metadata.write_text(json.dumps(summary, indent=2))

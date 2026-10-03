@@ -1,0 +1,68 @@
+{
+  "cases": [
+    {
+      "id": "boolean-flags",
+      "sourceLanguage": "go",
+      "queries": {
+        "zh": "找到命令行布尔选项解析代码：未提供等号时怎样使用默认值，显式真假值和无效值怎样处理？",
+        "en": "Find command-line boolean option parsing: how are defaults used without an equals sign, and how are explicit true/false and invalid values handled?"
+      }
+    },
+    {
+      "id": "watch-lifetime",
+      "sourceLanguage": "go",
+      "queries": {
+        "zh": "找到命令行启动文件监视的代码：如何先校验构建选项，以及为什么进程不会马上退出？",
+        "en": "Find how the command-line starts file watching: how are build options validated first, and why does the process stay alive?"
+      }
+    },
+    {
+      "id": "worker-input-close",
+      "sourceLanguage": "javascript",
+      "queries": {
+        "zh": "找到打包 WebAssembly worker 时向子进程传入生成代码的脚本：怎样发送输入并显式关闭标准输入以避免挂起？",
+        "en": "Find the script that bundles a WebAssembly worker by sending generated code to a child process: how is input sent and standard input explicitly closed to avoid hanging?"
+      }
+    },
+    {
+      "id": "optional-platforms",
+      "sourceLanguage": "javascript",
+      "queries": {
+        "zh": "找到发布 npm 包时生成可选平台依赖的脚本：如何汇总不同操作系统的包名并统一设置版本，再写回包配置？",
+        "en": "Find the script that generates optional platform dependencies for an npm release: how are package names across operating systems collected, assigned a common version, and written back?"
+      }
+    },
+    {
+      "id": "sync-worker-reuse",
+      "sourceLanguage": "typescript",
+      "queries": {
+        "zh": "找到 Node 同步构建入口：怎样复用长期存活的 worker 线程降低启动开销，不可用时走哪条同步路径？",
+        "en": "Find the Node synchronous build entry point: how is a long-lived worker thread reused to reduce startup overhead, and what synchronous path is used otherwise?"
+      }
+    },
+    {
+      "id": "release-validation",
+      "sourceLanguage": "yaml",
+      "queries": {
+        "zh": "找到发布构建验证的工作流配置：哪些事件触发它，在哪个操作系统和 Go 版本上运行什么验证命令？",
+        "en": "Find the release-build validation workflow: which events trigger it, and on which OS and Go version does it run which validation command?"
+      }
+    },
+    {
+      "id": "test-targets",
+      "sourceLanguage": "make",
+      "queries": {
+        "zh": "找到构建配置中开发测试和完整发布测试的入口：它们如何并发执行，完整测试额外包含哪些类型的检查？",
+        "en": "Find the build configuration entries for development tests and full release tests: how do they execute concurrently, and which additional kinds of checks are in the full suite?"
+      }
+    },
+    {
+      "id": "binary-download",
+      "sourceLanguage": "shell",
+      "queries": {
+        "zh": "找到安装脚本：怎样根据操作系统和 CPU 选择可执行文件下载地址，处理不支持的平台，并解压到当前目录？",
+        "en": "Find the installation script: how does it choose a binary download URL by OS and CPU, handle unsupported platforms, and extract the executable into the current directory?"
+      }
+    }
+  ]
+}

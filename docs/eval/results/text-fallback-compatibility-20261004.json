@@ -1,0 +1,52 @@
+{
+  "kind": "structural compatibility and deterministic output replay; not new model queries",
+  "repositories": [
+    {
+      "repository": "click",
+      "files": 16,
+      "units": 598,
+      "allFieldsUnchanged": true,
+      "previousUnitsSha256": "68135fa7c5b50393e09101584aca9e369913b7e8caaed5e331a64eea777abd07",
+      "replayedOutputs": 20,
+      "selection": {
+        "inputFiles": 16,
+        "acceptedFiles": 16,
+        "excluded": [],
+        "fallbackFiles": 0
+      },
+      "elapsedMs": 74
+    },
+    {
+      "repository": "httpx",
+      "files": 23,
+      "units": 583,
+      "allFieldsUnchanged": true,
+      "previousUnitsSha256": "56397679888fba36e2d9c11554c2c5159147680848158d48ba24ee0d4b7fbe94",
+      "replayedOutputs": 20,
+      "selection": {
+        "inputFiles": 23,
+        "acceptedFiles": 23,
+        "excluded": [],
+        "fallbackFiles": 0
+      },
+      "elapsedMs": 65
+    },
+    {
+      "repository": "zod",
+      "files": 13,
+      "units": 1152,
+      "allFieldsUnchanged": true,
+      "previousUnitsSha256": "d8d524bd1bff8162756686009a1a48041139785aabb2a0e0c76eb5f0cf80cc25",
+      "replayedOutputs": 20,
+      "selection": {
+        "inputFiles": 13,
+        "acceptedFiles": 13,
+        "excluded": [],
+        "fallbackFiles": 0
+      },
+      "elapsedMs": 418
+    }
+  ],
+  "units": 2333,
+  "replayedOutputs": 60
+}

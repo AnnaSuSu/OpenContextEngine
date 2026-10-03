@@ -33,6 +33,7 @@ def serve(config):
         'sourceSha256':{name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in
             ['src/retrieval/engine.py','src/retrieval/batched.py','scripts/retrieval-server.py',
              'src/retrieval/languages/__init__.py','src/retrieval/languages/schema.py',
+             'src/retrieval/languages/text.py','src/retrieval/languages/files.py',
              'src/retrieval/languages/python.py','src/retrieval/languages/typescript.py',
              'src/retrieval/languages/typescript.mjs','package.json','package-lock.json']}}
     model_base = config['reranker']['baseUrl'].removesuffix('/v1')

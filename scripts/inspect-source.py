@@ -20,7 +20,8 @@ def main():
     started = time.monotonic()
     raw = args.snapshot.read_bytes()
     snapshot = json.loads(raw)
-    units = source_units(args.root, snapshot['files'], language_options=snapshot.get('languageOptions'))
+    selection = {}
+    units = source_units(args.root, snapshot['files'], language_options=snapshot.get('languageOptions'), report=selection)
     summary = {'files': len(snapshot['files']), 'units': len(units),
                'languages': dict(Counter(u['language'] for u in units)),
                'edges': sum(len(u['edges']) for u in units),
@@ -29,6 +30,7 @@ def main():
                'elapsedMs': round((time.monotonic()-started)*1000)}
     output = {'schemaVersion': 2, 'kind': 'source-structure-inspection',
               'snapshotSha256': hashlib.sha256(raw).hexdigest(), 'summary': summary,
+              'selection': selection,
               'languageAdapters': adapter_manifest(snapshot['files'], snapshot.get('languageOptions')),
               'units': units}
     args.output.parent.mkdir(parents=True, exist_ok=True)

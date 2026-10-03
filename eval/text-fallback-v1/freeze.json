@@ -1,0 +1,8 @@
+{
+  "sha256": {
+    "snapshot.json": "c55b73abdbeee00298301eb4bb764aa15e43f182ed8f97fa4b5bea22d7f24173",
+    "queries.json": "2f4feae5d34919a6648599cd364b3b10e427e6e26fdfac977c67457266751b8f",
+    "answers.v1.json": "8225299dddad09ad8e4b2c69e55efe54767e511f89698c1de3127f7004c9f6ce",
+    "protocol.json": "7e77ee5f54d37d63d5781a88260d65f8c89232014a2979db92993a324bd8f344"
+  }
+}

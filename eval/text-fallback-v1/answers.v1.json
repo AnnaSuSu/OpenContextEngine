@@ -1,0 +1,378 @@
+{
+  "answers": [
+    {
+      "id": "boolean-flags",
+      "units": [
+        {
+          "id": "default",
+          "fact": "Use the default when no equals sign is supplied",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "pkg/cli/cli_impl.go",
+                  "startLine": 66,
+                  "endLine": 70,
+                  "quote": "func parseBoolFlag(arg string, defaultValue bool) (bool, *cli_helpers.ErrorWithNote) {\n\tequals := strings.IndexByte(arg, '=')\n\tif equals == -1 {\n\t\treturn defaultValue, nil\n\t}",
+                  "sha256": "84aee2265378f4bf7d656d939c25e824f280f7c01de28db55e3c6a31ac981e96"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "values",
+          "fact": "Accept true and false and explain invalid values",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "pkg/cli/cli_impl.go",
+                  "startLine": 71,
+                  "endLine": 81,
+                  "quote": "\tvalue := arg[equals+1:]\n\tswitch value {\n\tcase \"false\":\n\t\treturn false, nil\n\tcase \"true\":\n\t\treturn true, nil\n\t}\n\treturn false, cli_helpers.MakeErrorWithNote(\n\t\tfmt.Sprintf(\"Invalid value %q in %q\", value, arg),\n\t\t\"Valid values are \\\"true\\\" or \\\"false\\\".\",\n\t)",
+                  "sha256": "2058c0a4d9bd4328ad7ab6e8e30314f2625c99522e5f7dcc15c5271ec3447d41"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "watch-lifetime",
+      "units": [
+        {
+          "id": "validation",
+          "fact": "Create a context and reject invalid build options",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "pkg/cli/cli_impl.go",
+                  "startLine": 1323,
+                  "endLine": 1324,
+                  "quote": "\t\tif extras.watch {\n\t\t\tctx, err := api.Context(*buildOptions)",
+                  "sha256": "5e2d0882eac4a8d6dbbceb9644a08892240c67accc94989386b7e2944328ad95"
+                },
+                {
+                  "path": "pkg/cli/cli_impl.go",
+                  "startLine": 1326,
+                  "endLine": 1329,
+                  "quote": "\t\t\t// Only start watching if the build options passed validation\n\t\t\tif err != nil {\n\t\t\t\treturn 1\n\t\t\t}",
+                  "sha256": "b3794c64c53c5afe3f3e6f5841d73554d1efc2abbbda7f8441dcb0e0042f93d8"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "lifetime",
+          "fact": "Start watching and block instead of exiting",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "pkg/cli/cli_impl.go",
+                  "startLine": 1331,
+                  "endLine": 1331,
+                  "quote": "\t\t\tctx.Watch(api.WatchOptions{})",
+                  "sha256": "b11dafa8a5cf4a7fca38f49ea3ecb468765af853474326041643b017a79d4382"
+                },
+                {
+                  "path": "pkg/cli/cli_impl.go",
+                  "startLine": 1333,
+                  "endLine": 1334,
+                  "quote": "\t\t\t// Do not exit if we're in watch mode\n\t\t\t<-make(chan struct{})",
+                  "sha256": "7bf5cd56044af3ff0e6b9cbb583f81e14277cae837dad8f6f431b81b293f2788"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "worker-input-close",
+      "units": [
+        {
+          "id": "process",
+          "fact": "Start the asynchronous compiler process and handle completion",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "scripts/esbuild.js",
+                  "startLine": 113,
+                  "endLine": 117,
+                  "quote": "  const wasmExecAndWorker = (await new Promise((resolve, reject) => {\n    const proc = childProcess.execFile(esbuildPath, args, { cwd: repoDir }, (err, stdout) => {\n      if (err) reject(err)\n      else resolve(stdout)\n    })",
+                  "sha256": "fcaa64b47fd7d88049c4cc74ff4e115a5bc8ecd0e4e8c2182b4f9fb697fef7f5"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "close",
+          "fact": "Write the generated input and close stdin",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "scripts/esbuild.js",
+                  "startLine": 118,
+                  "endLine": 120,
+                  "quote": "    proc.stdin.write(input)\n    proc.stdin.end()\n  })).toString().trim()",
+                  "sha256": "96bbf6cb52206c33a0d79b3ed38a21a22ae51c175de8ccc1dff8d12450c437e4"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "optional-platforms",
+      "units": [
+        {
+          "id": "platforms",
+          "fact": "Collect and sort platform packages with the release version",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "scripts/esbuild.js",
+                  "startLine": 76,
+                  "endLine": 80,
+                  "quote": "  const optionalDependencies = Object.fromEntries(Object.values({\n    ...platforms.exports.knownWindowsPackages,\n    ...platforms.exports.knownUnixlikePackages,\n    ...platforms.exports.knownWebAssemblyFallbackPackages,\n  }).sort().map(x => [x, version]))",
+                  "sha256": "fdc1387d535a9e5c403332fcff8f5361c16c9b343d7c49855524ecec07597ded"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "write",
+          "fact": "Write optional dependencies to package configuration",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "scripts/esbuild.js",
+                  "startLine": 83,
+                  "endLine": 86,
+                  "quote": "  const pjPath = path.join(npmDir, 'package.json')\n  const package_json = JSON.parse(fs.readFileSync(pjPath, 'utf8'))\n  package_json.optionalDependencies = optionalDependencies\n  fs.writeFileSync(pjPath, JSON.stringify(package_json, null, 2) + '\\n')",
+                  "sha256": "aa2f0ee4fa6b1f4f736683a0817336dec2f3b9b4f193d12d6bc99388b69c72a8"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sync-worker-reuse",
+      "units": [
+        {
+          "id": "worker",
+          "fact": "Reuse or start the worker service outside the internal worker",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "lib/npm/node.ts",
+                  "startLine": 148,
+                  "endLine": 153,
+                  "quote": "export let buildSync: typeof types.buildSync = (options: types.BuildOptions) => {\n  // Try using a long-lived worker thread to avoid repeated start-up overhead\n  if (worker_threads && !isInternalWorkerThread) {\n    if (!workerThreadService) workerThreadService = startWorkerThreadService(worker_threads)\n    return workerThreadService.buildSync(options)\n  }",
+                  "sha256": "9b6d58dc2eaa6a349fc0bc9f3048aae48679d9ccb051de171160cec21697861e"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "fallback",
+          "fact": "Run the synchronous service and return its result",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "lib/npm/node.ts",
+                  "startLine": 155,
+                  "endLine": 164,
+                  "quote": "  let result: types.BuildResult\n  runServiceSync(service => service.buildOrContext({\n    callName: 'buildSync',\n    refs: null,\n    options,\n    isTTY: isTTY(),\n    defaultWD,\n    callback: (err, res) => { if (err) throw err; result = res as types.BuildResult },\n  }))\n  return result!",
+                  "sha256": "99a6a1e95f0673ec2576329098a74c3007a21e76596186f7f70af7592aa2bd55"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "release-validation",
+      "units": [
+        {
+          "id": "triggers",
+          "fact": "Version tags and manual dispatch trigger validation",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": ".github/workflows/validate.yml",
+                  "startLine": 3,
+                  "endLine": 6,
+                  "quote": "on:\n  push:\n    tags: ['v*']\n  workflow_dispatch:",
+                  "sha256": "960fcbb6f854d3e35a688675acdbdfe6186019dbf2ea44028129ca584f7f6ece"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "runner",
+          "fact": "Use the Ubuntu runner",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": ".github/workflows/validate.yml",
+                  "startLine": 11,
+                  "endLine": 13,
+                  "quote": "jobs:\n  release:\n    runs-on: ubuntu-latest",
+                  "sha256": "0aad2fc1a164d505b8e3ddcd56a2c80fcb6af2f4f1386ea7c9135f91fb8a2445"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "go",
+          "fact": "Install the pinned Go version",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": ".github/workflows/validate.yml",
+                  "startLine": 18,
+                  "endLine": 21,
+                  "quote": "      - name: Set up Go 1.x\n        uses: actions/setup-go@v3\n        with:\n          go-version: 1.23.5",
+                  "sha256": "c2405f9cd5dbac9b7ef14e77e05ffc0eb7e228d13c8187786806cf23a1695198"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "command",
+          "fact": "Run the build validation make target",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": ".github/workflows/validate.yml",
+                  "startLine": 24,
+                  "endLine": 26,
+                  "quote": "      - name: Validation checks\n        run: |\n          make validate-builds",
+                  "sha256": "125de4bf65e32e4828e5ebbcfeeb05c49fdc724f3490aafc5be5bb3649ad9c61"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "test-targets",
+      "units": [
+        {
+          "id": "development",
+          "fact": "Run the common development test targets with six parallel jobs",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "Makefile",
+                  "startLine": 12,
+                  "endLine": 13,
+                  "quote": "test:\n\t@$(MAKE) --no-print-directory -j6 test-common",
+                  "sha256": "05ab38bf479eb079c47f74296ce86e67c30deb4399131dd2f8cd9c98e5d5e2a6"
+                },
+                {
+                  "path": "Makefile",
+                  "startLine": 15,
+                  "endLine": 16,
+                  "quote": "# These tests are for development\ntest-common: test-go vet-go no-filepath verify-source-map end-to-end-tests js-api-tests plugin-tests register-test node-unref-tests decorator-tests",
+                  "sha256": "aa70309861bb43ac72ff72b0a964146b179195ddaf112123786625ad3a9bd71c"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "release",
+          "fact": "Add the slower release test targets",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "Makefile",
+                  "startLine": 18,
+                  "endLine": 20,
+                  "quote": "# These tests are for release (the extra tests are not included in \"test\" because they are pretty slow)\ntest-all:\n\t@$(MAKE) --no-print-directory -j6 test-common test-deno ts-type-tests test-wasm-node test-wasm-browser lib-typecheck test-yarnpnp",
+                  "sha256": "85e6479715bf2de456a331400ce8843aba4c47d9487401168d021743152c9792"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "binary-download",
+      "units": [
+        {
+          "id": "select",
+          "fact": "Identify the platform and choose a package or reject it",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "dl.sh",
+                  "startLine": 3,
+                  "endLine": 5,
+                  "quote": "dir=$(mktemp -d)\nplatform=$(uname -ms)\ntgz=\"$dir/esbuild-$ESBUILD_VERSION.tgz\"",
+                  "sha256": "0b213adeb4e55430de21d253716449225166bc258ade07243dc79c98b02b6052"
+                },
+                {
+                  "path": "dl.sh",
+                  "startLine": 7,
+                  "endLine": 17,
+                  "quote": "# Download the binary executable for the current platform\ncase $platform in\n  'Darwin arm64') curl -fo \"$tgz\" \"https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-$ESBUILD_VERSION.tgz\";;\n  'Darwin x86_64') curl -fo \"$tgz\" \"https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-$ESBUILD_VERSION.tgz\";;\n  'Linux arm64' | 'Linux aarch64') curl -fo \"$tgz\" \"https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-$ESBUILD_VERSION.tgz\";;\n  'Linux x86_64') curl -fo \"$tgz\" \"https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-$ESBUILD_VERSION.tgz\";;\n  'NetBSD amd64') curl -fo \"$tgz\" \"https://registry.npmjs.org/@esbuild/netbsd-x64/-/netbsd-x64-$ESBUILD_VERSION.tgz\";;\n  'OpenBSD arm64') curl -fo \"$tgz\" \"https://registry.npmjs.org/@esbuild/openbsd-arm64/-/openbsd-arm64-$ESBUILD_VERSION.tgz\";;\n  'OpenBSD amd64') curl -fo \"$tgz\" \"https://registry.npmjs.org/@esbuild/openbsd-x64/-/openbsd-x64-$ESBUILD_VERSION.tgz\";;\n  *) echo \"error: Unsupported platform: $platform\"; exit 1\nesac",
+                  "sha256": "2e7d5d05e7109a6e676cacf3fe067d721a857bf36211ac1ff0edcb0335bbdab2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "extract",
+          "fact": "Extract and move the executable and remove the archive",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "dl.sh",
+                  "startLine": 19,
+                  "endLine": 22,
+                  "quote": "# Extract the binary executable to the current directory\ntar -xzf \"$tgz\" -C \"$dir\" package/bin/esbuild\nmv \"$dir/package/bin/esbuild\" .\nrm \"$tgz\"",
+                  "sha256": "55e19e37679bdd1c277e2da2601a96ab1be4d57b3b55e9ade02950a925adaea9"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

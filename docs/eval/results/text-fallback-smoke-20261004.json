@@ -1,0 +1,941 @@
+{
+  "kind": "source-derived mixed-language smoke; not ACE comparison or held-out benchmark",
+  "repository": "evanw/esbuild",
+  "commit": "e9174d671b1882758cd32ac5e146200f5bee3e45",
+  "independentTasks": 8,
+  "budget": 4000,
+  "timing": "Remote worker internal time; excludes indexing; not previous Mac client latency",
+  "index": {
+    "identity": "2be94fb495dc366906ba711acec86ff4326a976e5477dc7b9bb864183d4c2a29",
+    "version": "structural-units-v2",
+    "units": 7865,
+    "files": 321,
+    "nonemptyFiles": 321,
+    "selection": {
+      "inputFiles": 321,
+      "acceptedFiles": 321,
+      "excluded": [],
+      "fallbackFiles": 301
+    },
+    "languageAdapters": {
+      "schemaVersion": "source-units-v2",
+      "languages": [
+        "text",
+        "typescript"
+      ],
+      "options": {},
+      "parsers": {
+        "text": "line-chunks-v1",
+        "typescript": "typescript-5.9.3"
+      },
+      "sourceSha256": {
+        "__init__.py": "2b3b2a13ddc296d21e4b518729daed027d0a7910f42c9872b930dc4291d3da00",
+        "schema.py": "2f26a2d7dece9f3b50f4f0a9aa54ddb64c5716b43c4131e41d279dabf8c70dbb",
+        "files.py": "e2a0f5d071101456bf19687f0d8826a23769dc86c083f4fd3c06f644846dec8d",
+        "text.py": "a5d99d6def8a2d68d708e48efe6b79de9b66a97e4508d39580b4810bd37e2822",
+        "typescript.py": "ffa77209f4a2304794c4dba13914f6cf960f9abbe8da8cc01e2a2c6795fbfbcc",
+        "typescript.mjs": "782ac128bf2897d875da23eea4272e14ac03a6e8bca0f87ac054e99515681d24"
+      }
+    },
+    "languageUnits": {
+      "text": 5590,
+      "typescript": 2275
+    },
+    "resolvedEdges": 63692,
+    "indexingMs": 286587,
+    "cacheHit": false
+  },
+  "indexEmbeddingRequests": 984,
+  "summary": {
+    "queries": 16,
+    "completed": 16,
+    "coverage": 0.8125,
+    "completeCount": 12,
+    "medianMs": 6283,
+    "p95Ms": 8758
+  },
+  "rows": [
+    {
+      "id": "boolean-flags",
+      "language": "zh",
+      "sourceLanguage": "go",
+      "status": "completed",
+      "rawFile": "boolean-flags.zh.txt",
+      "nativeFile": "boolean-flags.zh.json",
+      "sha256": "bdb0503a1ff1efbe93564d4305cb0d4c772d54b6ddbbc0bd1a787cf92496cdb2",
+      "elapsedMs": 7373,
+      "tokens": 3957,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "default",
+            "fact": "Use the default when no equals sign is supplied",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "values",
+            "fact": "Accept true and false and explain invalid values",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 408,
+          "verifiedOccurrences": 408,
+          "uniqueVerifiedLines": 408,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "id": "boolean-flags",
+      "language": "en",
+      "sourceLanguage": "go",
+      "status": "completed",
+      "rawFile": "boolean-flags.en.txt",
+      "nativeFile": "boolean-flags.en.json",
+      "sha256": "4578d89f9fc89aa6eaf130808834f1c92cf8f861f992614b8e1d9197440687d4",
+      "elapsedMs": 8758,
+      "tokens": 3960,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "default",
+            "fact": "Use the default when no equals sign is supplied",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "values",
+            "fact": "Accept true and false and explain invalid values",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 422,
+          "verifiedOccurrences": 422,
+          "uniqueVerifiedLines": 422,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "id": "watch-lifetime",
+      "language": "zh",
+      "sourceLanguage": "go",
+      "status": "completed",
+      "rawFile": "watch-lifetime.zh.txt",
+      "nativeFile": "watch-lifetime.zh.json",
+      "sha256": "719a2eee2806e5828fd14634b76fad063d0427ff151278cd0d0a5b106a329a21",
+      "elapsedMs": 6709,
+      "tokens": 3961,
+      "score": {
+        "covered": 0,
+        "total": 2,
+        "coverage": 0,
+        "omission": 1,
+        "complete": false,
+        "units": [
+          {
+            "id": "validation",
+            "fact": "Create a context and reject invalid build options",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1323,
+                      1324
+                    ]
+                  },
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1326,
+                      1327,
+                      1328,
+                      1329
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "lifetime",
+            "fact": "Start watching and block instead of exiting",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1331
+                    ]
+                  },
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1333,
+                      1334
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 338,
+          "verifiedOccurrences": 338,
+          "uniqueVerifiedLines": 338,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "id": "watch-lifetime",
+      "language": "en",
+      "sourceLanguage": "go",
+      "status": "completed",
+      "rawFile": "watch-lifetime.en.txt",
+      "nativeFile": "watch-lifetime.en.json",
+      "sha256": "08454dc7db5c08f0d2230cdc417509a8f92b619c2026569c5b56aace9bbc697c",
+      "elapsedMs": 8268,
+      "tokens": 3975,
+      "score": {
+        "covered": 0,
+        "total": 2,
+        "coverage": 0,
+        "omission": 1,
+        "complete": false,
+        "units": [
+          {
+            "id": "validation",
+            "fact": "Create a context and reject invalid build options",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1323,
+                      1324
+                    ]
+                  },
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1326,
+                      1327,
+                      1328,
+                      1329
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "lifetime",
+            "fact": "Start watching and block instead of exiting",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1331
+                    ]
+                  },
+                  {
+                    "path": "pkg/cli/cli_impl.go",
+                    "missingLines": [
+                      1333,
+                      1334
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 358,
+          "verifiedOccurrences": 358,
+          "uniqueVerifiedLines": 358,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "id": "worker-input-close",
+      "language": "zh",
+      "sourceLanguage": "javascript",
+      "status": "completed",
+      "rawFile": "worker-input-close.zh.txt",
+      "nativeFile": "worker-input-close.zh.json",
+      "sha256": "41fa7178cbc99444feba3e2d9f2026c2349378c105c98a95f6bfdf748a0f3f5c",
+      "elapsedMs": 3762,
+      "tokens": 3965,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "process",
+            "fact": "Start the asynchronous compiler process and handle completion",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "close",
+            "fact": "Write the generated input and close stdin",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 330,
+          "verifiedOccurrences": 330,
+          "uniqueVerifiedLines": 330,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "id": "worker-input-close",
+      "language": "en",
+      "sourceLanguage": "javascript",
+      "status": "completed",
+      "rawFile": "worker-input-close.en.txt",
+      "nativeFile": "worker-input-close.en.json",
+      "sha256": "898a42e3f36884e607e2df1db54a8d070dcbebcde8631b3cb8c297d40b3fe730",
+      "elapsedMs": 4921,
+      "tokens": 3963,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "process",
+            "fact": "Start the asynchronous compiler process and handle completion",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "close",
+            "fact": "Write the generated input and close stdin",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 333,
+          "verifiedOccurrences": 333,
+          "uniqueVerifiedLines": 333,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "id": "optional-platforms",
+      "language": "zh",
+      "sourceLanguage": "javascript",
+      "status": "completed",
+      "rawFile": "optional-platforms.zh.txt",
+      "nativeFile": "optional-platforms.zh.json",
+      "sha256": "07f484684b9c7a595d55b8b8b6b2d1b4bb85403c8edaac5ee70dc256697d3bf9",
+      "elapsedMs": 4951,
+      "tokens": 3972,
+      "score": {
+        "covered": 1,
+        "total": 2,
+        "coverage": 0.5,
+        "omission": 0.5,
+        "complete": false,
+        "units": [
+          {
+            "id": "platforms",
+            "fact": "Collect and sort platform packages with the release version",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "write",
+            "fact": "Write optional dependencies to package configuration",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "scripts/esbuild.js",
+                    "missingLines": [
+                      83,
+                      84,
+                      85,
+                      86
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 350,
+          "verifiedOccurrences": 350,
+          "uniqueVerifiedLines": 350,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "id": "optional-platforms",
+      "language": "en",
+      "sourceLanguage": "javascript",
+      "status": "completed",
+      "rawFile": "optional-platforms.en.txt",
+      "nativeFile": "optional-platforms.en.json",
+      "sha256": "e946a26f3ff8f98b3815729f2dd7714b22fb6071e29ee59e9147b3a9aecd964c",
+      "elapsedMs": 5990,
+      "tokens": 3962,
+      "score": {
+        "covered": 1,
+        "total": 2,
+        "coverage": 0.5,
+        "omission": 0.5,
+        "complete": false,
+        "units": [
+          {
+            "id": "platforms",
+            "fact": "Collect and sort platform packages with the release version",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "write",
+            "fact": "Write optional dependencies to package configuration",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "scripts/esbuild.js",
+                    "missingLines": [
+                      83,
+                      84,
+                      85,
+                      86
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 332,
+          "verifiedOccurrences": 332,
+          "uniqueVerifiedLines": 332,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "id": "sync-worker-reuse",
+      "language": "zh",
+      "sourceLanguage": "typescript",
+      "status": "completed",
+      "rawFile": "sync-worker-reuse.zh.txt",
+      "nativeFile": "sync-worker-reuse.zh.json",
+      "sha256": "c664ceb9470afbaf10911bd79aa949434800a4bb2fb1fff87dcf813b5ee0c2e0",
+      "elapsedMs": 4837,
+      "tokens": 3920,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "worker",
+            "fact": "Reuse or start the worker service outside the internal worker",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "fallback",
+            "fact": "Run the synchronous service and return its result",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 342,
+          "verifiedOccurrences": 342,
+          "uniqueVerifiedLines": 342,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "id": "sync-worker-reuse",
+      "language": "en",
+      "sourceLanguage": "typescript",
+      "status": "completed",
+      "rawFile": "sync-worker-reuse.en.txt",
+      "nativeFile": "sync-worker-reuse.en.json",
+      "sha256": "b1d5609581377e69d4e5254adba9922bda51a5380f72ed1b4caa64f3d85805af",
+      "elapsedMs": 5667,
+      "tokens": 3933,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "worker",
+            "fact": "Reuse or start the worker service outside the internal worker",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "fallback",
+            "fact": "Run the synchronous service and return its result",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 314,
+          "verifiedOccurrences": 314,
+          "uniqueVerifiedLines": 314,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "id": "release-validation",
+      "language": "zh",
+      "sourceLanguage": "yaml",
+      "status": "completed",
+      "rawFile": "release-validation.zh.txt",
+      "nativeFile": "release-validation.zh.json",
+      "sha256": "7633d6121cefbf8eec7aa43566015b8b99a42923f9407799c5d7a384eff30494",
+      "elapsedMs": 4017,
+      "tokens": 3796,
+      "score": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "triggers",
+            "fact": "Version tags and manual dispatch trigger validation",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "runner",
+            "fact": "Use the Ubuntu runner",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "go",
+            "fact": "Install the pinned Go version",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "command",
+            "fact": "Run the build validation make target",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 364,
+          "verifiedOccurrences": 364,
+          "uniqueVerifiedLines": 364,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "id": "release-validation",
+      "language": "en",
+      "sourceLanguage": "yaml",
+      "status": "completed",
+      "rawFile": "release-validation.en.txt",
+      "nativeFile": "release-validation.en.json",
+      "sha256": "c264ada48035f95b0db057c2989ce1c98aef3db7b17b215e54e1b4bc8f65ef65",
+      "elapsedMs": 6576,
+      "tokens": 3833,
+      "score": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "triggers",
+            "fact": "Version tags and manual dispatch trigger validation",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "runner",
+            "fact": "Use the Ubuntu runner",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "go",
+            "fact": "Install the pinned Go version",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "command",
+            "fact": "Run the build validation make target",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 344,
+          "verifiedOccurrences": 344,
+          "uniqueVerifiedLines": 344,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "id": "test-targets",
+      "language": "zh",
+      "sourceLanguage": "make",
+      "status": "completed",
+      "rawFile": "test-targets.zh.txt",
+      "nativeFile": "test-targets.zh.json",
+      "sha256": "9a7eb6e26518e558b56788d8c11aef2e44925d4f5791e029a4d5bbc616dce456",
+      "elapsedMs": 8084,
+      "tokens": 3849,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "development",
+            "fact": "Run the common development test targets with six parallel jobs",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "release",
+            "fact": "Add the slower release test targets",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 362,
+          "verifiedOccurrences": 362,
+          "uniqueVerifiedLines": 362,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "id": "test-targets",
+      "language": "en",
+      "sourceLanguage": "make",
+      "status": "completed",
+      "rawFile": "test-targets.en.txt",
+      "nativeFile": "test-targets.en.json",
+      "sha256": "21873d03e572ef3824447b08f06394cdf0a9084cec22102d672bb4f212ad72d8",
+      "elapsedMs": 7411,
+      "tokens": 3882,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "development",
+            "fact": "Run the common development test targets with six parallel jobs",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "release",
+            "fact": "Add the slower release test targets",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 370,
+          "verifiedOccurrences": 370,
+          "uniqueVerifiedLines": 370,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "id": "binary-download",
+      "language": "zh",
+      "sourceLanguage": "shell",
+      "status": "completed",
+      "rawFile": "binary-download.zh.txt",
+      "nativeFile": "binary-download.zh.json",
+      "sha256": "7b07deec9ab6ab373c92aaa9c1a5f6eff53281640dfc1b5bea89b94f0c94e94d",
+      "elapsedMs": 6785,
+      "tokens": 3952,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "select",
+            "fact": "Identify the platform and choose a package or reject it",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "extract",
+            "fact": "Extract and move the executable and remove the archive",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 362,
+          "verifiedOccurrences": 362,
+          "uniqueVerifiedLines": 362,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    },
+    {
+      "id": "binary-download",
+      "language": "en",
+      "sourceLanguage": "shell",
+      "status": "completed",
+      "rawFile": "binary-download.en.txt",
+      "nativeFile": "binary-download.en.json",
+      "sha256": "b8a66b88f08877cfb24dd7dad2292b0e5e0fc3113fc39d135dd64bc0df85b326",
+      "elapsedMs": 5120,
+      "tokens": 3972,
+      "score": {
+        "covered": 2,
+        "total": 2,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "select",
+            "fact": "Identify the platform and choose a package or reject it",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "extract",
+            "fact": "Extract and move the executable and remove the archive",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 252,
+          "verifiedOccurrences": 252,
+          "uniqueVerifiedLines": 252,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      }
+    }
+  ],
+  "validation": {
+    "frozenInputs": true,
+    "evaluatedSourceHashes": true,
+    "rawHashes": true,
+    "sourceLines": true,
+    "modelBudget": true,
+    "referenceAnswersKeptLocal": true
+  }
+}

@@ -15,6 +15,12 @@ class SourceFile:
     sha256: str
 
 
+def physical_lines(text):
+    """Match editor line numbers: CRLF/CR/LF, not Unicode paragraph separators."""
+    lines = text.replace('\r\n', '\n').replace('\r', '\n').split('\n')
+    return lines[:-1] if lines and not lines[-1] else lines
+
+
 class Relation(TypedDict):
     target: int
     kind: str
@@ -42,7 +48,9 @@ class CodeUnit(TypedDict):
 
 def validate_units(units, sources):
     """Require lossless source coordinates, non-overlapping spans and valid graph IDs."""
-    lines = {source.path: source.text.splitlines() for source in sources}
+    text_paths = {unit['path'] for unit in units if unit['language'] == 'text'}
+    lines = {source.path: (physical_lines(source.text) if source.path in text_paths
+                          else source.text.splitlines()) for source in sources}
     covered = {path: set() for path in lines}
     for expected, unit in enumerate(units):
         if unit['id'] != expected or unit['path'] not in lines:
