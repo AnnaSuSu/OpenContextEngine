@@ -1,0 +1,578 @@
+{
+  "schemaVersion": 1,
+  "kind": "development-pilot",
+  "startedAt": "2026-10-03T09:25:00.710Z",
+  "mode": "DirectContext.search",
+  "sdkVersion": "0.2.0",
+  "protocolId": "django-semantic-v1-protocol",
+  "commit": "f59aef2ee9b5c988fd4179d8f2835030bd76297c",
+  "freeze": {
+    "frozenAt": "2026-10-03T09:24:38.169472+00:00",
+    "status": "frozen before first ACE query on this dataset",
+    "sha256": {
+      "queries.json": "e4ff7d77a5c2f6ee8a99bad2cc3d0f7043cbbc3743a3dd20e34736e823f2427f",
+      "answers.v1.json": "429d0288073ca8c5d3d7638ceeeb1430c2c8e1399c6c02ccb0fe46836966f458",
+      "snapshot.json": "c1c3ab1991cf6892fda5ce8086e32f56db1cdd3cda1253f1551a49a8f51fbe7c",
+      "protocol.json": "aadc0bba1e59f6615e64c1162194bb2c86b254853ce599fc30d0eaad5fa3657b"
+    },
+    "implementationSha256": {
+      "scripts/ace-django.mjs": "6ad6756530e5622b144976813fc103253abed4f0a0ade1a42cc0f7bbd185f752",
+      "scripts/score-django.mjs": "fa863b66535582b43db507753c13d9f7655f087051fcc4ce01c96623596aebf4",
+      "src/eval/evidence.mjs": "76cb50cfac376f3ae8d3fa17a83558f17a8a8f5e9256c4b5d8f9c4b2d01b79d0",
+      "package-lock.json": "4c8802fc81e2348d4eaa9add7c627dd3f9418f827a3142b36c8644adecfe9f21"
+    }
+  },
+  "status": "completed",
+  "stage": "search:view-permissions:zh",
+  "requests": [
+    {
+      "number": 1,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:25:00.718Z",
+      "status": 200,
+      "headersMs": 21579
+    },
+    {
+      "number": 2,
+      "endpoint": "batch-upload",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:25:22.534Z",
+      "status": 200,
+      "headersMs": 2077
+    },
+    {
+      "number": 3,
+      "endpoint": "batch-upload",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:25:24.704Z",
+      "status": 200,
+      "headersMs": 19637
+    },
+    {
+      "number": 4,
+      "endpoint": "batch-upload",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:25:44.376Z",
+      "status": 200,
+      "headersMs": 2304
+    },
+    {
+      "number": 5,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:25:46.709Z",
+      "status": 200,
+      "headersMs": 635
+    },
+    {
+      "number": 6,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:25:50.463Z",
+      "status": 200,
+      "headersMs": 763
+    },
+    {
+      "number": 7,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:25:54.333Z",
+      "status": 200,
+      "headersMs": 887
+    },
+    {
+      "number": 8,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:25:58.278Z",
+      "status": 200,
+      "headersMs": 746
+    },
+    {
+      "number": 9,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:26:02.054Z",
+      "status": 200,
+      "headersMs": 540
+    },
+    {
+      "number": 10,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:26:05.599Z",
+      "status": 200,
+      "headersMs": 462
+    },
+    {
+      "number": 11,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:26:09.063Z",
+      "status": 200,
+      "headersMs": 910
+    },
+    {
+      "number": 12,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:26:12.978Z",
+      "status": 200,
+      "headersMs": 408
+    },
+    {
+      "number": 13,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:26:16.388Z",
+      "status": 200,
+      "headersMs": 663
+    },
+    {
+      "number": 14,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:26:20.053Z",
+      "status": 200,
+      "headersMs": 1337
+    },
+    {
+      "number": 15,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:26:24.393Z",
+      "status": 200,
+      "headersMs": 733
+    },
+    {
+      "number": 16,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:26:28.129Z",
+      "status": 200,
+      "headersMs": 1353
+    },
+    {
+      "number": 17,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:26:32.485Z",
+      "status": 200,
+      "headersMs": 502
+    },
+    {
+      "number": 18,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:26:35.992Z",
+      "status": 200,
+      "headersMs": 732
+    },
+    {
+      "number": 19,
+      "endpoint": "find-missing",
+      "stage": "indexing",
+      "startedAt": "2026-10-03T09:26:39.726Z",
+      "status": 200,
+      "headersMs": 407
+    },
+    {
+      "number": 20,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:login:zh",
+      "startedAt": "2026-10-03T09:26:40.139Z",
+      "status": 200,
+      "headersMs": 4443
+    },
+    {
+      "number": 21,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:login:en",
+      "startedAt": "2026-10-03T09:26:44.636Z",
+      "status": 200,
+      "headersMs": 3575
+    },
+    {
+      "number": 22,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:routing:en",
+      "startedAt": "2026-10-03T09:26:48.266Z",
+      "status": 200,
+      "headersMs": 3452
+    },
+    {
+      "number": 23,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:routing:zh",
+      "startedAt": "2026-10-03T09:26:51.751Z",
+      "status": 200,
+      "headersMs": 3084
+    },
+    {
+      "number": 24,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:middleware:zh",
+      "startedAt": "2026-10-03T09:26:54.866Z",
+      "status": 200,
+      "headersMs": 2597
+    },
+    {
+      "number": 25,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:middleware:en",
+      "startedAt": "2026-10-03T09:26:57.493Z",
+      "status": 200,
+      "headersMs": 2269
+    },
+    {
+      "number": 26,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:transactions:en",
+      "startedAt": "2026-10-03T09:26:59.795Z",
+      "status": 200,
+      "headersMs": 3026
+    },
+    {
+      "number": 27,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:transactions:zh",
+      "startedAt": "2026-10-03T09:27:02.875Z",
+      "status": 200,
+      "headersMs": 2509
+    },
+    {
+      "number": 28,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:csrf:zh",
+      "startedAt": "2026-10-03T09:27:05.415Z",
+      "status": 200,
+      "headersMs": 3081
+    },
+    {
+      "number": 29,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:csrf:en",
+      "startedAt": "2026-10-03T09:27:08.529Z",
+      "status": 200,
+      "headersMs": 2713
+    },
+    {
+      "number": 30,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:page-cache:en",
+      "startedAt": "2026-10-03T09:27:11.273Z",
+      "status": 200,
+      "headersMs": 3082
+    },
+    {
+      "number": 31,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:page-cache:zh",
+      "startedAt": "2026-10-03T09:27:14.413Z",
+      "status": 200,
+      "headersMs": 3424
+    },
+    {
+      "number": 32,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:settings:zh",
+      "startedAt": "2026-10-03T09:27:17.867Z",
+      "status": 200,
+      "headersMs": 2598
+    },
+    {
+      "number": 33,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:settings:en",
+      "startedAt": "2026-10-03T09:27:20.524Z",
+      "status": 200,
+      "headersMs": 2270
+    },
+    {
+      "number": 34,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:file-upload:en",
+      "startedAt": "2026-10-03T09:27:22.825Z",
+      "status": 200,
+      "headersMs": 2352
+    },
+    {
+      "number": 35,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:file-upload:zh",
+      "startedAt": "2026-10-03T09:27:25.208Z",
+      "status": 200,
+      "headersMs": 2361
+    },
+    {
+      "number": 36,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:signals:zh",
+      "startedAt": "2026-10-03T09:27:27.599Z",
+      "status": 200,
+      "headersMs": 2612
+    },
+    {
+      "number": 37,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:signals:en",
+      "startedAt": "2026-10-03T09:27:30.241Z",
+      "status": 200,
+      "headersMs": 2394
+    },
+    {
+      "number": 38,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:view-permissions:en",
+      "startedAt": "2026-10-03T09:27:32.668Z",
+      "status": 200,
+      "headersMs": 2875
+    },
+    {
+      "number": 39,
+      "endpoint": "agents/codebase-retrieval",
+      "stage": "search:view-permissions:zh",
+      "startedAt": "2026-10-03T09:27:35.573Z",
+      "status": 200,
+      "headersMs": 3086
+    }
+  ],
+  "results": [
+    {
+      "id": "login",
+      "language": "zh",
+      "query": "找到 Django 内置网页登录的处理代码：用户提交账号密码后，怎样验证身份并建立登录会话？",
+      "status": "completed",
+      "elapsedMs": 4497,
+      "characters": 20000,
+      "rawFile": "login.zh.txt",
+      "sha256": "84349b01a78a6e6dd48a306773463c3b7466d3db5f8d0e5df628dce1a50ec252",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "login",
+      "language": "en",
+      "query": "Find the code handling Django’s built-in web login: after a user submits a username and password, how is identity verified and a login session established?",
+      "status": "completed",
+      "elapsedMs": 3629,
+      "characters": 19554,
+      "rawFile": "login.en.txt",
+      "sha256": "58cbcce7e5f9c1adb7d4589d339f0f7fad192bb2987ada2a1be8e1652a3415e7",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "routing",
+      "language": "en",
+      "query": "How is a project’s URL routing configuration loaded, and how is a requested path matched to a specific view?",
+      "status": "completed",
+      "elapsedMs": 3484,
+      "characters": 20000,
+      "rawFile": "routing.en.txt",
+      "sha256": "16571d1921d8d0e595e557d52dff777f8326bf10aee5b5844561d43fc71bfb76",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "routing",
+      "language": "zh",
+      "query": "项目里的 URL 路由配置是怎样被加载，并把访问路径匹配到具体视图的？",
+      "status": "completed",
+      "elapsedMs": 3115,
+      "characters": 20000,
+      "rawFile": "routing.zh.txt",
+      "sha256": "e33abf257a15f2f4f2b67b73bac52048fa372b826e36d3fbd7c57f4a09ccde28",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "middleware",
+      "language": "zh",
+      "query": "普通同步请求里，中间件按什么顺序执行，为什么某个中间件可以提前返回响应而不继续调用视图？",
+      "status": "completed",
+      "elapsedMs": 2627,
+      "characters": 19817,
+      "rawFile": "middleware.zh.txt",
+      "sha256": "817690446dffb2b48d91422ee9ea110594d38b8ee003f59cfdf6b6118a43266b",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "middleware",
+      "language": "en",
+      "query": "For a normal synchronous request, in what order does middleware run, and why can a middleware return a response early without continuing to the view?",
+      "status": "completed",
+      "elapsedMs": 2301,
+      "characters": 19520,
+      "rawFile": "middleware.en.txt",
+      "sha256": "02385f8a831a84c8ad75b9f1eb20aa8a45c8539896a41373d1118635d802ed14",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "transactions",
+      "language": "en",
+      "query": "How does the transaction code commit on normal exit and roll back on exceptions, and how does it handle nested transactions?",
+      "status": "completed",
+      "elapsedMs": 3079,
+      "characters": 20000,
+      "rawFile": "transactions.en.txt",
+      "sha256": "e94f1178522205a019a63f40038422dd9b4224b67d7a3673be63709675649212",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "transactions",
+      "language": "zh",
+      "query": "数据库事务代码如何做到正常退出提交、异常退出回滚，嵌套事务又如何处理？",
+      "status": "completed",
+      "elapsedMs": 2540,
+      "characters": 19948,
+      "rawFile": "transactions.zh.txt",
+      "sha256": "cbcbafe6a5c4a4883acedd6be9ff9d2bf58fc2e99f4b2baffff47d097b012085",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "csrf",
+      "language": "zh",
+      "query": "表单提交的跨站请求伪造防护在哪里实现，哪些请求会放行，哪些校验失败会被拒绝？",
+      "status": "completed",
+      "elapsedMs": 3111,
+      "characters": 19468,
+      "rawFile": "csrf.zh.txt",
+      "sha256": "d72a88c2a7480528bfd8f3fb09941711a2943dbe4f84bf1695fc7f6b4dabd5fe",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "csrf",
+      "language": "en",
+      "query": "Where is cross-site request forgery protection for form submissions implemented, which requests are allowed through, and which failed checks cause rejection?",
+      "status": "completed",
+      "elapsedMs": 2743,
+      "characters": 19790,
+      "rawFile": "csrf.en.txt",
+      "sha256": "43e508f33f4d0aa2ff33b08775a9ef243b7479c2f1f474802e95f3dc3ce2cabd",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "page-cache",
+      "language": "en",
+      "query": "How does page caching decide whether it can return a cached response directly, and when does it store a new response in the cache?",
+      "status": "completed",
+      "elapsedMs": 3139,
+      "characters": 19859,
+      "rawFile": "page-cache.en.txt",
+      "sha256": "c045e3cc151eebe5364321162406e353c48af0c4b4a62a1c75d3e1fa62e44b72",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "page-cache",
+      "language": "zh",
+      "query": "页面缓存怎样判断能否直接返回缓存，以及什么时候把新响应写入缓存？",
+      "status": "completed",
+      "elapsedMs": 3454,
+      "characters": 20000,
+      "rawFile": "page-cache.zh.txt",
+      "sha256": "761aaf5cb3507974d52a0694091284407f406bb8c8089c4a0fec5309207dbe7f",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "settings",
+      "language": "zh",
+      "query": "项目配置是什么时候加载的，默认值怎样被项目自己的配置覆盖，读取过的配置会缓存吗？",
+      "status": "completed",
+      "elapsedMs": 2656,
+      "characters": 19570,
+      "rawFile": "settings.zh.txt",
+      "sha256": "c84463aac7e4fdbdbdc50d93912223951e975f805dfbb0556eb0069d9ae7864d",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "settings",
+      "language": "en",
+      "query": "When are project settings loaded, how do project-specific settings override defaults, and are settings cached after they are read?",
+      "status": "completed",
+      "elapsedMs": 2301,
+      "characters": 19683,
+      "rawFile": "settings.en.txt",
+      "sha256": "614afb6397dbd1046d07cb91d325895c1e5788747d7263d38ddcf37c30ee6e6e",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "file-upload",
+      "language": "en",
+      "query": "When are uploaded files kept in memory versus written to temporary files, and how does the framework select those handlers?",
+      "status": "completed",
+      "elapsedMs": 2381,
+      "characters": 19031,
+      "rawFile": "file-upload.en.txt",
+      "sha256": "783530b2967417c3dca4fbfe785e21009cc00193309a49883d15a9f2558d831c",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "file-upload",
+      "language": "zh",
+      "query": "上传文件什么时候保存在内存、什么时候写入临时文件，框架如何选择这些处理器？",
+      "status": "completed",
+      "elapsedMs": 2391,
+      "characters": 20000,
+      "rawFile": "file-upload.zh.txt",
+      "sha256": "e845412052fa054d56a5d40768906394b32dc0b3bd8b7824a2d5f6ba79459bc0",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "signals",
+      "language": "zh",
+      "query": "找到信号通知订阅者的实现；普通发送和容错发送在订阅者抛出异常时有什么区别？",
+      "status": "completed",
+      "elapsedMs": 2641,
+      "characters": 19415,
+      "rawFile": "signals.zh.txt",
+      "sha256": "96e96511f6193649bc19f033b70615f9e5ee0694f1fbf346781bc21731bde6f7",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "signals",
+      "language": "en",
+      "query": "Find the implementation that delivers signals to subscribers; how do normal sending and robust sending differ when a subscriber raises an exception?",
+      "status": "completed",
+      "elapsedMs": 2426,
+      "characters": 19027,
+      "rawFile": "signals.en.txt",
+      "sha256": "cf037dfc24299d201f24f9e127746461f86030ceee0df8f7fac7eb3c84d78b6a",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "view-permissions",
+      "language": "en",
+      "query": "How do class-based views check user permissions, and how do they decide whether to redirect to login or deny access when permissions are insufficient?",
+      "status": "completed",
+      "elapsedMs": 2904,
+      "characters": 19844,
+      "rawFile": "view-permissions.en.txt",
+      "sha256": "a70815c5ca32b492811401f7798a1ba3a21943c1f8aee6c27477a5102c6a3d5c",
+      "exceedsCharacterLimit": false
+    },
+    {
+      "id": "view-permissions",
+      "language": "zh",
+      "query": "基于类的视图怎样检查用户权限，权限不足时又如何决定跳转登录还是直接拒绝访问？",
+      "status": "completed",
+      "elapsedMs": 3116,
+      "characters": 20000,
+      "rawFile": "view-permissions.zh.txt",
+      "sha256": "9626fffbe4f76a7f222150102967003a5d73cabf656bb69bd8cb4f83ce81bf93",
+      "exceedsCharacterLimit": false
+    }
+  ],
+  "billing": {
+    "tokens": null,
+    "cost": null
+  },
+  "corpus": {
+    "files": 883,
+    "bytes": 5680101
+  },
+  "indexing": {
+    "elapsedMs": 99421,
+    "newlyUploaded": 883,
+    "alreadyUploaded": 0,
+    "indexedPaths": 883
+  },
+  "elapsedMs": 157979
+}

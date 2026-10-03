@@ -1,0 +1,997 @@
+{
+  "schemaVersion": 1,
+  "dataset": "django-semantic-v1",
+  "answerVersion": "v2",
+  "repository": "django/django",
+  "commit": "f59aef2ee9b5c988fd4179d8f2835030bd76297c",
+  "annotator": "Codex reading fixed source before ACE runs",
+  "status": "source-reviewed; not human or independent multi-annotator ground truth",
+  "coverageRule": "A unit is covered when all exact verified source lines in any one alternative are present in the budgeted result; missing alternatives can be added in a versioned revision for all systems.",
+  "answers": [
+    {
+      "id": "login",
+      "units": [
+        {
+          "id": "credentials",
+          "fact": "登录表单读取账号密码，调用身份验证，并拒绝验证失败的结果。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/contrib/auth/forms.py",
+                  "startLine": 362,
+                  "endLine": 370,
+                  "quote": "        username = self.cleaned_data.get(\"username\")\n        password = self.cleaned_data.get(\"password\")\n\n        if username is not None and password:\n            self.user_cache = authenticate(\n                self.request, username=username, password=password\n            )\n            if self.user_cache is None:\n                raise self.get_invalid_login_error()",
+                  "sha256": "c7e9cda36d696b7057503c2644e3d861b82e25caf0a129848ff0c75e67acb9b9"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "backend-dispatch",
+          "fact": "身份验证入口依次调用兼容的后端，返回用户时标记其后端。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/contrib/auth/__init__.py",
+                  "startLine": 112,
+                  "endLine": 114,
+                  "quote": "    for backend, backend_path in _get_compatible_backends(request, **credentials):\n        try:\n            user = backend.authenticate(request, **credentials)",
+                  "sha256": "f3796ebb71841a7a528e1eb07af361d734fde8c07e82720ec10d6252a3bb5adb"
+                },
+                {
+                  "path": "django/contrib/auth/__init__.py",
+                  "startLine": 119,
+                  "endLine": 123,
+                  "quote": "        if user is None:\n            continue\n        # Annotate the user object with the path of the backend.\n        user.backend = backend_path\n        return user",
+                  "sha256": "93e64f036a2c5241b0fbad121ea7aafedc83f5b5e59771d5e217c6ef86b0388f"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "password-check",
+          "fact": "默认模型后端查找用户并检查密码及账号是否可认证。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/contrib/auth/backends.py",
+                  "startLine": 65,
+                  "endLine": 65,
+                  "quote": "            user = UserModel._default_manager.get_by_natural_key(username)",
+                  "sha256": "c72a14de22d866c6909925be0b08449b77e1e7be02cb63168ed9fa4001b5b728"
+                },
+                {
+                  "path": "django/contrib/auth/backends.py",
+                  "startLine": 71,
+                  "endLine": 72,
+                  "quote": "            if user.check_password(password) and self.user_can_authenticate(user):\n                return user",
+                  "sha256": "cecef653fb20f0ffe091c1577b4f4f802477df309efd8d6dcb091500b19e7a6a"
+                },
+                {
+                  "path": "django/contrib/auth/backends.py",
+                  "startLine": 96,
+                  "endLine": 96,
+                  "quote": "        return getattr(user, \"is_active\", True)",
+                  "sha256": "5f0f85abbb24fd2066e31c9e60940d6ceff5791110584da1290ebb469dbd6e4d"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "login-view",
+          "fact": "内置登录视图在表单有效后调用登录逻辑并返回跳转。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/contrib/auth/views.py",
+                  "startLine": 106,
+                  "endLine": 109,
+                  "quote": "    def form_valid(self, form):\n        \"\"\"Security check complete. Log the user in.\"\"\"\n        auth_login(self.request, form.get_user())\n        return HttpResponseRedirect(self.get_success_url())",
+                  "sha256": "582f7adec4b512debb097ecbb6d30e82ac22aa744886bbdbf4eab874f72f1873"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "session-state",
+          "fact": "登录将用户标识、后端和认证哈希写入会话，并更新请求用户。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/contrib/auth/__init__.py",
+                  "startLine": 191,
+                  "endLine": 195,
+                  "quote": "    request.session[SESSION_KEY] = user._meta.pk.value_to_string(user)\n    request.session[BACKEND_SESSION_KEY] = backend\n    request.session[HASH_SESSION_KEY] = session_auth_hash\n    if hasattr(request, \"user\"):\n        request.user = user",
+                  "sha256": "8711f235f4e56e8487d554ed9965950798856064efdf6efe3ad24bd0048f423c"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "routing",
+      "units": [
+        {
+          "id": "root-config",
+          "fact": "未显式指定路由配置时从项目的根路由配置设置创建解析器。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/urls/resolvers.py",
+                  "startLine": 108,
+                  "endLine": 111,
+                  "quote": "def get_resolver(urlconf=None):\n    if urlconf is None:\n        urlconf = settings.ROOT_URLCONF\n    return _get_cached_resolver(urlconf)",
+                  "sha256": "ca97de24f8e3184d9746166f1cfd53551837b02785c19aa6117fcde11f5f49f5"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "load-patterns",
+          "fact": "字符串配置通过导入模块加载，再取得其中的路由列表。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/urls/resolvers.py",
+                  "startLine": 710,
+                  "endLine": 713,
+                  "quote": "        if isinstance(self.urlconf_name, str):\n            return import_module(self.urlconf_name)\n        else:\n            return self.urlconf_name",
+                  "sha256": "b51cf7866444d4aa72eaac8636c4fa02f7153b052f4ac6aa2140b7049cf81ea4"
+                },
+                {
+                  "path": "django/urls/resolvers.py",
+                  "startLine": 718,
+                  "endLine": 718,
+                  "quote": "        patterns = getattr(self.urlconf_module, \"urlpatterns\", self.urlconf_module)",
+                  "sha256": "41a40202d142e39a5d5489372b573251c8a32724855b0b565912344670e70ded"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "match-patterns",
+          "fact": "解析器遍历路由规则递归匹配，并返回匹配视图及参数。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/urls/resolvers.py",
+                  "startLine": 666,
+                  "endLine": 668,
+                  "quote": "            for pattern in self.url_patterns:\n                try:\n                    sub_match = pattern.resolve(new_path)",
+                  "sha256": "f74f4ceda27f03f9254b84ce1e890de134d2856d1e4a37fc34888488932558a0"
+                },
+                {
+                  "path": "django/urls/resolvers.py",
+                  "startLine": 689,
+                  "endLine": 693,
+                  "quote": "                        return ResolverMatch(\n                            sub_match.func,\n                            sub_match_args,\n                            sub_match_dict,\n                            sub_match.url_name,",
+                  "sha256": "e99200a6b2bc18f6e03a46623dd4f7588dfef0e529e579068c4efb73b1895c8a"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "request-to-view",
+          "fact": "请求处理器用访问路径解析，将匹配结果保存在请求中并返回。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/core/handlers/base.py",
+                  "startLine": 313,
+                  "endLine": 315,
+                  "quote": "        resolver_match = resolver.resolve(request.path_info)\n        request.resolver_match = resolver_match\n        return resolver_match",
+                  "sha256": "01bbdc3b6d7005eeefab4b66616577b08241df1911025e5c5e9959f383877b2e"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "middleware",
+      "units": [
+        {
+          "id": "build-chain",
+          "fact": "按配置的逆序实例化中间件并逐层包装下游处理器，因此请求从配置首项进入。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/core/handlers/base.py",
+                  "startLine": 39,
+                  "endLine": 40,
+                  "quote": "        for middleware_path in reversed(settings.MIDDLEWARE):\n            middleware = import_string(middleware_path)",
+                  "sha256": "6408ed930ae82425bafa6c2b0169741403322a2e575378214e5e11c016ca3d8d"
+                },
+                {
+                  "path": "django/core/handlers/base.py",
+                  "startLine": 61,
+                  "endLine": 61,
+                  "quote": "                mw_instance = middleware(adapted_handler)",
+                  "sha256": "cbd7378f22357937309d18a761c7d755826e221b9a1145fe33585bde43414cd0"
+                },
+                {
+                  "path": "django/core/handlers/base.py",
+                  "startLine": 95,
+                  "endLine": 95,
+                  "quote": "            handler = convert_exception_to_response(mw_instance)",
+                  "sha256": "339ec926580564260e4b1da0cbfaf56ed0a3554ad3d9ae8633c5e33811c3d24f"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "call-chain",
+          "fact": "构建好的处理器保存为中间件链，普通请求直接调用它。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/core/handlers/base.py",
+                  "startLine": 102,
+                  "endLine": 102,
+                  "quote": "        self._middleware_chain = handler",
+                  "sha256": "f3644aacac20bd898c43a250454bcdf59b0342f21d0046a16444f824999324cf"
+                },
+                {
+                  "path": "django/core/handlers/base.py",
+                  "startLine": 140,
+                  "endLine": 140,
+                  "quote": "        response = self._middleware_chain(request)",
+                  "sha256": "f9312441a0f4e628bad4bc77f4ccba2cce1813e3de2698ab83660880726e283a"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "request-short-circuit",
+          "fact": "兼容中间件先执行请求钩子；只有未取得响应才调用下游，之后执行响应钩子。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/utils/deprecation.py",
+                  "startLine": 117,
+                  "endLine": 123,
+                  "quote": "        response = None\n        if hasattr(self, \"process_request\"):\n            response = self.process_request(request)\n        response = response or self.get_response(request)\n        if hasattr(self, \"process_response\"):\n            response = self.process_response(request, response)\n        return response",
+                  "sha256": "d12c050ae3adaa61b40e1422ee39ba443dacb8481d5ec1d92d314cdac5f24d6b"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "view-short-circuit",
+          "fact": "视图中间件返回响应会中断钩子循环；只有没有响应才调用视图。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/core/handlers/base.py",
+                  "startLine": 184,
+                  "endLine": 192,
+                  "quote": "        for middleware_method in self._view_middleware:\n            response = middleware_method(\n                request, callback, callback_args, callback_kwargs\n            )\n            if response:\n                break\n\n        if response is None:\n            wrapped_callback = self.make_view_atomic(callback)",
+                  "sha256": "d8f762e07bd29e1e471e7d684aae1c6671cf8df92d6b2b0697d7abe00965408c"
+                },
+                {
+                  "path": "django/core/handlers/base.py",
+                  "startLine": 197,
+                  "endLine": 197,
+                  "quote": "                response = wrapped_callback(request, *callback_args, **callback_kwargs)",
+                  "sha256": "fba5eeadd1d3f160c593e1c84a7945182b84cea3c2d93b17082b2e7bab621224"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "transactions",
+      "units": [
+        {
+          "id": "nested-savepoint",
+          "fact": "已在事务内时按条件创建保存点；禁用保存点或已需回滚时记录空保存点。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/db/transaction.py",
+                  "startLine": 205,
+                  "endLine": 205,
+                  "quote": "        if connection.in_atomic_block:",
+                  "sha256": "e27bbf1037224e6df9b4dfc34e5e558ee84e42e457dd77237bbe448bbf997925"
+                },
+                {
+                  "path": "django/db/transaction.py",
+                  "startLine": 210,
+                  "endLine": 214,
+                  "quote": "            if self.savepoint and not connection.needs_rollback:\n                sid = connection.savepoint()\n                connection.savepoint_ids.append(sid)\n            else:\n                connection.savepoint_ids.append(None)",
+                  "sha256": "51b918abf168924c3421d33e8b9ee853d851e84b079d0f297667d8ca940981ac"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "successful-exit",
+          "fact": "正常且无需回滚时释放内层保存点，最外层则提交事务。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/db/transaction.py",
+                  "startLine": 242,
+                  "endLine": 247,
+                  "quote": "            elif exc_type is None and not connection.needs_rollback:\n                if connection.in_atomic_block:\n                    # Release savepoint if there is one\n                    if sid is not None:\n                        try:\n                            connection.savepoint_commit(sid)",
+                  "sha256": "dd76c6f4e5a67a094d27a4b8ab418d51a96a44bce541b0947a34eae5e66def66"
+                },
+                {
+                  "path": "django/db/transaction.py",
+                  "startLine": 260,
+                  "endLine": 263,
+                  "quote": "                else:\n                    # Commit transaction\n                    try:\n                        connection.commit()",
+                  "sha256": "c847d344025f449c339f5ace872bdf1e893e6f6d8815aa0a430f3321d0bd3070"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "failed-exit",
+          "fact": "失败时内层回滚至保存点或标记上层回滚，最外层回滚事务。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/db/transaction.py",
+                  "startLine": 272,
+                  "endLine": 272,
+                  "quote": "            else:",
+                  "sha256": "eccc3a970945550e279f743fc701c3868a48c7fe7def86f65b71bbdffc6ffcf9"
+                },
+                {
+                  "path": "django/db/transaction.py",
+                  "startLine": 275,
+                  "endLine": 280,
+                  "quote": "                connection.needs_rollback = False\n                if connection.in_atomic_block:\n                    # Roll back to savepoint if there is one, mark for rollback\n                    # otherwise.\n                    if sid is None:\n                        connection.needs_rollback = True",
+                  "sha256": "ccc92ac017dcccf3b58190aaef4ea5f0c93246c6938c1db90c1ad455afab8626"
+                },
+                {
+                  "path": "django/db/transaction.py",
+                  "startLine": 281,
+                  "endLine": 283,
+                  "quote": "                    else:\n                        try:\n                            connection.savepoint_rollback(sid)",
+                  "sha256": "dd4f581815197d1ea12ebedc40c2cbde0c2fcf3ee762804a208e764b0bde6fca"
+                },
+                {
+                  "path": "django/db/transaction.py",
+                  "startLine": 292,
+                  "endLine": 295,
+                  "quote": "                else:\n                    # Roll back transaction\n                    try:\n                        connection.rollback()",
+                  "sha256": "68304854f509fae903d11f9456cfa3ebd9f70a0cc84b5b7eacce300a164aed41"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "restore-autocommit",
+          "fact": "最外层退出后恢复自动提交；事务连接已关闭时清除连接。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/db/transaction.py",
+                  "startLine": 303,
+                  "endLine": 307,
+                  "quote": "            if not connection.in_atomic_block:\n                if connection.closed_in_transaction:\n                    connection.connection = None\n                else:\n                    connection.set_autocommit(True)",
+                  "sha256": "413eb5a6d0781217026166a815798c0c9a05184c63acfeaffe700ee012abb430"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "csrf",
+      "units": [
+        {
+          "id": "exempt-safe",
+          "fact": "豁免视图不检查，安全 HTTP 方法直接放行。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/middleware/csrf.py",
+                  "startLine": 420,
+                  "endLine": 425,
+                  "quote": "        if getattr(callback, \"csrf_exempt\", False):\n            return None\n\n        # Assume that anything not defined as 'safe' by RFC 9110 needs protection\n        if request.method in (\"GET\", \"HEAD\", \"OPTIONS\", \"TRACE\"):\n            return self._accept(request)",
+                  "sha256": "fc32ed5411ba8073988ac8cdf001ebaebe2d85941130b80266a58e198badb4b3"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "origin-referer",
+          "fact": "有 Origin 时校验来源；HTTPS 且无 Origin 时校验 Referer，失败则拒绝。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/middleware/csrf.py",
+                  "startLine": 436,
+                  "endLine": 441,
+                  "quote": "        if \"HTTP_ORIGIN\" in request.META:\n            if not self._origin_verified(request):\n                return self._reject(\n                    request, REASON_BAD_ORIGIN % request.META[\"HTTP_ORIGIN\"]\n                )\n        elif request.is_secure():",
+                  "sha256": "031c712d4b6a563faf525a1a2894628707afb9fb397dda9d6a082885af100274"
+                },
+                {
+                  "path": "django/middleware/csrf.py",
+                  "startLine": 459,
+                  "endLine": 462,
+                  "quote": "            try:\n                self._check_referer(request)\n            except RejectRequest as exc:\n                return self._reject(request, exc.reason)",
+                  "sha256": "c7b07a73fe91a908ad103744dd2c7044be0ca97dc058318e23e900a88581a287"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "require-secret",
+          "fact": "缺少请求对应的 CSRF secret 会拒绝请求。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/middleware/csrf.py",
+                  "startLine": 358,
+                  "endLine": 358,
+                  "quote": "        if csrf_secret is None:",
+                  "sha256": "a3b638d0f984af22c094a6470ec5c6f435b61e1157c18a5d6f1d418c460eb78b"
+                },
+                {
+                  "path": "django/middleware/csrf.py",
+                  "startLine": 362,
+                  "endLine": 362,
+                  "quote": "            raise RejectRequest(REASON_NO_CSRF_COOKIE)",
+                  "sha256": "1b9272c6c46feb8a0429421e4d813b420de2f64407869b2411fab73e9f2761ec"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "token-sources",
+          "fact": "优先读取表单 token，没有时回退到配置的请求头，缺失则拒绝。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/middleware/csrf.py",
+                  "startLine": 366,
+                  "endLine": 368,
+                  "quote": "        if request.method == \"POST\":\n            try:\n                request_csrf_token = request.POST.get(\"csrfmiddlewaretoken\", \"\")",
+                  "sha256": "fe1935819cb3c05aea78998cdfe47a064f9cfa06c2d667beaee8282334aa4a7d"
+                },
+                {
+                  "path": "django/middleware/csrf.py",
+                  "startLine": 376,
+                  "endLine": 376,
+                  "quote": "        if request_csrf_token == \"\":",
+                  "sha256": "f99db7f7d1fe78a7d6245da0cb9ec005cf675dd4d2f53b871976db4f5e1fabd4"
+                },
+                {
+                  "path": "django/middleware/csrf.py",
+                  "startLine": 384,
+                  "endLine": 386,
+                  "quote": "                request_csrf_token = request.META[settings.CSRF_HEADER_NAME]\n            except KeyError:\n                raise RejectRequest(REASON_CSRF_TOKEN_MISSING)",
+                  "sha256": "ff5bfab30b7a5672fb761d12a7e57cacbae6ae010377775e2f80b4242da82c24"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "token-validation",
+          "fact": "检查 token 格式及其与 secret 的匹配，视图钩子捕获校验失败并拒绝。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/middleware/csrf.py",
+                  "startLine": 391,
+                  "endLine": 395,
+                  "quote": "        try:\n            _check_token_format(request_csrf_token)\n        except InvalidTokenFormat as exc:\n            reason = self._bad_token_message(exc.reason, token_source)\n            raise RejectRequest(reason)",
+                  "sha256": "7ce5c1ff010178de93f9e080bc55ba5ea82c5f9593add2122a2cae3d8a5f0448"
+                },
+                {
+                  "path": "django/middleware/csrf.py",
+                  "startLine": 397,
+                  "endLine": 399,
+                  "quote": "        if not _does_token_match(request_csrf_token, csrf_secret):\n            reason = self._bad_token_message(\"incorrect\", token_source)\n            raise RejectRequest(reason)",
+                  "sha256": "0adfe85b33957975e942639579ed53b318652b63f1a8cb1ce7039dcfdbc826ac"
+                },
+                {
+                  "path": "django/middleware/csrf.py",
+                  "startLine": 464,
+                  "endLine": 467,
+                  "quote": "        try:\n            self._check_token(request)\n        except RejectRequest as exc:\n            return self._reject(request, exc.reason)",
+                  "sha256": "8795825e54e7672090a5c101c66731a15b04b3785b33281acbb76c758dfd100e"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page-cache",
+      "units": [
+        {
+          "id": "eligible-methods",
+          "fact": "读取页面缓存仅处理 GET 和 HEAD，其他方法不更新缓存。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/middleware/cache.py",
+                  "startLine": 174,
+                  "endLine": 176,
+                  "quote": "        if request.method not in (\"GET\", \"HEAD\"):\n            request._cache_update_cache = False\n            return None  # Don't bother checking the cache.",
+                  "sha256": "8669d2209a21d81f667af39d124362ed53460be755acf48171c80ecd25aca63d"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cache-hit-miss",
+          "fact": "按键读取响应，未命中标记需要更新，命中则返回缓存并取消更新。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/middleware/cache.py",
+                  "startLine": 179,
+                  "endLine": 183,
+                  "quote": "        cache_key = get_cache_key(request, self.key_prefix, \"GET\", cache=self.cache)\n        if cache_key is None:\n            request._cache_update_cache = True\n            return None  # No cache information available, need to rebuild.\n        response = self.cache.get(cache_key)",
+                  "sha256": "8d333a84433b205a59256663099268132c322bc74a452469c365c1c33cef0172"
+                },
+                {
+                  "path": "django/middleware/cache.py",
+                  "startLine": 191,
+                  "endLine": 193,
+                  "quote": "        if response is None:\n            request._cache_update_cache = True\n            return None  # No cache information available, need to rebuild.",
+                  "sha256": "2bf46d823c6482b37a4d8c8833c33f69e3ff00935cc5e45526f60c843d519ec8"
+                },
+                {
+                  "path": "django/middleware/cache.py",
+                  "startLine": 205,
+                  "endLine": 206,
+                  "quote": "        request._cache_update_cache = False\n        return response",
+                  "sha256": "91ee33d57d1dd8ebeb9229b728bef749daf9717c64ac41b9c1170a489861a752"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "response-eligibility",
+          "fact": "流式响应、不合适状态码、带 Cookie 的用户响应和禁止共享缓存的控制指令阻止写缓存。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/middleware/cache.py",
+                  "startLine": 94,
+                  "endLine": 95,
+                  "quote": "        if response.streaming or response.status_code not in (200, 304):\n            return response",
+                  "sha256": "71215be53bdff5b2cc1a501eb90d33e68e3e84d165c04ddc1568740fd6a3bf56"
+                },
+                {
+                  "path": "django/middleware/cache.py",
+                  "startLine": 99,
+                  "endLine": 100,
+                  "quote": "        if response.cookies and has_vary_header(response, \"Cookie\"):\n            return response",
+                  "sha256": "9994d1f1915e64eeb6e613887d45bda3a7da2f6fb720f8a19d826f028cc9e14c"
+                },
+                {
+                  "path": "django/middleware/cache.py",
+                  "startLine": 104,
+                  "endLine": 113,
+                  "quote": "        cache_control = response.get(\"Cache-Control\", \"\").lower()\n        if cache_control and any(\n            directive in cache_control\n            for directive in (\n                \"private\",\n                \"no-cache\",\n                \"no-store\",\n            )\n        ):\n            return response",
+                  "sha256": "88279f46649436daea1c4dd6b24f0a6721a26144a78011df6f7dbf126d496a78"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "write-response",
+          "fact": "有效超时且状态为 200 时学习缓存键，已可用响应直接写入，需渲染的响应在渲染后写入。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/middleware/cache.py",
+                  "startLine": 138,
+                  "endLine": 147,
+                  "quote": "        if timeout and response.status_code == 200:\n            cache_key = learn_cache_key(\n                request, response, timeout, self.key_prefix, cache=self.cache\n            )\n            if hasattr(response, \"render\") and callable(response.render):\n                response.add_post_render_callback(\n                    lambda r: self.cache.set(cache_key, r, timeout)\n                )\n            else:\n                self.cache.set(cache_key, response, timeout)",
+                  "sha256": "683e79445acdbbc86f7f671e2d1446a43d45a2011eb2a50e533097ff2754e23e"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "settings",
+      "units": [
+        {
+          "id": "lazy-load",
+          "fact": "首次访问未初始化的配置会触发加载，从环境变量取得模块并构造设置对象。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/conf/__init__.py",
+                  "startLine": 58,
+                  "endLine": 58,
+                  "quote": "        settings_module = os.environ.get(ENVIRONMENT_VARIABLE)",
+                  "sha256": "9ce7df40e0157110a74084d2d5ec30b1dd9adbeba6c682c9625133b86e12ee77"
+                },
+                {
+                  "path": "django/conf/__init__.py",
+                  "startLine": 68,
+                  "endLine": 68,
+                  "quote": "        self._wrapped = Settings(settings_module)",
+                  "sha256": "4d5f7c8e7a6b92309e746bac09452002c3a86cf8077bcb383d8e5f66d72087c8"
+                },
+                {
+                  "path": "django/conf/__init__.py",
+                  "startLine": 80,
+                  "endLine": 83,
+                  "quote": "        if (_wrapped := self._wrapped) is empty:\n            self._setup(name)\n            _wrapped = self._wrapped\n        val = getattr(_wrapped, name)",
+                  "sha256": "dddfbc4784f6ccd5679f17bc103e122f39aabcdc05a752a75043134c9f624ec6"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "override-defaults",
+          "fact": "先复制全局大写默认设置，再导入项目模块，用项目大写设置覆盖。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/conf/__init__.py",
+                  "startLine": 159,
+                  "endLine": 161,
+                  "quote": "        for setting in dir(global_settings):\n            if setting.isupper():\n                setattr(self, setting, getattr(global_settings, setting))",
+                  "sha256": "2bec74cd794ef15ff684d6f85f4040d723708c0dc3c715a35c2646eb826833ac"
+                },
+                {
+                  "path": "django/conf/__init__.py",
+                  "startLine": 166,
+                  "endLine": 166,
+                  "quote": "        mod = importlib.import_module(self.SETTINGS_MODULE)",
+                  "sha256": "191d8d304826f6ad37ac0bdd7f54257161b334c58eaf948aa8883be9f34163b6"
+                },
+                {
+                  "path": "django/conf/__init__.py",
+                  "startLine": 175,
+                  "endLine": 178,
+                  "quote": "        self._explicit_settings = set()\n        for setting in dir(mod):\n            if setting.isupper():\n                setting_value = getattr(mod, setting)",
+                  "sha256": "f434e8d3a8e14034f5bad8cccfcd4d40c305ba1c048a43128a23474ff73428a6"
+                },
+                {
+                  "path": "django/conf/__init__.py",
+                  "startLine": 186,
+                  "endLine": 187,
+                  "quote": "                setattr(self, setting, setting_value)\n                self._explicit_settings.add(setting)",
+                  "sha256": "2673d53bba3ab8ead9d2f4c3d9d5fb30398886657b92df7aec5a5a0b51a89042"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "cache-read",
+          "fact": "取到的设置值缓存在代理实例字典中并返回。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/conf/__init__.py",
+                  "startLine": 92,
+                  "endLine": 93,
+                  "quote": "        self.__dict__[name] = val\n        return val",
+                  "sha256": "840eccf77c5db7128c5fb6329d872a193eaa4f7e113137c9d7f063b5c452e218"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "file-upload",
+      "units": [
+        {
+          "id": "handler-order",
+          "fact": "从配置加载上传处理器，默认内存处理器排在临时文件处理器前。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/http/request.py",
+                  "startLine": 342,
+                  "endLine": 346,
+                  "quote": "    def _initialize_handlers(self):\n        self._upload_handlers = [\n            uploadhandler.load_handler(handler, self)\n            for handler in settings.FILE_UPLOAD_HANDLERS\n        ]",
+                  "sha256": "8b1c49e2fe076ea203df09a5c192515f0f90c2f3b0fb7390475f1c48447796db"
+                },
+                {
+                  "path": "django/conf/global_settings.py",
+                  "startLine": 304,
+                  "endLine": 307,
+                  "quote": "FILE_UPLOAD_HANDLERS = [\n    \"django.core.files.uploadhandler.MemoryFileUploadHandler\",\n    \"django.core.files.uploadhandler.TemporaryFileUploadHandler\",\n]",
+                  "sha256": "141fd2718c7eb040c7a8003df312d0a65914bc3aa8d7eb72f9e8b46687860d89"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "size-decision",
+          "fact": "内存处理器优先测量可寻址流的实际大小，否则使用传入长度，再与内存阈值比较。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/core/files/uploadhandler.py",
+                  "startLine": 210,
+                  "endLine": 218,
+                  "quote": "        stream = getattr(input_data, \"_stream\", input_data)\n        try:\n            content_length = stream.seek(0, os.SEEK_END)\n        except (UnsupportedOperation, AttributeError):\n            # Cannot seek; fall back to the Content-Length parameter.\n            # On WSGI the stream enforces this value so it is trustworthy.\n            pass\n        else:\n            stream.seek(0)",
+                  "sha256": "0476a9d3b2aac9ff9d51f6d16463e279d6ddf9629376d107141db394d8d2bbf3"
+                },
+                {
+                  "path": "django/core/files/uploadhandler.py",
+                  "startLine": 219,
+                  "endLine": 222,
+                  "quote": "        self.activated = (\n            content_length is not None\n            and content_length <= settings.FILE_UPLOAD_MAX_MEMORY_SIZE\n        )",
+                  "sha256": "357f02603b19ac2e039781d9506e7fe047c8f85a78e0c5fe4ae46616ef61a75a"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "memory-handler",
+          "fact": "内存处理器启用时创建内存流并阻止后续处理器；未启用时将数据块传下去。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/core/files/uploadhandler.py",
+                  "startLine": 226,
+                  "endLine": 228,
+                  "quote": "        if self.activated:\n            self.file = BytesIO()\n            raise StopFutureHandlers()",
+                  "sha256": "77e1aabec10cbbbe7248b634f42e20c4d73151cbbeb3d418ccbb7fa13c9b07e0"
+                },
+                {
+                  "path": "django/core/files/uploadhandler.py",
+                  "startLine": 232,
+                  "endLine": 235,
+                  "quote": "        if self.activated:\n            self.file.write(raw_data)\n        else:\n            return raw_data",
+                  "sha256": "03bbfd7bc5ce1be45fb0779891cc37cdae1372d392f267cef7400898eb4bca3a"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "temporary-handler",
+          "fact": "临时文件处理器创建临时上传文件，并将数据块写入其中。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/core/files/uploadhandler.py",
+                  "startLine": 171,
+                  "endLine": 176,
+                  "quote": "        self.file = TemporaryUploadedFile(\n            self.file_name, self.content_type, 0, self.charset, self.content_type_extra\n        )\n\n    def receive_data_chunk(self, raw_data, start):\n        self.file.write(raw_data)",
+                  "sha256": "59f08555e5c64f04b4f1d07bbef7a46a0b493deedee8b40e58fef1687bb71455"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "signals",
+      "units": [
+        {
+          "id": "registration",
+          "fact": "注册根据接收者或去重标识与发送者建立键，避免重复并保存接收者。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/dispatch/dispatcher.py",
+                  "startLine": 96,
+                  "endLine": 99,
+                  "quote": "        if dispatch_uid:\n            lookup_key = (dispatch_uid, _make_id(sender))\n        else:\n            lookup_key = (_make_id(receiver), _make_id(sender))",
+                  "sha256": "1664d27cc639b79ccc18442ad1ae5d683826f0f541afb079783e41a9df249acb"
+                },
+                {
+                  "path": "django/dispatch/dispatcher.py",
+                  "startLine": 113,
+                  "endLine": 117,
+                  "quote": "        with self.lock:\n            self._clear_dead_receivers()\n            if not any(r_key == lookup_key for r_key, _, _ in self.receivers):\n                self.receivers.append((lookup_key, receiver, is_async))\n            self.sender_receivers_cache.clear()",
+                  "sha256": "115ea904da3279f485000d25824c43ff96fd63f0a20ad619891a08084506fa49"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "receiver-selection",
+          "fact": "发送者过滤允许指定发送者或任意发送者，弱引用只保留仍存活的接收者。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/dispatch/dispatcher.py",
+                  "startLine": 435,
+                  "endLine": 437,
+                  "quote": "                for (_receiverkey, r_senderkey), receiver, is_async in self.receivers:\n                    if r_senderkey == NONE_ID or r_senderkey == senderkey:\n                        receivers.append((receiver, is_async))",
+                  "sha256": "c7e7277955602f1daa558810afca0339d4cf0c0c80ae0b19defaddd057867b70"
+                },
+                {
+                  "path": "django/dispatch/dispatcher.py",
+                  "startLine": 446,
+                  "endLine": 450,
+                  "quote": "        for receiver, is_async in receivers:\n            if isinstance(receiver, weakref.ReferenceType):\n                # Dereference the weak reference.\n                receiver = receiver()\n                if receiver is not None:",
+                  "sha256": "41456ef3510d37535f6ef82250342fd3c0fb5d3a054f7429e43e30f54099a49c"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "normal-errors",
+          "fact": "普通同步发送直接调用接收者，未捕获其异常，因此异常会向调用方传播并中止该循环。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/dispatch/dispatcher.py",
+                  "startLine": 186,
+                  "endLine": 190,
+                  "quote": "        responses = []\n        sync_receivers, async_receivers = self._live_receivers(sender)\n        for receiver in sync_receivers:\n            response = receiver(signal=self, sender=sender, **named)\n            responses.append((receiver, response))",
+                  "sha256": "94f528e8a792403953f87ce87c29ff50020c79efa9369c9a83df28bdc24b5062"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "robust-errors",
+          "fact": "容错发送逐个捕获 Exception，将异常对象作为该接收者结果并继续循环。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/dispatch/dispatcher.py",
+                  "startLine": 303,
+                  "endLine": 311,
+                  "quote": "        sync_receivers, async_receivers = self._live_receivers(sender)\n        for receiver in sync_receivers:\n            try:\n                response = receiver(signal=self, sender=sender, **named)\n            except Exception as err:\n                self._log_robust_failure(receiver, err)\n                responses.append((receiver, err))\n            else:\n                responses.append((receiver, response))",
+                  "sha256": "761fdb2863caa4b4951559b25b225e89ecee6e53076981516d2a7be16897b5ed"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "view-permissions",
+      "units": [
+        {
+          "id": "permission-check",
+          "fact": "取得所需权限后调用用户权限检查，分发时未通过则进入无权限处理。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/contrib/auth/mixins.py",
+                  "startLine": 103,
+                  "endLine": 109,
+                  "quote": "        perms = self.get_permission_required()\n        return self.request.user.has_perms(perms)\n\n    def dispatch(self, request, *args, **kwargs):\n        if not self.has_permission():\n            return self.handle_no_permission()\n        return super().dispatch(request, *args, **kwargs)",
+                  "sha256": "c7c99ce64e0faa9500a54aa884eede36c5a43819856609ced3f069188be9468b"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "deny-authenticated",
+          "fact": "配置要求抛异常，或用户已经登录时，抛出权限拒绝异常。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/contrib/auth/mixins.py",
+                  "startLine": 46,
+                  "endLine": 48,
+                  "quote": "    def handle_no_permission(self):\n        if self.raise_exception or self.request.user.is_authenticated:\n            raise PermissionDenied(self.get_permission_denied_message())",
+                  "sha256": "6d25d5482297da246b381464b50bec695eabcd0e25d72822176fd1b52811454d"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "redirect-anonymous",
+          "fact": "其他情况取得登录地址，保留安全的返回路径并跳转到登录。",
+          "alternatives": [
+            {
+              "allOf": [
+                {
+                  "path": "django/contrib/auth/mixins.py",
+                  "startLine": 50,
+                  "endLine": 51,
+                  "quote": "        path = self.request.build_absolute_uri()\n        resolved_login_url = resolve_url(self.get_login_url())",
+                  "sha256": "a9ea30d8dfad7ac2e1c826314e740fd1ba3cbaadadf16e251aea2e13ec95b29b"
+                },
+                {
+                  "path": "django/contrib/auth/mixins.py",
+                  "startLine": 54,
+                  "endLine": 64,
+                  "quote": "        login_scheme, login_netloc = urlsplit(resolved_login_url)[:2]\n        current_scheme, current_netloc = urlsplit(path)[:2]\n        if (not login_scheme or login_scheme == current_scheme) and (\n            not login_netloc or login_netloc == current_netloc\n        ):\n            path = self.request.get_full_path()\n        return redirect_to_login(\n            path,\n            resolved_login_url,\n            self.get_redirect_field_name(),\n        )",
+                  "sha256": "5678c66fb4ee87d6a2e986b49dbf8cfaebd19e8003fbaf63fb24d5c3e59d9221"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "revision": {
+    "basedOn": "answers.v1.json",
+    "basedOnSha256": "429d0288073ca8c5d3d7638ceeeb1430c2c8e1399c6c02ccb0fe46836966f458",
+    "revisedAt": "2026-10-03T09:33:50.271991+00:00",
+    "timing": "after inspecting saved ACE responses; not a blind correction",
+    "reason": "routing/request-to-view required executing the resolved view, but both query languages ask only about loading routing configuration and matching the requested path to a view. Remove the execution requirement; retain the source-verified resolve_request evidence. No other units changed.",
+    "changedUnits": [
+      "routing/request-to-view"
+    ]
+  }
+}

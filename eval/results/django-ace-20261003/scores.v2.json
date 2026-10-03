@@ -1,0 +1,5983 @@
+{
+  "schemaVersion": 1,
+  "kind": "development-pilot-reference-span-coverage",
+  "answerVersion": "v2",
+  "answerFile": "answers.v2.json",
+  "answerSha256": "6923b8d2558dd151adac538dbecf5f4384af104fe6a8262fc566de0790409ab5",
+  "commit": "f59aef2ee9b5c988fd4179d8f2835030bd76297c",
+  "tokenizer": {
+    "package": "js-tiktoken",
+    "version": "1.0.21",
+    "encoding": "cl100k_base"
+  },
+  "primaryBudget": 4000,
+  "independentTasks": 10,
+  "notes": [
+    "Source-verified reference-span coverage; no human/independent annotation claim.",
+    "Unjudged output is not automatically irrelevant. One run per language; no significance claim."
+  ],
+  "summary": {
+    "2000": {
+      "zh": {
+        "tasks": 10,
+        "completed": 10,
+        "coverage": 0.6599999999999999,
+        "completeRecall": 0.3
+      },
+      "en": {
+        "tasks": 10,
+        "completed": 10,
+        "coverage": 0.6016666666666667,
+        "completeRecall": 0.2
+      },
+      "englishMinusChinese": -0.05833333333333324
+    },
+    "4000": {
+      "zh": {
+        "tasks": 10,
+        "completed": 10,
+        "coverage": 0.865,
+        "completeRecall": 0.5
+      },
+      "en": {
+        "tasks": 10,
+        "completed": 10,
+        "coverage": 0.8400000000000001,
+        "completeRecall": 0.5
+      },
+      "englishMinusChinese": -0.02499999999999991
+    },
+    "8000": {
+      "zh": {
+        "tasks": 10,
+        "completed": 10,
+        "coverage": 0.885,
+        "completeRecall": 0.5
+      },
+      "en": {
+        "tasks": 10,
+        "completed": 10,
+        "coverage": 0.885,
+        "completeRecall": 0.5
+      },
+      "englishMinusChinese": 0
+    }
+  },
+  "rows": [
+    {
+      "id": "login",
+      "language": "zh",
+      "status": "completed",
+      "rawTokens": 4889,
+      "elapsedMs": 4497,
+      "rawScore": {
+        "covered": 4,
+        "total": 5,
+        "coverage": 0.8,
+        "omission": 0.19999999999999996,
+        "complete": false,
+        "units": [
+          {
+            "id": "credentials",
+            "fact": "登录表单读取账号密码，调用身份验证，并拒绝验证失败的结果。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "backend-dispatch",
+            "fact": "身份验证入口依次调用兼容的后端，返回用户时标记其后端。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "password-check",
+            "fact": "默认模型后端查找用户并检查密码及账号是否可认证。",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "django/contrib/auth/backends.py",
+                    "missingLines": [
+                      96
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "login-view",
+            "fact": "内置登录视图在表单有效后调用登录逻辑并返回跳转。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "session-state",
+            "fact": "登录将用户标识、后端和认证哈希写入会话，并更新请求用户。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 469,
+          "verifiedOccurrences": 468,
+          "uniqueVerifiedLines": 468,
+          "duplicateVerifiedLines": 0,
+          "invalid": [
+            {
+              "path": "django/middleware/csrf.py",
+              "line": 408,
+              "reason": "line-text-mismatch"
+            }
+          ]
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1995,
+          "truncated": true,
+          "file": "budgeted/login.zh.2000.txt",
+          "covered": 3,
+          "total": 5,
+          "coverage": 0.6,
+          "omission": 0.4,
+          "complete": false,
+          "units": [
+            {
+              "id": "credentials",
+              "fact": "登录表单读取账号密码，调用身份验证，并拒绝验证失败的结果。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/contrib/auth/forms.py",
+                      "missingLines": [
+                        362,
+                        363,
+                        364,
+                        365,
+                        366,
+                        367,
+                        368,
+                        369,
+                        370
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "backend-dispatch",
+              "fact": "身份验证入口依次调用兼容的后端，返回用户时标记其后端。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "password-check",
+              "fact": "默认模型后端查找用户并检查密码及账号是否可认证。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/contrib/auth/backends.py",
+                      "missingLines": [
+                        65
+                      ]
+                    },
+                    {
+                      "path": "django/contrib/auth/backends.py",
+                      "missingLines": [
+                        71,
+                        72
+                      ]
+                    },
+                    {
+                      "path": "django/contrib/auth/backends.py",
+                      "missingLines": [
+                        96
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "login-view",
+              "fact": "内置登录视图在表单有效后调用登录逻辑并返回跳转。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "session-state",
+              "fact": "登录将用户标识、后端和认证哈希写入会话，并更新请求用户。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 181,
+            "verifiedOccurrences": 181,
+            "uniqueVerifiedLines": 181,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3996,
+          "truncated": true,
+          "file": "budgeted/login.zh.4000.txt",
+          "covered": 4,
+          "total": 5,
+          "coverage": 0.8,
+          "omission": 0.19999999999999996,
+          "complete": false,
+          "units": [
+            {
+              "id": "credentials",
+              "fact": "登录表单读取账号密码，调用身份验证，并拒绝验证失败的结果。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "backend-dispatch",
+              "fact": "身份验证入口依次调用兼容的后端，返回用户时标记其后端。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "password-check",
+              "fact": "默认模型后端查找用户并检查密码及账号是否可认证。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/contrib/auth/backends.py",
+                      "missingLines": [
+                        96
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "login-view",
+              "fact": "内置登录视图在表单有效后调用登录逻辑并返回跳转。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "session-state",
+              "fact": "登录将用户标识、后端和认证哈希写入会话，并更新请求用户。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 388,
+            "verifiedOccurrences": 388,
+            "uniqueVerifiedLines": 388,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4889,
+          "truncated": false,
+          "file": "budgeted/login.zh.8000.txt",
+          "covered": 4,
+          "total": 5,
+          "coverage": 0.8,
+          "omission": 0.19999999999999996,
+          "complete": false,
+          "units": [
+            {
+              "id": "credentials",
+              "fact": "登录表单读取账号密码，调用身份验证，并拒绝验证失败的结果。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "backend-dispatch",
+              "fact": "身份验证入口依次调用兼容的后端，返回用户时标记其后端。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "password-check",
+              "fact": "默认模型后端查找用户并检查密码及账号是否可认证。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/contrib/auth/backends.py",
+                      "missingLines": [
+                        96
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "login-view",
+              "fact": "内置登录视图在表单有效后调用登录逻辑并返回跳转。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "session-state",
+              "fact": "登录将用户标识、后端和认证哈希写入会话，并更新请求用户。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 469,
+            "verifiedOccurrences": 468,
+            "uniqueVerifiedLines": 468,
+            "duplicateVerifiedLines": 0,
+            "invalid": [
+              {
+                "path": "django/middleware/csrf.py",
+                "line": 408,
+                "reason": "line-text-mismatch"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "login",
+      "language": "en",
+      "status": "completed",
+      "rawTokens": 4763,
+      "elapsedMs": 3629,
+      "rawScore": {
+        "covered": 4,
+        "total": 5,
+        "coverage": 0.8,
+        "omission": 0.19999999999999996,
+        "complete": false,
+        "units": [
+          {
+            "id": "credentials",
+            "fact": "登录表单读取账号密码，调用身份验证，并拒绝验证失败的结果。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "backend-dispatch",
+            "fact": "身份验证入口依次调用兼容的后端，返回用户时标记其后端。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "password-check",
+            "fact": "默认模型后端查找用户并检查密码及账号是否可认证。",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "django/contrib/auth/backends.py",
+                    "missingLines": [
+                      96
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "login-view",
+            "fact": "内置登录视图在表单有效后调用登录逻辑并返回跳转。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "session-state",
+            "fact": "登录将用户标识、后端和认证哈希写入会话，并更新请求用户。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 454,
+          "verifiedOccurrences": 454,
+          "uniqueVerifiedLines": 454,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1986,
+          "truncated": true,
+          "file": "budgeted/login.en.2000.txt",
+          "covered": 3,
+          "total": 5,
+          "coverage": 0.6,
+          "omission": 0.4,
+          "complete": false,
+          "units": [
+            {
+              "id": "credentials",
+              "fact": "登录表单读取账号密码，调用身份验证，并拒绝验证失败的结果。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/contrib/auth/forms.py",
+                      "missingLines": [
+                        362,
+                        363,
+                        364,
+                        365,
+                        366,
+                        367,
+                        368,
+                        369,
+                        370
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "backend-dispatch",
+              "fact": "身份验证入口依次调用兼容的后端，返回用户时标记其后端。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "password-check",
+              "fact": "默认模型后端查找用户并检查密码及账号是否可认证。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/contrib/auth/backends.py",
+                      "missingLines": [
+                        71,
+                        72
+                      ]
+                    },
+                    {
+                      "path": "django/contrib/auth/backends.py",
+                      "missingLines": [
+                        96
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "login-view",
+              "fact": "内置登录视图在表单有效后调用登录逻辑并返回跳转。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "session-state",
+              "fact": "登录将用户标识、后端和认证哈希写入会话，并更新请求用户。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 179,
+            "verifiedOccurrences": 179,
+            "uniqueVerifiedLines": 179,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3997,
+          "truncated": true,
+          "file": "budgeted/login.en.4000.txt",
+          "covered": 4,
+          "total": 5,
+          "coverage": 0.8,
+          "omission": 0.19999999999999996,
+          "complete": false,
+          "units": [
+            {
+              "id": "credentials",
+              "fact": "登录表单读取账号密码，调用身份验证，并拒绝验证失败的结果。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "backend-dispatch",
+              "fact": "身份验证入口依次调用兼容的后端，返回用户时标记其后端。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "password-check",
+              "fact": "默认模型后端查找用户并检查密码及账号是否可认证。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/contrib/auth/backends.py",
+                      "missingLines": [
+                        96
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "login-view",
+              "fact": "内置登录视图在表单有效后调用登录逻辑并返回跳转。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "session-state",
+              "fact": "登录将用户标识、后端和认证哈希写入会话，并更新请求用户。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 374,
+            "verifiedOccurrences": 374,
+            "uniqueVerifiedLines": 374,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4763,
+          "truncated": false,
+          "file": "budgeted/login.en.8000.txt",
+          "covered": 4,
+          "total": 5,
+          "coverage": 0.8,
+          "omission": 0.19999999999999996,
+          "complete": false,
+          "units": [
+            {
+              "id": "credentials",
+              "fact": "登录表单读取账号密码，调用身份验证，并拒绝验证失败的结果。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "backend-dispatch",
+              "fact": "身份验证入口依次调用兼容的后端，返回用户时标记其后端。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "password-check",
+              "fact": "默认模型后端查找用户并检查密码及账号是否可认证。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/contrib/auth/backends.py",
+                      "missingLines": [
+                        96
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "login-view",
+              "fact": "内置登录视图在表单有效后调用登录逻辑并返回跳转。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "session-state",
+              "fact": "登录将用户标识、后端和认证哈希写入会话，并更新请求用户。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 454,
+            "verifiedOccurrences": 454,
+            "uniqueVerifiedLines": 454,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "routing",
+      "language": "zh",
+      "status": "completed",
+      "rawTokens": 4873,
+      "elapsedMs": 3115,
+      "rawScore": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "root-config",
+            "fact": "未显式指定路由配置时从项目的根路由配置设置创建解析器。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "load-patterns",
+            "fact": "字符串配置通过导入模块加载，再取得其中的路由列表。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "match-patterns",
+            "fact": "解析器遍历路由规则递归匹配，并返回匹配视图及参数。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "request-to-view",
+            "fact": "请求处理器用访问路径解析，将匹配结果保存在请求中并返回。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 468,
+          "verifiedOccurrences": 467,
+          "uniqueVerifiedLines": 467,
+          "duplicateVerifiedLines": 0,
+          "invalid": [
+            {
+              "path": "django/urls/base.py",
+              "line": 178,
+              "reason": "line-text-mismatch"
+            }
+          ]
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1989,
+          "truncated": true,
+          "file": "budgeted/routing.zh.2000.txt",
+          "covered": 2,
+          "total": 4,
+          "coverage": 0.5,
+          "omission": 0.5,
+          "complete": false,
+          "units": [
+            {
+              "id": "root-config",
+              "fact": "未显式指定路由配置时从项目的根路由配置设置创建解析器。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "load-patterns",
+              "fact": "字符串配置通过导入模块加载，再取得其中的路由列表。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/urls/resolvers.py",
+                      "missingLines": [
+                        710,
+                        711,
+                        712,
+                        713
+                      ]
+                    },
+                    {
+                      "path": "django/urls/resolvers.py",
+                      "missingLines": [
+                        718
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "match-patterns",
+              "fact": "解析器遍历路由规则递归匹配，并返回匹配视图及参数。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/urls/resolvers.py",
+                      "missingLines": [
+                        666,
+                        667,
+                        668
+                      ]
+                    },
+                    {
+                      "path": "django/urls/resolvers.py",
+                      "missingLines": [
+                        689,
+                        690,
+                        691,
+                        692,
+                        693
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "request-to-view",
+              "fact": "请求处理器用访问路径解析，将匹配结果保存在请求中并返回。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 197,
+            "verifiedOccurrences": 197,
+            "uniqueVerifiedLines": 197,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3995,
+          "truncated": true,
+          "file": "budgeted/routing.zh.4000.txt",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "root-config",
+              "fact": "未显式指定路由配置时从项目的根路由配置设置创建解析器。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "load-patterns",
+              "fact": "字符串配置通过导入模块加载，再取得其中的路由列表。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "match-patterns",
+              "fact": "解析器遍历路由规则递归匹配，并返回匹配视图及参数。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "request-to-view",
+              "fact": "请求处理器用访问路径解析，将匹配结果保存在请求中并返回。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 381,
+            "verifiedOccurrences": 381,
+            "uniqueVerifiedLines": 381,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4873,
+          "truncated": false,
+          "file": "budgeted/routing.zh.8000.txt",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "root-config",
+              "fact": "未显式指定路由配置时从项目的根路由配置设置创建解析器。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "load-patterns",
+              "fact": "字符串配置通过导入模块加载，再取得其中的路由列表。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "match-patterns",
+              "fact": "解析器遍历路由规则递归匹配，并返回匹配视图及参数。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "request-to-view",
+              "fact": "请求处理器用访问路径解析，将匹配结果保存在请求中并返回。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 468,
+            "verifiedOccurrences": 467,
+            "uniqueVerifiedLines": 467,
+            "duplicateVerifiedLines": 0,
+            "invalid": [
+              {
+                "path": "django/urls/base.py",
+                "line": 178,
+                "reason": "line-text-mismatch"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "routing",
+      "language": "en",
+      "status": "completed",
+      "rawTokens": 4964,
+      "elapsedMs": 3484,
+      "rawScore": {
+        "covered": 3,
+        "total": 4,
+        "coverage": 0.75,
+        "omission": 0.25,
+        "complete": false,
+        "units": [
+          {
+            "id": "root-config",
+            "fact": "未显式指定路由配置时从项目的根路由配置设置创建解析器。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "load-patterns",
+            "fact": "字符串配置通过导入模块加载，再取得其中的路由列表。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "match-patterns",
+            "fact": "解析器遍历路由规则递归匹配，并返回匹配视图及参数。",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "django/urls/resolvers.py",
+                    "missingLines": [
+                      689,
+                      690,
+                      691,
+                      692,
+                      693
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "request-to-view",
+            "fact": "请求处理器用访问路径解析，将匹配结果保存在请求中并返回。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 484,
+          "verifiedOccurrences": 483,
+          "uniqueVerifiedLines": 483,
+          "duplicateVerifiedLines": 0,
+          "invalid": [
+            {
+              "path": "django/urls/resolvers.py",
+              "line": 728,
+              "reason": "line-text-mismatch"
+            }
+          ]
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1998,
+          "truncated": true,
+          "file": "budgeted/routing.en.2000.txt",
+          "covered": 2,
+          "total": 4,
+          "coverage": 0.5,
+          "omission": 0.5,
+          "complete": false,
+          "units": [
+            {
+              "id": "root-config",
+              "fact": "未显式指定路由配置时从项目的根路由配置设置创建解析器。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "load-patterns",
+              "fact": "字符串配置通过导入模块加载，再取得其中的路由列表。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/urls/resolvers.py",
+                      "missingLines": [
+                        710,
+                        711,
+                        712,
+                        713
+                      ]
+                    },
+                    {
+                      "path": "django/urls/resolvers.py",
+                      "missingLines": [
+                        718
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "match-patterns",
+              "fact": "解析器遍历路由规则递归匹配，并返回匹配视图及参数。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/urls/resolvers.py",
+                      "missingLines": [
+                        666,
+                        667,
+                        668
+                      ]
+                    },
+                    {
+                      "path": "django/urls/resolvers.py",
+                      "missingLines": [
+                        689,
+                        690,
+                        691,
+                        692,
+                        693
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "request-to-view",
+              "fact": "请求处理器用访问路径解析，将匹配结果保存在请求中并返回。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 196,
+            "verifiedOccurrences": 196,
+            "uniqueVerifiedLines": 196,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3997,
+          "truncated": true,
+          "file": "budgeted/routing.en.4000.txt",
+          "covered": 2,
+          "total": 4,
+          "coverage": 0.5,
+          "omission": 0.5,
+          "complete": false,
+          "units": [
+            {
+              "id": "root-config",
+              "fact": "未显式指定路由配置时从项目的根路由配置设置创建解析器。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "load-patterns",
+              "fact": "字符串配置通过导入模块加载，再取得其中的路由列表。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/urls/resolvers.py",
+                      "missingLines": [
+                        710,
+                        711,
+                        712,
+                        713
+                      ]
+                    },
+                    {
+                      "path": "django/urls/resolvers.py",
+                      "missingLines": [
+                        718
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "match-patterns",
+              "fact": "解析器遍历路由规则递归匹配，并返回匹配视图及参数。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/urls/resolvers.py",
+                      "missingLines": [
+                        666,
+                        667,
+                        668
+                      ]
+                    },
+                    {
+                      "path": "django/urls/resolvers.py",
+                      "missingLines": [
+                        689,
+                        690,
+                        691,
+                        692,
+                        693
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "request-to-view",
+              "fact": "请求处理器用访问路径解析，将匹配结果保存在请求中并返回。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 393,
+            "verifiedOccurrences": 393,
+            "uniqueVerifiedLines": 393,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4964,
+          "truncated": false,
+          "file": "budgeted/routing.en.8000.txt",
+          "covered": 3,
+          "total": 4,
+          "coverage": 0.75,
+          "omission": 0.25,
+          "complete": false,
+          "units": [
+            {
+              "id": "root-config",
+              "fact": "未显式指定路由配置时从项目的根路由配置设置创建解析器。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "load-patterns",
+              "fact": "字符串配置通过导入模块加载，再取得其中的路由列表。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "match-patterns",
+              "fact": "解析器遍历路由规则递归匹配，并返回匹配视图及参数。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/urls/resolvers.py",
+                      "missingLines": [
+                        689,
+                        690,
+                        691,
+                        692,
+                        693
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "request-to-view",
+              "fact": "请求处理器用访问路径解析，将匹配结果保存在请求中并返回。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 484,
+            "verifiedOccurrences": 483,
+            "uniqueVerifiedLines": 483,
+            "duplicateVerifiedLines": 0,
+            "invalid": [
+              {
+                "path": "django/urls/resolvers.py",
+                "line": 728,
+                "reason": "line-text-mismatch"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "middleware",
+      "language": "zh",
+      "status": "completed",
+      "rawTokens": 4486,
+      "elapsedMs": 2627,
+      "rawScore": {
+        "covered": 3,
+        "total": 4,
+        "coverage": 0.75,
+        "omission": 0.25,
+        "complete": false,
+        "units": [
+          {
+            "id": "build-chain",
+            "fact": "按配置的逆序实例化中间件并逐层包装下游处理器，因此请求从配置首项进入。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "call-chain",
+            "fact": "构建好的处理器保存为中间件链，普通请求直接调用它。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "request-short-circuit",
+            "fact": "兼容中间件先执行请求钩子；只有未取得响应才调用下游，之后执行响应钩子。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "view-short-circuit",
+            "fact": "视图中间件返回响应会中断钩子循环；只有没有响应才调用视图。",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "django/core/handlers/base.py",
+                    "missingLines": [
+                      190,
+                      191,
+                      192
+                    ]
+                  },
+                  {
+                    "path": "django/core/handlers/base.py",
+                    "missingLines": [
+                      197
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 412,
+          "verifiedOccurrences": 412,
+          "uniqueVerifiedLines": 412,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1998,
+          "truncated": true,
+          "file": "budgeted/middleware.zh.2000.txt",
+          "covered": 2,
+          "total": 4,
+          "coverage": 0.5,
+          "omission": 0.5,
+          "complete": false,
+          "units": [
+            {
+              "id": "build-chain",
+              "fact": "按配置的逆序实例化中间件并逐层包装下游处理器，因此请求从配置首项进入。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "call-chain",
+              "fact": "构建好的处理器保存为中间件链，普通请求直接调用它。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "request-short-circuit",
+              "fact": "兼容中间件先执行请求钩子；只有未取得响应才调用下游，之后执行响应钩子。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/utils/deprecation.py",
+                      "missingLines": [
+                        117,
+                        118,
+                        119,
+                        120,
+                        121,
+                        122,
+                        123
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "view-short-circuit",
+              "fact": "视图中间件返回响应会中断钩子循环；只有没有响应才调用视图。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/core/handlers/base.py",
+                      "missingLines": [
+                        190,
+                        191,
+                        192
+                      ]
+                    },
+                    {
+                      "path": "django/core/handlers/base.py",
+                      "missingLines": [
+                        197
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 189,
+            "verifiedOccurrences": 189,
+            "uniqueVerifiedLines": 189,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3990,
+          "truncated": true,
+          "file": "budgeted/middleware.zh.4000.txt",
+          "covered": 3,
+          "total": 4,
+          "coverage": 0.75,
+          "omission": 0.25,
+          "complete": false,
+          "units": [
+            {
+              "id": "build-chain",
+              "fact": "按配置的逆序实例化中间件并逐层包装下游处理器，因此请求从配置首项进入。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "call-chain",
+              "fact": "构建好的处理器保存为中间件链，普通请求直接调用它。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "request-short-circuit",
+              "fact": "兼容中间件先执行请求钩子；只有未取得响应才调用下游，之后执行响应钩子。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "view-short-circuit",
+              "fact": "视图中间件返回响应会中断钩子循环；只有没有响应才调用视图。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/core/handlers/base.py",
+                      "missingLines": [
+                        190,
+                        191,
+                        192
+                      ]
+                    },
+                    {
+                      "path": "django/core/handlers/base.py",
+                      "missingLines": [
+                        197
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 370,
+            "verifiedOccurrences": 370,
+            "uniqueVerifiedLines": 370,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4486,
+          "truncated": false,
+          "file": "budgeted/middleware.zh.8000.txt",
+          "covered": 3,
+          "total": 4,
+          "coverage": 0.75,
+          "omission": 0.25,
+          "complete": false,
+          "units": [
+            {
+              "id": "build-chain",
+              "fact": "按配置的逆序实例化中间件并逐层包装下游处理器，因此请求从配置首项进入。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "call-chain",
+              "fact": "构建好的处理器保存为中间件链，普通请求直接调用它。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "request-short-circuit",
+              "fact": "兼容中间件先执行请求钩子；只有未取得响应才调用下游，之后执行响应钩子。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "view-short-circuit",
+              "fact": "视图中间件返回响应会中断钩子循环；只有没有响应才调用视图。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/core/handlers/base.py",
+                      "missingLines": [
+                        190,
+                        191,
+                        192
+                      ]
+                    },
+                    {
+                      "path": "django/core/handlers/base.py",
+                      "missingLines": [
+                        197
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 412,
+            "verifiedOccurrences": 412,
+            "uniqueVerifiedLines": 412,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "middleware",
+      "language": "en",
+      "status": "completed",
+      "rawTokens": 4331,
+      "elapsedMs": 2301,
+      "rawScore": {
+        "covered": 3,
+        "total": 4,
+        "coverage": 0.75,
+        "omission": 0.25,
+        "complete": false,
+        "units": [
+          {
+            "id": "build-chain",
+            "fact": "按配置的逆序实例化中间件并逐层包装下游处理器，因此请求从配置首项进入。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "call-chain",
+            "fact": "构建好的处理器保存为中间件链，普通请求直接调用它。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "request-short-circuit",
+            "fact": "兼容中间件先执行请求钩子；只有未取得响应才调用下游，之后执行响应钩子。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "view-short-circuit",
+            "fact": "视图中间件返回响应会中断钩子循环；只有没有响应才调用视图。",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "django/core/handlers/base.py",
+                    "missingLines": [
+                      190,
+                      191,
+                      192
+                    ]
+                  },
+                  {
+                    "path": "django/core/handlers/base.py",
+                    "missingLines": [
+                      197
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 406,
+          "verifiedOccurrences": 406,
+          "uniqueVerifiedLines": 406,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 2000,
+          "truncated": true,
+          "file": "budgeted/middleware.en.2000.txt",
+          "covered": 2,
+          "total": 4,
+          "coverage": 0.5,
+          "omission": 0.5,
+          "complete": false,
+          "units": [
+            {
+              "id": "build-chain",
+              "fact": "按配置的逆序实例化中间件并逐层包装下游处理器，因此请求从配置首项进入。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "call-chain",
+              "fact": "构建好的处理器保存为中间件链，普通请求直接调用它。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "request-short-circuit",
+              "fact": "兼容中间件先执行请求钩子；只有未取得响应才调用下游，之后执行响应钩子。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/utils/deprecation.py",
+                      "missingLines": [
+                        117,
+                        118,
+                        119,
+                        120,
+                        121,
+                        122,
+                        123
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "view-short-circuit",
+              "fact": "视图中间件返回响应会中断钩子循环；只有没有响应才调用视图。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/core/handlers/base.py",
+                      "missingLines": [
+                        190,
+                        191,
+                        192
+                      ]
+                    },
+                    {
+                      "path": "django/core/handlers/base.py",
+                      "missingLines": [
+                        197
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 193,
+            "verifiedOccurrences": 193,
+            "uniqueVerifiedLines": 193,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3998,
+          "truncated": true,
+          "file": "budgeted/middleware.en.4000.txt",
+          "covered": 3,
+          "total": 4,
+          "coverage": 0.75,
+          "omission": 0.25,
+          "complete": false,
+          "units": [
+            {
+              "id": "build-chain",
+              "fact": "按配置的逆序实例化中间件并逐层包装下游处理器，因此请求从配置首项进入。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "call-chain",
+              "fact": "构建好的处理器保存为中间件链，普通请求直接调用它。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "request-short-circuit",
+              "fact": "兼容中间件先执行请求钩子；只有未取得响应才调用下游，之后执行响应钩子。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "view-short-circuit",
+              "fact": "视图中间件返回响应会中断钩子循环；只有没有响应才调用视图。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/core/handlers/base.py",
+                      "missingLines": [
+                        190,
+                        191,
+                        192
+                      ]
+                    },
+                    {
+                      "path": "django/core/handlers/base.py",
+                      "missingLines": [
+                        197
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 373,
+            "verifiedOccurrences": 373,
+            "uniqueVerifiedLines": 373,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4331,
+          "truncated": false,
+          "file": "budgeted/middleware.en.8000.txt",
+          "covered": 3,
+          "total": 4,
+          "coverage": 0.75,
+          "omission": 0.25,
+          "complete": false,
+          "units": [
+            {
+              "id": "build-chain",
+              "fact": "按配置的逆序实例化中间件并逐层包装下游处理器，因此请求从配置首项进入。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "call-chain",
+              "fact": "构建好的处理器保存为中间件链，普通请求直接调用它。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "request-short-circuit",
+              "fact": "兼容中间件先执行请求钩子；只有未取得响应才调用下游，之后执行响应钩子。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "view-short-circuit",
+              "fact": "视图中间件返回响应会中断钩子循环；只有没有响应才调用视图。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/core/handlers/base.py",
+                      "missingLines": [
+                        190,
+                        191,
+                        192
+                      ]
+                    },
+                    {
+                      "path": "django/core/handlers/base.py",
+                      "missingLines": [
+                        197
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 406,
+            "verifiedOccurrences": 406,
+            "uniqueVerifiedLines": 406,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "transactions",
+      "language": "zh",
+      "status": "completed",
+      "rawTokens": 4666,
+      "elapsedMs": 2540,
+      "rawScore": {
+        "covered": 3,
+        "total": 4,
+        "coverage": 0.75,
+        "omission": 0.25,
+        "complete": false,
+        "units": [
+          {
+            "id": "nested-savepoint",
+            "fact": "已在事务内时按条件创建保存点；禁用保存点或已需回滚时记录空保存点。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "successful-exit",
+            "fact": "正常且无需回滚时释放内层保存点，最外层则提交事务。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "failed-exit",
+            "fact": "失败时内层回滚至保存点或标记上层回滚，最外层回滚事务。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "restore-autocommit",
+            "fact": "最外层退出后恢复自动提交；事务连接已关闭时清除连接。",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "django/db/transaction.py",
+                    "missingLines": [
+                      303,
+                      304,
+                      305,
+                      306,
+                      307
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 455,
+          "verifiedOccurrences": 455,
+          "uniqueVerifiedLines": 455,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1986,
+          "truncated": true,
+          "file": "budgeted/transactions.zh.2000.txt",
+          "covered": 3,
+          "total": 4,
+          "coverage": 0.75,
+          "omission": 0.25,
+          "complete": false,
+          "units": [
+            {
+              "id": "nested-savepoint",
+              "fact": "已在事务内时按条件创建保存点；禁用保存点或已需回滚时记录空保存点。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "successful-exit",
+              "fact": "正常且无需回滚时释放内层保存点，最外层则提交事务。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "failed-exit",
+              "fact": "失败时内层回滚至保存点或标记上层回滚，最外层回滚事务。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "restore-autocommit",
+              "fact": "最外层退出后恢复自动提交；事务连接已关闭时清除连接。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/db/transaction.py",
+                      "missingLines": [
+                        303,
+                        304,
+                        305,
+                        306,
+                        307
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 186,
+            "verifiedOccurrences": 186,
+            "uniqueVerifiedLines": 186,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3984,
+          "truncated": true,
+          "file": "budgeted/transactions.zh.4000.txt",
+          "covered": 3,
+          "total": 4,
+          "coverage": 0.75,
+          "omission": 0.25,
+          "complete": false,
+          "units": [
+            {
+              "id": "nested-savepoint",
+              "fact": "已在事务内时按条件创建保存点；禁用保存点或已需回滚时记录空保存点。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "successful-exit",
+              "fact": "正常且无需回滚时释放内层保存点，最外层则提交事务。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "failed-exit",
+              "fact": "失败时内层回滚至保存点或标记上层回滚，最外层回滚事务。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "restore-autocommit",
+              "fact": "最外层退出后恢复自动提交；事务连接已关闭时清除连接。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/db/transaction.py",
+                      "missingLines": [
+                        303,
+                        304,
+                        305,
+                        306,
+                        307
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 395,
+            "verifiedOccurrences": 395,
+            "uniqueVerifiedLines": 395,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4666,
+          "truncated": false,
+          "file": "budgeted/transactions.zh.8000.txt",
+          "covered": 3,
+          "total": 4,
+          "coverage": 0.75,
+          "omission": 0.25,
+          "complete": false,
+          "units": [
+            {
+              "id": "nested-savepoint",
+              "fact": "已在事务内时按条件创建保存点；禁用保存点或已需回滚时记录空保存点。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "successful-exit",
+              "fact": "正常且无需回滚时释放内层保存点，最外层则提交事务。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "failed-exit",
+              "fact": "失败时内层回滚至保存点或标记上层回滚，最外层回滚事务。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "restore-autocommit",
+              "fact": "最外层退出后恢复自动提交；事务连接已关闭时清除连接。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/db/transaction.py",
+                      "missingLines": [
+                        303,
+                        304,
+                        305,
+                        306,
+                        307
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 455,
+            "verifiedOccurrences": 455,
+            "uniqueVerifiedLines": 455,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "transactions",
+      "language": "en",
+      "status": "completed",
+      "rawTokens": 4605,
+      "elapsedMs": 3079,
+      "rawScore": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "nested-savepoint",
+            "fact": "已在事务内时按条件创建保存点；禁用保存点或已需回滚时记录空保存点。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "successful-exit",
+            "fact": "正常且无需回滚时释放内层保存点，最外层则提交事务。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "failed-exit",
+            "fact": "失败时内层回滚至保存点或标记上层回滚，最外层回滚事务。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "restore-autocommit",
+            "fact": "最外层退出后恢复自动提交；事务连接已关闭时清除连接。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 441,
+          "verifiedOccurrences": 440,
+          "uniqueVerifiedLines": 440,
+          "duplicateVerifiedLines": 0,
+          "invalid": [
+            {
+              "path": "django/db/backends/base/base.py",
+              "line": 747,
+              "reason": "line-text-mismatch"
+            }
+          ]
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1993,
+          "truncated": true,
+          "file": "budgeted/transactions.en.2000.txt",
+          "covered": 2,
+          "total": 4,
+          "coverage": 0.5,
+          "omission": 0.5,
+          "complete": false,
+          "units": [
+            {
+              "id": "nested-savepoint",
+              "fact": "已在事务内时按条件创建保存点；禁用保存点或已需回滚时记录空保存点。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "successful-exit",
+              "fact": "正常且无需回滚时释放内层保存点，最外层则提交事务。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "failed-exit",
+              "fact": "失败时内层回滚至保存点或标记上层回滚，最外层回滚事务。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/db/transaction.py",
+                      "missingLines": [
+                        283
+                      ]
+                    },
+                    {
+                      "path": "django/db/transaction.py",
+                      "missingLines": [
+                        292,
+                        293,
+                        294,
+                        295
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "restore-autocommit",
+              "fact": "最外层退出后恢复自动提交；事务连接已关闭时清除连接。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/db/transaction.py",
+                      "missingLines": [
+                        303,
+                        304,
+                        305,
+                        306,
+                        307
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 190,
+            "verifiedOccurrences": 190,
+            "uniqueVerifiedLines": 190,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3997,
+          "truncated": true,
+          "file": "budgeted/transactions.en.4000.txt",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "nested-savepoint",
+              "fact": "已在事务内时按条件创建保存点；禁用保存点或已需回滚时记录空保存点。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "successful-exit",
+              "fact": "正常且无需回滚时释放内层保存点，最外层则提交事务。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "failed-exit",
+              "fact": "失败时内层回滚至保存点或标记上层回滚，最外层回滚事务。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "restore-autocommit",
+              "fact": "最外层退出后恢复自动提交；事务连接已关闭时清除连接。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 386,
+            "verifiedOccurrences": 386,
+            "uniqueVerifiedLines": 386,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4605,
+          "truncated": false,
+          "file": "budgeted/transactions.en.8000.txt",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "nested-savepoint",
+              "fact": "已在事务内时按条件创建保存点；禁用保存点或已需回滚时记录空保存点。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "successful-exit",
+              "fact": "正常且无需回滚时释放内层保存点，最外层则提交事务。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "failed-exit",
+              "fact": "失败时内层回滚至保存点或标记上层回滚，最外层回滚事务。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "restore-autocommit",
+              "fact": "最外层退出后恢复自动提交；事务连接已关闭时清除连接。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 441,
+            "verifiedOccurrences": 440,
+            "uniqueVerifiedLines": 440,
+            "duplicateVerifiedLines": 0,
+            "invalid": [
+              {
+                "path": "django/db/backends/base/base.py",
+                "line": 747,
+                "reason": "line-text-mismatch"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "csrf",
+      "language": "zh",
+      "status": "completed",
+      "rawTokens": 4851,
+      "elapsedMs": 3111,
+      "rawScore": {
+        "covered": 4,
+        "total": 5,
+        "coverage": 0.8,
+        "omission": 0.19999999999999996,
+        "complete": false,
+        "units": [
+          {
+            "id": "exempt-safe",
+            "fact": "豁免视图不检查，安全 HTTP 方法直接放行。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "origin-referer",
+            "fact": "有 Origin 时校验来源；HTTPS 且无 Origin 时校验 Referer，失败则拒绝。",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "django/middleware/csrf.py",
+                    "missingLines": [
+                      441
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "require-secret",
+            "fact": "缺少请求对应的 CSRF secret 会拒绝请求。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "token-sources",
+            "fact": "优先读取表单 token，没有时回退到配置的请求头，缺失则拒绝。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "token-validation",
+            "fact": "检查 token 格式及其与 secret 的匹配，视图钩子捕获校验失败并拒绝。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 426,
+          "verifiedOccurrences": 426,
+          "uniqueVerifiedLines": 426,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1999,
+          "truncated": true,
+          "file": "budgeted/csrf.zh.2000.txt",
+          "covered": 0,
+          "total": 5,
+          "coverage": 0,
+          "omission": 1,
+          "complete": false,
+          "units": [
+            {
+              "id": "exempt-safe",
+              "fact": "豁免视图不检查，安全 HTTP 方法直接放行。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        420,
+                        421,
+                        422,
+                        423,
+                        424,
+                        425
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "origin-referer",
+              "fact": "有 Origin 时校验来源；HTTPS 且无 Origin 时校验 Referer，失败则拒绝。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        436,
+                        437,
+                        438,
+                        439,
+                        440,
+                        441
+                      ]
+                    },
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        459,
+                        460,
+                        461,
+                        462
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "require-secret",
+              "fact": "缺少请求对应的 CSRF secret 会拒绝请求。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        358
+                      ]
+                    },
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        362
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "token-sources",
+              "fact": "优先读取表单 token，没有时回退到配置的请求头，缺失则拒绝。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        366,
+                        367,
+                        368
+                      ]
+                    },
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        376
+                      ]
+                    },
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        384,
+                        385,
+                        386
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "token-validation",
+              "fact": "检查 token 格式及其与 secret 的匹配，视图钩子捕获校验失败并拒绝。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        391,
+                        392,
+                        393,
+                        394,
+                        395
+                      ]
+                    },
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        397,
+                        398,
+                        399
+                      ]
+                    },
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        464,
+                        465,
+                        466,
+                        467
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 176,
+            "verifiedOccurrences": 176,
+            "uniqueVerifiedLines": 176,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3997,
+          "truncated": true,
+          "file": "budgeted/csrf.zh.4000.txt",
+          "covered": 3,
+          "total": 5,
+          "coverage": 0.6,
+          "omission": 0.4,
+          "complete": false,
+          "units": [
+            {
+              "id": "exempt-safe",
+              "fact": "豁免视图不检查，安全 HTTP 方法直接放行。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "origin-referer",
+              "fact": "有 Origin 时校验来源；HTTPS 且无 Origin 时校验 Referer，失败则拒绝。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        436,
+                        437,
+                        438,
+                        439,
+                        440,
+                        441
+                      ]
+                    },
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        459,
+                        460,
+                        461,
+                        462
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "require-secret",
+              "fact": "缺少请求对应的 CSRF secret 会拒绝请求。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "token-sources",
+              "fact": "优先读取表单 token，没有时回退到配置的请求头，缺失则拒绝。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "token-validation",
+              "fact": "检查 token 格式及其与 secret 的匹配，视图钩子捕获校验失败并拒绝。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        464,
+                        465,
+                        466,
+                        467
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 348,
+            "verifiedOccurrences": 348,
+            "uniqueVerifiedLines": 348,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4851,
+          "truncated": false,
+          "file": "budgeted/csrf.zh.8000.txt",
+          "covered": 4,
+          "total": 5,
+          "coverage": 0.8,
+          "omission": 0.19999999999999996,
+          "complete": false,
+          "units": [
+            {
+              "id": "exempt-safe",
+              "fact": "豁免视图不检查，安全 HTTP 方法直接放行。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "origin-referer",
+              "fact": "有 Origin 时校验来源；HTTPS 且无 Origin 时校验 Referer，失败则拒绝。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        441
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "require-secret",
+              "fact": "缺少请求对应的 CSRF secret 会拒绝请求。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "token-sources",
+              "fact": "优先读取表单 token，没有时回退到配置的请求头，缺失则拒绝。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "token-validation",
+              "fact": "检查 token 格式及其与 secret 的匹配，视图钩子捕获校验失败并拒绝。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 426,
+            "verifiedOccurrences": 426,
+            "uniqueVerifiedLines": 426,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "csrf",
+      "language": "en",
+      "status": "completed",
+      "rawTokens": 4972,
+      "elapsedMs": 2743,
+      "rawScore": {
+        "covered": 4,
+        "total": 5,
+        "coverage": 0.8,
+        "omission": 0.19999999999999996,
+        "complete": false,
+        "units": [
+          {
+            "id": "exempt-safe",
+            "fact": "豁免视图不检查，安全 HTTP 方法直接放行。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "origin-referer",
+            "fact": "有 Origin 时校验来源；HTTPS 且无 Origin 时校验 Referer，失败则拒绝。",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "django/middleware/csrf.py",
+                    "missingLines": [
+                      441
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "require-secret",
+            "fact": "缺少请求对应的 CSRF secret 会拒绝请求。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "token-sources",
+            "fact": "优先读取表单 token，没有时回退到配置的请求头，缺失则拒绝。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "token-validation",
+            "fact": "检查 token 格式及其与 secret 的匹配，视图钩子捕获校验失败并拒绝。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 433,
+          "verifiedOccurrences": 433,
+          "uniqueVerifiedLines": 433,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1981,
+          "truncated": true,
+          "file": "budgeted/csrf.en.2000.txt",
+          "covered": 0,
+          "total": 5,
+          "coverage": 0,
+          "omission": 1,
+          "complete": false,
+          "units": [
+            {
+              "id": "exempt-safe",
+              "fact": "豁免视图不检查，安全 HTTP 方法直接放行。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        420,
+                        421,
+                        422,
+                        423,
+                        424,
+                        425
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "origin-referer",
+              "fact": "有 Origin 时校验来源；HTTPS 且无 Origin 时校验 Referer，失败则拒绝。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        436,
+                        437,
+                        438,
+                        439,
+                        440,
+                        441
+                      ]
+                    },
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        459,
+                        460,
+                        461,
+                        462
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "require-secret",
+              "fact": "缺少请求对应的 CSRF secret 会拒绝请求。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        358
+                      ]
+                    },
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        362
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "token-sources",
+              "fact": "优先读取表单 token，没有时回退到配置的请求头，缺失则拒绝。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        366,
+                        367,
+                        368
+                      ]
+                    },
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        376
+                      ]
+                    },
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        384,
+                        385,
+                        386
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "token-validation",
+              "fact": "检查 token 格式及其与 secret 的匹配，视图钩子捕获校验失败并拒绝。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        391,
+                        392,
+                        393,
+                        394,
+                        395
+                      ]
+                    },
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        397,
+                        398,
+                        399
+                      ]
+                    },
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        464,
+                        465,
+                        466,
+                        467
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 173,
+            "verifiedOccurrences": 173,
+            "uniqueVerifiedLines": 173,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3984,
+          "truncated": true,
+          "file": "budgeted/csrf.en.4000.txt",
+          "covered": 3,
+          "total": 5,
+          "coverage": 0.6,
+          "omission": 0.4,
+          "complete": false,
+          "units": [
+            {
+              "id": "exempt-safe",
+              "fact": "豁免视图不检查，安全 HTTP 方法直接放行。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "origin-referer",
+              "fact": "有 Origin 时校验来源；HTTPS 且无 Origin 时校验 Referer，失败则拒绝。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        436,
+                        437,
+                        438,
+                        439,
+                        440,
+                        441
+                      ]
+                    },
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        459,
+                        460,
+                        461,
+                        462
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "require-secret",
+              "fact": "缺少请求对应的 CSRF secret 会拒绝请求。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "token-sources",
+              "fact": "优先读取表单 token，没有时回退到配置的请求头，缺失则拒绝。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "token-validation",
+              "fact": "检查 token 格式及其与 secret 的匹配，视图钩子捕获校验失败并拒绝。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        464,
+                        465,
+                        466,
+                        467
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 345,
+            "verifiedOccurrences": 345,
+            "uniqueVerifiedLines": 345,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4972,
+          "truncated": false,
+          "file": "budgeted/csrf.en.8000.txt",
+          "covered": 4,
+          "total": 5,
+          "coverage": 0.8,
+          "omission": 0.19999999999999996,
+          "complete": false,
+          "units": [
+            {
+              "id": "exempt-safe",
+              "fact": "豁免视图不检查，安全 HTTP 方法直接放行。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "origin-referer",
+              "fact": "有 Origin 时校验来源；HTTPS 且无 Origin 时校验 Referer，失败则拒绝。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/middleware/csrf.py",
+                      "missingLines": [
+                        441
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "require-secret",
+              "fact": "缺少请求对应的 CSRF secret 会拒绝请求。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "token-sources",
+              "fact": "优先读取表单 token，没有时回退到配置的请求头，缺失则拒绝。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "token-validation",
+              "fact": "检查 token 格式及其与 secret 的匹配，视图钩子捕获校验失败并拒绝。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 433,
+            "verifiedOccurrences": 433,
+            "uniqueVerifiedLines": 433,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "page-cache",
+      "language": "zh",
+      "status": "completed",
+      "rawTokens": 5033,
+      "elapsedMs": 3454,
+      "rawScore": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "eligible-methods",
+            "fact": "读取页面缓存仅处理 GET 和 HEAD，其他方法不更新缓存。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "cache-hit-miss",
+            "fact": "按键读取响应，未命中标记需要更新，命中则返回缓存并取消更新。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "response-eligibility",
+            "fact": "流式响应、不合适状态码、带 Cookie 的用户响应和禁止共享缓存的控制指令阻止写缓存。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "write-response",
+            "fact": "有效超时且状态为 200 时学习缓存键，已可用响应直接写入，需渲染的响应在渲染后写入。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 430,
+          "verifiedOccurrences": 429,
+          "uniqueVerifiedLines": 429,
+          "duplicateVerifiedLines": 0,
+          "invalid": [
+            {
+              "path": "django/utils/cache.py",
+              "line": 437,
+              "reason": "line-text-mismatch"
+            }
+          ]
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1991,
+          "truncated": true,
+          "file": "budgeted/page-cache.zh.2000.txt",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "eligible-methods",
+              "fact": "读取页面缓存仅处理 GET 和 HEAD，其他方法不更新缓存。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "cache-hit-miss",
+              "fact": "按键读取响应，未命中标记需要更新，命中则返回缓存并取消更新。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "response-eligibility",
+              "fact": "流式响应、不合适状态码、带 Cookie 的用户响应和禁止共享缓存的控制指令阻止写缓存。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "write-response",
+              "fact": "有效超时且状态为 200 时学习缓存键，已可用响应直接写入，需渲染的响应在渲染后写入。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 172,
+            "verifiedOccurrences": 172,
+            "uniqueVerifiedLines": 172,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3983,
+          "truncated": true,
+          "file": "budgeted/page-cache.zh.4000.txt",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "eligible-methods",
+              "fact": "读取页面缓存仅处理 GET 和 HEAD，其他方法不更新缓存。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "cache-hit-miss",
+              "fact": "按键读取响应，未命中标记需要更新，命中则返回缓存并取消更新。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "response-eligibility",
+              "fact": "流式响应、不合适状态码、带 Cookie 的用户响应和禁止共享缓存的控制指令阻止写缓存。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "write-response",
+              "fact": "有效超时且状态为 200 时学习缓存键，已可用响应直接写入，需渲染的响应在渲染后写入。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 352,
+            "verifiedOccurrences": 352,
+            "uniqueVerifiedLines": 352,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 5033,
+          "truncated": false,
+          "file": "budgeted/page-cache.zh.8000.txt",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "eligible-methods",
+              "fact": "读取页面缓存仅处理 GET 和 HEAD，其他方法不更新缓存。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "cache-hit-miss",
+              "fact": "按键读取响应，未命中标记需要更新，命中则返回缓存并取消更新。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "response-eligibility",
+              "fact": "流式响应、不合适状态码、带 Cookie 的用户响应和禁止共享缓存的控制指令阻止写缓存。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "write-response",
+              "fact": "有效超时且状态为 200 时学习缓存键，已可用响应直接写入，需渲染的响应在渲染后写入。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 430,
+            "verifiedOccurrences": 429,
+            "uniqueVerifiedLines": 429,
+            "duplicateVerifiedLines": 0,
+            "invalid": [
+              {
+                "path": "django/utils/cache.py",
+                "line": 437,
+                "reason": "line-text-mismatch"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "page-cache",
+      "language": "en",
+      "status": "completed",
+      "rawTokens": 4966,
+      "elapsedMs": 3139,
+      "rawScore": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "eligible-methods",
+            "fact": "读取页面缓存仅处理 GET 和 HEAD，其他方法不更新缓存。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "cache-hit-miss",
+            "fact": "按键读取响应，未命中标记需要更新，命中则返回缓存并取消更新。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "response-eligibility",
+            "fact": "流式响应、不合适状态码、带 Cookie 的用户响应和禁止共享缓存的控制指令阻止写缓存。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "write-response",
+            "fact": "有效超时且状态为 200 时学习缓存键，已可用响应直接写入，需渲染的响应在渲染后写入。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 418,
+          "verifiedOccurrences": 418,
+          "uniqueVerifiedLines": 418,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1983,
+          "truncated": true,
+          "file": "budgeted/page-cache.en.2000.txt",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "eligible-methods",
+              "fact": "读取页面缓存仅处理 GET 和 HEAD，其他方法不更新缓存。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "cache-hit-miss",
+              "fact": "按键读取响应，未命中标记需要更新，命中则返回缓存并取消更新。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "response-eligibility",
+              "fact": "流式响应、不合适状态码、带 Cookie 的用户响应和禁止共享缓存的控制指令阻止写缓存。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "write-response",
+              "fact": "有效超时且状态为 200 时学习缓存键，已可用响应直接写入，需渲染的响应在渲染后写入。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 173,
+            "verifiedOccurrences": 173,
+            "uniqueVerifiedLines": 173,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3996,
+          "truncated": true,
+          "file": "budgeted/page-cache.en.4000.txt",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "eligible-methods",
+              "fact": "读取页面缓存仅处理 GET 和 HEAD，其他方法不更新缓存。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "cache-hit-miss",
+              "fact": "按键读取响应，未命中标记需要更新，命中则返回缓存并取消更新。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "response-eligibility",
+              "fact": "流式响应、不合适状态码、带 Cookie 的用户响应和禁止共享缓存的控制指令阻止写缓存。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "write-response",
+              "fact": "有效超时且状态为 200 时学习缓存键，已可用响应直接写入，需渲染的响应在渲染后写入。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 347,
+            "verifiedOccurrences": 347,
+            "uniqueVerifiedLines": 347,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4966,
+          "truncated": false,
+          "file": "budgeted/page-cache.en.8000.txt",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "eligible-methods",
+              "fact": "读取页面缓存仅处理 GET 和 HEAD，其他方法不更新缓存。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "cache-hit-miss",
+              "fact": "按键读取响应，未命中标记需要更新，命中则返回缓存并取消更新。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "response-eligibility",
+              "fact": "流式响应、不合适状态码、带 Cookie 的用户响应和禁止共享缓存的控制指令阻止写缓存。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "write-response",
+              "fact": "有效超时且状态为 200 时学习缓存键，已可用响应直接写入，需渲染的响应在渲染后写入。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 418,
+            "verifiedOccurrences": 418,
+            "uniqueVerifiedLines": 418,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "settings",
+      "language": "zh",
+      "status": "completed",
+      "rawTokens": 5039,
+      "elapsedMs": 2656,
+      "rawScore": {
+        "covered": 3,
+        "total": 3,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "lazy-load",
+            "fact": "首次访问未初始化的配置会触发加载，从环境变量取得模块并构造设置对象。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "override-defaults",
+            "fact": "先复制全局大写默认设置，再导入项目模块，用项目大写设置覆盖。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "cache-read",
+            "fact": "取到的设置值缓存在代理实例字典中并返回。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 463,
+          "verifiedOccurrences": 463,
+          "uniqueVerifiedLines": 463,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1990,
+          "truncated": true,
+          "file": "budgeted/settings.zh.2000.txt",
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "lazy-load",
+              "fact": "首次访问未初始化的配置会触发加载，从环境变量取得模块并构造设置对象。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "override-defaults",
+              "fact": "先复制全局大写默认设置，再导入项目模块，用项目大写设置覆盖。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "cache-read",
+              "fact": "取到的设置值缓存在代理实例字典中并返回。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 190,
+            "verifiedOccurrences": 190,
+            "uniqueVerifiedLines": 190,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3991,
+          "truncated": true,
+          "file": "budgeted/settings.zh.4000.txt",
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "lazy-load",
+              "fact": "首次访问未初始化的配置会触发加载，从环境变量取得模块并构造设置对象。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "override-defaults",
+              "fact": "先复制全局大写默认设置，再导入项目模块，用项目大写设置覆盖。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "cache-read",
+              "fact": "取到的设置值缓存在代理实例字典中并返回。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 371,
+            "verifiedOccurrences": 371,
+            "uniqueVerifiedLines": 371,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 5039,
+          "truncated": false,
+          "file": "budgeted/settings.zh.8000.txt",
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "lazy-load",
+              "fact": "首次访问未初始化的配置会触发加载，从环境变量取得模块并构造设置对象。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "override-defaults",
+              "fact": "先复制全局大写默认设置，再导入项目模块，用项目大写设置覆盖。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "cache-read",
+              "fact": "取到的设置值缓存在代理实例字典中并返回。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 463,
+            "verifiedOccurrences": 463,
+            "uniqueVerifiedLines": 463,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "settings",
+      "language": "en",
+      "status": "completed",
+      "rawTokens": 4866,
+      "elapsedMs": 2301,
+      "rawScore": {
+        "covered": 3,
+        "total": 3,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "lazy-load",
+            "fact": "首次访问未初始化的配置会触发加载，从环境变量取得模块并构造设置对象。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "override-defaults",
+            "fact": "先复制全局大写默认设置，再导入项目模块，用项目大写设置覆盖。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "cache-read",
+            "fact": "取到的设置值缓存在代理实例字典中并返回。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 456,
+          "verifiedOccurrences": 456,
+          "uniqueVerifiedLines": 456,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1990,
+          "truncated": true,
+          "file": "budgeted/settings.en.2000.txt",
+          "covered": 2,
+          "total": 3,
+          "coverage": 0.6666666666666666,
+          "omission": 0.33333333333333337,
+          "complete": false,
+          "units": [
+            {
+              "id": "lazy-load",
+              "fact": "首次访问未初始化的配置会触发加载，从环境变量取得模块并构造设置对象。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "override-defaults",
+              "fact": "先复制全局大写默认设置，再导入项目模块，用项目大写设置覆盖。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/conf/__init__.py",
+                      "missingLines": [
+                        186,
+                        187
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "cache-read",
+              "fact": "取到的设置值缓存在代理实例字典中并返回。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 185,
+            "verifiedOccurrences": 185,
+            "uniqueVerifiedLines": 185,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3996,
+          "truncated": true,
+          "file": "budgeted/settings.en.4000.txt",
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "lazy-load",
+              "fact": "首次访问未初始化的配置会触发加载，从环境变量取得模块并构造设置对象。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "override-defaults",
+              "fact": "先复制全局大写默认设置，再导入项目模块，用项目大写设置覆盖。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "cache-read",
+              "fact": "取到的设置值缓存在代理实例字典中并返回。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 369,
+            "verifiedOccurrences": 369,
+            "uniqueVerifiedLines": 369,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4866,
+          "truncated": false,
+          "file": "budgeted/settings.en.8000.txt",
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "lazy-load",
+              "fact": "首次访问未初始化的配置会触发加载，从环境变量取得模块并构造设置对象。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "override-defaults",
+              "fact": "先复制全局大写默认设置，再导入项目模块，用项目大写设置覆盖。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "cache-read",
+              "fact": "取到的设置值缓存在代理实例字典中并返回。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 456,
+            "verifiedOccurrences": 456,
+            "uniqueVerifiedLines": 456,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "file-upload",
+      "language": "zh",
+      "status": "completed",
+      "rawTokens": 5057,
+      "elapsedMs": 2391,
+      "rawScore": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "handler-order",
+            "fact": "从配置加载上传处理器，默认内存处理器排在临时文件处理器前。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "size-decision",
+            "fact": "内存处理器优先测量可寻址流的实际大小，否则使用传入长度，再与内存阈值比较。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "memory-handler",
+            "fact": "内存处理器启用时创建内存流并阻止后续处理器；未启用时将数据块传下去。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "temporary-handler",
+            "fact": "临时文件处理器创建临时上传文件，并将数据块写入其中。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 486,
+          "verifiedOccurrences": 485,
+          "uniqueVerifiedLines": 485,
+          "duplicateVerifiedLines": 0,
+          "invalid": [
+            {
+              "path": "django/http/multipartparser.py",
+              "line": 756,
+              "reason": "line-text-mismatch"
+            }
+          ]
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1988,
+          "truncated": true,
+          "file": "budgeted/file-upload.zh.2000.txt",
+          "covered": 3,
+          "total": 4,
+          "coverage": 0.75,
+          "omission": 0.25,
+          "complete": false,
+          "units": [
+            {
+              "id": "handler-order",
+              "fact": "从配置加载上传处理器，默认内存处理器排在临时文件处理器前。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/http/request.py",
+                      "missingLines": [
+                        342,
+                        343,
+                        344,
+                        345,
+                        346
+                      ]
+                    },
+                    {
+                      "path": "django/conf/global_settings.py",
+                      "missingLines": [
+                        304,
+                        305,
+                        306,
+                        307
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "size-decision",
+              "fact": "内存处理器优先测量可寻址流的实际大小，否则使用传入长度，再与内存阈值比较。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "memory-handler",
+              "fact": "内存处理器启用时创建内存流并阻止后续处理器；未启用时将数据块传下去。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "temporary-handler",
+              "fact": "临时文件处理器创建临时上传文件，并将数据块写入其中。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 205,
+            "verifiedOccurrences": 205,
+            "uniqueVerifiedLines": 205,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3999,
+          "truncated": true,
+          "file": "budgeted/file-upload.zh.4000.txt",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "handler-order",
+              "fact": "从配置加载上传处理器，默认内存处理器排在临时文件处理器前。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "size-decision",
+              "fact": "内存处理器优先测量可寻址流的实际大小，否则使用传入长度，再与内存阈值比较。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "memory-handler",
+              "fact": "内存处理器启用时创建内存流并阻止后续处理器；未启用时将数据块传下去。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "temporary-handler",
+              "fact": "临时文件处理器创建临时上传文件，并将数据块写入其中。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 386,
+            "verifiedOccurrences": 386,
+            "uniqueVerifiedLines": 386,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 5057,
+          "truncated": false,
+          "file": "budgeted/file-upload.zh.8000.txt",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "handler-order",
+              "fact": "从配置加载上传处理器，默认内存处理器排在临时文件处理器前。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "size-decision",
+              "fact": "内存处理器优先测量可寻址流的实际大小，否则使用传入长度，再与内存阈值比较。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "memory-handler",
+              "fact": "内存处理器启用时创建内存流并阻止后续处理器；未启用时将数据块传下去。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "temporary-handler",
+              "fact": "临时文件处理器创建临时上传文件，并将数据块写入其中。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 486,
+            "verifiedOccurrences": 485,
+            "uniqueVerifiedLines": 485,
+            "duplicateVerifiedLines": 0,
+            "invalid": [
+              {
+                "path": "django/http/multipartparser.py",
+                "line": 756,
+                "reason": "line-text-mismatch"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "file-upload",
+      "language": "en",
+      "status": "completed",
+      "rawTokens": 4677,
+      "elapsedMs": 2381,
+      "rawScore": {
+        "covered": 4,
+        "total": 4,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "handler-order",
+            "fact": "从配置加载上传处理器，默认内存处理器排在临时文件处理器前。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "size-decision",
+            "fact": "内存处理器优先测量可寻址流的实际大小，否则使用传入长度，再与内存阈值比较。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "memory-handler",
+            "fact": "内存处理器启用时创建内存流并阻止后续处理器；未启用时将数据块传下去。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "temporary-handler",
+            "fact": "临时文件处理器创建临时上传文件，并将数据块写入其中。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 455,
+          "verifiedOccurrences": 455,
+          "uniqueVerifiedLines": 455,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1988,
+          "truncated": true,
+          "file": "budgeted/file-upload.en.2000.txt",
+          "covered": 3,
+          "total": 4,
+          "coverage": 0.75,
+          "omission": 0.25,
+          "complete": false,
+          "units": [
+            {
+              "id": "handler-order",
+              "fact": "从配置加载上传处理器，默认内存处理器排在临时文件处理器前。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/http/request.py",
+                      "missingLines": [
+                        342,
+                        343,
+                        344,
+                        345,
+                        346
+                      ]
+                    },
+                    {
+                      "path": "django/conf/global_settings.py",
+                      "missingLines": [
+                        304,
+                        305,
+                        306,
+                        307
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "size-decision",
+              "fact": "内存处理器优先测量可寻址流的实际大小，否则使用传入长度，再与内存阈值比较。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "memory-handler",
+              "fact": "内存处理器启用时创建内存流并阻止后续处理器；未启用时将数据块传下去。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "temporary-handler",
+              "fact": "临时文件处理器创建临时上传文件，并将数据块写入其中。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 205,
+            "verifiedOccurrences": 205,
+            "uniqueVerifiedLines": 205,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3994,
+          "truncated": true,
+          "file": "budgeted/file-upload.en.4000.txt",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "handler-order",
+              "fact": "从配置加载上传处理器，默认内存处理器排在临时文件处理器前。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "size-decision",
+              "fact": "内存处理器优先测量可寻址流的实际大小，否则使用传入长度，再与内存阈值比较。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "memory-handler",
+              "fact": "内存处理器启用时创建内存流并阻止后续处理器；未启用时将数据块传下去。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "temporary-handler",
+              "fact": "临时文件处理器创建临时上传文件，并将数据块写入其中。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 395,
+            "verifiedOccurrences": 395,
+            "uniqueVerifiedLines": 395,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4677,
+          "truncated": false,
+          "file": "budgeted/file-upload.en.8000.txt",
+          "covered": 4,
+          "total": 4,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "handler-order",
+              "fact": "从配置加载上传处理器，默认内存处理器排在临时文件处理器前。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "size-decision",
+              "fact": "内存处理器优先测量可寻址流的实际大小，否则使用传入长度，再与内存阈值比较。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "memory-handler",
+              "fact": "内存处理器启用时创建内存流并阻止后续处理器；未启用时将数据块传下去。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "temporary-handler",
+              "fact": "临时文件处理器创建临时上传文件，并将数据块写入其中。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 455,
+            "verifiedOccurrences": 455,
+            "uniqueVerifiedLines": 455,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "signals",
+      "language": "zh",
+      "status": "completed",
+      "rawTokens": 4515,
+      "elapsedMs": 2641,
+      "rawScore": {
+        "covered": 3,
+        "total": 4,
+        "coverage": 0.75,
+        "omission": 0.25,
+        "complete": false,
+        "units": [
+          {
+            "id": "registration",
+            "fact": "注册根据接收者或去重标识与发送者建立键，避免重复并保存接收者。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "receiver-selection",
+            "fact": "发送者过滤允许指定发送者或任意发送者，弱引用只保留仍存活的接收者。",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "django/dispatch/dispatcher.py",
+                    "missingLines": [
+                      446,
+                      447,
+                      448,
+                      449,
+                      450
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "normal-errors",
+            "fact": "普通同步发送直接调用接收者，未捕获其异常，因此异常会向调用方传播并中止该循环。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "robust-errors",
+            "fact": "容错发送逐个捕获 Exception，将异常对象作为该接收者结果并继续循环。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 445,
+          "verifiedOccurrences": 445,
+          "uniqueVerifiedLines": 445,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1991,
+          "truncated": true,
+          "file": "budgeted/signals.zh.2000.txt",
+          "covered": 2,
+          "total": 4,
+          "coverage": 0.5,
+          "omission": 0.5,
+          "complete": false,
+          "units": [
+            {
+              "id": "registration",
+              "fact": "注册根据接收者或去重标识与发送者建立键，避免重复并保存接收者。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "receiver-selection",
+              "fact": "发送者过滤允许指定发送者或任意发送者，弱引用只保留仍存活的接收者。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/dispatch/dispatcher.py",
+                      "missingLines": [
+                        435,
+                        436,
+                        437
+                      ]
+                    },
+                    {
+                      "path": "django/dispatch/dispatcher.py",
+                      "missingLines": [
+                        446,
+                        447,
+                        448,
+                        449,
+                        450
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "normal-errors",
+              "fact": "普通同步发送直接调用接收者，未捕获其异常，因此异常会向调用方传播并中止该循环。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "robust-errors",
+              "fact": "容错发送逐个捕获 Exception，将异常对象作为该接收者结果并继续循环。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/dispatch/dispatcher.py",
+                      "missingLines": [
+                        303,
+                        304,
+                        305,
+                        306,
+                        307,
+                        308,
+                        309,
+                        310,
+                        311
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 196,
+            "verifiedOccurrences": 196,
+            "uniqueVerifiedLines": 196,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3994,
+          "truncated": true,
+          "file": "budgeted/signals.zh.4000.txt",
+          "covered": 3,
+          "total": 4,
+          "coverage": 0.75,
+          "omission": 0.25,
+          "complete": false,
+          "units": [
+            {
+              "id": "registration",
+              "fact": "注册根据接收者或去重标识与发送者建立键，避免重复并保存接收者。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "receiver-selection",
+              "fact": "发送者过滤允许指定发送者或任意发送者，弱引用只保留仍存活的接收者。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/dispatch/dispatcher.py",
+                      "missingLines": [
+                        436,
+                        437
+                      ]
+                    },
+                    {
+                      "path": "django/dispatch/dispatcher.py",
+                      "missingLines": [
+                        446,
+                        447,
+                        448,
+                        449,
+                        450
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "normal-errors",
+              "fact": "普通同步发送直接调用接收者，未捕获其异常，因此异常会向调用方传播并中止该循环。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "robust-errors",
+              "fact": "容错发送逐个捕获 Exception，将异常对象作为该接收者结果并继续循环。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 397,
+            "verifiedOccurrences": 397,
+            "uniqueVerifiedLines": 397,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4515,
+          "truncated": false,
+          "file": "budgeted/signals.zh.8000.txt",
+          "covered": 3,
+          "total": 4,
+          "coverage": 0.75,
+          "omission": 0.25,
+          "complete": false,
+          "units": [
+            {
+              "id": "registration",
+              "fact": "注册根据接收者或去重标识与发送者建立键，避免重复并保存接收者。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "receiver-selection",
+              "fact": "发送者过滤允许指定发送者或任意发送者，弱引用只保留仍存活的接收者。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/dispatch/dispatcher.py",
+                      "missingLines": [
+                        446,
+                        447,
+                        448,
+                        449,
+                        450
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "normal-errors",
+              "fact": "普通同步发送直接调用接收者，未捕获其异常，因此异常会向调用方传播并中止该循环。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "robust-errors",
+              "fact": "容错发送逐个捕获 Exception，将异常对象作为该接收者结果并继续循环。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 445,
+            "verifiedOccurrences": 445,
+            "uniqueVerifiedLines": 445,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "signals",
+      "language": "en",
+      "status": "completed",
+      "rawTokens": 4438,
+      "elapsedMs": 2426,
+      "rawScore": {
+        "covered": 3,
+        "total": 4,
+        "coverage": 0.75,
+        "omission": 0.25,
+        "complete": false,
+        "units": [
+          {
+            "id": "registration",
+            "fact": "注册根据接收者或去重标识与发送者建立键，避免重复并保存接收者。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "receiver-selection",
+            "fact": "发送者过滤允许指定发送者或任意发送者，弱引用只保留仍存活的接收者。",
+            "covered": false,
+            "alternatives": [
+              {
+                "missing": [
+                  {
+                    "path": "django/dispatch/dispatcher.py",
+                    "missingLines": [
+                      446,
+                      447,
+                      448,
+                      449,
+                      450
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "normal-errors",
+            "fact": "普通同步发送直接调用接收者，未捕获其异常，因此异常会向调用方传播并中止该循环。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "robust-errors",
+            "fact": "容错发送逐个捕获 Exception，将异常对象作为该接收者结果并继续循环。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 442,
+          "verifiedOccurrences": 442,
+          "uniqueVerifiedLines": 442,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1985,
+          "truncated": true,
+          "file": "budgeted/signals.en.2000.txt",
+          "covered": 2,
+          "total": 4,
+          "coverage": 0.5,
+          "omission": 0.5,
+          "complete": false,
+          "units": [
+            {
+              "id": "registration",
+              "fact": "注册根据接收者或去重标识与发送者建立键，避免重复并保存接收者。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "receiver-selection",
+              "fact": "发送者过滤允许指定发送者或任意发送者，弱引用只保留仍存活的接收者。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/dispatch/dispatcher.py",
+                      "missingLines": [
+                        435,
+                        436,
+                        437
+                      ]
+                    },
+                    {
+                      "path": "django/dispatch/dispatcher.py",
+                      "missingLines": [
+                        446,
+                        447,
+                        448,
+                        449,
+                        450
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "normal-errors",
+              "fact": "普通同步发送直接调用接收者，未捕获其异常，因此异常会向调用方传播并中止该循环。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "robust-errors",
+              "fact": "容错发送逐个捕获 Exception，将异常对象作为该接收者结果并继续循环。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/dispatch/dispatcher.py",
+                      "missingLines": [
+                        303,
+                        304,
+                        305,
+                        306,
+                        307,
+                        308,
+                        309,
+                        310,
+                        311
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 192,
+            "verifiedOccurrences": 192,
+            "uniqueVerifiedLines": 192,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3996,
+          "truncated": true,
+          "file": "budgeted/signals.en.4000.txt",
+          "covered": 3,
+          "total": 4,
+          "coverage": 0.75,
+          "omission": 0.25,
+          "complete": false,
+          "units": [
+            {
+              "id": "registration",
+              "fact": "注册根据接收者或去重标识与发送者建立键，避免重复并保存接收者。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "receiver-selection",
+              "fact": "发送者过滤允许指定发送者或任意发送者，弱引用只保留仍存活的接收者。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/dispatch/dispatcher.py",
+                      "missingLines": [
+                        435,
+                        436,
+                        437
+                      ]
+                    },
+                    {
+                      "path": "django/dispatch/dispatcher.py",
+                      "missingLines": [
+                        446,
+                        447,
+                        448,
+                        449,
+                        450
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "normal-errors",
+              "fact": "普通同步发送直接调用接收者，未捕获其异常，因此异常会向调用方传播并中止该循环。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "robust-errors",
+              "fact": "容错发送逐个捕获 Exception，将异常对象作为该接收者结果并继续循环。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 401,
+            "verifiedOccurrences": 401,
+            "uniqueVerifiedLines": 401,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4438,
+          "truncated": false,
+          "file": "budgeted/signals.en.8000.txt",
+          "covered": 3,
+          "total": 4,
+          "coverage": 0.75,
+          "omission": 0.25,
+          "complete": false,
+          "units": [
+            {
+              "id": "registration",
+              "fact": "注册根据接收者或去重标识与发送者建立键，避免重复并保存接收者。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "receiver-selection",
+              "fact": "发送者过滤允许指定发送者或任意发送者，弱引用只保留仍存活的接收者。",
+              "covered": false,
+              "alternatives": [
+                {
+                  "missing": [
+                    {
+                      "path": "django/dispatch/dispatcher.py",
+                      "missingLines": [
+                        446,
+                        447,
+                        448,
+                        449,
+                        450
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "normal-errors",
+              "fact": "普通同步发送直接调用接收者，未捕获其异常，因此异常会向调用方传播并中止该循环。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "robust-errors",
+              "fact": "容错发送逐个捕获 Exception，将异常对象作为该接收者结果并继续循环。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 442,
+            "verifiedOccurrences": 442,
+            "uniqueVerifiedLines": 442,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "view-permissions",
+      "language": "zh",
+      "status": "completed",
+      "rawTokens": 4759,
+      "elapsedMs": 3116,
+      "rawScore": {
+        "covered": 3,
+        "total": 3,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "permission-check",
+            "fact": "取得所需权限后调用用户权限检查，分发时未通过则进入无权限处理。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "deny-authenticated",
+            "fact": "配置要求抛异常，或用户已经登录时，抛出权限拒绝异常。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "redirect-anonymous",
+            "fact": "其他情况取得登录地址，保留安全的返回路径并跳转到登录。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 455,
+          "verifiedOccurrences": 454,
+          "uniqueVerifiedLines": 454,
+          "duplicateVerifiedLines": 0,
+          "invalid": [
+            {
+              "path": "django/contrib/auth/views.py",
+              "line": 190,
+              "reason": "line-text-mismatch"
+            }
+          ]
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1996,
+          "truncated": true,
+          "file": "budgeted/view-permissions.zh.2000.txt",
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "permission-check",
+              "fact": "取得所需权限后调用用户权限检查，分发时未通过则进入无权限处理。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "deny-authenticated",
+              "fact": "配置要求抛异常，或用户已经登录时，抛出权限拒绝异常。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "redirect-anonymous",
+              "fact": "其他情况取得登录地址，保留安全的返回路径并跳转到登录。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 193,
+            "verifiedOccurrences": 193,
+            "uniqueVerifiedLines": 193,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3993,
+          "truncated": true,
+          "file": "budgeted/view-permissions.zh.4000.txt",
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "permission-check",
+              "fact": "取得所需权限后调用用户权限检查，分发时未通过则进入无权限处理。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "deny-authenticated",
+              "fact": "配置要求抛异常，或用户已经登录时，抛出权限拒绝异常。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "redirect-anonymous",
+              "fact": "其他情况取得登录地址，保留安全的返回路径并跳转到登录。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 381,
+            "verifiedOccurrences": 381,
+            "uniqueVerifiedLines": 381,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4759,
+          "truncated": false,
+          "file": "budgeted/view-permissions.zh.8000.txt",
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "permission-check",
+              "fact": "取得所需权限后调用用户权限检查，分发时未通过则进入无权限处理。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "deny-authenticated",
+              "fact": "配置要求抛异常，或用户已经登录时，抛出权限拒绝异常。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "redirect-anonymous",
+              "fact": "其他情况取得登录地址，保留安全的返回路径并跳转到登录。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 455,
+            "verifiedOccurrences": 454,
+            "uniqueVerifiedLines": 454,
+            "duplicateVerifiedLines": 0,
+            "invalid": [
+              {
+                "path": "django/contrib/auth/views.py",
+                "line": 190,
+                "reason": "line-text-mismatch"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "view-permissions",
+      "language": "en",
+      "status": "completed",
+      "rawTokens": 4747,
+      "elapsedMs": 2904,
+      "rawScore": {
+        "covered": 3,
+        "total": 3,
+        "coverage": 1,
+        "omission": 0,
+        "complete": true,
+        "units": [
+          {
+            "id": "permission-check",
+            "fact": "取得所需权限后调用用户权限检查，分发时未通过则进入无权限处理。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "deny-authenticated",
+            "fact": "配置要求抛异常，或用户已经登录时，抛出权限拒绝异常。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          },
+          {
+            "id": "redirect-anonymous",
+            "fact": "其他情况取得登录地址，保留安全的返回路径并跳转到登录。",
+            "covered": true,
+            "alternatives": [
+              {
+                "missing": []
+              }
+            ]
+          }
+        ],
+        "diagnostic": {
+          "numberedLines": 457,
+          "verifiedOccurrences": 457,
+          "uniqueVerifiedLines": 457,
+          "duplicateVerifiedLines": 0,
+          "invalid": []
+        }
+      },
+      "budgetScores": [
+        {
+          "budget": 2000,
+          "tokens": 1997,
+          "truncated": true,
+          "file": "budgeted/view-permissions.en.2000.txt",
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "permission-check",
+              "fact": "取得所需权限后调用用户权限检查，分发时未通过则进入无权限处理。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "deny-authenticated",
+              "fact": "配置要求抛异常，或用户已经登录时，抛出权限拒绝异常。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "redirect-anonymous",
+              "fact": "其他情况取得登录地址，保留安全的返回路径并跳转到登录。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 191,
+            "verifiedOccurrences": 191,
+            "uniqueVerifiedLines": 191,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 4000,
+          "tokens": 3997,
+          "truncated": true,
+          "file": "budgeted/view-permissions.en.4000.txt",
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "permission-check",
+              "fact": "取得所需权限后调用用户权限检查，分发时未通过则进入无权限处理。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "deny-authenticated",
+              "fact": "配置要求抛异常，或用户已经登录时，抛出权限拒绝异常。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "redirect-anonymous",
+              "fact": "其他情况取得登录地址，保留安全的返回路径并跳转到登录。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 385,
+            "verifiedOccurrences": 385,
+            "uniqueVerifiedLines": 385,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        },
+        {
+          "budget": 8000,
+          "tokens": 4747,
+          "truncated": false,
+          "file": "budgeted/view-permissions.en.8000.txt",
+          "covered": 3,
+          "total": 3,
+          "coverage": 1,
+          "omission": 0,
+          "complete": true,
+          "units": [
+            {
+              "id": "permission-check",
+              "fact": "取得所需权限后调用用户权限检查，分发时未通过则进入无权限处理。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "deny-authenticated",
+              "fact": "配置要求抛异常，或用户已经登录时，抛出权限拒绝异常。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            },
+            {
+              "id": "redirect-anonymous",
+              "fact": "其他情况取得登录地址，保留安全的返回路径并跳转到登录。",
+              "covered": true,
+              "alternatives": [
+                {
+                  "missing": []
+                }
+              ]
+            }
+          ],
+          "diagnostic": {
+            "numberedLines": 457,
+            "verifiedOccurrences": 457,
+            "uniqueVerifiedLines": 457,
+            "duplicateVerifiedLines": 0,
+            "invalid": []
+          }
+        }
+      ]
+    }
+  ]
+}

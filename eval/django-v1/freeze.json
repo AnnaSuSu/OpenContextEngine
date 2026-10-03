@@ -1,0 +1,16 @@
+{
+  "frozenAt": "2026-10-03T09:24:38.169472+00:00",
+  "status": "frozen before first ACE query on this dataset",
+  "sha256": {
+    "queries.json": "e4ff7d77a5c2f6ee8a99bad2cc3d0f7043cbbc3743a3dd20e34736e823f2427f",
+    "answers.v1.json": "429d0288073ca8c5d3d7638ceeeb1430c2c8e1399c6c02ccb0fe46836966f458",
+    "snapshot.json": "c1c3ab1991cf6892fda5ce8086e32f56db1cdd3cda1253f1551a49a8f51fbe7c",
+    "protocol.json": "aadc0bba1e59f6615e64c1162194bb2c86b254853ce599fc30d0eaad5fa3657b"
+  },
+  "implementationSha256": {
+    "scripts/ace-django.mjs": "6ad6756530e5622b144976813fc103253abed4f0a0ade1a42cc0f7bbd185f752",
+    "scripts/score-django.mjs": "fa863b66535582b43db507753c13d9f7655f087051fcc4ce01c96623596aebf4",
+    "src/eval/evidence.mjs": "76cb50cfac376f3ae8d3fa17a83558f17a8a8f5e9256c4b5d8f9c4b2d01b79d0",
+    "package-lock.json": "4c8802fc81e2348d4eaa9add7c627dd3f9418f827a3142b36c8644adecfe9f21"
+  }
+}

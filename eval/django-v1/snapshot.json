@@ -1,0 +1,4424 @@
+{
+  "schemaVersion": 1,
+  "repository": "django/django",
+  "commit": "f59aef2ee9b5c988fd4179d8f2835030bd76297c",
+  "selectedRef": "stable/5.2.x",
+  "scope": "All tracked django/**/*.py at the fixed commit; tests, docs, templates, translations, static assets, and evaluation material excluded. No production Python file filtered by relevance.",
+  "files": [
+    {
+      "path": "django/__init__.py",
+      "bytes": 800,
+      "sha256": "47a812042340468d485a3bf6a7f771f364eab79625545a535be88dc86557ee22"
+    },
+    {
+      "path": "django/__main__.py",
+      "bytes": 212,
+      "sha256": "5cef8246f6d91422ad22f013e89bdb9f7d9d5a7bf6a6736ccd1552fb59ca5f42"
+    },
+    {
+      "path": "django/apps/__init__.py",
+      "bytes": 90,
+      "sha256": "f1665323f26736e3f8b727ee8a61f7fe929061b0c0cb685aabec64413d545e47"
+    },
+    {
+      "path": "django/apps/config.py",
+      "bytes": 11482,
+      "sha256": "d59871b783abc119ce9ac4ff07f06eac89b3de88bcdf7d13246d2b451279f1b4"
+    },
+    {
+      "path": "django/apps/registry.py",
+      "bytes": 17693,
+      "sha256": "add7b138de49ba1280316019bf89360c7d1f45229d3d9a22ebfb538ce5201510"
+    },
+    {
+      "path": "django/conf/__init__.py",
+      "bytes": 9809,
+      "sha256": "cfedfd89eac2b3ff056289a86e1f4f5844a8648e5127e4e0cc4b9ec3c07d9093"
+    },
+    {
+      "path": "django/conf/global_settings.py",
+      "bytes": 23068,
+      "sha256": "a5770312aff8a67954d5fd308d2a3fab26736e522e9430bb52b36666220fb98d"
+    },
+    {
+      "path": "django/conf/locale/__init__.py",
+      "bytes": 13864,
+      "sha256": "4070caf102007118c632d58bf10560600ffaa6c7adb99b9604990fc2e993788f"
+    },
+    {
+      "path": "django/conf/locale/ar/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ar/formats.py",
+      "bytes": 696,
+      "sha256": "108f430221add5abcd63e6ba96e32702a28848a1875c788a13840b471ef01875"
+    },
+    {
+      "path": "django/conf/locale/ar_DZ/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ar_DZ/formats.py",
+      "bytes": 901,
+      "sha256": "4fce2ade830a9e0f8beffc7298fa98c29cecefc2efbdf1f2d9dadf4918fc5e31"
+    },
+    {
+      "path": "django/conf/locale/az/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/az/formats.py",
+      "bytes": 1087,
+      "sha256": "250a12d80607289c621fa4c96acd4ca1e6204de52fe5770db5850717bba50e6c"
+    },
+    {
+      "path": "django/conf/locale/bg/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/bg/formats.py",
+      "bytes": 705,
+      "sha256": "2c2ecfff9ca374682cc4b43f183b42f07d9bcfd353c54cdefc202dce59b7ed30"
+    },
+    {
+      "path": "django/conf/locale/bn/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/bn/formats.py",
+      "bytes": 964,
+      "sha256": "8f29e167d5cd36ec535de17b7f616b258619b85c252d8e7c7c67d0ea056ceecf"
+    },
+    {
+      "path": "django/conf/locale/bs/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/bs/formats.py",
+      "bytes": 705,
+      "sha256": "efad26fa1e0e1e98a3ea9fc1003d9daf79ec59a4dbea847563972e957f46c6ac"
+    },
+    {
+      "path": "django/conf/locale/ca/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ca/formats.py",
+      "bytes": 940,
+      "sha256": "b3b37a36cdf222aaff28385ab6752f7e36cf8546eb86f7a60791ed09ea1d199a"
+    },
+    {
+      "path": "django/conf/locale/ckb/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ckb/formats.py",
+      "bytes": 728,
+      "sha256": "11b9900be772425f04a9540e546c32d516b9f8fd67f89dd41782b9e69dd5cce3"
+    },
+    {
+      "path": "django/conf/locale/cs/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/cs/formats.py",
+      "bytes": 1539,
+      "sha256": "dcc03bd025b4c1faf400862f62a134002997efdb4d3b1f9976547a01eb69f5ef"
+    },
+    {
+      "path": "django/conf/locale/cy/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/cy/formats.py",
+      "bytes": 1355,
+      "sha256": "358d6960f7e9bbb5e32cc082b899398207692dcb9f575875d35a23cb17cf52b6"
+    },
+    {
+      "path": "django/conf/locale/da/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/da/formats.py",
+      "bytes": 876,
+      "sha256": "fb2df4df7168ec23b263435bc5e2556061726eb9cb6e05ed45fd72046968bb2b"
+    },
+    {
+      "path": "django/conf/locale/de/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/de/formats.py",
+      "bytes": 996,
+      "sha256": "7f2b17f33e5391b3d45809e0a32fec31e1465a9da268d53a7ed901cfc72aa658"
+    },
+    {
+      "path": "django/conf/locale/de_CH/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/de_CH/formats.py",
+      "bytes": 1187,
+      "sha256": "06ea36a4ae6316c9df5336c4a1ab0e2385db9ed4528172f3d41309eda0155e59"
+    },
+    {
+      "path": "django/conf/locale/el/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/el/formats.py",
+      "bytes": 1241,
+      "sha256": "44e3766aa41a40adc361517fc069414090c7ae100dc72a5c516fee758288faba"
+    },
+    {
+      "path": "django/conf/locale/en/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/en/formats.py",
+      "bytes": 2438,
+      "sha256": "55341485a67f585852e6b423d0fc5b9e833248ad27cd44aaadde86c7e0ed5f12"
+    },
+    {
+      "path": "django/conf/locale/en_AU/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/en_AU/formats.py",
+      "bytes": 1650,
+      "sha256": "06823952f88a199e1371ca8b9b1a5c74c7f4624d58884858fe22d051d763be2d"
+    },
+    {
+      "path": "django/conf/locale/en_CA/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/en_CA/formats.py",
+      "bytes": 1166,
+      "sha256": "8e80760f2ed76219628bf3c125fbb31cd2db38f9915d6d898d8926c45afa2b12"
+    },
+    {
+      "path": "django/conf/locale/en_GB/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/en_GB/formats.py",
+      "bytes": 1650,
+      "sha256": "70937c60db61908387088327c224da499e910b08121e48d660c71fc3c54549c1"
+    },
+    {
+      "path": "django/conf/locale/en_IE/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/en_IE/formats.py",
+      "bytes": 1484,
+      "sha256": "68a1084fde98eadcdb18716edeab05cc5738430feece136307af46a663faa97f"
+    },
+    {
+      "path": "django/conf/locale/eo/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/eo/formats.py",
+      "bytes": 1715,
+      "sha256": "cc810093e4a22d7d1cbd056645cdcba6657af63c11ade8cc31d0bbbed56c4a1d"
+    },
+    {
+      "path": "django/conf/locale/es/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/es/formats.py",
+      "bytes": 978,
+      "sha256": "ed2bac3b574f12b63af21e60e25a71bcf6ec25876b6d372bff4117eee0ca60da"
+    },
+    {
+      "path": "django/conf/locale/es_AR/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/es_AR/formats.py",
+      "bytes": 935,
+      "sha256": "e2a80e2684762b9644fa9036f9a611c055bb01b2be33d17dbb7cd5c2079baf6c"
+    },
+    {
+      "path": "django/conf/locale/es_CO/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/es_CO/formats.py",
+      "bytes": 691,
+      "sha256": "d2e01b06f3a474964a8ef86baddd21b5271d3bbb1381ba1f3a4902f00df9fdaf"
+    },
+    {
+      "path": "django/conf/locale/es_MX/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/es_MX/formats.py",
+      "bytes": 768,
+      "sha256": "7c1bf202a05c017011a6d484de1c70cc560dc7794413c42b84dac25aeb863650"
+    },
+    {
+      "path": "django/conf/locale/es_NI/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/es_NI/formats.py",
+      "bytes": 711,
+      "sha256": "52239a74fa0cacdb74893a7c8d956aeb9c51ff82e43b0a7e7e3bc56fc3323558"
+    },
+    {
+      "path": "django/conf/locale/es_PR/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/es_PR/formats.py",
+      "bytes": 675,
+      "sha256": "5554e5c327a45fcd3308a960d4fe2385a01d28da4de48eb8a56ff182b869c95b"
+    },
+    {
+      "path": "django/conf/locale/et/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/et/formats.py",
+      "bytes": 707,
+      "sha256": "0f2152655b864981a8226ad123616875e339d4eb6f21c0a42b3908d0abd84d0c"
+    },
+    {
+      "path": "django/conf/locale/eu/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/eu/formats.py",
+      "bytes": 749,
+      "sha256": "f8fb9103a7877973fc477615d1a2044116e4d8bbde69993efe48c79414fe0eb8"
+    },
+    {
+      "path": "django/conf/locale/fa/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/fa/formats.py",
+      "bytes": 722,
+      "sha256": "bf474b68887af825820101e4997d0f688940e3df604de45c2448bb955273c3da"
+    },
+    {
+      "path": "django/conf/locale/fi/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/fi/formats.py",
+      "bytes": 1213,
+      "sha256": "08eff00f96411f0015823c40ad792d2c20fb33e3cf86d1db6b25ff6c12aa8650"
+    },
+    {
+      "path": "django/conf/locale/fr/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/fr/formats.py",
+      "bytes": 938,
+      "sha256": "d2e3b734c500736ad164eb6bf523098051d334d86bf2ddb1ac6aee5414474e6c"
+    },
+    {
+      "path": "django/conf/locale/fr_BE/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/fr_BE/formats.py",
+      "bytes": 1154,
+      "sha256": "0c1ed6fa2e4161e4633111963169a6e682b814d393cb81f82cbff1c7a66d934d"
+    },
+    {
+      "path": "django/conf/locale/fr_CA/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/fr_CA/formats.py",
+      "bytes": 1171,
+      "sha256": "b92678b3b5c999cbad71bc79d43551bb64a1f5990e8654d4d511c8dfb350a90b"
+    },
+    {
+      "path": "django/conf/locale/fr_CH/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/fr_CH/formats.py",
+      "bytes": 1320,
+      "sha256": "37d4928f6a52800c4d4546925d57767c88ede7d6a8ae50ad23ba2a6a37f6e025"
+    },
+    {
+      "path": "django/conf/locale/fy/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/fy/formats.py",
+      "bytes": 658,
+      "sha256": "9895e3d5d1d49cef3cdcf6163f0b88d3b08d6e39a77c14d05515d9320da198e9"
+    },
+    {
+      "path": "django/conf/locale/ga/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ga/formats.py",
+      "bytes": 682,
+      "sha256": "421ed1dd431f5b3b7b40874c66ac58d28e0e32956caa57211caed9d109c359db"
+    },
+    {
+      "path": "django/conf/locale/gd/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/gd/formats.py",
+      "bytes": 715,
+      "sha256": "edda0bec92280aa03fa3e9690b03378c31cca69b40dc16d281e2d1a9d664f0b7"
+    },
+    {
+      "path": "django/conf/locale/gl/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/gl/formats.py",
+      "bytes": 757,
+      "sha256": "ca0485bfe6134bc86d1bf2d6d1ac1e82490e6ab3d14d934f6d4724e6cc640302"
+    },
+    {
+      "path": "django/conf/locale/he/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/he/formats.py",
+      "bytes": 712,
+      "sha256": "33eb6ef8b99365dfe860f347e82644b1dc49379dba45439f9cb1e543144bd0dd"
+    },
+    {
+      "path": "django/conf/locale/hi/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/hi/formats.py",
+      "bytes": 684,
+      "sha256": "240ad533d74c96e48ff9cc296727525571c1e55b3d40ac91f5cf9b7ed23d85db"
+    },
+    {
+      "path": "django/conf/locale/hr/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/hr/formats.py",
+      "bytes": 1723,
+      "sha256": "178988743a1a39827f94f9ac27fe9b428e198fca4e495c2e95d9bddb3472e05a"
+    },
+    {
+      "path": "django/conf/locale/hu/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/hu/formats.py",
+      "bytes": 1001,
+      "sha256": "c400fb98db02e70140dbf28645b04c3cac23f3ce29ab48c22a65e111e9c60049"
+    },
+    {
+      "path": "django/conf/locale/id/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/id/formats.py",
+      "bytes": 1644,
+      "sha256": "918c8ec561cddc9ca27f7ac5c4b1720548d3cc55309ae68bae4c3926f19b133f"
+    },
+    {
+      "path": "django/conf/locale/ig/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ig/formats.py",
+      "bytes": 1119,
+      "sha256": "3f722cc61179acd159e67096512c897c52dbd15d50757fd79feb5876b7259794"
+    },
+    {
+      "path": "django/conf/locale/is/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/is/formats.py",
+      "bytes": 688,
+      "sha256": "b1cb0d7cfe2f55a731588a0dd37a9cd856b747c521e48cebd4ca8189cac09770"
+    },
+    {
+      "path": "django/conf/locale/it/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/it/formats.py",
+      "bytes": 1774,
+      "sha256": "2b39126f72970707ccde093615ecf247e5bcfd160aa67945785b888b9ce5f92d"
+    },
+    {
+      "path": "django/conf/locale/ja/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ja/formats.py",
+      "bytes": 729,
+      "sha256": "08e52e697a39cc248dcc4c09d2c9a36e6f508f6f18341706c66f2a14226fe2c1"
+    },
+    {
+      "path": "django/conf/locale/ka/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ka/formats.py",
+      "bytes": 1861,
+      "sha256": "7a54c63a34be9b1ba848200a3a6f16cf668b7e1e295af3720a550572b62af678"
+    },
+    {
+      "path": "django/conf/locale/km/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/km/formats.py",
+      "bytes": 750,
+      "sha256": "d1430bad9cf5688dac7513e42746335fdf5ca36215ead95d3fba44bc610f74fd"
+    },
+    {
+      "path": "django/conf/locale/kn/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/kn/formats.py",
+      "bytes": 680,
+      "sha256": "5f98fd547216d9745d793cc3144c92f2d1b4e4e045ccfd91eec1065106bf20d8"
+    },
+    {
+      "path": "django/conf/locale/ko/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ko/formats.py",
+      "bytes": 2060,
+      "sha256": "628c77ebbbf81cf2f737d568275bc9f3532948496324394070b6b691063eba78"
+    },
+    {
+      "path": "django/conf/locale/ky/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ky/formats.py",
+      "bytes": 1178,
+      "sha256": "402abbbf1003e5f7bd5617234611ba0b7376f2336f773291f9cf84bc3489d4f8"
+    },
+    {
+      "path": "django/conf/locale/lt/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/lt/formats.py",
+      "bytes": 1637,
+      "sha256": "0bd49c477818b304f57505c579d5149d87ba0d03d51804bf9cbc6cd21d84ddd1"
+    },
+    {
+      "path": "django/conf/locale/lv/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/lv/formats.py",
+      "bytes": 1713,
+      "sha256": "93ca3076ad14efec7aca5f259755b956346829da7c6b51b67a71f4e06e7f9ef5"
+    },
+    {
+      "path": "django/conf/locale/mk/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/mk/formats.py",
+      "bytes": 1451,
+      "sha256": "c709c9b172d71a880eaa93f5f2ee86a338de869580c302a65db10ba25615fe4e"
+    },
+    {
+      "path": "django/conf/locale/ml/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ml/formats.py",
+      "bytes": 1597,
+      "sha256": "651eed31d245d14e8ad47f79713aab147e20a29e99b9243bbc3da1d322aaea6a"
+    },
+    {
+      "path": "django/conf/locale/mn/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/mn/formats.py",
+      "bytes": 676,
+      "sha256": "7ec7b1254f7f5138a0d8f4bfa35d617049ab6cf052f2fa08e288ee0153ce77f5"
+    },
+    {
+      "path": "django/conf/locale/ms/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ms/formats.py",
+      "bytes": 1522,
+      "sha256": "62d381b3ab388f848e99f077729a767a4731545a151a050df264e1a12b9e0add"
+    },
+    {
+      "path": "django/conf/locale/nb/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/nb/formats.py",
+      "bytes": 1552,
+      "sha256": "cb540b13e486d34787c237b4964013a07b73e2deb6d51cff1d04720560a02bc7"
+    },
+    {
+      "path": "django/conf/locale/nl/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/nl/formats.py",
+      "bytes": 3927,
+      "sha256": "70a69a3af45d79ab8e463bee675c7255c56c977e89dd993815213e967c765f08"
+    },
+    {
+      "path": "django/conf/locale/nn/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/nn/formats.py",
+      "bytes": 1552,
+      "sha256": "cb540b13e486d34787c237b4964013a07b73e2deb6d51cff1d04720560a02bc7"
+    },
+    {
+      "path": "django/conf/locale/pl/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/pl/formats.py",
+      "bytes": 1032,
+      "sha256": "2911213ed1eecca4bf66c02a5ece4ba983c6867e8efa32dde16650fb7f4103c2"
+    },
+    {
+      "path": "django/conf/locale/pt/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/pt/formats.py",
+      "bytes": 1520,
+      "sha256": "450f4cb88c143e1898daefb584553669bb3d5aabf5a9913601401f6152be354f"
+    },
+    {
+      "path": "django/conf/locale/pt_BR/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/pt_BR/formats.py",
+      "bytes": 1285,
+      "sha256": "27520a57b712d98309e7faa54fd8757436145fdb4b16fa80f7997f1a96532d46"
+    },
+    {
+      "path": "django/conf/locale/ro/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ro/formats.py",
+      "bytes": 928,
+      "sha256": "7bf769d33c9f15fa3276b1b29fa2a4dc39d0223ed14d1baf45ceab43ab52c730"
+    },
+    {
+      "path": "django/conf/locale/ru/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ru/formats.py",
+      "bytes": 1098,
+      "sha256": "9537d86de71d4a61c2c5e6e883fd9b774377da20f79c4abf7f96ee87d8a5fa72"
+    },
+    {
+      "path": "django/conf/locale/sk/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/sk/formats.py",
+      "bytes": 1051,
+      "sha256": "6d68f414da587ce0208bd27e2f856e88de82fe3b203ec28d74b61df604e716cd"
+    },
+    {
+      "path": "django/conf/locale/sl/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/sl/formats.py",
+      "bytes": 1642,
+      "sha256": "36ae087c452794679b319791bc1da5f5aa6cfb91b96f8cb5910ff73222537def"
+    },
+    {
+      "path": "django/conf/locale/sq/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/sq/formats.py",
+      "bytes": 688,
+      "sha256": "480fe309237023cfa9efdb241e82f1acf2d99e4caad4f55a7704fa80cb7b9ff3"
+    },
+    {
+      "path": "django/conf/locale/sr/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/sr/formats.py",
+      "bytes": 1729,
+      "sha256": "177fe0628a4e5c835c96568f1734ea66b676a19d727b7c73474350b65a97629d"
+    },
+    {
+      "path": "django/conf/locale/sr_Latn/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/sr_Latn/formats.py",
+      "bytes": 1728,
+      "sha256": "043666f9a8d080223143c98271c9041f7d88a0237ddb7dd3bc0397920e26737f"
+    },
+    {
+      "path": "django/conf/locale/sv/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/sv/formats.py",
+      "bytes": 1311,
+      "sha256": "f68f19b5a4aad5439ae72e83bb7ad0b0b00097964e11d558d4e55531b8f4d910"
+    },
+    {
+      "path": "django/conf/locale/ta/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ta/formats.py",
+      "bytes": 682,
+      "sha256": "be68df88ce78a09271a9c76064950d35037ba0c4be5cb541609e255816f972d6"
+    },
+    {
+      "path": "django/conf/locale/te/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/te/formats.py",
+      "bytes": 680,
+      "sha256": "f873a86609a7304e3efb80ae5f3727857a8d99ad1687b3629e87f74420866645"
+    },
+    {
+      "path": "django/conf/locale/tg/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/tg/formats.py",
+      "bytes": 1160,
+      "sha256": "4c6e5319f2cdcb82528e5f90016938ea02046f48a3741a6a3eb0edc1f273b21c"
+    },
+    {
+      "path": "django/conf/locale/th/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/th/formats.py",
+      "bytes": 1072,
+      "sha256": "4a60940fecd5808d501361f0aa416d00ef3bac9f85a028f0d6cfb6f9c7e5d61d"
+    },
+    {
+      "path": "django/conf/locale/tk/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/tk/formats.py",
+      "bytes": 1160,
+      "sha256": "4c6e5319f2cdcb82528e5f90016938ea02046f48a3741a6a3eb0edc1f273b21c"
+    },
+    {
+      "path": "django/conf/locale/tr/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/tr/formats.py",
+      "bytes": 1019,
+      "sha256": "c8983eee199ebc3d60be3f620513028981a07790f129970bed3fc2dcadf3b4c1"
+    },
+    {
+      "path": "django/conf/locale/ug/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/ug/formats.py",
+      "bytes": 454,
+      "sha256": "aa848091a5aa27b156d8e4c6699b3f09f88c37d3f1015c4779c65fc0d0b3754a"
+    },
+    {
+      "path": "django/conf/locale/uk/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/uk/formats.py",
+      "bytes": 1241,
+      "sha256": "66679898bd1ea28170420984d39e15dfa450e3af594df02fea4f12509ac3610f"
+    },
+    {
+      "path": "django/conf/locale/uz/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/uz/formats.py",
+      "bytes": 1176,
+      "sha256": "71d9aa3940559cf4b28b693d024386976eecf3d3f298578f1b682d9d8cd86e2c"
+    },
+    {
+      "path": "django/conf/locale/vi/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/vi/formats.py",
+      "bytes": 762,
+      "sha256": "ff122e824a8b9e337d77322179f329b095da4cf95daf86e5292192f9cdecc20d"
+    },
+    {
+      "path": "django/conf/locale/zh_Hans/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/zh_Hans/formats.py",
+      "bytes": 1598,
+      "sha256": "88c6fd4da8fac50400de5fcd5820bbc14950ba1e187cd520b36987710e97504a"
+    },
+    {
+      "path": "django/conf/locale/zh_Hant/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/conf/locale/zh_Hant/formats.py",
+      "bytes": 1598,
+      "sha256": "88c6fd4da8fac50400de5fcd5820bbc14950ba1e187cd520b36987710e97504a"
+    },
+    {
+      "path": "django/conf/urls/__init__.py",
+      "bytes": 292,
+      "sha256": "aa6a5a462e469f6b9a63d87783d44dbb4cf72c312911e34bf4995f48b79df6cd"
+    },
+    {
+      "path": "django/conf/urls/i18n.py",
+      "bytes": 1166,
+      "sha256": "33f94eeaaffdd90aeb3e84d8f68ba2f790508097cf95af5e75136e37955ce063"
+    },
+    {
+      "path": "django/conf/urls/static.py",
+      "bytes": 908,
+      "sha256": "8193986a221fdd2c50ef937af46c959bd0b43a642fd6bd480eb509d04ef331ed"
+    },
+    {
+      "path": "django/contrib/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/admin/__init__.py",
+      "bytes": 1203,
+      "sha256": "8b44f08c75aaeaa7d92747bda55580657c551d9f9e38f7b01a3b5dc079636ce3"
+    },
+    {
+      "path": "django/contrib/admin/actions.py",
+      "bytes": 3181,
+      "sha256": "80e49deebac58c82f51f10d23fcc89dfa89eec9f431f4e8cff0b07f50bd21463"
+    },
+    {
+      "path": "django/contrib/admin/apps.py",
+      "bytes": 840,
+      "sha256": "04e8ae940e2db1bdf0b8052d2c64c68eb6f2c294975f474ba36a5408657c511c"
+    },
+    {
+      "path": "django/contrib/admin/checks.py",
+      "bytes": 50474,
+      "sha256": "2a4c947cab68b30f1c4444cddd14af3ced8d38f81d1148ceb758a59c5318bc13"
+    },
+    {
+      "path": "django/contrib/admin/decorators.py",
+      "bytes": 3481,
+      "sha256": "7648bb18b14a38f4fe981e6bc6c617d76ae8c75f01cb0ae8c66af38c6fd52573"
+    },
+    {
+      "path": "django/contrib/admin/exceptions.py",
+      "bytes": 507,
+      "sha256": "549873bab6a5957577db6861664966be9dce983219650a5b10eb84f825fbf77f"
+    },
+    {
+      "path": "django/contrib/admin/filters.py",
+      "bytes": 27668,
+      "sha256": "c5671ad30b00fdf1a592057d9805c0dd18a9997be3f0429aba65387ff2b293db"
+    },
+    {
+      "path": "django/contrib/admin/forms.py",
+      "bytes": 1023,
+      "sha256": "d14089b2d9a605fa7f73fd00aa500b250632f5bc57a3d7eaa1040809038d184a"
+    },
+    {
+      "path": "django/contrib/admin/helpers.py",
+      "bytes": 18620,
+      "sha256": "f52b69a048d3647df420fd2145564926319ffa72967e73300f77a742e3cd8482"
+    },
+    {
+      "path": "django/contrib/admin/migrations/0001_initial.py",
+      "bytes": 2507,
+      "sha256": "f4716989d9815b6231f0d7291754835e008c96818447fe57984bbf8985883335"
+    },
+    {
+      "path": "django/contrib/admin/migrations/0002_logentry_remove_auto_add.py",
+      "bytes": 553,
+      "sha256": "2c127e659a2236edea0ed57eccd38786ae84e365790a80b96b758c617f50be43"
+    },
+    {
+      "path": "django/contrib/admin/migrations/0003_logentry_add_action_flag_choices.py",
+      "bytes": 538,
+      "sha256": "02700a827190720e5c417495a395071b6baa28a34e74bc8f90824afaafc01841"
+    },
+    {
+      "path": "django/contrib/admin/migrations/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/admin/models.py",
+      "bytes": 8500,
+      "sha256": "a832b3284ad334097578430e0f7a7ed2326a5438ab959fc2213856f21bb09a49"
+    },
+    {
+      "path": "django/contrib/admin/options.py",
+      "bytes": 101633,
+      "sha256": "50c6c655c2644b71a1b6bdeba04a016b70f9be47c5dbfd50c64361bbbeff176a"
+    },
+    {
+      "path": "django/contrib/admin/sites.py",
+      "bytes": 23454,
+      "sha256": "03c5693e7a5c2684ed79f9fca677e929059920edd670114ade703081bfac52e4"
+    },
+    {
+      "path": "django/contrib/admin/templatetags/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/admin/templatetags/admin_list.py",
+      "bytes": 19159,
+      "sha256": "afad0141c072dffb04cd493ce8a62f88a6d1f2fcce729a0f479dc0be21859e91"
+    },
+    {
+      "path": "django/contrib/admin/templatetags/admin_modify.py",
+      "bytes": 4978,
+      "sha256": "0c613e61a641d7e6d4aaf8cec269d6253ac8462475a98758e8dc8f0e3d478f75"
+    },
+    {
+      "path": "django/contrib/admin/templatetags/admin_urls.py",
+      "bytes": 2038,
+      "sha256": "1cda287b6eb0cad30b8790dd80eab37321ed35fe06faf59f72c2fbc5095656e1"
+    },
+    {
+      "path": "django/contrib/admin/templatetags/base.py",
+      "bytes": 1562,
+      "sha256": "3b0256b9ad0847948a1f3759c26b8c28a10a793127c006efe3a849c5496923a7"
+    },
+    {
+      "path": "django/contrib/admin/templatetags/log.py",
+      "bytes": 2050,
+      "sha256": "bcbd93361805b021fee095c313ed88fc1841db14102f0c781a41cac7b9bc473e"
+    },
+    {
+      "path": "django/contrib/admin/tests.py",
+      "bytes": 8559,
+      "sha256": "189b962402af959ffda9ef3a10cbeba08df8a1a69fa1497c88533f3ff61258a4"
+    },
+    {
+      "path": "django/contrib/admin/utils.py",
+      "bytes": 22381,
+      "sha256": "74d86306eb836b11338c254ed8daf7d8f69bdda402b1baf69868652dd44af123"
+    },
+    {
+      "path": "django/contrib/admin/views/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/admin/views/autocomplete.py",
+      "bytes": 4385,
+      "sha256": "3e30bc75bdb9ce1620c0b4bfe29aba3c0a530ff6119f89ae207d00fd537b9028"
+    },
+    {
+      "path": "django/contrib/admin/views/decorators.py",
+      "bytes": 639,
+      "sha256": "e27758758a0f2e15ac76eb4c1342f1b2671fe9414fe59da8bb7fe932380d6f0f"
+    },
+    {
+      "path": "django/contrib/admin/views/main.py",
+      "bytes": 25868,
+      "sha256": "3660bc9614d1715c454d0e8365981cc64481d1a08787a4d53b9c621fcb493cbd"
+    },
+    {
+      "path": "django/contrib/admin/widgets.py",
+      "bytes": 19637,
+      "sha256": "ba33ae129ec36f5d8a2047237bbfebcb9e6afc5212ca178117eec4df3f1dac58"
+    },
+    {
+      "path": "django/contrib/admindocs/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/admindocs/apps.py",
+      "bytes": 216,
+      "sha256": "6e4961538a1a4d298f76bd10ce955eb8d4fa886efb40cd4082228a6435f4e6de"
+    },
+    {
+      "path": "django/contrib/admindocs/middleware.py",
+      "bytes": 1329,
+      "sha256": "a30a8b6e2801b712a684f426cfbebb28e0243779ca44826bc19014b874480103"
+    },
+    {
+      "path": "django/contrib/admindocs/urls.py",
+      "bytes": 1309,
+      "sha256": "b293d20fac1cfc1f5e00117898458884f499df0e96e1f33a11119ea68f0d46d6"
+    },
+    {
+      "path": "django/contrib/admindocs/utils.py",
+      "bytes": 8399,
+      "sha256": "3587545738101c049b8a6a59a50c34584167fd2b7ff6118c78ee1a4c458bba18"
+    },
+    {
+      "path": "django/contrib/admindocs/views.py",
+      "bytes": 19572,
+      "sha256": "828d9d02b193a11101cfffe38448582b25b56b868a04a306ee3bc90ca9e1f627"
+    },
+    {
+      "path": "django/contrib/auth/__init__.py",
+      "bytes": 14960,
+      "sha256": "0d272de023f0821d2b5bc97919c40aa81e82810a31b3f67e2126df22542c7aaf"
+    },
+    {
+      "path": "django/contrib/auth/admin.py",
+      "bytes": 10378,
+      "sha256": "15576eb0a80f0ec6134d66725ca6519256d64ad2c7a3e6cefc479adbf9ffcda8"
+    },
+    {
+      "path": "django/contrib/auth/apps.py",
+      "bytes": 1284,
+      "sha256": "aa98e315d307d07dfe89a959ad1610e5f9e67c2b928744620f76ec2b3cd311e6"
+    },
+    {
+      "path": "django/contrib/auth/backends.py",
+      "bytes": 12967,
+      "sha256": "b6ea0c48827cec842360c56af11a339d4e419f75b2b60e2cfe112fdf948aae1f"
+    },
+    {
+      "path": "django/contrib/auth/base_user.py",
+      "bytes": 5043,
+      "sha256": "89dfa1ee281367e2cd864036b45e91f4c473d49cc1c305d5861e0c8687d5552b"
+    },
+    {
+      "path": "django/contrib/auth/checks.py",
+      "bytes": 9847,
+      "sha256": "c975afcba914ca3e167c39640c1b726f01052aeaaf3614fdaea1e3e0509d4e50"
+    },
+    {
+      "path": "django/contrib/auth/context_processors.py",
+      "bytes": 1911,
+      "sha256": "f016ef75b4d53e5f06560079fb62d3cf1e85ac6b0ccdebfe13b24c9d482bfab3"
+    },
+    {
+      "path": "django/contrib/auth/decorators.py",
+      "bytes": 4760,
+      "sha256": "514b89d658a76c92d4a63d9f118217b7795c17b528e0a19a10fe447689b29054"
+    },
+    {
+      "path": "django/contrib/auth/forms.py",
+      "bytes": 21496,
+      "sha256": "4ec2a254441375b6fab822731a5fb7d60b109399754a91cb080909ca7ce7b6a7"
+    },
+    {
+      "path": "django/contrib/auth/handlers/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/auth/handlers/modwsgi.py",
+      "bytes": 1914,
+      "sha256": "8f988b5c52c2cb294ebe763a45a94dd21779def990d0b2811ef0e7fc27924936"
+    },
+    {
+      "path": "django/contrib/auth/hashers.py",
+      "bytes": 23335,
+      "sha256": "12e7b00244bcd989e2aa646cad5d884f7b6d67beb5a06ec90473145697886792"
+    },
+    {
+      "path": "django/contrib/auth/management/__init__.py",
+      "bytes": 5391,
+      "sha256": "79e4f62397ec9c4db776d7e2ed45f666150c27811e15a181a595189b39aea846"
+    },
+    {
+      "path": "django/contrib/auth/management/commands/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/auth/management/commands/changepassword.py",
+      "bytes": 2686,
+      "sha256": "1fda276d0bd5c3320b8912ba0a0f7aa86acb8bcfe4763a3105532fba95f5f1e2"
+    },
+    {
+      "path": "django/contrib/auth/management/commands/createsuperuser.py",
+      "bytes": 13576,
+      "sha256": "71297c15ea17601c390d48ed9c74589b26ec608c7a5b3b549188e0c7864ed572"
+    },
+    {
+      "path": "django/contrib/auth/middleware.py",
+      "bytes": 11954,
+      "sha256": "c2759d7855d4d8c036d7a8058762882564a9f1e7b112e24bc7b299969ae0c806"
+    },
+    {
+      "path": "django/contrib/auth/migrations/0001_initial.py",
+      "bytes": 7281,
+      "sha256": "845cff319606332f49ef20ce165d1a17e522c426c5e56d7616133e9e4eaba5ef"
+    },
+    {
+      "path": "django/contrib/auth/migrations/0002_alter_permission_name_max_length.py",
+      "bytes": 346,
+      "sha256": "feaf97e0e8f7d148bec3db9bab2349c5e15888117c1ff2829deff63ef9e16cff"
+    },
+    {
+      "path": "django/contrib/auth/migrations/0003_alter_user_email_max_length.py",
+      "bytes": 418,
+      "sha256": "9d5657b4db9872dc26c2d634c2f5911a3d69ab1d8552af4c6d633bc4001dfabf"
+    },
+    {
+      "path": "django/contrib/auth/migrations/0004_alter_user_username_opts.py",
+      "bytes": 880,
+      "sha256": "9538db342c9a9bec4ca12b3137fb80772c4ea4afb861e8647a2962b1ea58344a"
+    },
+    {
+      "path": "django/contrib/auth/migrations/0005_alter_user_last_login_null.py",
+      "bytes": 410,
+      "sha256": "79f60a35dc000fdd427bc05c85233ae5b9c4ada078ff0688fc9f78604bf7eaee"
+    },
+    {
+      "path": "django/contrib/auth/migrations/0006_require_contenttypes_0002.py",
+      "bytes": 369,
+      "sha256": "00cb16e3405f14b62dbeffa15c68c9030291e4ddd513d733648ba460d6c5e781"
+    },
+    {
+      "path": "django/contrib/auth/migrations/0007_alter_validators_add_error_messages.py",
+      "bytes": 802,
+      "sha256": "115db87dc327530fb5e1964ba3d03f9746492f90600406947be39f54f6cc042f"
+    },
+    {
+      "path": "django/contrib/auth/migrations/0008_alter_user_username_max_length.py",
+      "bytes": 814,
+      "sha256": "02857f65f7d648147a5d12596b200a83e29145391d3f986ceb84b3b865a2c351"
+    },
+    {
+      "path": "django/contrib/auth/migrations/0009_alter_user_last_name_max_length.py",
+      "bytes": 415,
+      "sha256": "19a89500e7f108a7397da9b1733181f92105f758663b3685b60f5c2da384d76e"
+    },
+    {
+      "path": "django/contrib/auth/migrations/0010_alter_group_name_max_length.py",
+      "bytes": 378,
+      "sha256": "0963ed6498ac0b3a8430b6ca34c1b4a4b1d5f55b43d3db902f15a03ff74b14cd"
+    },
+    {
+      "path": "django/contrib/auth/migrations/0011_update_proxy_permissions.py",
+      "bytes": 2860,
+      "sha256": "85a5dde708dc4b6111e1bc71ce723ecfba7b1f8aedecfd130900ff7782765436"
+    },
+    {
+      "path": "django/contrib/auth/migrations/0012_alter_user_first_name_max_length.py",
+      "bytes": 411,
+      "sha256": "6cefbc9f80903763ff8492a537a22836ef69f2227e19d402509b8099d2baecb0"
+    },
+    {
+      "path": "django/contrib/auth/migrations/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/auth/mixins.py",
+      "bytes": 4652,
+      "sha256": "29b8ba86a372e86daa3b4f25be41a74724a936fec3c5b13044ffcda02a462509"
+    },
+    {
+      "path": "django/contrib/auth/models.py",
+      "bytes": 21331,
+      "sha256": "824579cb42c72f8b3fe7e5f67f0b13cc23066b2220634af3f988a98c8a368e75"
+    },
+    {
+      "path": "django/contrib/auth/password_validation.py",
+      "bytes": 9631,
+      "sha256": "5d19a3f9045f7712e1e4aa64654c087c1df548565fab20250e4b74386a5440d3"
+    },
+    {
+      "path": "django/contrib/auth/signals.py",
+      "bytes": 118,
+      "sha256": "04592cef43b463cb3aa757ebf12083e3eca4da48ee72fec7c1371d454cd50c53"
+    },
+    {
+      "path": "django/contrib/auth/tokens.py",
+      "bytes": 4328,
+      "sha256": "963a9058ed1d024778e7e6c127a5bce6865953da448f3361dd56d97de00dc314"
+    },
+    {
+      "path": "django/contrib/auth/urls.py",
+      "bytes": 1185,
+      "sha256": "521f03ad2aa92570c0e5ad7b06bf5f32621b11c80b93174df45bc2460fafc728"
+    },
+    {
+      "path": "django/contrib/auth/validators.py",
+      "bytes": 722,
+      "sha256": "54eeccc9a7244da4e22bc3a3126ed8c8bb6c8caaed7958ddccf6cd6648b48ab5"
+    },
+    {
+      "path": "django/contrib/auth/views.py",
+      "bytes": 14134,
+      "sha256": "479b5d493836a87daa6b54781c2dd543b2b4c5b0975bbe7dad14e095c8c17b82"
+    },
+    {
+      "path": "django/contrib/contenttypes/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/contenttypes/admin.py",
+      "bytes": 5858,
+      "sha256": "a89f4c5526931afd1e7469966bbe6f5f188c33ba2ed689a5577fec144d634f61"
+    },
+    {
+      "path": "django/contrib/contenttypes/apps.py",
+      "bytes": 846,
+      "sha256": "d50d665a33ef7d853b11a3b9d09bec5ae0e0ff7b8af03a02c29bdd21d4fb88a6"
+    },
+    {
+      "path": "django/contrib/contenttypes/checks.py",
+      "bytes": 1268,
+      "sha256": "28a07ee0539f3ceeb44ccfaec6a2bc9bdb085f3077091c7b226afe8da6ae33f5"
+    },
+    {
+      "path": "django/contrib/contenttypes/fields.py",
+      "bytes": 31744,
+      "sha256": "04a08cfdfe966cc61135ed84e92ee7a34996a1e1db2985af0f65982ed25626ee"
+    },
+    {
+      "path": "django/contrib/contenttypes/forms.py",
+      "bytes": 3950,
+      "sha256": "9bae5a276347a93a8bf138921add843daad8a79590a9a70bcd95cff4653c13a5"
+    },
+    {
+      "path": "django/contrib/contenttypes/management/__init__.py",
+      "bytes": 4937,
+      "sha256": "6551d5240622fe30885f1594652931ab42031027ba6ef6c5b166b2aea6eeb5f7"
+    },
+    {
+      "path": "django/contrib/contenttypes/management/commands/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/contenttypes/management/commands/remove_stale_contenttypes.py",
+      "bytes": 4643,
+      "sha256": "17aae6e8c4cc2ee6555c2b27e8bde59f7a2e7a1b144da54668d79a6787115bb2"
+    },
+    {
+      "path": "django/contrib/contenttypes/migrations/0001_initial.py",
+      "bytes": 1434,
+      "sha256": "35ed8489a147e0b42a15c21b5d4f0e8940de6f73fb326e9d6dea91b4d0b953cc"
+    },
+    {
+      "path": "django/contrib/contenttypes/migrations/0002_remove_content_type_name.py",
+      "bytes": 1199,
+      "sha256": "7d36494075750f0ed3c0f68d0cb1548eba59cc593f52f691f6cc37a043083766"
+    },
+    {
+      "path": "django/contrib/contenttypes/migrations/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/contenttypes/models.py",
+      "bytes": 6844,
+      "sha256": "54a5d6c1e21043a797f3c617f7a9e570ca3d112696ee9ff050f2526a51889ec7"
+    },
+    {
+      "path": "django/contrib/contenttypes/prefetch.py",
+      "bytes": 1358,
+      "sha256": "70e47028294a4bec331ab9918f6065481bae273ea244158e565e2d0581d1aed0"
+    },
+    {
+      "path": "django/contrib/contenttypes/views.py",
+      "bytes": 3549,
+      "sha256": "1c1a086cda601d340de691fc9ae97bed43043191db6e4107fd07659fe5c581dd"
+    },
+    {
+      "path": "django/contrib/flatpages/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/flatpages/admin.py",
+      "bytes": 701,
+      "sha256": "ca77a63920e0bcaa027d114b5d9acfc23dbb53498f5179b176bb9eed23997aa4"
+    },
+    {
+      "path": "django/contrib/flatpages/apps.py",
+      "bytes": 252,
+      "sha256": "fce95a0f159b32b52614d092e2ef919c1b20ebbac25acf10ce1fdce7cc2fb570"
+    },
+    {
+      "path": "django/contrib/flatpages/forms.py",
+      "bytes": 2492,
+      "sha256": "afdc941bffb302723b51bafcdfa6a25a049c6292b11e125b34b8474646503b36"
+    },
+    {
+      "path": "django/contrib/flatpages/middleware.py",
+      "bytes": 784,
+      "sha256": "69778e78e9149a976418ecaa667911fa5d55ac3435eb54562166b758f06119a7"
+    },
+    {
+      "path": "django/contrib/flatpages/migrations/0001_initial.py",
+      "bytes": 2408,
+      "sha256": "e3184cb0a6973b272c7e8f4ed5022e9274bdc1feebd2e56cb21009ee8a5eaac3"
+    },
+    {
+      "path": "django/contrib/flatpages/migrations/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/flatpages/models.py",
+      "bytes": 1764,
+      "sha256": "dee81146c0f00790b7187396bed3b38c997ecb4caaaa361905238cb76e1062ec"
+    },
+    {
+      "path": "django/contrib/flatpages/sitemaps.py",
+      "bytes": 584,
+      "sha256": "0848593ac2f0bf7a8827586ce1e1e513fd0002d62389c6ffc91cecb2d635f5e8"
+    },
+    {
+      "path": "django/contrib/flatpages/templatetags/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/flatpages/templatetags/flatpages.py",
+      "bytes": 3552,
+      "sha256": "407facbb3b283c8312ae0c8747d3bcb8e7667c8901bffc372ccfa119f42f9d4f"
+    },
+    {
+      "path": "django/contrib/flatpages/urls.py",
+      "bytes": 179,
+      "sha256": "46cdfb223d7dd923ad4818dde0bc7d62da4835f10c83b5d1634d5d10e63c4608"
+    },
+    {
+      "path": "django/contrib/flatpages/views.py",
+      "bytes": 2724,
+      "sha256": "1f82c6ec96a76fa0dc9fecc834b9a9df9f2147ad098a000a1b38780383cc3da3"
+    },
+    {
+      "path": "django/contrib/gis/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/gis/admin/__init__.py",
+      "bytes": 486,
+      "sha256": "6c252c0ba1e1ee1ced721a912ae6a24e09379cbd01e07d39ddb54823ea2507b9"
+    },
+    {
+      "path": "django/contrib/gis/admin/options.py",
+      "bytes": 689,
+      "sha256": "afad2bc9c74081c192076d4a412fd5d17efcba5523013633c2cf8928b61dfe57"
+    },
+    {
+      "path": "django/contrib/gis/apps.py",
+      "bytes": 417,
+      "sha256": "75b0052b1f638fdfd076174d7cbe4a082e3ba6e1ff653c34f7c8ec245c033bd6"
+    },
+    {
+      "path": "django/contrib/gis/db/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/base/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/base/adapter.py",
+      "bytes": 592,
+      "sha256": "a9b2c6fac2c1e8467fb00ebe13fb880a5ca9e44e61cfd510f82b11dc15b1f16f"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/base/features.py",
+      "bytes": 3718,
+      "sha256": "7c5f80281ebffd18e4c5545a74d90e3fb02fe3031a4469172b26d857a112d869"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/base/models.py",
+      "bytes": 4009,
+      "sha256": "5aaa6654ba8adb59bd27a93f37e4863d7ab555932e34769fc81f71ab15304789"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/base/operations.py",
+      "bytes": 6859,
+      "sha256": "fe0fc1fbf00dd4e5666ab0373bc15d53b8670200425f477882fa9a94d4490188"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/mysql/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/mysql/base.py",
+      "bytes": 498,
+      "sha256": "cfbe702a19be7bd25f44b0af803abe8aff4ea8e8c10404b6dfc2534eb59f1d14"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/mysql/features.py",
+      "bytes": 1354,
+      "sha256": "b62635ee5439c2868e15d02b7a276c102f6f1fdba5ffa3a1850663725b7485a6"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/mysql/introspection.py",
+      "bytes": 1602,
+      "sha256": "66285c4b3c0dd1ff22a8a39828c1ee43f318e351114acc233f8e9dbc2174bfaf"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/mysql/operations.py",
+      "bytes": 5017,
+      "sha256": "248f1afc573bc3e492f434868bb0942b232f5a8a2154ee2387041c2aaaa34bea"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/mysql/schema.py",
+      "bytes": 3953,
+      "sha256": "167fe1fba0bca1df792933d64a8810a6b3c6b53868e5bf936eaa9768755f9078"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/oracle/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/oracle/adapter.py",
+      "bytes": 2066,
+      "sha256": "0230f478cba9b6ef01aa41362ec8538b391fe62bfd02b6153fd3e83931df35aa"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/oracle/base.py",
+      "bytes": 507,
+      "sha256": "ffbaa1bc475b9eb25010a2f9d6c83c618bbc91162640d02506035bd8e51b064c"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/oracle/features.py",
+      "bytes": 1253,
+      "sha256": "35f388f0be9c8dacdc2242a21fb3707fcc526bbcede8d7fce339300cacd55bf4"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/oracle/introspection.py",
+      "bytes": 1939,
+      "sha256": "7d6f454c85bfc804106709342f37684ed8fa410a4537a7e0510ceff1d0a6144a"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/oracle/models.py",
+      "bytes": 2081,
+      "sha256": "b8a1ee05178418d246e8c6d3fbcad3cab09566cdc1cb6842031edbc32c526143"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/oracle/operations.py",
+      "bytes": 8871,
+      "sha256": "902a6b0528af267df84cba044490fc4d1483d34861e8972a843fca604abd23bb"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/oracle/schema.py",
+      "bytes": 5430,
+      "sha256": "de75ee5173347c73d1baa9a2f7a5b2095c7f9474717f751244df00b75e155301"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/adapter.py",
+      "bytes": 1980,
+      "sha256": "9a341911fac9b4012815916aa13890dee93fac16adb2d5f4a850c557cc59f74c"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/base.py",
+      "bytes": 5793,
+      "sha256": "dfbb74fdf0c3e08785b10accacaa10456d357bc28979709291bbf9b0ea6b791f"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/const.py",
+      "bytes": 2008,
+      "sha256": "7a425cf69bc9c10d2d9b110d909b1915d3f4dee1141277a5a11db74897274c87"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/features.py",
+      "bytes": 455,
+      "sha256": "a8e1092d04c80b561d943a099292c2895414e06032d1df7f0e77ae8bbc38d5b3"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/introspection.py",
+      "bytes": 3164,
+      "sha256": "8a1acd77fa8743ae03463a1a3e3f7ed5ad32dc7f0aa388166cad8de5f0c0dff8"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/models.py",
+      "bytes": 2002,
+      "sha256": "2c3663c970b1ca9b56a0e58f91ece73b5e5ab88e0b0a95834ec55a6419d07125"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/operations.py",
+      "bytes": 17052,
+      "sha256": "4249e8552798c372ac18608abb746b749cdf74482b120afe3409e964696597b6"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/pgraster.py",
+      "bytes": 4588,
+      "sha256": "7826b6cbebf7a862de35b148e044458f6526aa0600135f67b8bdd28031669b4a"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/postgis/schema.py",
+      "bytes": 4468,
+      "sha256": "be0bd457abf09f2d36b0db2118658c92ca81d17008c1337b7c37238ef6416902"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/adapter.py",
+      "bytes": 318,
+      "sha256": "a93880e41046505343dc3ef118affce68a3ffc749ec531f7d97178ba29f7655d"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/base.py",
+      "bytes": 3218,
+      "sha256": "c14d5f829ebc08bc8a10bb0c7ceeb360cf39a31e20fc69685844842bc10fadf3"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/client.py",
+      "bytes": 138,
+      "sha256": "74d33b9aa0f24f31658104755e1a9921fb6747d5511fb01f712befcb8bee704b"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/features.py",
+      "bytes": 876,
+      "sha256": "ce49893c4c45b51aa3463eb4f194e5b12a7191868f6d5dc0dd211f5f73dc6856"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/introspection.py",
+      "bytes": 3118,
+      "sha256": "57f8b0933d33c85d54f802aaf94971bf20c89aa402b22b5c9afc64d9c530f350"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/models.py",
+      "bytes": 1930,
+      "sha256": "1feb0389f437fb4a6f588025efdceba867ee4d6efebe9d73167d5b21fa9447ea"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/operations.py",
+      "bytes": 8596,
+      "sha256": "14b247fd35dd8a54729ee84d21b6cd04ce044f68922be573f9b2fd370c6978f6"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/spatialite/schema.py",
+      "bytes": 7340,
+      "sha256": "5118457cb40cec51f7f709a45620fc319275a86ddc8b184d7569a3b8cf59078e"
+    },
+    {
+      "path": "django/contrib/gis/db/backends/utils.py",
+      "bytes": 785,
+      "sha256": "acbc12bfbf6d2893f1bc31c0098f2b84f0cb1590bbf66108948c924f297faaa7"
+    },
+    {
+      "path": "django/contrib/gis/db/models/__init__.py",
+      "bytes": 865,
+      "sha256": "4eb092dbb25d55af90ec7a24f98689c5be1e2eb3ddcaf4666ac24622ed397ef0"
+    },
+    {
+      "path": "django/contrib/gis/db/models/aggregates.py",
+      "bytes": 3147,
+      "sha256": "2266ee5f60212fa3e4132ac60effea288811f4549e22eafb70830854a5189e53"
+    },
+    {
+      "path": "django/contrib/gis/db/models/fields.py",
+      "bytes": 15979,
+      "sha256": "47d8f934a71837fbfd4b593bf6fb072343f5be8bd6f4f46e3b6ad70cdb176150"
+    },
+    {
+      "path": "django/contrib/gis/db/models/functions.py",
+      "bytes": 19606,
+      "sha256": "d73a090958c19452ba8e378e1d558730b5b5a75107ca82cce039aca54a8ef78c"
+    },
+    {
+      "path": "django/contrib/gis/db/models/lookups.py",
+      "bytes": 11797,
+      "sha256": "14e6f9d350c1ba8a5c6cbcb5ef93b50700f66686956b6a29b6881b5e6bf0bf7a"
+    },
+    {
+      "path": "django/contrib/gis/db/models/proxy.py",
+      "bytes": 3393,
+      "sha256": "76eab0ef5a16ddf38255a8d8b3094eb2541296fbebcfc09b5609d9fd7da4aa36"
+    },
+    {
+      "path": "django/contrib/gis/db/models/sql/__init__.py",
+      "bytes": 134,
+      "sha256": "fabcdc0b78b33098b66e7bf241408ccc83ab8a006763a37fe444088a6e300926"
+    },
+    {
+      "path": "django/contrib/gis/db/models/sql/conversion.py",
+      "bytes": 2433,
+      "sha256": "662311cc47fbfe43962782084d716ae9d2fec03c0c848130bdb13bd3969f81a5"
+    },
+    {
+      "path": "django/contrib/gis/feeds.py",
+      "bytes": 5995,
+      "sha256": "d2f355552708c30d776cec6f9507d700e088b483865925eba0a2a5e905c6079f"
+    },
+    {
+      "path": "django/contrib/gis/forms/__init__.py",
+      "bytes": 318,
+      "sha256": "67289dfd8959cc751c31891f197d467b098f3c335cd278bb1f25ca0d3788923a"
+    },
+    {
+      "path": "django/contrib/gis/forms/fields.py",
+      "bytes": 5269,
+      "sha256": "f91fec9cced73f2529df66e5e689ec19becdbf86f4bb5ad0a71474647ae1c3f1"
+    },
+    {
+      "path": "django/contrib/gis/forms/widgets.py",
+      "bytes": 4084,
+      "sha256": "626a1e62b665dc85b5195ba01bc8d40d2a95b1c8214d71da2f3c046f03dd0b5a"
+    },
+    {
+      "path": "django/contrib/gis/gdal/__init__.py",
+      "bytes": 1811,
+      "sha256": "4f79f1ca38bfe33daa5033cacca9562a0815629077ff98fa9cbb843c3a33ed1d"
+    },
+    {
+      "path": "django/contrib/gis/gdal/base.py",
+      "bytes": 181,
+      "sha256": "cb29b22f4bd944c05f885533ade86f69e6ae9c8c4c1f9b9c1a33d17ca8feac0a"
+    },
+    {
+      "path": "django/contrib/gis/gdal/datasource.py",
+      "bytes": 4644,
+      "sha256": "0270bf55f197ca0aa9785609f9b58aa34a08743342195f395d9f9305dec36a99"
+    },
+    {
+      "path": "django/contrib/gis/gdal/driver.py",
+      "bytes": 2983,
+      "sha256": "c2eda6ffe9463cee0c0e626b50f058ac60d40fb06734f171d1144e784dfea8fd"
+    },
+    {
+      "path": "django/contrib/gis/gdal/envelope.py",
+      "bytes": 7314,
+      "sha256": "a7273739cde664affd9876d380b89b5b5e8930a40e038fe900f9d5b72f9af412"
+    },
+    {
+      "path": "django/contrib/gis/gdal/error.py",
+      "bytes": 1575,
+      "sha256": "45c112cf14edde330a93db3cdb2d838fb9cc72ea1200c3825f57a8e4a15851fc"
+    },
+    {
+      "path": "django/contrib/gis/gdal/feature.py",
+      "bytes": 4017,
+      "sha256": "1cf5a80998f0cec52785ced098a87e041311a890a38f4ed170523abe36dd9e9e"
+    },
+    {
+      "path": "django/contrib/gis/gdal/field.py",
+      "bytes": 6886,
+      "sha256": "10a13e2288f92fbf6fa3ddce8b1cff244e132196c34d1cb46151af647f88d73e"
+    },
+    {
+      "path": "django/contrib/gis/gdal/geometries.py",
+      "bytes": 29286,
+      "sha256": "164261e38ef18d9ef885119fa635738eb7d3882569c5644dbc78042dc96d8427"
+    },
+    {
+      "path": "django/contrib/gis/gdal/geomtype.py",
+      "bytes": 4582,
+      "sha256": "096a9b7b95eda602a204ff0b6e2b1bb5bf28d45b6e21455bdfb11bd368ba4d21"
+    },
+    {
+      "path": "django/contrib/gis/gdal/layer.py",
+      "bytes": 8825,
+      "sha256": "3f280082c459cd67a4a7a92ae8d10067abe14134a8d4d938735622fe939d2b9f"
+    },
+    {
+      "path": "django/contrib/gis/gdal/libgdal.py",
+      "bytes": 3619,
+      "sha256": "1759fed8c0bb318ee561852f2039a465be4c063d7587c6cf3aebe8cec80f67db"
+    },
+    {
+      "path": "django/contrib/gis/gdal/prototypes/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/gis/gdal/prototypes/ds.py",
+      "bytes": 4725,
+      "sha256": "d5a49a420c62bccd0f61cd58ee31db15eaa3752497ff164760f96cbde08e78df"
+    },
+    {
+      "path": "django/contrib/gis/gdal/prototypes/errcheck.py",
+      "bytes": 4172,
+      "sha256": "0d72eafe9a6c80e5cd86444b27ddfd7e8f45bd14b45a156a643ae96d9450d839"
+    },
+    {
+      "path": "django/contrib/gis/gdal/prototypes/generation.py",
+      "bytes": 4888,
+      "sha256": "7e6de2329a7c4df688c7bda314daaced8ac75f928bcf4fc3513ba668d84e23f3"
+    },
+    {
+      "path": "django/contrib/gis/gdal/prototypes/geom.py",
+      "bytes": 6233,
+      "sha256": "af6deb4e926180c8b0df419d2cedfb51384449e56e39f48865c6aeadee19cb97"
+    },
+    {
+      "path": "django/contrib/gis/gdal/prototypes/raster.py",
+      "bytes": 5571,
+      "sha256": "8cf381a93eb9f34a824e12b93e18a0c842f3c4c769d394602388402929627bfd"
+    },
+    {
+      "path": "django/contrib/gis/gdal/prototypes/srs.py",
+      "bytes": 3677,
+      "sha256": "e7602ad05ec24f4fd2aa83026a2217543550f5db272c6188617a398dfdc40c35"
+    },
+    {
+      "path": "django/contrib/gis/gdal/raster/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/gis/gdal/raster/band.py",
+      "bytes": 8343,
+      "sha256": "44f76eb7a05e43dbd6ef5aeb3ccc1bd829d7adb0b2b3c600b75040f00868972d"
+    },
+    {
+      "path": "django/contrib/gis/gdal/raster/base.py",
+      "bytes": 2882,
+      "sha256": "d861a52fdd7d94fafb615185b5d2329cb3c81fe40a621ceb529a17c154653359"
+    },
+    {
+      "path": "django/contrib/gis/gdal/raster/const.py",
+      "bytes": 3283,
+      "sha256": "0bfb2f05cfb1d39d8a2688c7d6dde90f5376f5debb850c7237cae6f2ed35e35a"
+    },
+    {
+      "path": "django/contrib/gis/gdal/raster/source.py",
+      "bytes": 19725,
+      "sha256": "0ef42054b67b8a88441a919b20224ea1c4b45d46080d69b64fdb8f06cb649932"
+    },
+    {
+      "path": "django/contrib/gis/gdal/srs.py",
+      "bytes": 12301,
+      "sha256": "7db7a45f57157954ffdfa3701aab1b5cc27dc4d95fb4b45545c39240bd69f069"
+    },
+    {
+      "path": "django/contrib/gis/geoip2.py",
+      "bytes": 9399,
+      "sha256": "c8ed00181dd620f673c0b67f615af0874a61f859d2f0c0a85e92edb44f95c958"
+    },
+    {
+      "path": "django/contrib/gis/geometry.py",
+      "bytes": 788,
+      "sha256": "a326a9a77f856c2a357f64506610f083e243dac8356eae42833a5fc63f949ae1"
+    },
+    {
+      "path": "django/contrib/gis/geos/__init__.py",
+      "bytes": 661,
+      "sha256": "ec120337f2c2cda3588b44620e23f0c5d9b51bbe9c0a24c124bb3070ce823192"
+    },
+    {
+      "path": "django/contrib/gis/geos/base.py",
+      "bytes": 181,
+      "sha256": "35d94583997d6a4bc3a7cedaab387d764d00dd91f64c8ddc3aad749a69ae1c19"
+    },
+    {
+      "path": "django/contrib/gis/geos/collections.py",
+      "bytes": 3939,
+      "sha256": "9bd4a88ad8aeedc38451d22b4d9fa3e591e7e878e65ecc96c57cc2e43c934a6d"
+    },
+    {
+      "path": "django/contrib/gis/geos/coordseq.py",
+      "bytes": 6838,
+      "sha256": "60902778e0eaf2351e2628ff3530cfc4720274d993a07beff8a74b667472cf9d"
+    },
+    {
+      "path": "django/contrib/gis/geos/error.py",
+      "bytes": 105,
+      "sha256": "01d78245454f6be1b6d96039949e50a94e13d24efd34b935872de7e7e7b1a5fb"
+    },
+    {
+      "path": "django/contrib/gis/geos/factory.py",
+      "bytes": 961,
+      "sha256": "29017a96a021e4a4651520e037e0525d6a2399615a6db114160cf6206617fef9"
+    },
+    {
+      "path": "django/contrib/gis/geos/geometry.py",
+      "bytes": 27184,
+      "sha256": "fbba34bfaa30ca8edc432f837130c0fff219f8bf804fd268cb9ec68af9d3e40d"
+    },
+    {
+      "path": "django/contrib/gis/geos/io.py",
+      "bytes": 800,
+      "sha256": "18250be29e81ec56001ce70f71b4dcf902ee489debb6f2af53bbdfcd9a5496c8"
+    },
+    {
+      "path": "django/contrib/gis/geos/libgeos.py",
+      "bytes": 4983,
+      "sha256": "7b0537d45e5e405bb8c405ef28015b6999f8509d20fda8834c6b9193f313c0ea"
+    },
+    {
+      "path": "django/contrib/gis/geos/linestring.py",
+      "bytes": 6372,
+      "sha256": "04902859f1d6d3c117d54a4d155074f6248a5dd4d2ea966c4c805ce8371971f7"
+    },
+    {
+      "path": "django/contrib/gis/geos/mutable_list.py",
+      "bytes": 10122,
+      "sha256": "2ca179bfc24550b44e767057cab337a82d5ff59577fc5180581eba53c00ed738"
+    },
+    {
+      "path": "django/contrib/gis/geos/point.py",
+      "bytes": 4781,
+      "sha256": "6ef6adb1d5d36f55d8cb511a499be9e119ebd8bc17654d76cc82de7cbbbab11c"
+    },
+    {
+      "path": "django/contrib/gis/geos/polygon.py",
+      "bytes": 6710,
+      "sha256": "0d9aba11df5b240dccaa1a4343dbbddba847c5c9f10639db292a691e06d2871c"
+    },
+    {
+      "path": "django/contrib/gis/geos/prepared.py",
+      "bytes": 1577,
+      "sha256": "2790e3e9edeede011f54f34e33513faef726717476f82770b5b01ca220d4e5ad"
+    },
+    {
+      "path": "django/contrib/gis/geos/prototypes/__init__.py",
+      "bytes": 1435,
+      "sha256": "6984151d54fb8403748d21f88a80dc6f9c9f9c9745066a2e1d77d13436f31343"
+    },
+    {
+      "path": "django/contrib/gis/geos/prototypes/coordseq.py",
+      "bytes": 3124,
+      "sha256": "1a93439d488883be88faa69def60c6c3bc04cf78b91ff5c7f581cee02bd84f2b"
+    },
+    {
+      "path": "django/contrib/gis/geos/prototypes/errcheck.py",
+      "bytes": 2788,
+      "sha256": "4961da0523013c9a1f4cfab49a88831eb0889e5e4fd6f61aa9b5e000a6c1bd34"
+    },
+    {
+      "path": "django/contrib/gis/geos/prototypes/geom.py",
+      "bytes": 3401,
+      "sha256": "fe79ce30b44a352f7399c058b22bdc7b0975d0ab3a58c134629f8446f0036b69"
+    },
+    {
+      "path": "django/contrib/gis/geos/prototypes/io.py",
+      "bytes": 16961,
+      "sha256": "4e5c8abf6d90e8f236cccba882a39e420f24c1af56195412d501ec6db576edf0"
+    },
+    {
+      "path": "django/contrib/gis/geos/prototypes/misc.py",
+      "bytes": 1167,
+      "sha256": "4a3d1f67280becc151e29a7fc4f262647441b9f9d593961f2b92de52fda1b56b"
+    },
+    {
+      "path": "django/contrib/gis/geos/prototypes/predicates.py",
+      "bytes": 1662,
+      "sha256": "67fff2e5932fa594bbd7c250b06287759dbb81767ab02f71c03edf5afe020267"
+    },
+    {
+      "path": "django/contrib/gis/geos/prototypes/prepared.py",
+      "bytes": 1175,
+      "sha256": "e08f694bbe50e4c675cfc035bf498a926742972df72a3ff4b0372bab13a9a733"
+    },
+    {
+      "path": "django/contrib/gis/geos/prototypes/threadsafe.py",
+      "bytes": 2302,
+      "sha256": "9f5c8262f402b5cee9885ae18de642587f0f7f4f8088e1811f7dd566eb138162"
+    },
+    {
+      "path": "django/contrib/gis/geos/prototypes/topology.py",
+      "bytes": 2327,
+      "sha256": "b89f4c3af8c686012ecfa8ab3038591163bf50377f44cb69e597db5af7f68602"
+    },
+    {
+      "path": "django/contrib/gis/management/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/gis/management/commands/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/gis/management/commands/inspectdb.py",
+      "bytes": 760,
+      "sha256": "f168433812021406cb16eee4c00012e08e6936cfe9d41ac2bfc189608dd2e3d9"
+    },
+    {
+      "path": "django/contrib/gis/management/commands/ogrinspect.py",
+      "bytes": 6071,
+      "sha256": "5e75806cbc51c534af6ca4af8e078f37b0f5a3f129e2a5a4bccc15ac6d53a586"
+    },
+    {
+      "path": "django/contrib/gis/measure.py",
+      "bytes": 12574,
+      "sha256": "a6fa72074c31928128aaa18162204507938b7a9a8b819bd833fa82467441800d"
+    },
+    {
+      "path": "django/contrib/gis/ptr.py",
+      "bytes": 1312,
+      "sha256": "35e20107ea65c0eeb5c0638ec4683b7c5c955c8e1ae6f6c019475a27f1668eaa"
+    },
+    {
+      "path": "django/contrib/gis/serializers/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/gis/serializers/geojson.py",
+      "bytes": 2876,
+      "sha256": "612d064e89bc63b4c8e03b0e44aaa99b85f4f34a723b6f970673b81577594ef1"
+    },
+    {
+      "path": "django/contrib/gis/shortcuts.py",
+      "bytes": 1027,
+      "sha256": "69af73163554dfca9a12f45cd2f007fe3d80800111948d35ae98582c76dced38"
+    },
+    {
+      "path": "django/contrib/gis/sitemaps/__init__.py",
+      "bytes": 138,
+      "sha256": "4e38f4e7ba263957280b915bf084c461584b9b41dc563ad9d4c6f3fed2a80f50"
+    },
+    {
+      "path": "django/contrib/gis/sitemaps/kml.py",
+      "bytes": 2573,
+      "sha256": "0949ff28a56bc06836666983716a2c05cd1016e269f211e978d442725a159355"
+    },
+    {
+      "path": "django/contrib/gis/sitemaps/views.py",
+      "bytes": 2353,
+      "sha256": "0055756b2fa815fb450be22ccf378acf72401b31344ce087f29375730b60ef22"
+    },
+    {
+      "path": "django/contrib/gis/utils/__init__.py",
+      "bytes": 682,
+      "sha256": "197aabc705ffde39db85db7d0d7d9c84625d7a82c5046c2bf06ce424153e4454"
+    },
+    {
+      "path": "django/contrib/gis/utils/layermapping.py",
+      "bytes": 29040,
+      "sha256": "e7a8842f4fdb9394d62ed34fb373c057e6c08a2754d740109a4d8f2bca80c8c1"
+    },
+    {
+      "path": "django/contrib/gis/utils/ogrinfo.py",
+      "bytes": 1956,
+      "sha256": "ea6dca691ccba19b50d0e4aba5191a1484178bd60e5d39107187aa61bd12d27c"
+    },
+    {
+      "path": "django/contrib/gis/utils/ogrinspect.py",
+      "bytes": 9170,
+      "sha256": "7f7d5e46a479c9b0be411da63a3356b3360300d096744120caa78872f0400b88"
+    },
+    {
+      "path": "django/contrib/gis/utils/srs.py",
+      "bytes": 2962,
+      "sha256": "517b1bc56d1c4337673ca3b477d1392b61cf75e91d69be4d68b65634e52afb39"
+    },
+    {
+      "path": "django/contrib/gis/views.py",
+      "bytes": 714,
+      "sha256": "cdd095f107d455fc44146c444ac52d0a272c6d256d64d23f217c9b766b072a23"
+    },
+    {
+      "path": "django/contrib/humanize/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/humanize/apps.py",
+      "bytes": 194,
+      "sha256": "2c7dcf4db07857581b05cf27982c3706c4ae03c2dad1f34e6f8712212bc90302"
+    },
+    {
+      "path": "django/contrib/humanize/templatetags/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/humanize/templatetags/humanize.py",
+      "bytes": 12681,
+      "sha256": "f1a90c57b0502a495e87eecb84156c283aecfbfe3f48e40d3b2fa4fcc054460e"
+    },
+    {
+      "path": "django/contrib/messages/__init__.py",
+      "bytes": 171,
+      "sha256": "ff96fa90cc56b744ea5b9cdee6f67e8aa60441f690880976f31daaf4a45a333e"
+    },
+    {
+      "path": "django/contrib/messages/api.py",
+      "bytes": 3250,
+      "sha256": "dc36e7546e68381760e3df5c94c53c97687109731707a4b4dfe1c2295b815e30"
+    },
+    {
+      "path": "django/contrib/messages/apps.py",
+      "bytes": 611,
+      "sha256": "5bf9f26b49735d805ec3cde1a8fe88f2083a5e7691961fa098dfa96290c637ce"
+    },
+    {
+      "path": "django/contrib/messages/constants.py",
+      "bytes": 312,
+      "sha256": "243e13a5a4780b91b4a31221e019ab5a25660800afeeb9d58194a927c466cde8"
+    },
+    {
+      "path": "django/contrib/messages/context_processors.py",
+      "bytes": 354,
+      "sha256": "c4cae061e5fa01c4ff5b04bd01828d0c3b2d6ef03013bfeed6cb0354b37f6db8"
+    },
+    {
+      "path": "django/contrib/messages/middleware.py",
+      "bytes": 986,
+      "sha256": "da6c67702a4955480bb63a2e506495977f664c5f90b244295a8da308e3aa57c0"
+    },
+    {
+      "path": "django/contrib/messages/storage/__init__.py",
+      "bytes": 392,
+      "sha256": "8170c76d0f4a81075f8583a56bd423e7dfd2944f565114222b3200d1c147d034"
+    },
+    {
+      "path": "django/contrib/messages/storage/base.py",
+      "bytes": 6082,
+      "sha256": "4fe6dccba1ddc116c428d22e3b97c4259d44523deb4c7597460d68c6a45a8467"
+    },
+    {
+      "path": "django/contrib/messages/storage/cookie.py",
+      "bytes": 8678,
+      "sha256": "eabfb3fccc982268040b92cfbe339da7ae31c24895fe26fded28383787978f16"
+    },
+    {
+      "path": "django/contrib/messages/storage/fallback.py",
+      "bytes": 2093,
+      "sha256": "2b90ab5497d40da90c8c872a491b7559977fd57728d417360103373b795df5a0"
+    },
+    {
+      "path": "django/contrib/messages/storage/session.py",
+      "bytes": 1764,
+      "sha256": "92f755a2c6c102f2375c10341b800529fd2fc4b95ecb39706c612097ad037cc4"
+    },
+    {
+      "path": "django/contrib/messages/test.py",
+      "bytes": 421,
+      "sha256": "cc7f6de95c22c57043a5a56c71e9c237de220d6220b3ca59fc29351965215afd"
+    },
+    {
+      "path": "django/contrib/messages/utils.py",
+      "bytes": 256,
+      "sha256": "fe822d4082dc85dc1d5c7d3c488c99f8305d622eeafeea1b1d06a35b0980794c"
+    },
+    {
+      "path": "django/contrib/messages/views.py",
+      "bytes": 524,
+      "sha256": "23fec2e32afe60b9214c45b1de2ba18b11bb36b2aecae4831bf09583e118443f"
+    },
+    {
+      "path": "django/contrib/postgres/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/postgres/aggregates/__init__.py",
+      "bytes": 65,
+      "sha256": "402ce7a8c2aa3dba6b6b14a2d58f3e07bfcc6252f8d85d641166751de2e04cab"
+    },
+    {
+      "path": "django/contrib/postgres/aggregates/general.py",
+      "bytes": 1496,
+      "sha256": "9ce23ef82c8ee6c1c1b304592a7f2a088b8cdec5fab8b2dbb1f9a191c84d5443"
+    },
+    {
+      "path": "django/contrib/postgres/aggregates/mixins.py",
+      "bytes": 2108,
+      "sha256": "51412b9dda3b56873f6246dc73b771a622c356daad668e075c82d81ab70d24ea"
+    },
+    {
+      "path": "django/contrib/postgres/aggregates/statistics.py",
+      "bytes": 1511,
+      "sha256": "c525a4e59e595693362d268c80ff7ba717228ce9cf1e23c04dedd7e39a685c22"
+    },
+    {
+      "path": "django/contrib/postgres/apps.py",
+      "bytes": 3692,
+      "sha256": "b1f8e82fed9526b173aefd020b74b85865996e5cd1ff80701439bd6c41ecf01d"
+    },
+    {
+      "path": "django/contrib/postgres/constraints.py",
+      "bytes": 9086,
+      "sha256": "60ebae0b92e890d4acd45fe584d0222cb135c2cfde3f2b23c8dfa32420a620d4"
+    },
+    {
+      "path": "django/contrib/postgres/expressions.py",
+      "bytes": 405,
+      "sha256": "7e8e580121c9b488dec5a76ab24ba16189385aeb687f1cf2998b22bd65894bce"
+    },
+    {
+      "path": "django/contrib/postgres/fields/__init__.py",
+      "bytes": 148,
+      "sha256": "5e8f30b963f054d3a4298f84c15f54d73bac4360e33175ed2fbffc47fc408b9b"
+    },
+    {
+      "path": "django/contrib/postgres/fields/array.py",
+      "bytes": 12630,
+      "sha256": "2a197e04208bdb94505c6be2e20207b1f8af3fe5d559be8b858242d0811a729c"
+    },
+    {
+      "path": "django/contrib/postgres/fields/citext.py",
+      "bytes": 1363,
+      "sha256": "cad576c802301af1251d301f1f80622d5fb60d9e68b5f7fc4a6c2672a1763151"
+    },
+    {
+      "path": "django/contrib/postgres/fields/hstore.py",
+      "bytes": 3296,
+      "sha256": "2d13396918683f2e51bbc60c55487ce09d7bc6821c43c65cde41d55cc9127d23"
+    },
+    {
+      "path": "django/contrib/postgres/fields/jsonb.py",
+      "bytes": 406,
+      "sha256": "9dc3064fa598ef49426dc9a1c2dbb66e34667c331422f0abefa7e852feedaafd"
+    },
+    {
+      "path": "django/contrib/postgres/fields/ranges.py",
+      "bytes": 11417,
+      "sha256": "21b8c0402ec8756b884aa1dd057aeb6a23863f350fff8a471dc9cbf15b98651b"
+    },
+    {
+      "path": "django/contrib/postgres/fields/utils.py",
+      "bytes": 95,
+      "sha256": "4d5f808fd56905bd772368aece2483511b6d66dcf7e795da9315e7170bed1a2a"
+    },
+    {
+      "path": "django/contrib/postgres/forms/__init__.py",
+      "bytes": 89,
+      "sha256": "36310d9f6f82e817171f84fc61e0b42b601b0e4f0c553f2da5aacbdd0e0e17a8"
+    },
+    {
+      "path": "django/contrib/postgres/forms/array.py",
+      "bytes": 8401,
+      "sha256": "4b310173ab4abaaaa3a58287d9bd2fa5d010b234ea13fde46e95c137b75f3183"
+    },
+    {
+      "path": "django/contrib/postgres/forms/hstore.py",
+      "bytes": 1787,
+      "sha256": "3175d2e0b76bb9e28894cdf0fbf40656f5773195ccc754d1ff836ba42840b50a"
+    },
+    {
+      "path": "django/contrib/postgres/forms/ranges.py",
+      "bytes": 3652,
+      "sha256": "70a01e5af44848f2d720f866d82e7b2eef46a08940775c62471ce7b3af577a10"
+    },
+    {
+      "path": "django/contrib/postgres/functions.py",
+      "bytes": 252,
+      "sha256": "eefe89d35410bd7ef4285ca0f610dcdf6d8f82f4fadb166a5a5ce9fefae5f1b0"
+    },
+    {
+      "path": "django/contrib/postgres/indexes.py",
+      "bytes": 8224,
+      "sha256": "a87e7f90a8fb260d37f1c0ccf38646aef10db021755be10bfb9c577fc5a18b86"
+    },
+    {
+      "path": "django/contrib/postgres/lookups.py",
+      "bytes": 1991,
+      "sha256": "279d1bb2bf2b2e3a7fcf37558925430dc4cb7c3918db57c4528caa0a07876ae2"
+    },
+    {
+      "path": "django/contrib/postgres/operations.py",
+      "bytes": 12274,
+      "sha256": "dec0f25a1f6ee08f3b00869b2c0b58392101e0d0054a4f88289b1bdb8d340109"
+    },
+    {
+      "path": "django/contrib/postgres/search.py",
+      "bytes": 11732,
+      "sha256": "6c85eec7b35782c5535406aebd271650fb58351e04daed43d5177a3cd7f6b3a6"
+    },
+    {
+      "path": "django/contrib/postgres/serializers.py",
+      "bytes": 435,
+      "sha256": "c028342334cd7ae54e882d9c772d708a8ea00a18ea56f1fa462e219029047975"
+    },
+    {
+      "path": "django/contrib/postgres/signals.py",
+      "bytes": 2870,
+      "sha256": "72991a79d6f2bda8e937834d0182c0e937ca23fe1f7bd014e3409e6216264bc4"
+    },
+    {
+      "path": "django/contrib/postgres/utils.py",
+      "bytes": 1187,
+      "sha256": "df69c29f374c67b45ae1d0e89db21dbf5682a69577b67427a045fd0210897b7f"
+    },
+    {
+      "path": "django/contrib/postgres/validators.py",
+      "bytes": 2801,
+      "sha256": "18226dc0849e86585ca90851e4911fadcc0f51c089aada4557f7eee1a44b6f7e"
+    },
+    {
+      "path": "django/contrib/redirects/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/redirects/admin.py",
+      "bytes": 314,
+      "sha256": "d5b3ce81e658458087761eecd92a579ee2f65ac7dd4230fde94e58df185163c8"
+    },
+    {
+      "path": "django/contrib/redirects/apps.py",
+      "bytes": 251,
+      "sha256": "d6e4b9101a7b5b00e763458779a458a3b556f63facdb48782837489a876308d8"
+    },
+    {
+      "path": "django/contrib/redirects/middleware.py",
+      "bytes": 1921,
+      "sha256": "c9daa276a8b92536a882e1054014732c4914dc77a2a21815b058251d413e1c85"
+    },
+    {
+      "path": "django/contrib/redirects/migrations/0001_initial.py",
+      "bytes": 2101,
+      "sha256": "d265c1e5380afdfc186e66c1fdeeed2928e03afa475a7657834205715b6799f5"
+    },
+    {
+      "path": "django/contrib/redirects/migrations/0002_alter_redirect_new_path_help_text.py",
+      "bytes": 635,
+      "sha256": "4573dd49b61ec275b56e38d7c4da9420bfaa21e4b174151e841a740637d197ca"
+    },
+    {
+      "path": "django/contrib/redirects/migrations/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/redirects/models.py",
+      "bytes": 1083,
+      "sha256": "289ea68f4052db8dc134f2a9dba2bb392a9c4fd8f8f453ed8799b480d596c453"
+    },
+    {
+      "path": "django/contrib/sessions/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/sessions/apps.py",
+      "bytes": 194,
+      "sha256": "e5620ca9adf29aa12f60c9c51dedee59907c5d28a3505fcd4a06a8ad10f9d0b8"
+    },
+    {
+      "path": "django/contrib/sessions/backends/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/sessions/backends/base.py",
+      "bytes": 16958,
+      "sha256": "bb0e230c91ef0502c8d57242aeefbf7d86763f37f3d54fa288df2c27134d695b"
+    },
+    {
+      "path": "django/contrib/sessions/backends/cache.py",
+      "bytes": 4674,
+      "sha256": "9bd58c07cc1ef13d63d24f6b1cff7fee706e1b30d56a9deb18c8e833b3795dee"
+    },
+    {
+      "path": "django/contrib/sessions/backends/cached_db.py",
+      "bytes": 4148,
+      "sha256": "9b7e3c86060bafeae5efad13f98c66d8526643abdb23e9d9daf8b94212326c22"
+    },
+    {
+      "path": "django/contrib/sessions/backends/db.py",
+      "bytes": 6907,
+      "sha256": "aa8160f788eed3f2adb0f52014288a02fc5b30e5dcd5874601f8e4b67d349f20"
+    },
+    {
+      "path": "django/contrib/sessions/backends/file.py",
+      "bytes": 8200,
+      "sha256": "16d2bacdc6d01b02f1b4836fa93447368bcb1d30eeca4eb563bcf03677525328"
+    },
+    {
+      "path": "django/contrib/sessions/backends/signed_cookies.py",
+      "bytes": 3218,
+      "sha256": "025fc743b3a70ecefb53d0204dc8cde55515b2de5d4cff9951b86e8fa060b24d"
+    },
+    {
+      "path": "django/contrib/sessions/base_session.py",
+      "bytes": 1491,
+      "sha256": "7ae4ced38b310c4934968bd4dfc6b64cb61724103e83a9f37bd6aca8ad8fa0d5"
+    },
+    {
+      "path": "django/contrib/sessions/exceptions.py",
+      "bytes": 359,
+      "sha256": "2a19215e21707d47e548ffedeb008b3845f3d588c145329535bacb98684e4cba"
+    },
+    {
+      "path": "django/contrib/sessions/management/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/sessions/management/commands/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/sessions/management/commands/clearsessions.py",
+      "bytes": 661,
+      "sha256": "a4088ee68ef3801bad56560057dddb3e79a2c3358fed5e4defec4fb714a48c98"
+    },
+    {
+      "path": "django/contrib/sessions/middleware.py",
+      "bytes": 3755,
+      "sha256": "6d9f1882e11d2e6e37f04e4b793b98f67707d897544ec46736355dcf8d838e77"
+    },
+    {
+      "path": "django/contrib/sessions/migrations/0001_initial.py",
+      "bytes": 1148,
+      "sha256": "2aa438e2393ee5135c4dda94bfde65fd49e8300f1c3f93bed25ae3a09f2f69b9"
+    },
+    {
+      "path": "django/contrib/sessions/migrations/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/sessions/models.py",
+      "bytes": 1250,
+      "sha256": "060bb0b90483ce979335786d79844072ca60d6ba29e37d6d8c57995155993587"
+    },
+    {
+      "path": "django/contrib/sessions/serializers.py",
+      "bytes": 106,
+      "sha256": "4bda03b1402316fd8c4e52d003a0287a18202b21d7a6eebe427aeac9b860be48"
+    },
+    {
+      "path": "django/contrib/sitemaps/__init__.py",
+      "bytes": 6923,
+      "sha256": "859b9642c2824077e03cec751903c44cccd34fda2acdca69db00cc7c688b869f"
+    },
+    {
+      "path": "django/contrib/sitemaps/apps.py",
+      "bytes": 249,
+      "sha256": "c5813e980b37ee72fc6409efd39d8b854295530198281df1c8fcb8b7ca703a9c"
+    },
+    {
+      "path": "django/contrib/sitemaps/views.py",
+      "bytes": 4657,
+      "sha256": "5a805540dd231f38eb86e07efed31d6c2f12d476fd4c09d5c8bd4a93709c18ce"
+    },
+    {
+      "path": "django/contrib/sites/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/sites/admin.py",
+      "bytes": 214,
+      "sha256": "216bc60d05130cf114b1dfaebb17c7c49ab8b321ad75d34a51d90fd2799550c0"
+    },
+    {
+      "path": "django/contrib/sites/apps.py",
+      "bytes": 562,
+      "sha256": "b812c75324284aea3543b3702d3c25bec4ee454d4c5f08f8b7a9515272017709"
+    },
+    {
+      "path": "django/contrib/sites/checks.py",
+      "bytes": 366,
+      "sha256": "0327463351b52fd9af9936cd3135d16d9ccf6c7a488a49e44732e1e6e1502cb2"
+    },
+    {
+      "path": "django/contrib/sites/management.py",
+      "bytes": 1646,
+      "sha256": "00494692dbc58565c9b6527038aa549487aebf6b6190d33c17a6e896230bf385"
+    },
+    {
+      "path": "django/contrib/sites/managers.py",
+      "bytes": 1994,
+      "sha256": "baa0ff0aedcfe0d0a9ed555d1a7d0dbc77e1b19074e4c2e688f9a0a2dfb2833e"
+    },
+    {
+      "path": "django/contrib/sites/middleware.py",
+      "bytes": 309,
+      "sha256": "a987151ec1ce83457140d4b8b1aa0b1e4745e74de7251f83ed9d35bc4d12bd43"
+    },
+    {
+      "path": "django/contrib/sites/migrations/0001_initial.py",
+      "bytes": 1361,
+      "sha256": "f1f63add9e43c1b290d47b6f01a8ca0e104b12e7e28114eca116b3c847f9454e"
+    },
+    {
+      "path": "django/contrib/sites/migrations/0002_alter_domain_unique.py",
+      "bytes": 549,
+      "sha256": "9652bb20a40a9c508ae6f8872dec3664c755f5ed6c1f2d07d5b96ccc4bbf34ab"
+    },
+    {
+      "path": "django/contrib/sites/migrations/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/sites/models.py",
+      "bytes": 3695,
+      "sha256": "d035957c318c62a4d982cfcb3fa865571637ced6f03f3ba513d0e8b3ccfa3374"
+    },
+    {
+      "path": "django/contrib/sites/requests.py",
+      "bytes": 641,
+      "sha256": "6da00173a7e64de8cd9a4f0cddf72843572e236aa927317c638ec0d714adf206"
+    },
+    {
+      "path": "django/contrib/sites/shortcuts.py",
+      "bytes": 573,
+      "sha256": "9de9154000c944e158c0a083edf966583310f6e2c069a2b3b4754a9797a6b967"
+    },
+    {
+      "path": "django/contrib/staticfiles/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/staticfiles/apps.py",
+      "bytes": 504,
+      "sha256": "f06f477ad5375813437d729fcd87f25e367ef97de5a0192441207bc5f95e225e"
+    },
+    {
+      "path": "django/contrib/staticfiles/checks.py",
+      "bytes": 846,
+      "sha256": "14fcd8a2d811cf1a966039e320aefc6e04007c1485a9e241d3844354cc658678"
+    },
+    {
+      "path": "django/contrib/staticfiles/finders.py",
+      "bytes": 13547,
+      "sha256": "df09ef42455a3b97f0c69390bb96096ac7fb49b76f81d26f8336707fd46d31a6"
+    },
+    {
+      "path": "django/contrib/staticfiles/handlers.py",
+      "bytes": 4043,
+      "sha256": "96b3c89e3f0437dfabc7367144217dc9e317b4d9a5b030bda3dfaa25d7c502cd"
+    },
+    {
+      "path": "django/contrib/staticfiles/management/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/staticfiles/management/commands/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/staticfiles/management/commands/collectstatic.py",
+      "bytes": 15105,
+      "sha256": "160b0da0a63ca5af40e2c432b6f9f2775f6acc562d3a4610ff006d8031102e2f"
+    },
+    {
+      "path": "django/contrib/staticfiles/management/commands/findstatic.py",
+      "bytes": 1643,
+      "sha256": "3f5d8617eebc6c8d5cb15b632f42760f029c117f093417851e691181ba659ee2"
+    },
+    {
+      "path": "django/contrib/staticfiles/management/commands/runserver.py",
+      "bytes": 1373,
+      "sha256": "53fee8098f0b257e499f5c6532ffaa178110a14be54f495d07913fd2c26646dc"
+    },
+    {
+      "path": "django/contrib/staticfiles/storage.py",
+      "bytes": 21176,
+      "sha256": "edb51ac5d816d4e6419ca7ad5f27a99450949967163f63810bd4b1410d0b5618"
+    },
+    {
+      "path": "django/contrib/staticfiles/testing.py",
+      "bytes": 463,
+      "sha256": "e17f84b4e7d79f0909032153f2a7b81f8b1b5532a033ae6494b52d63cd4a1e21"
+    },
+    {
+      "path": "django/contrib/staticfiles/urls.py",
+      "bytes": 498,
+      "sha256": "a300ccfe17723de466c58c598ac48ca299709f35aba6d23f5bcfb72b67fb2130"
+    },
+    {
+      "path": "django/contrib/staticfiles/utils.py",
+      "bytes": 2279,
+      "sha256": "88f5c7034c8c5eedfb3d0c02aeaf738e14b38d97ffcc405727e7471aca99a17f"
+    },
+    {
+      "path": "django/contrib/staticfiles/views.py",
+      "bytes": 1262,
+      "sha256": "997ef4a1e8c153614f67dfe27642341224419138ca7020fb249df8818c613363"
+    },
+    {
+      "path": "django/contrib/syndication/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/contrib/syndication/apps.py",
+      "bytes": 203,
+      "sha256": "ec8a47a2284f5ad39c03a4b83ba5681b45d196a129de3b1facd7fe0fe7a5ba27"
+    },
+    {
+      "path": "django/contrib/syndication/views.py",
+      "bytes": 9377,
+      "sha256": "c0e3017d202040fa571e605e3f37bdd001b99dcd49a10d135f67ae64a643ea26"
+    },
+    {
+      "path": "django/core/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/core/asgi.py",
+      "bytes": 386,
+      "sha256": "3762f7192e85ea82fec83f53bb6a2db290a2d9485b450f742c4c7713138fd66d"
+    },
+    {
+      "path": "django/core/cache/__init__.py",
+      "bytes": 1929,
+      "sha256": "6752ec2fe4cd4cd554e57dc22de1de2b815b7daafbea7e33c01af8682f64c6e2"
+    },
+    {
+      "path": "django/core/cache/backends/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/core/cache/backends/base.py",
+      "bytes": 14292,
+      "sha256": "b6b41554ec810dcf0f843253fa9dd90a01422266aeb06299d9373755146d4ac8"
+    },
+    {
+      "path": "django/core/cache/backends/db.py",
+      "bytes": 11373,
+      "sha256": "8ebce0cd54b4c2ca3c5d5f415eabb364f4671ccd1dfa520e9ecfdebea3d8cff2"
+    },
+    {
+      "path": "django/core/cache/backends/dummy.py",
+      "bytes": 1043,
+      "sha256": "7d06c588bef60e754a3fd514e160ec6586b160ac7b16530e261b4ff1a932da27"
+    },
+    {
+      "path": "django/core/cache/backends/filebased.py",
+      "bytes": 5797,
+      "sha256": "7afbc7e2b66d9eba2ad41a01113c266cfcfb4d5ec907a62271e9c1c078634361"
+    },
+    {
+      "path": "django/core/cache/backends/locmem.py",
+      "bytes": 4036,
+      "sha256": "47d83983d286e9a93d1b5d91e1168c9d5abb7a5e62f495ee7e8bec84d44c3087"
+    },
+    {
+      "path": "django/core/cache/backends/memcached.py",
+      "bytes": 6776,
+      "sha256": "701e5044276bf6ea1c07eb5603514c050b56411a87491a44ed470831823cea02"
+    },
+    {
+      "path": "django/core/cache/backends/redis.py",
+      "bytes": 8010,
+      "sha256": "f65df998ba671c3987c5bfae5d7723f950037e65cc63a373fb3dfea4630bc8a7"
+    },
+    {
+      "path": "django/core/cache/utils.py",
+      "bytes": 397,
+      "sha256": "dd92d88140c3ea22e22cc0babe35ca7d442282ca14db77dfa49c7c7bbd4ce170"
+    },
+    {
+      "path": "django/core/checks/__init__.py",
+      "bytes": 1248,
+      "sha256": "a7c6ade1335583c0c66817383d5002774309c88c538e2189ea225612f9ab0e9a"
+    },
+    {
+      "path": "django/core/checks/async_checks.py",
+      "bytes": 403,
+      "sha256": "03da7f8de6c42eb7f87e20fa8c9b4133a1af9bc70c6f4dec4ae5bd35cc77faf5"
+    },
+    {
+      "path": "django/core/checks/caches.py",
+      "bytes": 2643,
+      "sha256": "85b708143fe0ad7510476946033ce5097eaa3097e45e3d36643244960753e588"
+    },
+    {
+      "path": "django/core/checks/commands.py",
+      "bytes": 965,
+      "sha256": "9408162981e95275da13ff99b3fd0bc4a2998ccf89994d540a517e4585ae7bc2"
+    },
+    {
+      "path": "django/core/checks/compatibility/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/core/checks/compatibility/django_4_0.py",
+      "bytes": 657,
+      "sha256": "dacee59bd2d9d0dae16984abc3563998c90be410baf124be4f20fe4ca7336c42"
+    },
+    {
+      "path": "django/core/checks/database.py",
+      "bytes": 341,
+      "sha256": "b018fef28e039a91b940fcb5297817b59d056744fdc5d953e1704873bd309844"
+    },
+    {
+      "path": "django/core/checks/files.py",
+      "bytes": 522,
+      "sha256": "5b8c981e25abaa2d1dfc6ead0d64f0efda6bd9d809638d6b3afee64696eda764"
+    },
+    {
+      "path": "django/core/checks/messages.py",
+      "bytes": 2241,
+      "sha256": "bc826dbe679a7e0c05cf07176a84415a470bfedda02d32e3b2d592c39c42b634"
+    },
+    {
+      "path": "django/core/checks/model_checks.py",
+      "bytes": 8830,
+      "sha256": "f1a2b9ba2b7dc8ffe50df7570493e5cffafee3a7da3ff8083972eccd7a8b42a6"
+    },
+    {
+      "path": "django/core/checks/registry.py",
+      "bytes": 3482,
+      "sha256": "c23bfc1f5e10350150d4bc47ec1dbe00213e9adf683372161b747ad73219f99c"
+    },
+    {
+      "path": "django/core/checks/security/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/core/checks/security/base.py",
+      "bytes": 9140,
+      "sha256": "2341a6e38eadc112216d1a291262ac76c616fcd748eff9cafd9576f26b113c4a"
+    },
+    {
+      "path": "django/core/checks/security/csrf.py",
+      "bytes": 2074,
+      "sha256": "208528519c1759a13f8cf6f15cca8ecec24b18530e8ad689803d52052e126c2f"
+    },
+    {
+      "path": "django/core/checks/security/sessions.py",
+      "bytes": 2554,
+      "sha256": "4326fddc225e4013392cb861aeaa2be0a409476b52a459254bea7b5a5b577077"
+    },
+    {
+      "path": "django/core/checks/templates.py",
+      "bytes": 296,
+      "sha256": "95e43c9f28d0073a1f5854e8e981fd3642e6b79f363a51b6a7cb05c34d2c6dec"
+    },
+    {
+      "path": "django/core/checks/translation.py",
+      "bytes": 1990,
+      "sha256": "8aded58d77f5d3e1c1742737cf9e7f952c70a24f6a12771da234411bbe1de050"
+    },
+    {
+      "path": "django/core/checks/urls.py",
+      "bytes": 4907,
+      "sha256": "16385268ae74bf6101660c99d28cc10577b50a4b63c582a85be8d740be11612c"
+    },
+    {
+      "path": "django/core/exceptions.py",
+      "bytes": 6583,
+      "sha256": "deae9ef62bacc377415c0c022ef24087b1dcd1ae15023f18d12df19c1f89214d"
+    },
+    {
+      "path": "django/core/files/__init__.py",
+      "bytes": 60,
+      "sha256": "461cf9266f4133a832fe77f9c8cb6cc0dd55b132082d850bed9fb979d8e1fc72"
+    },
+    {
+      "path": "django/core/files/base.py",
+      "bytes": 4845,
+      "sha256": "30a371c608aec071f01a27e9c9d0608df6694f3745ed5c42427555fb0f1baa18"
+    },
+    {
+      "path": "django/core/files/images.py",
+      "bytes": 2644,
+      "sha256": "626b3efa1ba0516729b19249274f94c2421edcf559e0b8cc173e0eec4c3d1411"
+    },
+    {
+      "path": "django/core/files/locks.py",
+      "bytes": 3614,
+      "sha256": "9a9f7a85cf273286fc70c1128804855944d49ff69f5bc0386a0fef896cf4a235"
+    },
+    {
+      "path": "django/core/files/move.py",
+      "bytes": 2948,
+      "sha256": "c043a2a28ff58675a3870541eef66998c30f6924bf38913d90dbab74bff60582"
+    },
+    {
+      "path": "django/core/files/storage/__init__.py",
+      "bytes": 622,
+      "sha256": "128b260b5fd62da0053ae6a98f2a0a14db9d422c91216f02da1c7dd2841a543e"
+    },
+    {
+      "path": "django/core/files/storage/base.py",
+      "bytes": 8296,
+      "sha256": "f3732e9810f7ccb4bfb5e822983e753a1f7242c20be1c61b5bd75dba14671ea2"
+    },
+    {
+      "path": "django/core/files/storage/filesystem.py",
+      "bytes": 9462,
+      "sha256": "57da64c0014b933c15704b23af6c51d40a45aa124f6c4e98554f2a12d3f7056f"
+    },
+    {
+      "path": "django/core/files/storage/handler.py",
+      "bytes": 1507,
+      "sha256": "9ed3896769dfd9551a518eed287d269dd39116218a49d87fd7aa373ad8a52012"
+    },
+    {
+      "path": "django/core/files/storage/memory.py",
+      "bytes": 9875,
+      "sha256": "7940d107b075b9355bd5aef4cde6ac225577dd3de47c5705f5ccafcfde12e24f"
+    },
+    {
+      "path": "django/core/files/storage/mixins.py",
+      "bytes": 700,
+      "sha256": "8ff637ba7ce4f42726c7e4108e3e00a02dcc5215c8c399c56c3605dd09ff161d"
+    },
+    {
+      "path": "django/core/files/temp.py",
+      "bytes": 2503,
+      "sha256": "238eb74761eeab3033ae9222e45037bd3f12f26d997526195ce702f77d853b5c"
+    },
+    {
+      "path": "django/core/files/uploadedfile.py",
+      "bytes": 4189,
+      "sha256": "ea1063c66c7c3f47f199941bb63e0e4ec5ed524f4674803b21472ffcac12234f"
+    },
+    {
+      "path": "django/core/files/uploadhandler.py",
+      "bytes": 7809,
+      "sha256": "f065314f3bfbb2d6676d58138959cbd6f1b3ee592a1325c0e753deadf1bf8630"
+    },
+    {
+      "path": "django/core/files/utils.py",
+      "bytes": 2602,
+      "sha256": "b414fc73cc0239b326895178069069095e7f86180c2b17b6a688ae9f016921cc"
+    },
+    {
+      "path": "django/core/handlers/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/core/handlers/asgi.py",
+      "bytes": 14026,
+      "sha256": "4d963486575b32aa9fd04bd2d4ecd15f7988a5011341296980070d85a5c9d418"
+    },
+    {
+      "path": "django/core/handlers/base.py",
+      "bytes": 14813,
+      "sha256": "8fb49c21b30b2986b9d87ab01d88487cc596006ef8f676ad72c06c550b2f0637"
+    },
+    {
+      "path": "django/core/handlers/exception.py",
+      "bytes": 5961,
+      "sha256": "e10b79143b65790bae2d0c159778e4555213a97ece1b5d3a5bc750db2739f1b8"
+    },
+    {
+      "path": "django/core/handlers/wsgi.py",
+      "bytes": 7315,
+      "sha256": "f350c4ae0cc701a65cc36522beb2aac12ebd429a1117cb66d00484738bf7b90e"
+    },
+    {
+      "path": "django/core/mail/__init__.py",
+      "bytes": 5049,
+      "sha256": "5c9d48661816b69c070b937d1c1cf83b01142468560d1e85c9726293e5af8eea"
+    },
+    {
+      "path": "django/core/mail/backends/__init__.py",
+      "bytes": 37,
+      "sha256": "549ffd74158a038f0c5c1657554693cbd36181f4689daa40e9402354510f283f"
+    },
+    {
+      "path": "django/core/mail/backends/base.py",
+      "bytes": 1683,
+      "sha256": "0a58db6fb9e2978d037e9a1bd91f222e694ed18bffc25382040f6117667a5b9e"
+    },
+    {
+      "path": "django/core/mail/backends/console.py",
+      "bytes": 1427,
+      "sha256": "1fa956135f07f2e4b18fb2c1d52193a90ed416993d8162d962aeab7a8c22c4b5"
+    },
+    {
+      "path": "django/core/mail/backends/dummy.py",
+      "bytes": 234,
+      "sha256": "b08eed01adcc7c6e3750701176eb6d06f1006187e22dab20177f63cda64fbbd1"
+    },
+    {
+      "path": "django/core/mail/backends/filebased.py",
+      "bytes": 2353,
+      "sha256": "01b1012fdb57afa58886e490be6ddd1e80a9b8ca034d2224c7aa856f818c51ee"
+    },
+    {
+      "path": "django/core/mail/backends/locmem.py",
+      "bytes": 913,
+      "sha256": "f79c8071f89dfb86a4a7612ad4390dac7898176fb4a4a47637b5423f132eff9d"
+    },
+    {
+      "path": "django/core/mail/backends/smtp.py",
+      "bytes": 6500,
+      "sha256": "aafdfda1a14d3ea0e95b62ccc9770bd03db099fcceebe2783c5456b69b79b436"
+    },
+    {
+      "path": "django/core/mail/message.py",
+      "bytes": 18749,
+      "sha256": "b140e8a141fc153a2b8f4e51e321cb81609128d239ec1530c9a813a054d7fbe3"
+    },
+    {
+      "path": "django/core/mail/utils.py",
+      "bytes": 506,
+      "sha256": "59ffa975276fd162d1118cc8ec4556af9f4aea8eed7dbdddd8749b03213748e1"
+    },
+    {
+      "path": "django/core/management/__init__.py",
+      "bytes": 17407,
+      "sha256": "8245e02aea88a7215aba4dbe9203a053e203c5cc3c4e300a33f314f9eaeb684d"
+    },
+    {
+      "path": "django/core/management/base.py",
+      "bytes": 24967,
+      "sha256": "46f318094a0e75beaa09e05050d1137ad3aa3eedf52adb258667f411c52701c2"
+    },
+    {
+      "path": "django/core/management/color.py",
+      "bytes": 3168,
+      "sha256": "29774d0132b902fc552bcc2d287d864d60299cb18267fd4d29ec13b0b58205cd"
+    },
+    {
+      "path": "django/core/management/commands/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/core/management/commands/check.py",
+      "bytes": 2832,
+      "sha256": "5faf01e154d2f22fb72cf6344e3b9039cf403399bd1ce30134f19bcefdc50df0"
+    },
+    {
+      "path": "django/core/management/commands/compilemessages.py",
+      "bytes": 7010,
+      "sha256": "f922099e6c978d8bb7b5176dfb09f1ec2419577baf4441a138bd6ac4b8d4f74f"
+    },
+    {
+      "path": "django/core/management/commands/createcachetable.py",
+      "bytes": 4656,
+      "sha256": "6dd29fc5fb5f7e3a0a4204897c2049460542c3386a9d49fcf0cbc030f3538adb"
+    },
+    {
+      "path": "django/core/management/commands/dbshell.py",
+      "bytes": 1762,
+      "sha256": "8816a0eae0db07f59a77f5b387585b3367a04bef153ab989c265b21d161617c3"
+    },
+    {
+      "path": "django/core/management/commands/diffsettings.py",
+      "bytes": 3554,
+      "sha256": "34d2ff2743f71d1cc065df57716ec4a3f884fe5365888a4ab5d71aac36c14697"
+    },
+    {
+      "path": "django/core/management/commands/dumpdata.py",
+      "bytes": 11180,
+      "sha256": "7863c1aabcdd938619a7245a21441629fc5eeeaa6b281618fe30bc0dcb8920bc"
+    },
+    {
+      "path": "django/core/management/commands/flush.py",
+      "bytes": 3605,
+      "sha256": "1744de68975b13108be6764133656ae3563e5ffa10273fdd50721b26c7f23afc"
+    },
+    {
+      "path": "django/core/management/commands/inspectdb.py",
+      "bytes": 17338,
+      "sha256": "a5ead6b9dd4aab5493f1531078472c4026823c2e48e896f7d4e7efaf6a48f182"
+    },
+    {
+      "path": "django/core/management/commands/loaddata.py",
+      "bytes": 16008,
+      "sha256": "f28769bd3f54c5a26e1c0ef37b9743507cc57aaf9d85d6c7f4b935f49637419a"
+    },
+    {
+      "path": "django/core/management/commands/makemessages.py",
+      "bytes": 28695,
+      "sha256": "9afa0446094fc3be83df7c05096e73f3c992d0ebb23bd062e46a64efc2e499ff"
+    },
+    {
+      "path": "django/core/management/commands/makemigrations.py",
+      "bytes": 22539,
+      "sha256": "e6fecd489dc2220275330d9d6d1042fd5928ce666efcbaaf66047b2c268a3d62"
+    },
+    {
+      "path": "django/core/management/commands/migrate.py",
+      "bytes": 21349,
+      "sha256": "0ee0b991f655da1c91d821afe46ee751c9b8793c61c3df500339e5cf918f1d7b"
+    },
+    {
+      "path": "django/core/management/commands/optimizemigration.py",
+      "bytes": 5244,
+      "sha256": "c912a85cf4cdfcc981dc201b05de65dc3e7471e93403c56b94fa322f234d93df"
+    },
+    {
+      "path": "django/core/management/commands/runserver.py",
+      "bytes": 7539,
+      "sha256": "7d1302538a209c1bdabfd6f7d67f26128fae6d49475f00dd8a4551c47589d2a2"
+    },
+    {
+      "path": "django/core/management/commands/sendtestemail.py",
+      "bytes": 1518,
+      "sha256": "b05e5350c6c3fed94606752c9fdb7ea05546352c9e896448ae0c8f6c913cf1cb"
+    },
+    {
+      "path": "django/core/management/commands/shell.py",
+      "bytes": 9169,
+      "sha256": "e5ddff3d5def660ec2e8babe370c9b24aaa2bf32114e7b3bb3c19570b28b0751"
+    },
+    {
+      "path": "django/core/management/commands/showmigrations.py",
+      "bytes": 6847,
+      "sha256": "db8b39d44cf02212fa948a6e9a2be96a2c504c31b1ec8d6a274c0a14d19a10c5"
+    },
+    {
+      "path": "django/core/management/commands/sqlflush.py",
+      "bytes": 1031,
+      "sha256": "eca8805f352aa84dc8786adeb13fa4573ca4fe2f173f6353b0806662ddf40f76"
+    },
+    {
+      "path": "django/core/management/commands/sqlmigrate.py",
+      "bytes": 3310,
+      "sha256": "af5359aae399d9a5b66cf8452506134fb203b21da434664844999d213debf054"
+    },
+    {
+      "path": "django/core/management/commands/sqlsequencereset.py",
+      "bytes": 1101,
+      "sha256": "71d9db6ddef2f3508060af4a5fe57a1e8f0a2483bf995b46dd5ead7ed201a7a8"
+    },
+    {
+      "path": "django/core/management/commands/squashmigrations.py",
+      "bytes": 10882,
+      "sha256": "b5a6fbccd07d6ac57e0f3fc4695f3f0cef0e2ce735a0d9c3e5771d1981d0af4d"
+    },
+    {
+      "path": "django/core/management/commands/startapp.py",
+      "bytes": 503,
+      "sha256": "0e196585a7f5ab710a567c812e127d42c59fe899a302d62754baee1ec98c95c4"
+    },
+    {
+      "path": "django/core/management/commands/startproject.py",
+      "bytes": 789,
+      "sha256": "22feca39ca351a4cc6a9410c13f2c2c79bc68b825f63cfa5cdd91acc3a85ee4f"
+    },
+    {
+      "path": "django/core/management/commands/test.py",
+      "bytes": 2367,
+      "sha256": "517c6c227846aab72c30c88793ab81bc0c0c3330990f0265e7f425dcbea5931f"
+    },
+    {
+      "path": "django/core/management/commands/testserver.py",
+      "bytes": 2238,
+      "sha256": "6a24b4b427bab97a7d863704d4b51f675d7cc4070c6b6f089872f8ca7412a8ef"
+    },
+    {
+      "path": "django/core/management/sql.py",
+      "bytes": 1851,
+      "sha256": "7cfe81beae0dad007ff536fa5ec61e0a0e7bc6cd8293ab9a097ab4a2314e4af0"
+    },
+    {
+      "path": "django/core/management/templates.py",
+      "bytes": 15435,
+      "sha256": "be675d27da309288d4bd58d09624f1ef263708efe17017f2fd8848750192753a"
+    },
+    {
+      "path": "django/core/management/utils.py",
+      "bytes": 5636,
+      "sha256": "dd419782b0e2e47c144065358b9c108861c117e92df32274b86c859aee6618a1"
+    },
+    {
+      "path": "django/core/paginator.py",
+      "bytes": 7905,
+      "sha256": "605476104d16d9c2e112e5d2588ebb737dc3ade5554b1973f71463a86b39d337"
+    },
+    {
+      "path": "django/core/serializers/__init__.py",
+      "bytes": 8772,
+      "sha256": "81a1f9f22a7fd9dc9414395f38f7a73245497ed410381bd7a8271906300ac130"
+    },
+    {
+      "path": "django/core/serializers/base.py",
+      "bytes": 12631,
+      "sha256": "e8b9db3c26f8c1b0d8b04decbc4cedb760254b9859c7736621d33fd2e4628e1d"
+    },
+    {
+      "path": "django/core/serializers/json.py",
+      "bytes": 3757,
+      "sha256": "001db84420e2429a28a27dfb12424b95fd26733ce3bccd1bd6809c043b4f7951"
+    },
+    {
+      "path": "django/core/serializers/jsonl.py",
+      "bytes": 2258,
+      "sha256": "896e6e50175e669920111e1fa06869beb936e3a97443fa100f8ae1575430cb2a"
+    },
+    {
+      "path": "django/core/serializers/python.py",
+      "bytes": 8094,
+      "sha256": "4ebe5161d8b2dc280c9d3d6fa154a5bcbba339939b7847a15177f01d63d5b328"
+    },
+    {
+      "path": "django/core/serializers/pyyaml.py",
+      "bytes": 3061,
+      "sha256": "471337b725fef4872e79e49bfa5c14b0aec7d077aaeded64c9053441facfdb57"
+    },
+    {
+      "path": "django/core/serializers/xml_serializer.py",
+      "bytes": 19457,
+      "sha256": "7aa6b5b4938ab993455d4f0a1ae32cfd371b8425b9dd79876314cc86c4b58590"
+    },
+    {
+      "path": "django/core/servers/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/core/servers/basehttp.py",
+      "bytes": 9995,
+      "sha256": "d17b433f8483046a2f18a7baa1705b6bafaa80124ada5c35ba607c45748eb54a"
+    },
+    {
+      "path": "django/core/signals.py",
+      "bytes": 151,
+      "sha256": "e6f8757bb2203cdefc5973e8efe84430f37db5072a252647bb458289b36077e1"
+    },
+    {
+      "path": "django/core/signing.py",
+      "bytes": 9594,
+      "sha256": "772188f5818881a1cf8cb17e85868a48ff28f325a4411789d4c1ebab5bfcc25a"
+    },
+    {
+      "path": "django/core/validators.py",
+      "bytes": 22466,
+      "sha256": "262c79a3ea6c4990847bc4c8764e03af1370979098be3d8fc9b4d7365de24ea0"
+    },
+    {
+      "path": "django/core/wsgi.py",
+      "bytes": 388,
+      "sha256": "dac60c49edc806b10d7904fbaf2b3ed3809199ff215b64360a39640542328c79"
+    },
+    {
+      "path": "django/db/__init__.py",
+      "bytes": 1533,
+      "sha256": "081b9e8484eb915327d363fadccd0663532766e0b419e7c0d4c028c65568ddbe"
+    },
+    {
+      "path": "django/db/backends/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/db/backends/base/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/db/backends/base/base.py",
+      "bytes": 28598,
+      "sha256": "12080160cdce6705ca5a76234da77ad57d1281ecef382eb4b9cc4317af6a3525"
+    },
+    {
+      "path": "django/db/backends/base/client.py",
+      "bytes": 937,
+      "sha256": "f7415fb3acd9602962ded263c2c3c7f1322d67cb73d4fa7ece141af84a6c36a7"
+    },
+    {
+      "path": "django/db/backends/base/creation.py",
+      "bytes": 15847,
+      "sha256": "00540bff1cf8f23633653747977af777fdafff11b224c30435798451c6d1bf8f"
+    },
+    {
+      "path": "django/db/backends/base/features.py",
+      "bytes": 15946,
+      "sha256": "e3549f4ef7da1676a08861291d0f5193a5ecc022b356da1e50c0c56bd5c57a49"
+    },
+    {
+      "path": "django/db/backends/base/introspection.py",
+      "bytes": 7900,
+      "sha256": "0891b7314991fb0269366fa0356b8c44c3649d6a7765d67d0d151b2b1727c2ea"
+    },
+    {
+      "path": "django/db/backends/base/operations.py",
+      "bytes": 30169,
+      "sha256": "a0106321b3fa643f3f99818ded11c204ede99a848d64e6031b3440af485326ae"
+    },
+    {
+      "path": "django/db/backends/base/schema.py",
+      "bytes": 82323,
+      "sha256": "cadbef8844b990df069efa8e5a9a83a11e0ee550c5fe495c43bf622839f06004"
+    },
+    {
+      "path": "django/db/backends/base/validation.py",
+      "bytes": 1067,
+      "sha256": "db3a48d75872509af4234700d719afa05c1055d67eeffd53d85d754e94344649"
+    },
+    {
+      "path": "django/db/backends/ddl_references.py",
+      "bytes": 8619,
+      "sha256": "75496418b19d8ce9da711ffc3dac1e0395d2c200fcc288cc4c951538238a54b6"
+    },
+    {
+      "path": "django/db/backends/dummy/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/db/backends/dummy/base.py",
+      "bytes": 2217,
+      "sha256": "91e5310fb57e5ec7c3f1bd7371b90ffaf420cbb35b20939e3ddf35d1047224ce"
+    },
+    {
+      "path": "django/db/backends/dummy/features.py",
+      "bytes": 181,
+      "sha256": "3e0f3f8cd0fe6a8268993681057537849123ce907eacbb3a570a682a4398b908"
+    },
+    {
+      "path": "django/db/backends/mysql/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/db/backends/mysql/base.py",
+      "bytes": 16834,
+      "sha256": "f636ffff9192121c0cf70f31ad1d94c3937187f6e0fb9bd58bb4db54176f9b02"
+    },
+    {
+      "path": "django/db/backends/mysql/client.py",
+      "bytes": 2988,
+      "sha256": "229c1d23e1f9afe414a0cf19bcf5c7ca437129bdb07af714c7c1efc539ffa2d5"
+    },
+    {
+      "path": "django/db/backends/mysql/compiler.py",
+      "bytes": 3094,
+      "sha256": "a17e83b52726c67217d8db0865e4660f6f10dee0bec188b06007afbae331c071"
+    },
+    {
+      "path": "django/db/backends/mysql/creation.py",
+      "bytes": 3449,
+      "sha256": "f0157c607937a84ab9e799c7dcd1ee931a59660c6dbd716f92fed7be446584a0"
+    },
+    {
+      "path": "django/db/backends/mysql/features.py",
+      "bytes": 11128,
+      "sha256": "dc069bd0a3be5ab0251c386396e0fa19f2e8cbcc17221198e409e86472860a70"
+    },
+    {
+      "path": "django/db/backends/mysql/introspection.py",
+      "bytes": 14476,
+      "sha256": "94216ed2e1996bbad03d0b4ff47ffb2f827a5f49ae2932eb5a881b423e5eee80"
+    },
+    {
+      "path": "django/db/backends/mysql/operations.py",
+      "bytes": 18330,
+      "sha256": "de0caeeba66c68c97770f52f6aec1cc5de5fe27cb7ab2efba116a30cc730b2d9"
+    },
+    {
+      "path": "django/db/backends/mysql/schema.py",
+      "bytes": 11239,
+      "sha256": "ea349a3914d46ab22e90fe66c8cc3a41255aab30b228846b2956277019e33596"
+    },
+    {
+      "path": "django/db/backends/mysql/validation.py",
+      "bytes": 3093,
+      "sha256": "5c4463d253c48a129384fbf3a1526636959d3ceba7eb8711177807bfece60869"
+    },
+    {
+      "path": "django/db/backends/oracle/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/db/backends/oracle/base.py",
+      "bytes": 26097,
+      "sha256": "a8c068b614bcfba52b766098d11062b7e7389c977099e44027797c658b96be75"
+    },
+    {
+      "path": "django/db/backends/oracle/client.py",
+      "bytes": 784,
+      "sha256": "0df0d445f9e8f127a4d7733caf94b6b764fc554badc768414fd0d945fa30f554"
+    },
+    {
+      "path": "django/db/backends/oracle/creation.py",
+      "bytes": 20986,
+      "sha256": "f89b168f2555fd508d9d47f540961722c7d79c49a7570ce1759c6adb6968518e"
+    },
+    {
+      "path": "django/db/backends/oracle/features.py",
+      "bytes": 9336,
+      "sha256": "46e24d40a835769c67f7965ef35df8bc18948b7298c9b6f24fc9d0ebc0064cd3"
+    },
+    {
+      "path": "django/db/backends/oracle/functions.py",
+      "bytes": 812,
+      "sha256": "d8ea016326352dbe01e6161b9111e377c618fdaaedaf741e1aeda19688c2faf7"
+    },
+    {
+      "path": "django/db/backends/oracle/introspection.py",
+      "bytes": 15452,
+      "sha256": "c346d7d9766fdadff7f8c8f0e6753a6c9f2ee4cfbf5b749911c0d022bb73e3b4"
+    },
+    {
+      "path": "django/db/backends/oracle/operations.py",
+      "bytes": 30187,
+      "sha256": "90fa93cdda4fb8dc09aa503eba10e21bdafc75937b817d2f45fee4889f73d57b"
+    },
+    {
+      "path": "django/db/backends/oracle/oracledb_any.py",
+      "bytes": 446,
+      "sha256": "921bef77388df0b3daeabd108d9c2dcb660c7065cb08864a53c8ae22c3f28c32"
+    },
+    {
+      "path": "django/db/backends/oracle/schema.py",
+      "bytes": 10753,
+      "sha256": "8864d77c4218b62300ab4cbc2c7f340a7a441669cba3a24c1da593241bb9904c"
+    },
+    {
+      "path": "django/db/backends/oracle/utils.py",
+      "bytes": 2753,
+      "sha256": "02780d791623f56dba0a93a0c9a14cdaa3c1e0a39fdc3a48a0981f5e8ab091bb"
+    },
+    {
+      "path": "django/db/backends/oracle/validation.py",
+      "bytes": 860,
+      "sha256": "72af81bf2e42d3fae69209e0d12490e2cef814a836c9333537bf3619fcfcea76"
+    },
+    {
+      "path": "django/db/backends/postgresql/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/db/backends/postgresql/base.py",
+      "bytes": 23486,
+      "sha256": "d73b472e8d3f315b5e53f5a810e5e80d6a0310305fa668c7a0d0f345038aafa7"
+    },
+    {
+      "path": "django/db/backends/postgresql/client.py",
+      "bytes": 2044,
+      "sha256": "071a623987b6873838b568cf2870c9c5af3376be92ec237d62268e8530c950ea"
+    },
+    {
+      "path": "django/db/backends/postgresql/compiler.py",
+      "bytes": 2775,
+      "sha256": "8744ff19fec3df2a71089e2f8cd7625804c57417d2b5393e0433410b534355fa"
+    },
+    {
+      "path": "django/db/backends/postgresql/creation.py",
+      "bytes": 3886,
+      "sha256": "a59602ceaf3dde370c77c8e19d41f6b2e05a382f4bae44eda419fd81da6ac536"
+    },
+    {
+      "path": "django/db/backends/postgresql/features.py",
+      "bytes": 5979,
+      "sha256": "52abc15ab7b6e70ae27becf8ec668e2f055ce8fef8fe220c49bc734aa18d2760"
+    },
+    {
+      "path": "django/db/backends/postgresql/introspection.py",
+      "bytes": 11582,
+      "sha256": "ae81d7a81dc699b23b374d02d5b0cbb978d0e73b5c7f4999231ea174dc9ea804"
+    },
+    {
+      "path": "django/db/backends/postgresql/operations.py",
+      "bytes": 15940,
+      "sha256": "1edd9958f0fba7e729d9da38b68f979ef5782ccfbd4b24ee6cccfa0eac14e132"
+    },
+    {
+      "path": "django/db/backends/postgresql/psycopg_any.py",
+      "bytes": 3885,
+      "sha256": "5f6694f8c1df0cd6d768a4f6fb6542de6862015c58b61fee3093caa003cbb0a4"
+    },
+    {
+      "path": "django/db/backends/postgresql/schema.py",
+      "bytes": 14749,
+      "sha256": "37e739436117b93758a1e94d5c39e443c6a915ca584fa60545d867879a450585"
+    },
+    {
+      "path": "django/db/backends/signals.py",
+      "bytes": 66,
+      "sha256": "625d782a36098a34edd72a48662ae9f74952ed44c9f14a203c523f0f06dcb127"
+    },
+    {
+      "path": "django/db/backends/sqlite3/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/db/backends/sqlite3/_functions.py",
+      "bytes": 14559,
+      "sha256": "e2bc000efab8749bbc100cd45cf9eb98dfe50dc7e0fd77f4c3b0d11e08fc7dac"
+    },
+    {
+      "path": "django/db/backends/sqlite3/base.py",
+      "bytes": 15131,
+      "sha256": "48dee44b196c7d0e3530c5aa95e83f826661ea661acac67a4ebed63b49d1439c"
+    },
+    {
+      "path": "django/db/backends/sqlite3/client.py",
+      "bytes": 321,
+      "sha256": "11bffe3f5c346936d919535892feca03592ee48975376450a2fda5737bf49e1a"
+    },
+    {
+      "path": "django/db/backends/sqlite3/creation.py",
+      "bytes": 6849,
+      "sha256": "21bf697f0039dc6e306692d9821ec4bdd8a9a1276f860fb0c4a48fd99a30c053"
+    },
+    {
+      "path": "django/db/backends/sqlite3/features.py",
+      "bytes": 6533,
+      "sha256": "54c0a49481e660a7f386d55b18aa7248baef6a5a3d1b5068ac27173e9edb1d54"
+    },
+    {
+      "path": "django/db/backends/sqlite3/introspection.py",
+      "bytes": 17908,
+      "sha256": "60476816a0663159170a98d8b22d9eae2ae1b83b8a130db30de7affdea49616c"
+    },
+    {
+      "path": "django/db/backends/sqlite3/operations.py",
+      "bytes": 17167,
+      "sha256": "5d37088d32452be3cd0e0996521ea0c6de40b3c8cacfa74b50d4d6d0348f954c"
+    },
+    {
+      "path": "django/db/backends/sqlite3/schema.py",
+      "bytes": 20749,
+      "sha256": "9630800efc93fca84d0b96d0e35defe1c7fa23dfa7d62ed3dfce770b2acb6d8c"
+    },
+    {
+      "path": "django/db/backends/utils.py",
+      "bytes": 11137,
+      "sha256": "c05c9055f56cd40c51e3cc9021543e965d6c0bd194782c5d3fe69abd82f496bb"
+    },
+    {
+      "path": "django/db/migrations/__init__.py",
+      "bytes": 97,
+      "sha256": "39ae11bdf11aea12130aa75cab05d80bae9892714aca5baecbbbed35b49cf8be"
+    },
+    {
+      "path": "django/db/migrations/autodetector.py",
+      "bytes": 86243,
+      "sha256": "8de28785b7691d9e2d18e7480fd44b1657f62c28b3ec5c110bc24bbcef85f61e"
+    },
+    {
+      "path": "django/db/migrations/exceptions.py",
+      "bytes": 1204,
+      "sha256": "4a8b5017b64a809a5df4a37e80a0cbf3008900a48481b653a0cfefb54027a87c"
+    },
+    {
+      "path": "django/db/migrations/executor.py",
+      "bytes": 19038,
+      "sha256": "8f1f49e56752d17e3c52ac4791629dd8960153176ce3a1a7d37659340a3ca531"
+    },
+    {
+      "path": "django/db/migrations/graph.py",
+      "bytes": 13055,
+      "sha256": "bedecf738e4bba25d1f1a442ad73f95269ba5430824ecd8b02be4d5e1fabc5c1"
+    },
+    {
+      "path": "django/db/migrations/loader.py",
+      "bytes": 16877,
+      "sha256": "7157898bb3f00dcd8dc73820dcafc2ae12bd1f61c0b5a5dbd6d1b53f20dc4840"
+    },
+    {
+      "path": "django/db/migrations/migration.py",
+      "bytes": 9767,
+      "sha256": "8ad64048619ea4960263652fe4098baf13a08c41f5b727065746efdc4b518d01"
+    },
+    {
+      "path": "django/db/migrations/operations/__init__.py",
+      "bytes": 1008,
+      "sha256": "65a001092ec0e3ca3dd1b0e3aad4edddc799170c699a7c76a755b941ffe3b0a3"
+    },
+    {
+      "path": "django/db/migrations/operations/base.py",
+      "bytes": 5562,
+      "sha256": "20f0705a4fbc8f8e08670e85bd70bd4555ea79c6c5d0e84af91fcb318c2135de"
+    },
+    {
+      "path": "django/db/migrations/operations/fields.py",
+      "bytes": 12900,
+      "sha256": "3801a94f4ca8b982cbecb7317293be3797e1cc6971d2bff02b5662b4ceea9801"
+    },
+    {
+      "path": "django/db/migrations/operations/models.py",
+      "bytes": 47864,
+      "sha256": "43d242237b481e32d09c631ee69835652301c267373c848e23e3324ed576d085"
+    },
+    {
+      "path": "django/db/migrations/operations/special.py",
+      "bytes": 7966,
+      "sha256": "08c2dfa91e2b3bc0210cc36c70e5e36e52aebcd037bd617383ee8cffbc599d7e"
+    },
+    {
+      "path": "django/db/migrations/optimizer.py",
+      "bytes": 3255,
+      "sha256": "734259e451a5b43fe09a1db47b9491e80db5abf0deeab50a7e40092b0997e0ab"
+    },
+    {
+      "path": "django/db/migrations/questioner.py",
+      "bytes": 13568,
+      "sha256": "06c410c810c9228333cdaedde2377132c65e574a786b6d8fe4c942d22e5ede63"
+    },
+    {
+      "path": "django/db/migrations/recorder.py",
+      "bytes": 3827,
+      "sha256": "1ef880dc3c9d24faa913c828c2fd6502721d2cc4d2469457b8b167e77afe4356"
+    },
+    {
+      "path": "django/db/migrations/serializer.py",
+      "bytes": 14133,
+      "sha256": "a0fce731084d7b363351bf91d54efd888029e03b59a1c16f8cafbe07405bcafe"
+    },
+    {
+      "path": "django/db/migrations/state.py",
+      "bytes": 41924,
+      "sha256": "1d466a2f953ae1daa4c1f5590435ddd2fe959fc9a46bdd8131d2e4091001ec98"
+    },
+    {
+      "path": "django/db/migrations/utils.py",
+      "bytes": 4401,
+      "sha256": "a5daf3ba6183860cad73929559d668bfb710b41b778d10122ea6e60714914af8"
+    },
+    {
+      "path": "django/db/migrations/writer.py",
+      "bytes": 11613,
+      "sha256": "39645482d4eb04b9dd21478dc4bdfeea02393913dd2161bf272f4896e8b3b343"
+    },
+    {
+      "path": "django/db/models/__init__.py",
+      "bytes": 3084,
+      "sha256": "547566745e5b9179738e462082a0fb5f5b9a553709918140c1a33363b6d637cc"
+    },
+    {
+      "path": "django/db/models/aggregates.py",
+      "bytes": 8185,
+      "sha256": "a9a6e7c44cb7e16a295f82589bc3c720c145cf4ad16ef3b4e8e550c436357924"
+    },
+    {
+      "path": "django/db/models/base.py",
+      "bytes": 100964,
+      "sha256": "ce0ede738855ed6477e5dd5b5d4e1d1a083271d51df7c18d8c497480f350dcfd"
+    },
+    {
+      "path": "django/db/models/constants.py",
+      "bytes": 210,
+      "sha256": "9dd9e3f53393296d29e187083cb38b11bb07ea63a0162e81d7eac8cebfe2c305"
+    },
+    {
+      "path": "django/db/models/constraints.py",
+      "bytes": 29733,
+      "sha256": "32f5bfb2c1701be5641effd63886565f15ea03275dc6de8a44fb889db6456cf9"
+    },
+    {
+      "path": "django/db/models/deletion.py",
+      "bytes": 20943,
+      "sha256": "45cb0be274507192d8220f0032337ab9716e45256db303042586b7c11918b983"
+    },
+    {
+      "path": "django/db/models/enums.py",
+      "bytes": 3527,
+      "sha256": "9a00415fb6c5cee3d88243d1f61bf2e0564eb5b644e607db8475acbeb22138d4"
+    },
+    {
+      "path": "django/db/models/expressions.py",
+      "bytes": 75011,
+      "sha256": "5b8ae281a52ecaec49b98817786d5ebdccfb768d22eb7acd7575276d50f5f12f"
+    },
+    {
+      "path": "django/db/models/fields/__init__.py",
+      "bytes": 98730,
+      "sha256": "28b0dae4acf4fc0217d10048e8c387f504678e77217e62ee88135c7f13ce329c"
+    },
+    {
+      "path": "django/db/models/fields/composite.py",
+      "bytes": 5731,
+      "sha256": "49f0aa1e533d545e6df2e42f7302ddf320d3ddc46e42cdde9c06baba12abd712"
+    },
+    {
+      "path": "django/db/models/fields/files.py",
+      "bytes": 20206,
+      "sha256": "9cb891898f5b71513013cb3927acb1a361ea3771eb7831cf0cd1df696dea2ebb"
+    },
+    {
+      "path": "django/db/models/fields/generated.py",
+      "bytes": 7655,
+      "sha256": "8730815294b57efa2298423f0fb5ada0b93a02bc86c344d177293e5246010c91"
+    },
+    {
+      "path": "django/db/models/fields/json.py",
+      "bytes": 23893,
+      "sha256": "be034e9713ab4da98a95efe2ae295ff0e8f57863000c30ed4faadd6ade658c63"
+    },
+    {
+      "path": "django/db/models/fields/mixins.py",
+      "bytes": 2478,
+      "sha256": "f07add288ab4786f6f56cb49c242beda0db0770caf7045560733f74b48737966"
+    },
+    {
+      "path": "django/db/models/fields/proxy.py",
+      "bytes": 515,
+      "sha256": "7851f29788114eaa1c8e077a9c80fd52542e388a69040e7b55cafbd5445e4c0b"
+    },
+    {
+      "path": "django/db/models/fields/related.py",
+      "bytes": 79371,
+      "sha256": "138f00b2d8781aa3086d529116bf86c0115d69490fec3addfcfa3a05a61d4daf"
+    },
+    {
+      "path": "django/db/models/fields/related_descriptors.py",
+      "bytes": 66722,
+      "sha256": "471c30c89c69222663cc4039d0fd9247429c4ebf410152c167787ffe9a6306a1"
+    },
+    {
+      "path": "django/db/models/fields/related_lookups.py",
+      "bytes": 6076,
+      "sha256": "6dcc0b1f4b5f966731db5ebcbde60e503559df5bbbf9416d113506f7505d75e1"
+    },
+    {
+      "path": "django/db/models/fields/reverse_related.py",
+      "bytes": 12908,
+      "sha256": "100897dbac550ab4dc1a3fce8c10bf7bab23117138f85c95c671121023bc8ef7"
+    },
+    {
+      "path": "django/db/models/fields/tuple_lookups.py",
+      "bytes": 14349,
+      "sha256": "8ab7a1356991669f20c94b1da68eb7824dbcfe9409b5e71feafd39902e8b2bcc"
+    },
+    {
+      "path": "django/db/models/functions/__init__.py",
+      "bytes": 2714,
+      "sha256": "8f3dc3ba4c2221cce9249a5a8e6c0b4c825d8be0d07c7c5828b321d03d3c5f78"
+    },
+    {
+      "path": "django/db/models/functions/comparison.py",
+      "bytes": 6810,
+      "sha256": "6a6a4d91a02d9ba531da2114f6c4f7c2e99b741dfd47a01af5334813c1767f14"
+    },
+    {
+      "path": "django/db/models/functions/datetime.py",
+      "bytes": 13614,
+      "sha256": "2310e3d17d48524cdb2056f20e68d06743cbede20edab327d64538ec99529751"
+    },
+    {
+      "path": "django/db/models/functions/json.py",
+      "bytes": 4668,
+      "sha256": "44f46f32a09c5c332d2282bbaf0da61db76ae00cb7679b174734288fe938f752"
+    },
+    {
+      "path": "django/db/models/functions/math.py",
+      "bytes": 6140,
+      "sha256": "36e8027da0bc63f561a44afad8731e0d7dcef77e0d9ee04fb24de68b923f0e61"
+    },
+    {
+      "path": "django/db/models/functions/mixins.py",
+      "bytes": 2382,
+      "sha256": "52aa47632177dc948459876081ecd3b5692b3243ca1447d6e9e9c892e8f381a4"
+    },
+    {
+      "path": "django/db/models/functions/text.py",
+      "bytes": 11528,
+      "sha256": "6819e5fb9fa5deac3cc1aee114839c1c2a1438b1ad964e921456383d864632d5"
+    },
+    {
+      "path": "django/db/models/functions/window.py",
+      "bytes": 2841,
+      "sha256": "8387ebc9acb5b4b402a5945f98f421ad38ae89be11bcfaadc057687652db8bdf"
+    },
+    {
+      "path": "django/db/models/indexes.py",
+      "bytes": 11935,
+      "sha256": "1d8083d3a22cefe7f46881a45dd58d7845f37c1a1263a1023428956def2d9709"
+    },
+    {
+      "path": "django/db/models/lookups.py",
+      "bytes": 29048,
+      "sha256": "b5e7e1751fc7aef605dc83e75d5c5428ba6b40bc17cd73da4ebbddc4890ad54e"
+    },
+    {
+      "path": "django/db/models/manager.py",
+      "bytes": 6866,
+      "sha256": "9fdee9e2ad2db70988d57705f5d025f0f7e0e59b3c8ae76e7e159e6d0ed76aed"
+    },
+    {
+      "path": "django/db/models/options.py",
+      "bytes": 39469,
+      "sha256": "c50159a9c91da3d48776873ce9c62f5be9d648042a8f21837927ab07154d7a59"
+    },
+    {
+      "path": "django/db/models/query.py",
+      "bytes": 107026,
+      "sha256": "c9b07861fa6805428906c9bea32ffe8b48c376ed08b9eca47328e38f4df12efb"
+    },
+    {
+      "path": "django/db/models/query_utils.py",
+      "bytes": 19700,
+      "sha256": "ece85687e4a3f2495a9916f367d49745180b084e183d1756285ab6010d6c5b67"
+    },
+    {
+      "path": "django/db/models/signals.py",
+      "bytes": 1622,
+      "sha256": "986ea1c555ae82bfe6d2e8135365c010c8aa96ed85278081b866b7e1d2c9bc44"
+    },
+    {
+      "path": "django/db/models/sql/__init__.py",
+      "bytes": 241,
+      "sha256": "0466751929f4ddd4ce3bc3d8c7abc5d7e22613783591e66c43be001c9a10c264"
+    },
+    {
+      "path": "django/db/models/sql/compiler.py",
+      "bytes": 92436,
+      "sha256": "c31d5715429dd8eebda377c7ed8434fd33accb565c1c14443469169c79282705"
+    },
+    {
+      "path": "django/db/models/sql/constants.py",
+      "bytes": 599,
+      "sha256": "c5764a2dde7d39df80de12375fa88398806ad51cb447d0a4b5af932c563718d8"
+    },
+    {
+      "path": "django/db/models/sql/datastructures.py",
+      "bytes": 8271,
+      "sha256": "b43715756a95660a7370c804541541372476d7e502a15d9b77aa3402481e506b"
+    },
+    {
+      "path": "django/db/models/sql/query.py",
+      "bytes": 120134,
+      "sha256": "d47e25029eb71eadd6c108ab199dfff16f46c6a1512d81ea0c5b842cecfafa61"
+    },
+    {
+      "path": "django/db/models/sql/subqueries.py",
+      "bytes": 6150,
+      "sha256": "abb3453a7b0452d139756e48903f7e2314b9a9f41fd9d2f75e607ed5f40eaa10"
+    },
+    {
+      "path": "django/db/models/sql/where.py",
+      "bytes": 12317,
+      "sha256": "407704557a53a1a40170dd40d605ab2a5f71b580402c85e17b2c5e2343b688b8"
+    },
+    {
+      "path": "django/db/models/utils.py",
+      "bytes": 2182,
+      "sha256": "bf3a232f4b94407b8e9b62b14c9d7d0c71a7435a415db9d6693973474bd58a62"
+    },
+    {
+      "path": "django/db/transaction.py",
+      "bytes": 12506,
+      "sha256": "c217206480449d535a3ebc5dc5ebe18ecdcad7a29637ac8902721734ff3eb8bc"
+    },
+    {
+      "path": "django/db/utils.py",
+      "bytes": 9279,
+      "sha256": "44ab524b254998ce7ffd202cd696349e35fa84b551cb5588060818a35ccfe112"
+    },
+    {
+      "path": "django/dispatch/__init__.py",
+      "bytes": 286,
+      "sha256": "a8fdb4df33708daa255059d72cd6479ee067ec7373cb0f7f26438310244a65b7"
+    },
+    {
+      "path": "django/dispatch/dispatcher.py",
+      "bytes": 17777,
+      "sha256": "387681fbf925d46795c0a87f6c831b1cd1661f6c95378a9f490cf66805577cc1"
+    },
+    {
+      "path": "django/forms/__init__.py",
+      "bytes": 368,
+      "sha256": "4ba72438c9af517faf5524fa002f8cf01cec7d5430b8450074759a6cc37e3862"
+    },
+    {
+      "path": "django/forms/boundfield.py",
+      "bytes": 13271,
+      "sha256": "2b6f1bbbf1acf0bb18c5565599075fb6e00c13e66a930ff2008b0aad798b478f"
+    },
+    {
+      "path": "django/forms/fields.py",
+      "bytes": 49568,
+      "sha256": "50fca9aaeed0bded2e1b10ef97e821a3929afa3868df50440673794941145c24"
+    },
+    {
+      "path": "django/forms/forms.py",
+      "bytes": 16132,
+      "sha256": "d98d8d85bc18d9c422cfccd2c5d7e33b924efe3655a3c627f47d8e3188ac497a"
+    },
+    {
+      "path": "django/forms/formsets.py",
+      "bytes": 21338,
+      "sha256": "5f8a2d1425e8420204208d9b4e7a6bac4bb87070be6e943db75f0fb61f29f4c3"
+    },
+    {
+      "path": "django/forms/models.py",
+      "bytes": 61213,
+      "sha256": "893c3e72caa552439b038eb9219d6391df1c522eb519b6f4269dd9e54a888620"
+    },
+    {
+      "path": "django/forms/renderers.py",
+      "bytes": 3285,
+      "sha256": "72bdfbe9148d86a90e2658495346c93948db50388b43eeb215d71e8f1bd163bc"
+    },
+    {
+      "path": "django/forms/utils.py",
+      "bytes": 7974,
+      "sha256": "7e91be001cab35eac0aa40d3e9a955f37ccf0ecde0b3ce0b1435bad5bf72b341"
+    },
+    {
+      "path": "django/forms/widgets.py",
+      "bytes": 41244,
+      "sha256": "04e31b19837cfd59815a83a49ecf4e6aee0edb259ecabdfc3fc6a63708ac2ecf"
+    },
+    {
+      "path": "django/http/__init__.py",
+      "bytes": 1200,
+      "sha256": "b95533d28bfe7a6736f616c3efc40a2a46bf4752f89a90c33e19327e4c788f34"
+    },
+    {
+      "path": "django/http/cookie.py",
+      "bytes": 679,
+      "sha256": "b7bc863911829549c2615290ab22c194462cc502cb1e7f5caec3125aa2bf1227"
+    },
+    {
+      "path": "django/http/multipartparser.py",
+      "bytes": 27998,
+      "sha256": "f6325bf82024e33973d4a3be56f9ed80e20888a58d92126bcd2d2a2490e47bbe"
+    },
+    {
+      "path": "django/http/request.py",
+      "bytes": 30193,
+      "sha256": "bbdd7e5bdb6e38932f4559fb53aff24239d7b1d2520444df8ceb1c6e579f788a"
+    },
+    {
+      "path": "django/http/response.py",
+      "bytes": 26282,
+      "sha256": "e3cf67a8060fc67048ba4df8b45ea98cab4f3fe6302335c8e23a9156103687bf"
+    },
+    {
+      "path": "django/middleware/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/middleware/cache.py",
+      "bytes": 9405,
+      "sha256": "aa81aabfd12c5afca0722954cfcb160ab068661b43ee3d95a735cf9b607683b1"
+    },
+    {
+      "path": "django/middleware/clickjacking.py",
+      "bytes": 1724,
+      "sha256": "ac89b65656db94b5ab31345827524122e8b9c6c84033eda6a7225ff7cf713a06"
+    },
+    {
+      "path": "django/middleware/common.py",
+      "bytes": 7666,
+      "sha256": "f632565732d92138c4c39b56c96fc38c483b82d933518c309093d61e47a96887"
+    },
+    {
+      "path": "django/middleware/csrf.py",
+      "bytes": 19489,
+      "sha256": "2b3d6c8c4ea069dddd2d788acf6f69ece433bae4e58665cdf92b93e85f150963"
+    },
+    {
+      "path": "django/middleware/gzip.py",
+      "bytes": 2945,
+      "sha256": "8ec25e62fd3e038883ebed4f7771de865d99b6c86913859e0537a2fb83f07220"
+    },
+    {
+      "path": "django/middleware/http.py",
+      "bytes": 1616,
+      "sha256": "46a5cdf4aa7a18487c8ffb9bed85d18ba5b6fc22994d913200fa4553378d3c1b"
+    },
+    {
+      "path": "django/middleware/locale.py",
+      "bytes": 3442,
+      "sha256": "095f1a7ab4945a63ba70943a22b0f90734f76253b160d22a16b682aabf03a18e"
+    },
+    {
+      "path": "django/middleware/security.py",
+      "bytes": 2599,
+      "sha256": "caa6b0825a8d70fac84c852f4214a99f7043f3df48b787e1c8ec890932269571"
+    },
+    {
+      "path": "django/shortcuts.py",
+      "bytes": 6506,
+      "sha256": "3bd52bad99978d57ddcc2dc35d6e9d0f26705c4e181b8051a5fb4313c0f5405d"
+    },
+    {
+      "path": "django/template/__init__.py",
+      "bytes": 1844,
+      "sha256": "ec7662b7a8ce6f9dcbca30c57e5e562446f31b88193f069e3cf836b99ffe68d5"
+    },
+    {
+      "path": "django/template/autoreload.py",
+      "bytes": 2063,
+      "sha256": "8416a7610343344760a6dcbcf48da63ff6f10fe33269e5d6466817dcae9af198"
+    },
+    {
+      "path": "django/template/backends/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/template/backends/base.py",
+      "bytes": 2801,
+      "sha256": "22788e5b3c1f24786b8346b33b9e5f859dddd5c821363becae068c915ee8eb1e"
+    },
+    {
+      "path": "django/template/backends/django.py",
+      "bytes": 5963,
+      "sha256": "c1b394853550cb3d87beb4d51b51895249c33c9b6e0450ee5db9b5e717fb8cee"
+    },
+    {
+      "path": "django/template/backends/dummy.py",
+      "bytes": 1751,
+      "sha256": "33adacb46fe49dfec0755a78d9959675d90dbfa83a724fec7359d147a49cff10"
+    },
+    {
+      "path": "django/template/backends/jinja2.py",
+      "bytes": 4036,
+      "sha256": "53d581ce7a04953f9111b2131bb0e766047b480fc0c1fd60592f6f734cab11fb"
+    },
+    {
+      "path": "django/template/backends/utils.py",
+      "bytes": 424,
+      "sha256": "cf95ff97129af6a2f82850d579a8be166b1ec14dca2e05473bccbe8072e256db"
+    },
+    {
+      "path": "django/template/base.py",
+      "bytes": 41108,
+      "sha256": "e14973ad3cb76484a1106438ca4bc5f166b313433987e0c5759f671c32e87444"
+    },
+    {
+      "path": "django/template/context.py",
+      "bytes": 9448,
+      "sha256": "ec59c5dbac03c978dc5d40dd169066f94145b22362c1ae61a1de2711a2ecb63f"
+    },
+    {
+      "path": "django/template/context_processors.py",
+      "bytes": 2480,
+      "sha256": "3cc22e1941358a58dfe4bf285e080876fbc53a108b269012770777f4131d8c11"
+    },
+    {
+      "path": "django/template/defaultfilters.py",
+      "bytes": 28438,
+      "sha256": "07169341c50e984e02ffe14b842424013412d12d33ee319f49aa2e18f9774f90"
+    },
+    {
+      "path": "django/template/defaulttags.py",
+      "bytes": 49669,
+      "sha256": "115e2326b49c8c3c330493769c98412cc627e5b236b418f95e9594e7cc1dba69"
+    },
+    {
+      "path": "django/template/engine.py",
+      "bytes": 7773,
+      "sha256": "8299361d4c457f1561c39a27ae25b5b8754079ce898551ea31c39b344497c0ee"
+    },
+    {
+      "path": "django/template/exceptions.py",
+      "bytes": 1342,
+      "sha256": "aea1b7fea66adf5b541db9ad643f8c22ed12b4286ac1a15e8c5169478bbbb61e"
+    },
+    {
+      "path": "django/template/library.py",
+      "bytes": 16951,
+      "sha256": "5b8b94f0f30231656494aec48665c1e74c0aa78791c9106ff1fa3333797d68f2"
+    },
+    {
+      "path": "django/template/loader.py",
+      "bytes": 2054,
+      "sha256": "3d515452d0b95a08915554e296143a345667be3972eac3fdb3b6a716632829da"
+    },
+    {
+      "path": "django/template/loader_tags.py",
+      "bytes": 13234,
+      "sha256": "effd4b4dea101c6c2cacc2f4c21c14ba0ea0e9b4778a3866c223111fb5ecd024"
+    },
+    {
+      "path": "django/template/loaders/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/template/loaders/app_directories.py",
+      "bytes": 312,
+      "sha256": "b10a555ca6299caafd465d584ad35c6be6c62101dc3a44a79a6d65daa4461551"
+    },
+    {
+      "path": "django/template/loaders/base.py",
+      "bytes": 1636,
+      "sha256": "639578834972f46b8d7bb050c5a2523043499efc735c99bb5e1493c737c5334b"
+    },
+    {
+      "path": "django/template/loaders/cached.py",
+      "bytes": 3716,
+      "sha256": "6c3c245983e06efa6b53fbbd7fdc3da0d629496fe3f5beeca3f9a52b3a7df8de"
+    },
+    {
+      "path": "django/template/loaders/filesystem.py",
+      "bytes": 1506,
+      "sha256": "7f8b22943ed65a1bf72bd43248c816edd94618dc3060070708c493169c228976"
+    },
+    {
+      "path": "django/template/loaders/locmem.py",
+      "bytes": 672,
+      "sha256": "b7da741981765477f85c6e86820a7428198791d22e48ab8b7625573156f6887b"
+    },
+    {
+      "path": "django/template/response.py",
+      "bytes": 5584,
+      "sha256": "50053e68cee69fa71b18e209baeae7e0413921375c02a48580a0f9457166b38c"
+    },
+    {
+      "path": "django/template/smartif.py",
+      "bytes": 6410,
+      "sha256": "4cb6ef4996bf33807cd0cd97d74f052b64c58c7a00f111bd6dfc41d0f2ca35c9"
+    },
+    {
+      "path": "django/template/utils.py",
+      "bytes": 3571,
+      "sha256": "f42a77015996834c6f56fb0bd87018c382c33f59c979addf4d679aa235fb8298"
+    },
+    {
+      "path": "django/templatetags/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/templatetags/cache.py",
+      "bytes": 3551,
+      "sha256": "59a62f5949f9653111c23a2ebe49be7392f92d12dcf86a525a5d7dc05a1dfdb9"
+    },
+    {
+      "path": "django/templatetags/i18n.py",
+      "bytes": 19961,
+      "sha256": "52b4be684dd70842bfa17d7c9261fc812800d743061cc78c4cb3801120edb9f2"
+    },
+    {
+      "path": "django/templatetags/l10n.py",
+      "bytes": 1563,
+      "sha256": "181e7fbb7ca602dcf152d018f102dbfe9719af389ef59c4471afb536e2885c16"
+    },
+    {
+      "path": "django/templatetags/static.py",
+      "bytes": 4730,
+      "sha256": "5b846ab770cdfd8b577ba128a8ef862f2ed647bc5def3d09b285fe553d2fbe37"
+    },
+    {
+      "path": "django/templatetags/tz.py",
+      "bytes": 5357,
+      "sha256": "d2e4b011cab2c2c9f516b74eb722234ac482084ab35b408355e6cffadcc80626"
+    },
+    {
+      "path": "django/test/__init__.py",
+      "bytes": 834,
+      "sha256": "5f5d82f7c94a379256d7ec26b3b07a39a313a3e2e2f74c1a4298df244d55dc01"
+    },
+    {
+      "path": "django/test/client.py",
+      "bytes": 56033,
+      "sha256": "822196b11aec0ad9e53c70f90295483b4cc2fd5b2e60c2d3c9af3fdf42aa9d2c"
+    },
+    {
+      "path": "django/test/html.py",
+      "bytes": 8869,
+      "sha256": "5bdec1f2401e798deda96aedb5f7d6908d1b2be8febe7ebd97eefd582b0cbbd0"
+    },
+    {
+      "path": "django/test/runner.py",
+      "bytes": 42812,
+      "sha256": "2dee78de4fe6cb6e801784bcbddbda6e3c1436adac3b3fc3ad0cbb860c7bd651"
+    },
+    {
+      "path": "django/test/selenium.py",
+      "bytes": 9685,
+      "sha256": "0ed43147f32a82521f911e5d3105de3620b797fbe683196546e1c1cff2ca64d6"
+    },
+    {
+      "path": "django/test/signals.py",
+      "bytes": 7376,
+      "sha256": "72af9fb8ff0e45a458036f80420582c7461ea2cd647597830e166f1c4cf18f2f"
+    },
+    {
+      "path": "django/test/testcases.py",
+      "bytes": 68586,
+      "sha256": "e59aa3d56b2b39a38e7c4ac9e8ce01ae535ab18ce375a216fedcb3ea2d4e37e0"
+    },
+    {
+      "path": "django/test/utils.py",
+      "bytes": 32702,
+      "sha256": "7d09ab12e232166f3b5aeb4981e1115e88d9b53c9235550b82d44a0404560981"
+    },
+    {
+      "path": "django/urls/__init__.py",
+      "bytes": 1079,
+      "sha256": "047c8120e0f7138ff7360dbb4a95e7466a8edc8cd4aaf04b084e134dfb38c0db"
+    },
+    {
+      "path": "django/urls/base.py",
+      "bytes": 6191,
+      "sha256": "671d154a8564abe6f0882ee2ccb1187f8df267ab83f5fb3813a5262441eecaf4"
+    },
+    {
+      "path": "django/urls/conf.py",
+      "bytes": 3426,
+      "sha256": "4c5642742d46f0a7ed0ee07f23bb260bb507d5018a926e68d6e34020a3f607b3"
+    },
+    {
+      "path": "django/urls/converters.py",
+      "bytes": 1782,
+      "sha256": "393b2a980dee0ab998ed787de0751a3a318206db4d20a28e2517cf6019b9b703"
+    },
+    {
+      "path": "django/urls/exceptions.py",
+      "bytes": 115,
+      "sha256": "6a52cd8e4391b40c67782d34838aa74691b9c28b8e1ef26f19bca67692ad1bf2"
+    },
+    {
+      "path": "django/urls/resolvers.py",
+      "bytes": 31518,
+      "sha256": "e69ed254d56187d166b8591ee48aae1ca3cede3480dbd37f7a25f3b0ca62db11"
+    },
+    {
+      "path": "django/urls/utils.py",
+      "bytes": 2179,
+      "sha256": "77529273a25547ee59f1ac60ff20e060ab64a8e6dd6c9c1636485c07cc78e11b"
+    },
+    {
+      "path": "django/utils/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/utils/_os.py",
+      "bytes": 4843,
+      "sha256": "d09605fd87e31e55e645f16f2b8b5ea4ca1e316777e90a1924814bd28acb7a52"
+    },
+    {
+      "path": "django/utils/archive.py",
+      "bytes": 8302,
+      "sha256": "9f37277d682cf06369041e60fb6fda5a85dfcf118d9176489087a3d40293f015"
+    },
+    {
+      "path": "django/utils/asyncio.py",
+      "bytes": 1138,
+      "sha256": "d2094e8377869a6b3e814bf4e19803bd9b75f4865b74f042eb83e768aa9e1837"
+    },
+    {
+      "path": "django/utils/autoreload.py",
+      "bytes": 24429,
+      "sha256": "4b819fb9de31974a56e8677ed04ecb6b9a63142edc5aacbc874c3013e5b9e906"
+    },
+    {
+      "path": "django/utils/cache.py",
+      "bytes": 16599,
+      "sha256": "cf8ce4714db8d81e8746a51c57058795d163f994688120af34afeb7a696b055c"
+    },
+    {
+      "path": "django/utils/choices.py",
+      "bytes": 4202,
+      "sha256": "3a05dbfd0a848f37ff383804cd9aa42f9c8624b1d542dc21f450143ef2a85164"
+    },
+    {
+      "path": "django/utils/connection.py",
+      "bytes": 2554,
+      "sha256": "da4a80e8cfc439b6d983a40a317857ea9e185c6f5188f4d41f0c0dde6ba68436"
+    },
+    {
+      "path": "django/utils/crypto.py",
+      "bytes": 2662,
+      "sha256": "f752840c230a021de428033152fd9e41028c123f8481b316444da5563980ce06"
+    },
+    {
+      "path": "django/utils/datastructures.py",
+      "bytes": 10267,
+      "sha256": "984b76fa4837cce436e1f5bb96dc590c569ab596724d27893fd5801963a0e943"
+    },
+    {
+      "path": "django/utils/dateformat.py",
+      "bytes": 10118,
+      "sha256": "16f2113d67159524d07d59cf0113db57506d435397dd9de2e3d222cb1f49b832"
+    },
+    {
+      "path": "django/utils/dateparse.py",
+      "bytes": 5356,
+      "sha256": "a164d66c96b1e0d3f5b98eed0863d2827c809281b19d77f5b27121fa47c29224"
+    },
+    {
+      "path": "django/utils/dates.py",
+      "bytes": 2179,
+      "sha256": "cc750778e931ba8e77ad3bc71b775630b45f5727da30b048b79c6603813f21db"
+    },
+    {
+      "path": "django/utils/deconstruct.py",
+      "bytes": 2126,
+      "sha256": "47792cf0bf8289ff7eab2370cbed91e8a59ff5499c1834a23065fe37a09b2ce0"
+    },
+    {
+      "path": "django/utils/decorators.py",
+      "bytes": 8328,
+      "sha256": "37369e6349babbe1d75f04646c6bdd5f422267cc0d0d857c7c347cc38d91a1e7"
+    },
+    {
+      "path": "django/utils/deprecation.py",
+      "bytes": 4876,
+      "sha256": "68d2ce963c5b3310c7596afa4b2d6e976555f74173ba073a7ba6191b0d057c4a"
+    },
+    {
+      "path": "django/utils/duration.py",
+      "bytes": 1230,
+      "sha256": "1cae44dfa17518674f7210aa1ec9a5a1886b1d7fc1cb2213bce1f2bb1b449521"
+    },
+    {
+      "path": "django/utils/encoding.py",
+      "bytes": 8793,
+      "sha256": "0cb8dc023bc1c6bcf926be5df13d979c451c72c7915474d35ce9becdff85543e"
+    },
+    {
+      "path": "django/utils/feedgenerator.py",
+      "bytes": 18064,
+      "sha256": "bb02704aec1ffd761378dbfa5f448688fda04fb78594cad680f4da00a8d8bcfc"
+    },
+    {
+      "path": "django/utils/formats.py",
+      "bytes": 10255,
+      "sha256": "1663d48f775f2f68021f68a3716b5c7ac60a6ec8b6f846c718b1b21ef18e240d"
+    },
+    {
+      "path": "django/utils/functional.py",
+      "bytes": 14541,
+      "sha256": "5111599284cd2663a59bf6b2f7cef6fbf944815d5ec2e9d94bd18a489460f9ef"
+    },
+    {
+      "path": "django/utils/hashable.py",
+      "bytes": 738,
+      "sha256": "1f370baf860f64696cfd32edd1a42b6bb7021dc169fa1a5310e70e27f0d3423d"
+    },
+    {
+      "path": "django/utils/html.py",
+      "bytes": 17544,
+      "sha256": "28c0474e3e28d3fa7c416b3fac49a6b751ce9e001f0547dcebafda8c0fad4704"
+    },
+    {
+      "path": "django/utils/http.py",
+      "bytes": 13579,
+      "sha256": "e401aea23c751a3f660a9f7e9be40633c63dac79596ede501ac71255871be0b1"
+    },
+    {
+      "path": "django/utils/inspect.py",
+      "bytes": 3725,
+      "sha256": "975acdc07a8c4c6d15607ee25352e80467eeb3249a5f0f98626d84f646be2e5c"
+    },
+    {
+      "path": "django/utils/ipv6.py",
+      "bytes": 1823,
+      "sha256": "54dde176b9462a8e9340b4dae8abe0cf6ecacd391d60c381266b9cf104d76e95"
+    },
+    {
+      "path": "django/utils/itercompat.py",
+      "bytes": 532,
+      "sha256": "99798eefb49ddcfff454dea8c78900a2b676be8d828ca462141b836c8aaed68b"
+    },
+    {
+      "path": "django/utils/log.py",
+      "bytes": 8329,
+      "sha256": "a72e44a57d45560049dfb6e749240a289134cfccd6e08c3c157a81b8fc4226d6"
+    },
+    {
+      "path": "django/utils/lorem_ipsum.py",
+      "bytes": 5473,
+      "sha256": "c94b4180a86c85fb48a4f834e2973522b2e9381c9d6487fb8348ac14220966a9"
+    },
+    {
+      "path": "django/utils/module_loading.py",
+      "bytes": 3820,
+      "sha256": "f9aeea39be6ba69f8bc3fe75bf220f49d6fb478d01d7a12bd597350bf6ba89b6"
+    },
+    {
+      "path": "django/utils/numberformat.py",
+      "bytes": 3781,
+      "sha256": "f0ba923267f168dd0f6124d3112e944ff0137ab7c36109fb61ae0d23bd2031a5"
+    },
+    {
+      "path": "django/utils/regex_helper.py",
+      "bytes": 12772,
+      "sha256": "16c1909078c33499989c20cf4f67f76f4ee1769e1144d4cc07f2a04917bef21b"
+    },
+    {
+      "path": "django/utils/safestring.py",
+      "bytes": 2178,
+      "sha256": "a5fae9177b8978059c17ed276883d1afa4230e899407cc9ce24d6048dfb31110"
+    },
+    {
+      "path": "django/utils/termcolors.py",
+      "bytes": 7386,
+      "sha256": "bef41b507ec6b05a1f1914a2290c31e18be0138c9932d006455cfd40f0df8ac0"
+    },
+    {
+      "path": "django/utils/text.py",
+      "bytes": 14547,
+      "sha256": "4667d811a382587cb898dfc3497c302132cf4ecf303c04dcfec34e3eaa9b8c78"
+    },
+    {
+      "path": "django/utils/timesince.py",
+      "bytes": 4914,
+      "sha256": "8fd07fc129ec752dd95e7f69b7d18898e243a603bad5832bfe3b67529643c748"
+    },
+    {
+      "path": "django/utils/timezone.py",
+      "bytes": 7295,
+      "sha256": "5a0e1e22110702c38c10a9737d24bf6983dffa1ef40d8a8eaa79910c6d536db1"
+    },
+    {
+      "path": "django/utils/translation/__init__.py",
+      "bytes": 8878,
+      "sha256": "233b8c6475d8d39f53e2139cb2a4230e648e4f68ad1106fc381b0d8bcf1a5110"
+    },
+    {
+      "path": "django/utils/translation/reloader.py",
+      "bytes": 1114,
+      "sha256": "a15334c5e9e7ddfada52898c105b9cbf095baf95066148a35a7527e852f9e597"
+    },
+    {
+      "path": "django/utils/translation/template.py",
+      "bytes": 10549,
+      "sha256": "4ce7cf353eb646751b506eb86bfe9dfd543bb6c0c2d7f1754c2a29c3f1f095c0"
+    },
+    {
+      "path": "django/utils/translation/trans_null.py",
+      "bytes": 1287,
+      "sha256": "9e2cbf8359f3b52d9b3ec20da8aeff8341dca48ff0ea12fe73cfe1aa90bb53bb"
+    },
+    {
+      "path": "django/utils/translation/trans_real.py",
+      "bytes": 22684,
+      "sha256": "4a8ed14bf3c282791b6ddff3ba627c430bf92b844ab2f1a262e297c4f48a3fcd"
+    },
+    {
+      "path": "django/utils/tree.py",
+      "bytes": 4394,
+      "sha256": "bfcb0d52c9ec1b62e88bdc412089341a6579c8ded558e193cdb9a4f01384b3a1"
+    },
+    {
+      "path": "django/utils/version.py",
+      "bytes": 3737,
+      "sha256": "609e3527e060818bc424da534bca54e71eeeb5dfb7dbb6008eeb1f75391332b2"
+    },
+    {
+      "path": "django/utils/xmlutils.py",
+      "bytes": 1172,
+      "sha256": "2ec820788e2f8659f7027fd85cd064d9c0b028b42031ef8eff72fefa3de8dc63"
+    },
+    {
+      "path": "django/views/__init__.py",
+      "bytes": 63,
+      "sha256": "188aba08a50109b1a9415c8ae312286805033eb991bdb04f497fca48793405be"
+    },
+    {
+      "path": "django/views/csrf.py",
+      "bytes": 3425,
+      "sha256": "3f064f7d80fecc8d122f5f5eb65c007290f82ce329f0596ed6a3c680796bb018"
+    },
+    {
+      "path": "django/views/debug.py",
+      "bytes": 25670,
+      "sha256": "e28325a6d52241da75a0c782dda418eb3fbaaff17dd62b8483560aad952c2dcf"
+    },
+    {
+      "path": "django/views/decorators/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "django/views/decorators/cache.py",
+      "bytes": 2821,
+      "sha256": "e1c584596f3ca8fbf9ed2b7d5b09afd1a2b4bd5c43fbb69ebc539073ccf8a50b"
+    },
+    {
+      "path": "django/views/decorators/clickjacking.py",
+      "bytes": 2555,
+      "sha256": "df0f1d8de0e84142baeee0df2338bd8dd95db3f65d7a4c0330857620cf0d0569"
+    },
+    {
+      "path": "django/views/decorators/common.py",
+      "bytes": 739,
+      "sha256": "29c8f543e68f4c12c6316fe491e52579189888464283bba83ff51ec64972c900"
+    },
+    {
+      "path": "django/views/decorators/csrf.py",
+      "bytes": 2324,
+      "sha256": "abd9579e53646e6ec7960e05471d697ac7fae2c3690880b9da60aa63bc5db99a"
+    },
+    {
+      "path": "django/views/decorators/debug.py",
+      "bytes": 5256,
+      "sha256": "8ef2a29a0143495cc23774560355f9472ec14800c5036d4adc0d918d4b09cbb1"
+    },
+    {
+      "path": "django/views/decorators/gzip.py",
+      "bytes": 253,
+      "sha256": "3eda5219df0178f6b5bad1aabca305ce92ed649c69576fc97a3f25970e5b0896"
+    },
+    {
+      "path": "django/views/decorators/http.py",
+      "bytes": 6533,
+      "sha256": "bdaa08c461889fa9327218208e2ec299d995979257bcdb3eec551454dbf9c3d6"
+    },
+    {
+      "path": "django/views/decorators/vary.py",
+      "bytes": 1201,
+      "sha256": "0c6475780f2649a5ccf2480c26d6b85e7cc2ce7248ad6d7f28332b7786aa0933"
+    },
+    {
+      "path": "django/views/defaults.py",
+      "bytes": 4718,
+      "sha256": "0574f7e9abb0f17179670a9d5346a4cd7e484c505686ecbc89d4fc606902a3f2"
+    },
+    {
+      "path": "django/views/generic/__init__.py",
+      "bytes": 886,
+      "sha256": "57040a51b045264b62ab92767e8dea44dcd17344937dc3113c28652cf6009241"
+    },
+    {
+      "path": "django/views/generic/base.py",
+      "bytes": 9303,
+      "sha256": "d5797ff3c0584af5bc85f3f44bf5101779821c4b920cb878a2828403ba68a7b5"
+    },
+    {
+      "path": "django/views/generic/dates.py",
+      "bytes": 26921,
+      "sha256": "c53006113464b2b19b1ab782e98ec20073233102c080ea313dfc6870f1ab32a4"
+    },
+    {
+      "path": "django/views/generic/detail.py",
+      "bytes": 7022,
+      "sha256": "5d39062065a9686c5bb9d32f18eac5282ea9f2c97f10a867d77200e60ff5cfcc"
+    },
+    {
+      "path": "django/views/generic/edit.py",
+      "bytes": 9040,
+      "sha256": "bb2470d75b2246c3515f3d2277803672b25e0c6527710f027b87e259b0e0b438"
+    },
+    {
+      "path": "django/views/generic/list.py",
+      "bytes": 8009,
+      "sha256": "2b25717fc317690836b981b7be621541785292aecf89333ab139099582b2d661"
+    },
+    {
+      "path": "django/views/i18n.py",
+      "bytes": 8999,
+      "sha256": "11ee6e8a9077ca4cfa49cc4b36c702c9722d26578029b3bd150101c3242701f7"
+    },
+    {
+      "path": "django/views/static.py",
+      "bytes": 4055,
+      "sha256": "75f123dedaf4b4137a7d6d364f4cf8ddfb335528f50c1e86c5ef82dd5e1560fa"
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "dataset": "django-semantic-v1",
+  "repository": "django/django",
+  "commit": "f59aef2ee9b5c988fd4179d8f2835030bd76297c",
+  "primaryLanguage": "zh",
+  "pairedLanguage": "en",
+  "independentTasks": 10,
+  "kind": "development-pilot",
+  "cases": [
+    {
+      "id": "login",
+      "topic": "网页登录",
+      "split": "development",
+      "queries": {
+        "zh": "找到 Django 内置网页登录的处理代码：用户提交账号密码后，怎样验证身份并建立登录会话？",
+        "en": "Find the code handling Django’s built-in web login: after a user submits a username and password, how is identity verified and a login session established?"
+      }
+    },
+    {
+      "id": "routing",
+      "topic": "路由加载与匹配",
+      "split": "development",
+      "queries": {
+        "zh": "项目里的 URL 路由配置是怎样被加载，并把访问路径匹配到具体视图的？",
+        "en": "How is a project’s URL routing configuration loaded, and how is a requested path matched to a specific view?"
+      }
+    },
+    {
+      "id": "middleware",
+      "topic": "中间件执行",
+      "split": "development",
+      "queries": {
+        "zh": "普通同步请求里，中间件按什么顺序执行，为什么某个中间件可以提前返回响应而不继续调用视图？",
+        "en": "For a normal synchronous request, in what order does middleware run, and why can a middleware return a response early without continuing to the view?"
+      }
+    },
+    {
+      "id": "transactions",
+      "topic": "事务与嵌套",
+      "split": "development",
+      "queries": {
+        "zh": "数据库事务代码如何做到正常退出提交、异常退出回滚，嵌套事务又如何处理？",
+        "en": "How does the transaction code commit on normal exit and roll back on exceptions, and how does it handle nested transactions?"
+      }
+    },
+    {
+      "id": "csrf",
+      "topic": "表单防伪校验",
+      "split": "development",
+      "queries": {
+        "zh": "表单提交的跨站请求伪造防护在哪里实现，哪些请求会放行，哪些校验失败会被拒绝？",
+        "en": "Where is cross-site request forgery protection for form submissions implemented, which requests are allowed through, and which failed checks cause rejection?"
+      }
+    },
+    {
+      "id": "page-cache",
+      "topic": "页面缓存",
+      "split": "development",
+      "queries": {
+        "zh": "页面缓存怎样判断能否直接返回缓存，以及什么时候把新响应写入缓存？",
+        "en": "How does page caching decide whether it can return a cached response directly, and when does it store a new response in the cache?"
+      }
+    },
+    {
+      "id": "settings",
+      "topic": "项目配置加载",
+      "split": "development",
+      "queries": {
+        "zh": "项目配置是什么时候加载的，默认值怎样被项目自己的配置覆盖，读取过的配置会缓存吗？",
+        "en": "When are project settings loaded, how do project-specific settings override defaults, and are settings cached after they are read?"
+      }
+    },
+    {
+      "id": "file-upload",
+      "topic": "上传内存与磁盘",
+      "split": "development",
+      "queries": {
+        "zh": "上传文件什么时候保存在内存、什么时候写入临时文件，框架如何选择这些处理器？",
+        "en": "When are uploaded files kept in memory versus written to temporary files, and how does the framework select those handlers?"
+      }
+    },
+    {
+      "id": "signals",
+      "topic": "信号分发与异常",
+      "split": "development",
+      "queries": {
+        "zh": "找到信号通知订阅者的实现；普通发送和容错发送在订阅者抛出异常时有什么区别？",
+        "en": "Find the implementation that delivers signals to subscribers; how do normal sending and robust sending differ when a subscriber raises an exception?"
+      }
+    },
+    {
+      "id": "view-permissions",
+      "topic": "类视图权限控制",
+      "split": "development",
+      "queries": {
+        "zh": "基于类的视图怎样检查用户权限，权限不足时又如何决定跳转登录还是直接拒绝访问？",
+        "en": "How do class-based views check user permissions, and how do they decide whether to redirect to login or deny access when permissions are insufficient?"
+      }
+    }
+  ]
+}

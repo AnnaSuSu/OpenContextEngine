@@ -12,7 +12,10 @@
     "smoke": "node scripts/smoke.mjs",
     "prepare-pilot": "node scripts/prepare-pilot.mjs",
     "pilot": "node scripts/pilot.mjs",
-    "ace-pilot": "node scripts/ace-pilot.mjs"
+    "ace-pilot": "node scripts/ace-pilot.mjs",
+    "prepare-django": "node scripts/prepare-django.mjs",
+    "ace-django": "node scripts/ace-django.mjs",
+    "score-django": "node scripts/score-django.mjs"
   },
   "dependencies": {
     "@augmentcode/auggie-sdk": "0.2.0",
