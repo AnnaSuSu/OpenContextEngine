@@ -1,0 +1,1630 @@
+{
+  "schemaVersion": 1,
+  "kind": "development-pilot-comparison",
+  "commit": "f59aef2ee9b5c988fd4179d8f2835030bd76297c",
+  "referenceHash": "6923b8d2558dd151adac538dbecf5f4384af104fe6a8262fc566de0790409ab5",
+  "primaryBudgetTokens": 4000,
+  "independentTasks": 10,
+  "notes": [
+    "Single run; paired Chinese and English queries are not independent tasks.",
+    "Missing-unit categories describe the frozen reference spans, not all possible relevant evidence.",
+    "Timing depends on deployment and model configuration; not an isolated algorithm speed comparison."
+  ],
+  "systems": [
+    {
+      "system": "ace",
+      "run": "ace-django-2026-10-03T09-25-00.710Z",
+      "summary": {
+        "2000": {
+          "zh": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.6599999999999999,
+            "completeRecall": 0.3
+          },
+          "en": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.6016666666666667,
+            "completeRecall": 0.2
+          },
+          "englishMinusChinese": -0.05833333333333324
+        },
+        "4000": {
+          "zh": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.865,
+            "completeRecall": 0.5
+          },
+          "en": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.8400000000000001,
+            "completeRecall": 0.5
+          },
+          "englishMinusChinese": -0.02499999999999991
+        },
+        "8000": {
+          "zh": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.885,
+            "completeRecall": 0.5
+          },
+          "en": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.885,
+            "completeRecall": 0.5
+          },
+          "englishMinusChinese": 0
+        }
+      },
+      "diagnostics": {
+        "zh": {
+          "rawCoverage": 0.885,
+          "rawTokens": {
+            "min": 4486,
+            "max": 5057
+          },
+          "missingUnitCounts": {
+            "lost-to-budget": 1,
+            "incomplete-in-raw-return": 4,
+            "absent-from-raw-return": 1
+          },
+          "misses": [
+            {
+              "task": "login",
+              "unit": "password-check",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "view-short-circuit",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "transactions",
+              "unit": "restore-autocommit",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "csrf",
+              "unit": "origin-referer",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "csrf",
+              "unit": "token-validation",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "signals",
+              "unit": "receiver-selection",
+              "kind": "incomplete-in-raw-return"
+            }
+          ]
+        },
+        "en": {
+          "rawCoverage": 0.885,
+          "rawTokens": {
+            "min": 4331,
+            "max": 4972
+          },
+          "missingUnitCounts": {
+            "lost-to-budget": 2,
+            "incomplete-in-raw-return": 5,
+            "absent-from-raw-return": 0
+          },
+          "misses": [
+            {
+              "task": "login",
+              "unit": "password-check",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "routing",
+              "unit": "load-patterns",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "routing",
+              "unit": "match-patterns",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "view-short-circuit",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "csrf",
+              "unit": "origin-referer",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "csrf",
+              "unit": "token-validation",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "signals",
+              "unit": "receiver-selection",
+              "kind": "incomplete-in-raw-return"
+            }
+          ]
+        }
+      },
+      "elapsedMs": 157979,
+      "indexingMs": 99421,
+      "queryMs": [
+        {
+          "id": "login",
+          "language": "zh",
+          "elapsedMs": 4497
+        },
+        {
+          "id": "login",
+          "language": "en",
+          "elapsedMs": 3629
+        },
+        {
+          "id": "routing",
+          "language": "en",
+          "elapsedMs": 3484
+        },
+        {
+          "id": "routing",
+          "language": "zh",
+          "elapsedMs": 3115
+        },
+        {
+          "id": "middleware",
+          "language": "zh",
+          "elapsedMs": 2627
+        },
+        {
+          "id": "middleware",
+          "language": "en",
+          "elapsedMs": 2301
+        },
+        {
+          "id": "transactions",
+          "language": "en",
+          "elapsedMs": 3079
+        },
+        {
+          "id": "transactions",
+          "language": "zh",
+          "elapsedMs": 2540
+        },
+        {
+          "id": "csrf",
+          "language": "zh",
+          "elapsedMs": 3111
+        },
+        {
+          "id": "csrf",
+          "language": "en",
+          "elapsedMs": 2743
+        },
+        {
+          "id": "page-cache",
+          "language": "en",
+          "elapsedMs": 3139
+        },
+        {
+          "id": "page-cache",
+          "language": "zh",
+          "elapsedMs": 3454
+        },
+        {
+          "id": "settings",
+          "language": "zh",
+          "elapsedMs": 2656
+        },
+        {
+          "id": "settings",
+          "language": "en",
+          "elapsedMs": 2301
+        },
+        {
+          "id": "file-upload",
+          "language": "en",
+          "elapsedMs": 2381
+        },
+        {
+          "id": "file-upload",
+          "language": "zh",
+          "elapsedMs": 2391
+        },
+        {
+          "id": "signals",
+          "language": "zh",
+          "elapsedMs": 2641
+        },
+        {
+          "id": "signals",
+          "language": "en",
+          "elapsedMs": 2426
+        },
+        {
+          "id": "view-permissions",
+          "language": "en",
+          "elapsedMs": 2904
+        },
+        {
+          "id": "view-permissions",
+          "language": "zh",
+          "elapsedMs": 3116
+        }
+      ],
+      "scoreSha256": "81a614e5ed69d1b7c92014770e259276691076a0159309f28eba97c1a1b93779"
+    },
+    {
+      "system": "cocoindex",
+      "run": "cocoindex-django-2026-10-03T12-07-33.219Z",
+      "summary": {
+        "2000": {
+          "zh": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.22000000000000003,
+            "completeRecall": 0
+          },
+          "en": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.24,
+            "completeRecall": 0
+          },
+          "englishMinusChinese": 0.019999999999999962
+        },
+        "4000": {
+          "zh": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.24,
+            "completeRecall": 0
+          },
+          "en": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.335,
+            "completeRecall": 0
+          },
+          "englishMinusChinese": 0.09500000000000003
+        },
+        "8000": {
+          "zh": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.335,
+            "completeRecall": 0
+          },
+          "en": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.43,
+            "completeRecall": 0
+          },
+          "englishMinusChinese": 0.09499999999999997
+        }
+      },
+      "diagnostics": {
+        "zh": {
+          "rawCoverage": 0.4666666666666666,
+          "rawTokens": {
+            "min": 9560,
+            "max": 12583
+          },
+          "missingUnitCounts": {
+            "lost-to-budget": 9,
+            "incomplete-in-raw-return": 9,
+            "absent-from-raw-return": 13
+          },
+          "misses": [
+            {
+              "task": "login",
+              "unit": "credentials",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "login",
+              "unit": "password-check",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "login",
+              "unit": "login-view",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "login",
+              "unit": "session-state",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "routing",
+              "unit": "root-config",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "routing",
+              "unit": "load-patterns",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "routing",
+              "unit": "match-patterns",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "build-chain",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "call-chain",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "request-short-circuit",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "middleware",
+              "unit": "view-short-circuit",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "transactions",
+              "unit": "nested-savepoint",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "transactions",
+              "unit": "successful-exit",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "transactions",
+              "unit": "failed-exit",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "transactions",
+              "unit": "restore-autocommit",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "csrf",
+              "unit": "exempt-safe",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "csrf",
+              "unit": "require-secret",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "csrf",
+              "unit": "token-sources",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "csrf",
+              "unit": "token-validation",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "page-cache",
+              "unit": "cache-hit-miss",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "page-cache",
+              "unit": "response-eligibility",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "page-cache",
+              "unit": "write-response",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "settings",
+              "unit": "override-defaults",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "file-upload",
+              "unit": "handler-order",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "file-upload",
+              "unit": "size-decision",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "signals",
+              "unit": "registration",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "signals",
+              "unit": "receiver-selection",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "signals",
+              "unit": "normal-errors",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "signals",
+              "unit": "robust-errors",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "view-permissions",
+              "unit": "deny-authenticated",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "view-permissions",
+              "unit": "redirect-anonymous",
+              "kind": "lost-to-budget"
+            }
+          ]
+        },
+        "en": {
+          "rawCoverage": 0.6566666666666667,
+          "rawTokens": {
+            "min": 9788,
+            "max": 12754
+          },
+          "missingUnitCounts": {
+            "lost-to-budget": 13,
+            "incomplete-in-raw-return": 9,
+            "absent-from-raw-return": 5
+          },
+          "misses": [
+            {
+              "task": "login",
+              "unit": "credentials",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "login",
+              "unit": "password-check",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "login",
+              "unit": "session-state",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "routing",
+              "unit": "root-config",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "routing",
+              "unit": "load-patterns",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "routing",
+              "unit": "match-patterns",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "build-chain",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "call-chain",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "view-short-circuit",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "transactions",
+              "unit": "nested-savepoint",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "transactions",
+              "unit": "successful-exit",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "transactions",
+              "unit": "failed-exit",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "transactions",
+              "unit": "restore-autocommit",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "csrf",
+              "unit": "exempt-safe",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "csrf",
+              "unit": "require-secret",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "csrf",
+              "unit": "token-sources",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "csrf",
+              "unit": "token-validation",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "page-cache",
+              "unit": "cache-hit-miss",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "page-cache",
+              "unit": "write-response",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "settings",
+              "unit": "override-defaults",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "file-upload",
+              "unit": "handler-order",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "file-upload",
+              "unit": "size-decision",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "signals",
+              "unit": "registration",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "signals",
+              "unit": "receiver-selection",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "signals",
+              "unit": "normal-errors",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "view-permissions",
+              "unit": "deny-authenticated",
+              "kind": "lost-to-budget"
+            },
+            {
+              "task": "view-permissions",
+              "unit": "redirect-anonymous",
+              "kind": "lost-to-budget"
+            }
+          ]
+        }
+      },
+      "config": {
+        "engine": "cocoindex",
+        "toolSha": "8ec0ff3510be526e699028db5b64e10a0a8359b3",
+        "commit": "f59aef2ee9b5c988fd4179d8f2835030bd76297c",
+        "files": 883,
+        "embedding": {
+          "model": "Qwen3-Embedding-4B",
+          "dimensions": 1024,
+          "upstreamMaxInputTokens": 1024,
+          "instruction": "unmodified upstream tool text; no external query rewrite",
+          "requestBatchSize": 8,
+          "transportMaxAttemptsPerBatch": 3,
+          "transportAttemptTimeoutMs": 30000,
+          "transport": {
+            "baseUrl": "https://embedding.example.com/v1",
+            "requestBaseUrl": "http://127.0.0.1:42002/v1",
+            "transport": "ssh-tunnel",
+            "remote": "operator@model-host.example:22"
+          }
+        },
+        "search": {
+          "limit": 60,
+          "chunking": "unmodified upstream defaults"
+        },
+        "answerVersion": "v2",
+        "primaryBudgetTokens": 4000,
+        "formatting": "Path headers and line numbers; native text and order unchanged",
+        "maxIndexAndFirstQueryMs": 5400000,
+        "maxSubsequentQueryMs": 120000,
+        "maxTotalMs": 6000000,
+        "nodeVersion": "v22.14.0",
+        "executionHost": {
+          "platform": "linux",
+          "architecture": "x64",
+          "hostname": "development-6159-wb6fthqz-f48b7d654-j9rmq",
+          "location": "user-authorized-cloud"
+        },
+        "harnessSha256": {
+          "scripts/run-baseline.mjs": "8e1fdd370cf44fe79a7410ce045a852624e3355010a8f7b3a53b31b0d054cc62",
+          "scripts/coco-baseline.py": "2142db8a67283eede25d525a64695b6209b4cb677de00c98f4f87197b5896453",
+          "scripts/embedding-gateway.mjs": "36429ea8ba8fd47f933741a0132434485048aca311bd8ca17350d64cc8733c33",
+          "scripts/baseline-home.mjs": "3c23afc14fe8435927db175533962677784b057e5016e1b93a3d8da3c108899f",
+          "src/eval/normalize.mjs": "84dfdfce549bccc9c66f48f64b313124086279197f2f32d8bd8a12ab7d3ee328",
+          "src/eval/remote-models.mjs": "0fecd43be022f290e4ad5d6b64b2603bd2729734aef1eba3a1369f07757e8de8",
+          "src/eval/embedding-transport.mjs": "8174a013adea52b29dfdf1d1d7d6416b1a37d9e220349454b686a5b32b0851f4"
+        },
+        "dependencies": {
+          "cocoindex": "1.0.24",
+          "cocoindex-code": "999.0.1.dev1+g8ec0ff351",
+          "sqlite-vec": "0.1.9",
+          "numpy": "2.5.3",
+          "litellm": "1.103.2"
+        }
+      },
+      "elapsedMs": 255518,
+      "indexingMs": 245667,
+      "queryMs": [
+        {
+          "id": "login",
+          "language": "zh",
+          "elapsedMs": 149
+        },
+        {
+          "id": "login",
+          "language": "en",
+          "elapsedMs": 143
+        },
+        {
+          "id": "routing",
+          "language": "en",
+          "elapsedMs": 152
+        },
+        {
+          "id": "routing",
+          "language": "zh",
+          "elapsedMs": 145
+        },
+        {
+          "id": "middleware",
+          "language": "zh",
+          "elapsedMs": 146
+        },
+        {
+          "id": "middleware",
+          "language": "en",
+          "elapsedMs": 118
+        },
+        {
+          "id": "transactions",
+          "language": "en",
+          "elapsedMs": 123
+        },
+        {
+          "id": "transactions",
+          "language": "zh",
+          "elapsedMs": 141
+        },
+        {
+          "id": "csrf",
+          "language": "zh",
+          "elapsedMs": 148
+        },
+        {
+          "id": "csrf",
+          "language": "en",
+          "elapsedMs": 145
+        },
+        {
+          "id": "page-cache",
+          "language": "en",
+          "elapsedMs": 152
+        },
+        {
+          "id": "page-cache",
+          "language": "zh",
+          "elapsedMs": 145
+        },
+        {
+          "id": "settings",
+          "language": "zh",
+          "elapsedMs": 134
+        },
+        {
+          "id": "settings",
+          "language": "en",
+          "elapsedMs": 153
+        },
+        {
+          "id": "file-upload",
+          "language": "en",
+          "elapsedMs": 157
+        },
+        {
+          "id": "file-upload",
+          "language": "zh",
+          "elapsedMs": 158
+        },
+        {
+          "id": "signals",
+          "language": "zh",
+          "elapsedMs": 151
+        },
+        {
+          "id": "signals",
+          "language": "en",
+          "elapsedMs": 161
+        },
+        {
+          "id": "view-permissions",
+          "language": "en",
+          "elapsedMs": 157
+        },
+        {
+          "id": "view-permissions",
+          "language": "zh",
+          "elapsedMs": 130
+        }
+      ],
+      "scoreSha256": "338c7cfd6c1f08dc4dfe8618c7fc145f967e3bc49bd17023966ba2f18d0dfc2e"
+    },
+    {
+      "system": "contextweaver",
+      "run": "contextweaver-django-2026-10-03T12-18-00.084Z",
+      "summary": {
+        "2000": {
+          "zh": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.25999999999999995,
+            "completeRecall": 0.1
+          },
+          "en": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.17666666666666667,
+            "completeRecall": 0
+          },
+          "englishMinusChinese": -0.08333333333333329
+        },
+        "4000": {
+          "zh": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.25999999999999995,
+            "completeRecall": 0.1
+          },
+          "en": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.17666666666666667,
+            "completeRecall": 0
+          },
+          "englishMinusChinese": -0.08333333333333329
+        },
+        "8000": {
+          "zh": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.25999999999999995,
+            "completeRecall": 0.1
+          },
+          "en": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.17666666666666667,
+            "completeRecall": 0
+          },
+          "englishMinusChinese": -0.08333333333333329
+        }
+      },
+      "diagnostics": {
+        "zh": {
+          "rawCoverage": 0.25999999999999995,
+          "rawTokens": {
+            "min": 391,
+            "max": 1255
+          },
+          "missingUnitCounts": {
+            "lost-to-budget": 0,
+            "incomplete-in-raw-return": 7,
+            "absent-from-raw-return": 23
+          },
+          "misses": [
+            {
+              "task": "login",
+              "unit": "credentials",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "login",
+              "unit": "password-check",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "login",
+              "unit": "session-state",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "routing",
+              "unit": "root-config",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "routing",
+              "unit": "load-patterns",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "routing",
+              "unit": "match-patterns",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "build-chain",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "call-chain",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "request-short-circuit",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "transactions",
+              "unit": "nested-savepoint",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "transactions",
+              "unit": "failed-exit",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "transactions",
+              "unit": "restore-autocommit",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "csrf",
+              "unit": "origin-referer",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "csrf",
+              "unit": "require-secret",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "csrf",
+              "unit": "token-sources",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "csrf",
+              "unit": "token-validation",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "page-cache",
+              "unit": "cache-hit-miss",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "page-cache",
+              "unit": "response-eligibility",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "page-cache",
+              "unit": "write-response",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "settings",
+              "unit": "lazy-load",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "settings",
+              "unit": "override-defaults",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "settings",
+              "unit": "cache-read",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "file-upload",
+              "unit": "handler-order",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "file-upload",
+              "unit": "size-decision",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "file-upload",
+              "unit": "memory-handler",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "file-upload",
+              "unit": "temporary-handler",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "signals",
+              "unit": "registration",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "signals",
+              "unit": "receiver-selection",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "signals",
+              "unit": "normal-errors",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "signals",
+              "unit": "robust-errors",
+              "kind": "absent-from-raw-return"
+            }
+          ]
+        },
+        "en": {
+          "rawCoverage": 0.17666666666666667,
+          "rawTokens": {
+            "min": 266,
+            "max": 1373
+          },
+          "missingUnitCounts": {
+            "lost-to-budget": 0,
+            "incomplete-in-raw-return": 6,
+            "absent-from-raw-return": 27
+          },
+          "misses": [
+            {
+              "task": "login",
+              "unit": "password-check",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "login",
+              "unit": "session-state",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "routing",
+              "unit": "root-config",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "routing",
+              "unit": "load-patterns",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "routing",
+              "unit": "match-patterns",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "build-chain",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "call-chain",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "request-short-circuit",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "view-short-circuit",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "transactions",
+              "unit": "nested-savepoint",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "transactions",
+              "unit": "successful-exit",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "transactions",
+              "unit": "failed-exit",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "transactions",
+              "unit": "restore-autocommit",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "csrf",
+              "unit": "exempt-safe",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "csrf",
+              "unit": "origin-referer",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "csrf",
+              "unit": "require-secret",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "csrf",
+              "unit": "token-sources",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "csrf",
+              "unit": "token-validation",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "page-cache",
+              "unit": "cache-hit-miss",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "page-cache",
+              "unit": "response-eligibility",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "page-cache",
+              "unit": "write-response",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "settings",
+              "unit": "lazy-load",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "settings",
+              "unit": "override-defaults",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "file-upload",
+              "unit": "handler-order",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "file-upload",
+              "unit": "size-decision",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "file-upload",
+              "unit": "memory-handler",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "file-upload",
+              "unit": "temporary-handler",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "signals",
+              "unit": "registration",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "signals",
+              "unit": "receiver-selection",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "signals",
+              "unit": "normal-errors",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "signals",
+              "unit": "robust-errors",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "view-permissions",
+              "unit": "deny-authenticated",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "view-permissions",
+              "unit": "redirect-anonymous",
+              "kind": "absent-from-raw-return"
+            }
+          ]
+        }
+      },
+      "config": {
+        "engine": "contextweaver",
+        "toolSha": "42375d315e180da258ebb983215004dbbf98c00d",
+        "commit": "f59aef2ee9b5c988fd4179d8f2835030bd76297c",
+        "files": 883,
+        "embedding": {
+          "model": "Qwen3-Embedding-4B",
+          "dimensions": 1024,
+          "upstreamMaxInputTokens": 1024,
+          "instruction": "unmodified upstream tool text; no external query rewrite",
+          "requestBatchSize": 8,
+          "transportMaxAttemptsPerBatch": 3,
+          "transportAttemptTimeoutMs": 30000,
+          "maxRequests": 6000,
+          "maxInputChars": 60000000,
+          "transport": {
+            "baseUrl": "https://embedding.example.com/v1",
+            "requestBaseUrl": "http://127.0.0.1:42002/v1",
+            "transport": "ssh-tunnel",
+            "remote": "operator@model-host.example:22"
+          }
+        },
+        "search": {
+          "configuration": "upstream retrieval defaults; embedding client configured for actual service input window",
+          "embeddingsMaxContextTokens": 1024,
+          "reranker": {
+            "baseUrl": "https://rerank.example.com/v1",
+            "model": "Qwen3-Reranker-4B",
+            "deployment": "remote-only"
+          }
+        },
+        "answerVersion": "v2",
+        "primaryBudgetTokens": 4000,
+        "formatting": "Path headers and line numbers; native text and order unchanged",
+        "maxIndexAndFirstQueryMs": 5400000,
+        "maxSubsequentQueryMs": 120000,
+        "maxTotalMs": 6000000,
+        "nodeVersion": "v22.14.0",
+        "executionHost": {
+          "platform": "linux",
+          "architecture": "x64",
+          "hostname": "development-6159-wb6fthqz-f48b7d654-j9rmq",
+          "location": "user-authorized-cloud"
+        },
+        "harnessSha256": {
+          "scripts/run-baseline.mjs": "c748f84a762631a8849346b83592e66602c4b60771f6939b508828731ecb15b7",
+          "scripts/coco-baseline.py": "2142db8a67283eede25d525a64695b6209b4cb677de00c98f4f87197b5896453",
+          "scripts/embedding-gateway.mjs": "7944f9b2dbfb0abadb37a798935ccbefe9651f72b38b8d58ee87fcb5884a22ed",
+          "scripts/baseline-home.mjs": "3c23afc14fe8435927db175533962677784b057e5016e1b93a3d8da3c108899f",
+          "src/eval/normalize.mjs": "84dfdfce549bccc9c66f48f64b313124086279197f2f32d8bd8a12ab7d3ee328",
+          "src/eval/remote-models.mjs": "0fecd43be022f290e4ad5d6b64b2603bd2729734aef1eba3a1369f07757e8de8",
+          "src/eval/embedding-transport.mjs": "8174a013adea52b29dfdf1d1d7d6416b1a37d9e220349454b686a5b32b0851f4"
+        },
+        "dependencies": {
+          "lockfileSha256": "702644bb85bd5acab699ffbf82fe45420d51c3b042270b67efd2fcf6a6049fb7"
+        }
+      },
+      "elapsedMs": 558518,
+      "indexAndFirstQueryMs": 490348,
+      "queryMs": [
+        {
+          "id": "login",
+          "language": "zh",
+          "elapsedMs": 2852
+        },
+        {
+          "id": "login",
+          "language": "en",
+          "elapsedMs": 2284
+        },
+        {
+          "id": "routing",
+          "language": "en",
+          "elapsedMs": 2520
+        },
+        {
+          "id": "routing",
+          "language": "zh",
+          "elapsedMs": 2910
+        },
+        {
+          "id": "middleware",
+          "language": "zh",
+          "elapsedMs": 1264
+        },
+        {
+          "id": "middleware",
+          "language": "en",
+          "elapsedMs": 2802
+        },
+        {
+          "id": "transactions",
+          "language": "en",
+          "elapsedMs": 5438
+        },
+        {
+          "id": "transactions",
+          "language": "zh",
+          "elapsedMs": 8241
+        },
+        {
+          "id": "csrf",
+          "language": "zh",
+          "elapsedMs": 2725
+        },
+        {
+          "id": "csrf",
+          "language": "en",
+          "elapsedMs": 3721
+        },
+        {
+          "id": "page-cache",
+          "language": "en",
+          "elapsedMs": 3508
+        },
+        {
+          "id": "page-cache",
+          "language": "zh",
+          "elapsedMs": 4419
+        },
+        {
+          "id": "settings",
+          "language": "zh",
+          "elapsedMs": 3085
+        },
+        {
+          "id": "settings",
+          "language": "en",
+          "elapsedMs": 2143
+        },
+        {
+          "id": "file-upload",
+          "language": "en",
+          "elapsedMs": 3971
+        },
+        {
+          "id": "file-upload",
+          "language": "zh",
+          "elapsedMs": 2101
+        },
+        {
+          "id": "signals",
+          "language": "zh",
+          "elapsedMs": 2633
+        },
+        {
+          "id": "signals",
+          "language": "en",
+          "elapsedMs": 8955
+        },
+        {
+          "id": "view-permissions",
+          "language": "en",
+          "elapsedMs": 3168
+        },
+        {
+          "id": "view-permissions",
+          "language": "zh",
+          "elapsedMs": 2081
+        }
+      ],
+      "scoreSha256": "d866f0b4216a0fd1c8dc32d5c29ecc02e93f4b4ccf7c1746662278bdb83ce66a"
+    },
+    {
+      "system": "reponerve",
+      "run": "reponerve-django-2026-10-03T12-53-21.093Z",
+      "summary": {
+        "2000": {
+          "zh": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.6733333333333335,
+            "completeRecall": 0.2
+          },
+          "en": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.7366666666666666,
+            "completeRecall": 0.4
+          },
+          "englishMinusChinese": 0.06333333333333313
+        },
+        "4000": {
+          "zh": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.8633333333333333,
+            "completeRecall": 0.5
+          },
+          "en": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.8466666666666667,
+            "completeRecall": 0.5
+          },
+          "englishMinusChinese": -0.016666666666666607
+        },
+        "8000": {
+          "zh": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.8633333333333333,
+            "completeRecall": 0.5
+          },
+          "en": {
+            "tasks": 10,
+            "completed": 10,
+            "coverage": 0.8466666666666667,
+            "completeRecall": 0.5
+          },
+          "englishMinusChinese": -0.016666666666666607
+        }
+      },
+      "diagnostics": {
+        "zh": {
+          "rawCoverage": 0.8633333333333333,
+          "rawTokens": {
+            "min": 1916,
+            "max": 3960
+          },
+          "missingUnitCounts": {
+            "lost-to-budget": 0,
+            "incomplete-in-raw-return": 4,
+            "absent-from-raw-return": 1
+          },
+          "misses": [
+            {
+              "task": "login",
+              "unit": "password-check",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "routing",
+              "unit": "load-patterns",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "settings",
+              "unit": "override-defaults",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "file-upload",
+              "unit": "temporary-handler",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "view-permissions",
+              "unit": "permission-check",
+              "kind": "incomplete-in-raw-return"
+            }
+          ]
+        },
+        "en": {
+          "rawCoverage": 0.8466666666666667,
+          "rawTokens": {
+            "min": 1803,
+            "max": 3950
+          },
+          "missingUnitCounts": {
+            "lost-to-budget": 0,
+            "incomplete-in-raw-return": 5,
+            "absent-from-raw-return": 1
+          },
+          "misses": [
+            {
+              "task": "login",
+              "unit": "password-check",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "build-chain",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "middleware",
+              "unit": "call-chain",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "file-upload",
+              "unit": "temporary-handler",
+              "kind": "incomplete-in-raw-return"
+            },
+            {
+              "task": "signals",
+              "unit": "receiver-selection",
+              "kind": "absent-from-raw-return"
+            },
+            {
+              "task": "view-permissions",
+              "unit": "permission-check",
+              "kind": "incomplete-in-raw-return"
+            }
+          ]
+        }
+      },
+      "config": {
+        "engine": "ast-facets-v1",
+        "primaryBudgetTokens": 4000,
+        "executionHost": {
+          "hostname": "development-6159-wb6fthqz-f48b7d654-j9rmq",
+          "platform": "linux"
+        },
+        "embedding": {
+          "model": "Qwen3-Embedding-4B",
+          "dimensions": 1024,
+          "transport": {
+            "baseUrl": "https://embedding.example.com/v1",
+            "requestBaseUrl": "http://127.0.0.1:42002/v1",
+            "transport": "ssh-tunnel",
+            "remote": "operator@model-host.example:22"
+          }
+        },
+        "reranker": {
+          "baseUrl": "https://rerank.example.com/v1",
+          "model": "Qwen3-Reranker-4B"
+        },
+        "planner": {
+          "model": null,
+          "mode": "literal-clause-split-v1"
+        },
+        "plansSha256": "6fa08cdc70bd78120b0979b24b9be213a3e54d6b34b4b80e6e55641c8e452656",
+        "harnessSha256": {
+          "src/retrieval/engine.py": "9304732120cd33c63b7c03d76b1414e9fcb5c75cf53d65ae8c7bf67e3ed4b8a7",
+          "scripts/reponerve-worker.py": "b6f0f86d420f37bea3e1b76d14f2bfc4e158bf640cc6bbca45f52f2c0d515441",
+          "scripts/run-reponerve.mjs": "0d210d5561fb2ebf340d5a8dd0e7efaec9aa8db172cf022bc7463ee0c16b1809",
+          "scripts/plan-retrieval.mjs": "9631e055c3c86026cb7df0d787ec31b78a38154c8a1ece2c7e8a0b0e64d8e319",
+          "scripts/literal-retrieval-plans.mjs": "0adf6c19054ac334713ea9764bb823cb6c21e592515e467ce73d764008635222",
+          "scripts/embedding-gateway.mjs": "7944f9b2dbfb0abadb37a798935ccbefe9651f72b38b8d58ee87fcb5884a22ed"
+        }
+      },
+      "elapsedMs": 871600,
+      "indexingMs": 346166,
+      "queryMs": [
+        {
+          "id": "login",
+          "language": "zh",
+          "elapsedMs": 15821
+        },
+        {
+          "id": "login",
+          "language": "en",
+          "elapsedMs": 18517
+        },
+        {
+          "id": "routing",
+          "language": "zh",
+          "elapsedMs": 43999
+        },
+        {
+          "id": "routing",
+          "language": "en",
+          "elapsedMs": 21925
+        },
+        {
+          "id": "middleware",
+          "language": "zh",
+          "elapsedMs": 72300
+        },
+        {
+          "id": "middleware",
+          "language": "en",
+          "elapsedMs": 8717
+        },
+        {
+          "id": "transactions",
+          "language": "zh",
+          "elapsedMs": 9721
+        },
+        {
+          "id": "transactions",
+          "language": "en",
+          "elapsedMs": 16916
+        },
+        {
+          "id": "csrf",
+          "language": "zh",
+          "elapsedMs": 9981
+        },
+        {
+          "id": "csrf",
+          "language": "en",
+          "elapsedMs": 14618
+        },
+        {
+          "id": "page-cache",
+          "language": "zh",
+          "elapsedMs": 9006
+        },
+        {
+          "id": "page-cache",
+          "language": "en",
+          "elapsedMs": 5003
+        },
+        {
+          "id": "settings",
+          "language": "zh",
+          "elapsedMs": 12713
+        },
+        {
+          "id": "settings",
+          "language": "en",
+          "elapsedMs": 28191
+        },
+        {
+          "id": "file-upload",
+          "language": "zh",
+          "elapsedMs": 68279
+        },
+        {
+          "id": "file-upload",
+          "language": "en",
+          "elapsedMs": 15502
+        },
+        {
+          "id": "signals",
+          "language": "zh",
+          "elapsedMs": 14375
+        },
+        {
+          "id": "signals",
+          "language": "en",
+          "elapsedMs": 24504
+        },
+        {
+          "id": "view-permissions",
+          "language": "zh",
+          "elapsedMs": 14961
+        },
+        {
+          "id": "view-permissions",
+          "language": "en",
+          "elapsedMs": 6318
+        }
+      ],
+      "scoreSha256": "3946c9f1145907fdf286c34070b9b0fab0fbaefc8e71b567eefe645d948b469c"
+    }
+  ]
+}
