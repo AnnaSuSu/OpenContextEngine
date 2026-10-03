@@ -210,6 +210,19 @@ class LiveTests(unittest.TestCase):
             self.assertEqual(generation.engine,source_units(self.root,manager.scan()['files']))
         self.assertFalse(any(r['kind']=='calls' for u in generation.engine for r in u['relations']))
 
+    def test_go_cache_refreshes_unchanged_callers_and_module_configuration(self):
+        self.write('go.mod','module example.test/first\n')
+        self.write('lib.go','package example\nfunc Save() {}\n')
+        self.write('main.go','package example\nfunc Run() { Save() }\n')
+        manager = self.manager()
+        first = self.build(manager)
+        self.assertTrue(any(r['kind']=='calls' for u in first.engine for r in u['relations']))
+        self.write('lib.go','package example\nfunc Renamed() {}\n')
+        self.write('go.mod','module example.test/second\n')
+        second = self.build(manager)
+        self.assertFalse(any(r['kind']=='calls' for u in second.engine for r in u['relations']))
+        self.assertEqual(second.engine,source_units(self.root,manager.scan()['files']))
+
 
 if __name__ == '__main__':
     unittest.main()

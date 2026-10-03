@@ -19,6 +19,7 @@ export function serviceConfig({root, state, port = 0} = {}, environment = proces
     '.pilot-state/language-adapters-venv/bin/python'].map(path => resolve(projectRoot, path));
   return {
     python: env.REPONERVE_PYTHON || candidates.find(existsSync) || 'python3',
+    workerEnv: env.REPONERVE_GO_BINARY ? {REPONERVE_GO_BINARY:env.REPONERVE_GO_BINARY} : {},
     config: {root: repository, state: state ? resolve(state) : repository
       ? resolve(homedir(), '.cache/reponerve', workspaceId) : resolve(projectRoot, '.pilot-state/reponerve/index'),
     serviceKey: env.REPONERVE_API_KEY || randomBytes(32).toString('hex'), port,
@@ -37,7 +38,7 @@ export function serviceConfig({root, state, port = 0} = {}, environment = proces
 export function startService(settings, {log = line => process.stderr.write(line + '\n')} = {}) {
   const {python, config} = settings;
   const child = spawn(python, [resolve(projectRoot, 'scripts/retrieval-server.py')], {
-    cwd: projectRoot, env: {...process.env, OPENBLAS_NUM_THREADS:'2', OMP_NUM_THREADS:'2'},
+    cwd: projectRoot, env: {...process.env, ...settings.workerEnv, OPENBLAS_NUM_THREADS:'2', OMP_NUM_THREADS:'2'},
     stdio:['pipe', 'pipe', 'pipe'],
   });
   const lines = createInterface({input: child.stdout});
@@ -62,7 +63,7 @@ export function startService(settings, {log = line => process.stderr.write(line 
     });
   });
   async function close() {
-    if (child.exitCode !== null || child.signalCode !== null) return;
+    if (!child.pid || child.exitCode !== null || child.signalCode !== null) return;
     await new Promise(resolveClosed => {
       const timer = setTimeout(() => child.kill('SIGKILL'), 5000);
       child.once('exit', () => {clearTimeout(timer); resolveClosed();});

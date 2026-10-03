@@ -19,12 +19,15 @@
     "baseline": "node scripts/run-baseline.mjs",
     "search": "node scripts/search-reponerve.mjs",
     "serve-retrieval": "node scripts/serve-reponerve.mjs",
-    "benchmark-service": "node scripts/benchmark-service.mjs"
+    "benchmark-service": "node scripts/benchmark-service.mjs",
+    "mcp": "node scripts/mcp-reponerve.mjs"
   },
   "dependencies": {
     "@augmentcode/auggie-sdk": "0.2.0",
+    "@modelcontextprotocol/sdk": "1.32.0",
     "@openai/codex-sdk": "0.160.0",
     "js-tiktoken": "1.0.21",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "zod": "4.6.5"
   }
 }

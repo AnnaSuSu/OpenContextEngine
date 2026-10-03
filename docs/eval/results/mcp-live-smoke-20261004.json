@@ -1,0 +1,44 @@
+{
+  "startedAt": "2026-10-03T20:05:10.007Z",
+  "checks": [
+    {
+      "name": "initial-index-and-search",
+      "index": {
+        "mode": "live",
+        "identity": "3dda43b2af1b4502fd8218371ee3fd61ebbd093abb7df608370df449d9777849",
+        "freshness": "verified-after-search",
+        "completedAt": 1791057911.9189382
+      },
+      "elapsedMs": 3605
+    },
+    {
+      "name": "saved-edit-incremental-search",
+      "index": {
+        "mode": "live",
+        "identity": "65a7f4a694ad060f549ba04e5fd38d0a03b7f41d4b89fb235d4630c639e2fd0d",
+        "freshness": "verified-after-search",
+        "completedAt": 1791057914.921667
+      },
+      "elapsedMs": 5294,
+      "embeddedDocuments": 1,
+      "reusedUnits": 2
+    },
+    {
+      "name": "deleted-file-removed",
+      "index": {
+        "mode": "live",
+        "identity": "3ea5df5beb13d976d480a71b74de9802c960eb6fdedeeefd65d42c8dcb7fbae3",
+        "freshness": "verified-after-search",
+        "completedAt": 1791057919.54145
+      },
+      "elapsedMs": 3737
+    },
+    {
+      "name": "restart-restores-generation",
+      "identity": "3ea5df5beb13d976d480a71b74de9802c960eb6fdedeeefd65d42c8dcb7fbae3"
+    }
+  ],
+  "modelCalls": "configured remote endpoints",
+  "status": "passed",
+  "finishedAt": "2026-10-03T20:05:25.433Z"
+}
