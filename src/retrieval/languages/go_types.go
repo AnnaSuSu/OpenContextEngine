@@ -73,6 +73,8 @@ func resolveTypes(fset *token.FileSet, trees map[string]*ast.File, texts map[str
 	context.GOOS = goos
 	context.GOARCH = goarch
 	context.CgoEnabled = false
+	// Snapshot paths are slash-separated regardless of the helper's host OS.
+	context.JoinPath = path.Join
 	context.OpenFile = func(name string) (io.ReadCloser, error) {
 		if text, ok := texts[path.Clean(name)]; ok {
 			return io.NopCloser(strings.NewReader(text)), nil
