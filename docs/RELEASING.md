@@ -5,8 +5,6 @@ Preparing an archive does not publish it or change GitHub repository visibility.
 
 ## Prepare and verify
 
-Public documentation uses English. Keep `README.zh-CN.md` as the Chinese README translation; preserve frozen bilingual benchmark queries, reference data, and original results in their recorded form.
-
 1. Confirm the version in `package.json`, `package-lock.json`, and the MCP server agrees. Choose a new version if that version is already published.
 2. Run `npm ci` and `npm test` from a clean checkout with the Python dependencies installed. MCP integration tests need local loopback sockets; verify they are not skipped.
 3. Finalize the release README before packing: use the npm install command and remove pending-release notices. The release packer explicitly selects the English README in package metadata while retaining the Chinese translation; npm can otherwise select the translated file as its homepage. npm displays the README bundled with the release; later GitHub edits do not update it.
