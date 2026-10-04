@@ -39,7 +39,7 @@ OpenContextEngine 是一个**可自行部署、面向 AI 编程助手的代码�
 
 通过 npm 安装，展开你所用客户端的教程即可。同一台机器、同一用户下的多个客户端可以共用模型配置。下方链接的详细技术文档目前为英文。
 
-<details>
+<details open>
 <summary><strong>Codex：安装、接入与搜索</strong></summary>
 
 **1. 安装 CLI**

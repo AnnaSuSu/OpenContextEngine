@@ -39,7 +39,7 @@ Requires **macOS or Linux**, Node.js 22.14+, Python 3.10+, Git, and configured e
 
 Install from npm, then expand your client's guide. Model settings are shared across clients on the same machine.
 
-<details>
+<details open>
 <summary><strong>Codex — install, connect, and search</strong></summary>
 
 **1. Install the CLI**
