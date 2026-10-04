@@ -62,7 +62,7 @@ Scores include source fidelity: returned nonblank lines must match both the phys
 
 Upstream versions and exact source/reference fingerprints are recorded in the [protocol](../../eval/method-comparison-v1/protocol.json). These are configured deployments, not every project’s best possible configuration. Open-source native chunkers and selection policies differ by design. The common embedding service input window is a constraint for every open-source method.
 
-Serena and codebase-memory-mcp provide symbol/navigation or graph tools rather than a directly comparable one-shot natural-language retrieval entry point in the inspected versions. Their capabilities remain covered in the [technical survey](../../TECHNICAL_REPORT.md); they receive no invented accuracy score. Augment context-connectors is an integration layer over ACE, not an additional independent retrieval engine.
+Serena and codebase-memory-mcp provide symbol/navigation or graph tools rather than a directly comparable one-shot natural-language retrieval entry point in the inspected versions. They receive no invented accuracy score. Augment context-connectors is an integration layer over ACE, not an additional independent retrieval engine.
 
 ## Setup checks and compatibility
 

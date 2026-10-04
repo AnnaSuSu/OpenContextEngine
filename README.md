@@ -64,4 +64,4 @@ The MCP server starts the repository worker and maintains its index. **Save your
 
 ## Explore
 
-[Benchmark report](docs/BENCHMARKS.md) · [Raw evaluations](docs/eval/results) · [Retrieval engine](src/retrieval) · [Technical report](TECHNICAL_REPORT.md) · [Project goals](GOALS.md) · [Logo assets](assets/brand)
+[Benchmark report](docs/BENCHMARKS.md) · [Raw evaluations](docs/eval/results) · [Retrieval engine](src/retrieval) · [Logo assets](assets/brand)

@@ -6,3 +6,9 @@ runs/
 .pilot-state/
 __pycache__/
 *.pyc
+
+# Local planning, agent instructions, and provider details
+/AGENTS.md
+/GOALS.md
+/MODEL_PROVIDERS.md
+/TECHNICAL_REPORT.md
