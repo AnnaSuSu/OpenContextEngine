@@ -1,6 +1,6 @@
 {
   "name": "open-context-engine",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "engines": {
     "node": ">=22.14"
@@ -36,6 +36,7 @@
     "linux"
   ],
   "files": [
+    "README.zh-CN.md",
     "bin/",
     "src/config.mjs",
     "src/environment.mjs",
