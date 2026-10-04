@@ -148,7 +148,7 @@ Claude 会通过 `directory_path` 传入项目的绝对路径。首次请求会�
 
 ## 进一步了解
 
-[评测报告](docs/BENCHMARKS.md) · [原始评测数据](docs/eval/results) · [检索引擎源码](src/retrieval)
+[评测报告](https://github.com/AnnaSuSu/OpenContextEngine/blob/main/docs/BENCHMARKS.md) · [原始评测数据](https://github.com/AnnaSuSu/OpenContextEngine/tree/main/docs/eval/results) · [检索引擎源码](https://github.com/AnnaSuSu/OpenContextEngine/tree/main/src/retrieval)
 
 ## 许可证
 

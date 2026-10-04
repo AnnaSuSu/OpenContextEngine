@@ -148,7 +148,7 @@ Your agent supplies the current project's absolute path as `directory_path`. To 
 
 ## Explore
 
-[Benchmark report](docs/BENCHMARKS.md) · [Raw evaluations](docs/eval/results) · [Retrieval engine](src/retrieval)
+[Benchmark report](https://github.com/AnnaSuSu/OpenContextEngine/blob/main/docs/BENCHMARKS.md) · [Raw evaluations](https://github.com/AnnaSuSu/OpenContextEngine/tree/main/docs/eval/results) · [Retrieval engine](https://github.com/AnnaSuSu/OpenContextEngine/tree/main/src/retrieval)
 
 ## License
 
