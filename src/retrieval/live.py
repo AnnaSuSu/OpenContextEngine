@@ -2,7 +2,6 @@
 from collections import Counter
 from contextlib import closing
 from dataclasses import dataclass
-import fcntl
 import hashlib
 import json
 import os
@@ -19,6 +18,7 @@ from engine import document, post
 from languages import adapter_manifest, source_units
 from languages.files import discover_snapshot
 from routed import RoutedEngine
+from writer_lock import acquire_writer_lock
 
 
 def digest(value):
@@ -72,12 +72,7 @@ class LiveIndex:
         self.phase = 'starting'
         self.parse_cache = {}
         self.state.mkdir(parents=True, exist_ok=True, mode=0o700)
-        self.lock_file = (self.state/'writer.lock').open('a')
-        try:
-            fcntl.flock(self.lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except OSError:
-            self.lock_file.close()
-            raise ValueError('This index directory already has a running writer') from None
+        self.lock_file = acquire_writer_lock(self.state/'writer.lock')
         self.thread = threading.Thread(target=self._run, name='repository-index', daemon=True)
 
     def scan(self):

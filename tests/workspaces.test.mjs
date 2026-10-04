@@ -31,7 +31,7 @@ test('Workspace routing canonicalizes aliases, deduplicates concurrent starts an
   const gate = new Promise(resolve => {ready = resolve;});
   const {manager, started, dir, first, second} = await setup(t, {ready: () => gate});
   const alias = join(dir,'alias');
-  await symlink(first,alias);
+  await symlink(first,alias,process.platform === 'win32' ? 'junction' : 'dir');
   const a = manager.get(first), b = manager.get(alias), c = manager.get(second);
   assert.equal(started.length,2);
   assert.notEqual(started[0].settings.state,started[1].settings.state);

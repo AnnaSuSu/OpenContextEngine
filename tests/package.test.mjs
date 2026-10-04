@@ -15,7 +15,8 @@ test('npm package contains the runtime and excludes credentials, caches, benchma
   for (const path of ['LICENSE','README.md','README.zh-CN.md','bin/opencontextengine.mjs','src/config.mjs','src/runtime.mjs','src/setup.mjs',
     'src/mcp.mjs','src/workspaces.mjs','src/eval/remote-models.mjs','scripts/mcp-opencontextengine.mjs',
     'scripts/retrieval-server.py','src/retrieval/languages/typescript.mjs','src/retrieval/languages/go_ast.go',
-    'src/retrieval/languages/go_types.go','src/retrieval/reranker.py','requirements.txt']) assert.ok(files.has(path),path);
+    'src/retrieval/languages/go_types.go','src/retrieval/reranker.py','src/retrieval/writer_lock.py',
+    'requirements.txt']) assert.ok(files.has(path),path);
   for (const path of files) {
     assert.doesNotMatch(path,/(^|\/)(\.env[^/]*|\.pilot-state|node_modules|__pycache__)(\/|$)|\.pyc$/);
     assert.doesNotMatch(path,/^(tests|eval|deploy)\//);
@@ -29,6 +30,7 @@ test('npm package contains the runtime and excludes credentials, caches, benchma
   assert.equal(metadata.bin.opencontextengine,'bin/opencontextengine.mjs');
   assert.notEqual(metadata.private,true);
   assert.equal(metadata.license,'MIT');
+  assert.deepEqual(metadata.os,['darwin','linux','win32']);
   assert.deepEqual(metadata.publishConfig,{access:'public',registry:'https://registry.npmjs.org/'});
   assert.ok(!metadata.dependencies['@augmentcode/auggie-sdk']);
   assert.ok(!metadata.dependencies['@openai/codex-sdk']);

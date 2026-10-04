@@ -2,9 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, rm, mkdir, writeFile, readFile, stat, readdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
 import { loadEnvironment, readUserConfig, saveUserConfig } from '../src/config.mjs';
-import { ensureRuntime } from '../src/runtime.mjs';
+import { ensureRuntime, defaultPython, venvPython } from '../src/runtime.mjs';
 import { setup, validateModels } from '../src/setup.mjs';
 
 const models = {EMBEDDING_BASE_URL:'https://embedding.example/v1',EMBEDDING_API_KEY:'embedding-test-secret',
@@ -19,8 +19,10 @@ async function temporary(t) {
 test('Shared config uses private atomic files and explicit environment wins over saved settings and checkout defaults', async t => {
   const {dir,environment} = await temporary(t);
   const path = saveUserConfig({...models,GPT_API_KEY:'do-not-save'},environment);
-  assert.equal((await stat(path)).mode & 0o777,0o600);
-  assert.equal((await stat(environment.OCE_CONFIG_HOME)).mode & 0o777,0o700);
+  if (process.platform !== 'win32') {
+    assert.equal((await stat(path)).mode & 0o777,0o600);
+    assert.equal((await stat(environment.OCE_CONFIG_HOME)).mode & 0o777,0o700);
+  }
   assert.ok(!('GPT_API_KEY' in readUserConfig(environment)));
   const checkout = join(dir,'checkout'); await mkdir(checkout);
   await writeFile(join(checkout,'.env'),'RERANK_MODEL=checkout\nREPONERVE_POLL_SECONDS=2\n');
@@ -55,10 +57,38 @@ test('Runtime installation is isolated, reused on repeat setup and rebuilt when 
   const again = await ensureRuntime({...environment,...runtime},{execute});
   assert.deepEqual(again,runtime);
   assert.equal(calls.filter(([,args]) => args.includes('pip')).length,1);
-  await writeFile(join(runtime.OCE_PYTHON,'../../ready.json'),JSON.stringify({requirementsSha256:'old'}));
+  await writeFile(join(dirname(dirname(runtime.OCE_PYTHON)),'ready.json'),JSON.stringify({requirementsSha256:'old'}));
   const upgraded = await ensureRuntime({...environment,...runtime},{execute});
   assert.notEqual(upgraded.OCE_PYTHON,runtime.OCE_PYTHON);
   assert.equal(calls.filter(([,args]) => args.includes('pip')).length,2);
+});
+
+test('Windows setup installs and reuses Scripts/python.exe, preserving an explicit interpreter', async t => {
+  const {dir,environment} = await temporary(t);
+  environment.OCE_CONFIG_HOME = join(dir,'settings with spaces 中文');
+  const calls = [];
+  const execute = async (command,args) => {calls.push([command,args]); return {stdout:'3.12.0\n'};};
+  const logs = [];
+  const result = await setup({platform:'win32',environment:{...environment,...models},
+    nonInteractive:true,execute,log:line => logs.push(line)});
+  assert.equal(calls.find(([,args]) => args.includes('venv'))[0],'python');
+  assert.equal(result.env.OCE_PYTHON,
+    join(dirname(dirname(result.env.OCE_PYTHON)),'Scripts','python.exe'));
+  assert.equal(calls.find(([,args]) => args.includes('pip'))[0],result.env.OCE_PYTHON);
+  const repeated = await setup({platform:'win32',environment:{...environment,...models},
+    nonInteractive:true,execute,log:()=>{}});
+  assert.equal(repeated.env.OCE_PYTHON,result.env.OCE_PYTHON);
+  assert.equal(calls.filter(([,args]) => args.includes('venv')).length,1);
+  const explicit = join(dir,'custom python','python.exe');
+  const selected = await setup({platform:'win32',python:explicit,environment:{...environment,...models},
+    nonInteractive:true,execute,log:()=>{}});
+  assert.notEqual(selected.env.OCE_PYTHON,result.env.OCE_PYTHON);
+  assert.equal(calls.filter(([,args]) => args.includes('venv')).at(-1)[0],explicit);
+  assert.ok(!logs.join('\n').includes(models.EMBEDDING_API_KEY));
+  for (const platform of ['darwin','linux']) {
+    assert.equal(defaultPython(platform),'python3');
+    assert.equal(venvPython(dir,platform),join(dir,'bin','python'));
+  }
 });
 
 test('Failed dependency install removes only its new runtime and keeps the existing configuration', async t => {

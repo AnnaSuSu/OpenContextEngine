@@ -35,7 +35,9 @@ Measured with the optional batch rerank API. 40 source-derived tasks, each asked
 
 ## Quick start
 
-Requires **macOS or Linux**, Node.js 22.14+, Python 3.10+, Git, and configured embedding/reranking services. Go repositories also need Go 1.22+.
+Requires **macOS, Linux, or Windows**, Node.js 22.14+, Python 3.10+, Git, and configured embedding/reranking services. Go repositories also need Go 1.22+.
+
+Native Windows compatibility is included in this source checkout; Windows runner validation and an npm release containing these changes are pending. Windows users should follow the [source installation instructions](docs/QUICKSTART.md#1-install) for now.
 
 Install from npm, then expand your client's guide. Model settings are shared across clients on the same machine.
 

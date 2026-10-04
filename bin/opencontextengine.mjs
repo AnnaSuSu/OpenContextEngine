@@ -10,7 +10,7 @@ import { serviceConfig } from '../src/service.mjs';
 const help = `OpenContextEngine — repository context for AI coding agents
 
 Usage:
-  open-context-engine setup [--python /path/to/python3] [--non-interactive]
+  open-context-engine setup [--python <interpreter-path>] [--non-interactive]
   open-context-engine mcp [--root /project] [--state /outside/index]
   open-context-engine mcp --connect
   open-context-engine mcp-config
@@ -19,7 +19,7 @@ Usage:
 
 Setup installs isolated Python dependencies, saves shared model settings, and
 prints MCP configuration. Without --root, your agent supplies directory_path.
-Requires macOS/Linux, Node.js 22.14+, Python 3.10+, and Git.
+Requires macOS/Linux/Windows, Node.js 22.14+, Python 3.10+, and Git.
 `;
 function mcpConfig() {
   const env = process.env.OCE_CONFIG_HOME ? {OCE_CONFIG_HOME:configDirectory()} : undefined;

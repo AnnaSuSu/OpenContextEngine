@@ -2,7 +2,7 @@ import { createInterface } from 'node:readline/promises';
 import { Writable } from 'node:stream';
 import { configDirectory, loadEnvironment, saveUserConfig } from './config.mjs';
 import { remoteRerankerConfig, embeddingTransportConfig, rerankerExecutionTransport } from './eval/remote-models.mjs';
-import { ensureRuntime, run } from './runtime.mjs';
+import { ensureRuntime, run, defaultPython } from './runtime.mjs';
 
 export function validateModels(env) {
   embeddingTransportConfig(env);
@@ -37,8 +37,9 @@ export function terminalPrompt(input = process.stdin, output = process.stderr) {
 }
 
 export async function setup({environment = process.env, nonInteractive = false, python,
-  prompt, install = ensureRuntime, execute = run, log = message => process.stderr.write(message+'\n')} = {}) {
-  if (!['darwin','linux'].includes(process.platform)) throw new Error('OpenContextEngine currently supports macOS and Linux');
+  platform = process.platform, prompt, install = ensureRuntime, execute = run,
+  log = message => process.stderr.write(message+'\n')} = {}) {
+  if (!['darwin','linux','win32'].includes(platform)) throw new Error('OpenContextEngine supports macOS, Linux and Windows');
   let env = {EMBEDDING_MODEL:'Qwen3-Embedding-4B',RERANK_MODEL:'Qwen3-Reranker-4B',
     OCE_EMBEDDING_DIMENSIONS:'1024',...loadEnvironment(environment)};
   log(`Configuration: ${configDirectory(environment)}`);
@@ -57,10 +58,10 @@ export async function setup({environment = process.env, nonInteractive = false, 
   validateModels(env);
   await execute('git',['--version'],{timeout:10000});
   if (python) delete env.OCE_PYTHON;
-  const runtime = await install(env,{python:python || 'python3',execute,log});
+  const runtime = await install(env,{platform,python:python || defaultPython(platform),execute,log});
   env = {...env,...runtime};
   const path = saveUserConfig(env,environment);
-  log(`Saved configuration to ${path}. API keys are stored with owner-only file permissions.`);
+  log(`Saved configuration to ${path}.`);
   log('Setup complete. Go projects additionally require Go 1.22+ on PATH or OCE_GO_BINARY.');
   return {path,env};
 }

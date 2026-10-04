@@ -4,7 +4,7 @@ The persistent service supports saved files in any local repository. First acces
 
 ## Run a separate service from source
 
-Supported platforms are macOS / Linux, requiring Node.js 22.14+, Python 3.10+, and Git. Repositories with Go files also require a Go compiler. Models run through configured remote embedding and reranking services, without local model loading. For ordinary MCP use, follow the [Quickstart](QUICKSTART.md) and run `open-context-engine setup`; a separate HTTP service is unnecessary.
+Host platforms are macOS / Linux / Windows, requiring Node.js 22.14+, Python 3.10+, and Git. Native Windows compatibility is included in source; Windows runner validation and an npm release containing these changes are pending. Repositories with Go files also require a Go compiler. Models run through configured remote embedding and reranking services, without local model loading. For ordinary MCP use, follow the [Quickstart](QUICKSTART.md) and run `open-context-engine setup`; a separate HTTP service is unnecessary.
 
 ```sh
 npm ci
@@ -14,7 +14,17 @@ python3 -m venv .venv
 npm run serve-retrieval -- --root /absolute/path/to/repository --port 23505
 ```
 
-npm installations use the Python environment created and saved by `setup`. Source installations can select an interpreter with `OCE_PYTHON`; otherwise, compatible locations such as the source directory's `.venv` are checked before falling back to `python3`. Select the Go compiler with `OCE_GO_BINARY`. Enable Go type analysis with `OCE_LANGUAGE_OPTIONS='{"go":{"mode":"types"}}'`; syntax-based structure analysis remains the default.
+On Windows, create and install the source environment in PowerShell:
+
+```powershell
+npm ci
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+# Set model endpoints and OCE_API_KEY (at least 24 characters) in .env.
+npm run serve-retrieval -- --root "C:\Users\you\project" --port 23505
+```
+
+npm installations use the Python environment created and saved by `setup`. Source installations can select an interpreter with `OCE_PYTHON`; otherwise, compatible locations such as the source directory's `.venv` are checked before falling back to `python3` on macOS/Linux or `python` on Windows. Virtual environments use `bin/python` on macOS/Linux and `Scripts/python.exe` on Windows. Select the Go compiler with `OCE_GO_BINARY`. Enable Go type analysis with `OCE_LANGUAGE_OPTIONS='{"go":{"mode":"types"}}'`; syntax-based structure analysis remains the default.
 
 Indexes default to `~/.cache/opencontextengine/<repository-path-hash>/`; override this with `--state /outside/repository/index`. Existing installations automatically reuse their previous cache directory. Keep the state directory outside the source directory to avoid indexing its own output. Only one process may write to a state directory. After stopping the service, deleting the entire state directory removes source copies and vectors. Historical vectors are retained to reuse content when switching branches.
 

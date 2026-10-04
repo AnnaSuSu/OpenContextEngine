@@ -4,14 +4,15 @@ import { existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve, join } from 'node:path';
 import { startService } from '../../src/service.mjs';
+import { venvPython } from '../../src/runtime.mjs';
 
-export const python = process.env.OCE_PYTHON || ['.venv/bin/python',
-  '.pilot-state/language-adapters-venv/bin/python','.pilot-state/baselines/cocoindex-venv/bin/python']
-  .map(path => resolve(path)).find(existsSync);
+export const python = process.env.OCE_PYTHON || ['.venv',
+  '.pilot-state/language-adapters-venv','.pilot-state/baselines/cocoindex-venv']
+  .map(path => venvPython(resolve(path))).find(existsSync);
 
 // A deterministic protocol fixture, not a local model or retrieval quality test.
 export async function fixture(t) {
-  const dir = await mkdtemp(join(tmpdir(), 'opencontextengine-http-'));
+  const dir = await mkdtemp(join(tmpdir(), 'opencontextengine 中文 '));
   const root = join(dir,'repo');
   await mkdir(root);
   const hooks = {rerank:null, embedding:null};

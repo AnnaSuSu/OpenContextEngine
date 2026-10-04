@@ -6,6 +6,12 @@ import { createHash } from 'node:crypto';
 import { configDirectory, projectRoot } from './config.mjs';
 
 const exec = promisify(execFile);
+export function defaultPython(platform = process.platform) {
+  return platform === 'win32' ? 'python' : 'python3';
+}
+export function venvPython(directory, platform = process.platform) {
+  return platform === 'win32' ? join(directory,'Scripts','python.exe') : join(directory,'bin','python');
+}
 export async function run(command, args, options = {}) {
   try {return await exec(command,args,{timeout:600000,maxBuffer:4*1024*1024,...options});}
   catch (error) {
@@ -21,7 +27,8 @@ export async function verifyPython(python, environment = process.env, execute = 
   return (await execute(python,['-c',probe],{env:environment,timeout:120000})).stdout.trim();
 }
 
-export async function ensureRuntime(environment, {python = 'python3', execute = run, log = () => {}} = {}) {
+export async function ensureRuntime(environment, {platform = process.platform,
+  python = defaultPython(platform), execute = run, log = () => {}} = {}) {
   const runtimes = join(configDirectory(environment),'runtimes');
   const requirements = await readFile(join(projectRoot,'requirements.txt'));
   const fingerprint = createHash('sha256').update(requirements).digest('hex');
@@ -43,7 +50,7 @@ export async function ensureRuntime(environment, {python = 'python3', execute = 
   await mkdir(runtimes,{recursive:true,mode:0o700});
   // Virtual environments cannot be relocated. Each installation is built in its final directory.
   const directory = await mkdtemp(join(runtimes,'python-'));
-  const executable = join(directory,'bin','python');
+  const executable = venvPython(directory,platform);
   const env = {...environment,TIKTOKEN_CACHE_DIR:join(directory,'tokenizer')};
   try {
     log('Creating an isolated Python environment...');

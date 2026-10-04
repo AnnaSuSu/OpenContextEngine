@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { writeFile, rm } from 'node:fs/promises';
-import { join } from 'node:path';
+import { join, delimiter, dirname, resolve } from 'node:path';
 import { search, indexStatus } from '../src/client.mjs';
 import { fixture, python } from './helpers/live-service.mjs';
 import { startService } from '../src/service.mjs';
@@ -19,9 +19,10 @@ test('Live HTTP search synchronizes saved files and rejects unauthorized/invalid
     const first = await search('find save',{config,freshnessWaitMs:5000});
     assert.match(first.context, /first/);
     assert.equal(first.index.freshness,'verified-after-search');
-    await writeFile(join(root,'main.py'),'def save():\n    return "second"\n');
+    await writeFile(join(root,'main.py'),'def save():\n    return "second 中文"\n');
     const next = await search('find save',{config,freshnessWaitMs:5000});
     assert.match(next.context,/second/);
+    assert.match(next.context,/中文/);
     assert.notEqual(first.index.identity,next.index.identity);
     assert.equal((await indexStatus({config})).status,'ready');
     await assert.rejects(search('find save',{config:{...config,apiKey:'incorrect'}}),/401/);
@@ -52,7 +53,8 @@ test('Managed workers can parse JavaScript when the desktop client PATH does not
     const original = process.env.PATH;
     let service;
     try {
-      process.env.PATH = '/usr/bin:/bin';
+      process.env.PATH = original.split(delimiter)
+        .filter(directory => resolve(directory).toLowerCase() !== dirname(process.execPath).toLowerCase()).join(delimiter);
       service = await fixture(t);
     } finally {process.env.PATH = original;}
     await writeFile(join(service.root,'store.js'),'export function persist() { return "desktop-path-ready"; }\n');

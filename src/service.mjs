@@ -5,6 +5,7 @@ import { homedir } from 'node:os';
 import { resolve, dirname, delimiter } from 'node:path';
 import { createInterface } from 'node:readline';
 import { projectRoot, loadEnvironment } from './config.mjs';
+import { defaultPython, venvPython } from './runtime.mjs';
 import { embeddingTransportConfig, remoteRerankerConfig, rerankerExecutionTransport } from './eval/remote-models.mjs';
 
 export function serviceConfig({root, state, port = 0} = {}, environment = process.env) {
@@ -13,13 +14,13 @@ export function serviceConfig({root, state, port = 0} = {}, environment = proces
   const reranker = remoteRerankerConfig(env), runtime = rerankerExecutionTransport(env);
   const repository = root ? realpathSync(resolve(root)) : undefined;
   const workspaceId = repository && createHash('sha256').update(repository).digest('hex').slice(0, 24);
-  const candidates = ['.venv/bin/python', '.pilot-state/baselines/cocoindex-venv/bin/python',
-    '.pilot-state/language-adapters-venv/bin/python'].map(path => resolve(projectRoot, path));
+  const candidates = ['.venv', '.pilot-state/baselines/cocoindex-venv',
+    '.pilot-state/language-adapters-venv'].map(path => venvPython(resolve(projectRoot, path)));
   const currentState = repository && resolve(homedir(), '.cache/opencontextengine', workspaceId);
   const previousState = repository && resolve(homedir(), '.cache/reponerve', workspaceId);
   const defaultState = repository && (existsSync(currentState) ? currentState : existsSync(previousState) ? previousState : currentState);
   return {
-    python: env.OCE_PYTHON || candidates.find(existsSync) || 'python3',
+    python: env.OCE_PYTHON || candidates.find(existsSync) || defaultPython(),
     workerEnv: {...(env.OCE_GO_BINARY ? {OCE_GO_BINARY:env.OCE_GO_BINARY} : {}),
       ...(env.TIKTOKEN_CACHE_DIR ? {TIKTOKEN_CACHE_DIR:env.TIKTOKEN_CACHE_DIR} : {})},
     config: {root: repository, state: state ? resolve(state) : repository
@@ -41,7 +42,8 @@ export function startService(settings, {log = line => process.stderr.write(line 
   const {python, config} = settings;
   const child = spawn(python, [resolve(projectRoot, 'scripts/retrieval-server.py')], {
     cwd: projectRoot, env: {...process.env, ...settings.workerEnv,
-      PATH:dirname(process.execPath)+delimiter+(process.env.PATH || ''), OPENBLAS_NUM_THREADS:'2', OMP_NUM_THREADS:'2'},
+      PATH:dirname(process.execPath)+delimiter+(process.env.PATH || ''),
+      PYTHONUTF8:'1', PYTHONIOENCODING:'utf-8', OPENBLAS_NUM_THREADS:'2', OMP_NUM_THREADS:'2'},
     stdio:['pipe', 'pipe', 'pipe'],
   });
   const lines = createInterface({input: child.stdout});

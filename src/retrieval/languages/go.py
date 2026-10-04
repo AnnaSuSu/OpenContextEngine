@@ -8,6 +8,7 @@ import re
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 
 from .schema import physical_lines
@@ -54,23 +55,24 @@ def parse(sources, options):
     if cache.is_symlink() or (os.name == 'posix' and
             (cache.stat().st_uid != os.getuid() or cache.stat().st_mode & 0o077)):
         raise RuntimeError('Go parser cache must be private to the current user')
-    executable = cache/identity
+    suffix = '.exe' if sys.platform == 'win32' else ''
+    executable = cache/(identity+suffix)
     if executable.is_symlink():
         raise RuntimeError('Invalid Go parser cache entry')
     if not executable.exists():
         with tempfile.TemporaryDirectory(dir=cache) as directory:
-            target = Path(directory)/'parser'
+            target = Path(directory)/('parser'+suffix)
             env = {**os.environ, 'GOENV': 'off', 'GOWORK': 'off', 'GOTOOLCHAIN': 'local',
                    'GOPROXY': 'off', 'GO111MODULE': 'off', 'CGO_ENABLED': '0', 'GOFLAGS': '',
                    'GOCACHE': str(cache/'build')}
             built = subprocess.run([binary, 'build', '-o', str(target), str(source), str(semantic)],
-                                   env=env, capture_output=True, text=True, timeout=120)
+                                   env=env, capture_output=True, encoding='utf-8', timeout=120)
             if built.returncode:
                 raise RuntimeError('Go parser build failed: '+built.stderr[:2000])
             os.replace(target, executable)
     result = subprocess.run([str(executable)], input=json.dumps({'options': options, 'files': [
         {'path': source.path, 'text': source.text} for source in sources]}),
-        text=True, capture_output=True, timeout=120)
+        encoding='utf-8', capture_output=True, timeout=120)
     if result.returncode:
         raise ValueError('Go adapter failed: '+result.stderr.strip()[:2000])
     return json.loads(result.stdout)
@@ -84,7 +86,7 @@ def extract(sources, max_lines=65, options=None):
     for file in parsed['files']:
         path = file['path']
         lines = physical_lines(source_by_path[path].text)
-        module = str(Path(path).parent)+'::'+file['package']
+        module = Path(path).parent.as_posix()+'::'+file['package']
         root = {'name': '', 'kind': 'module', 'start': 1, 'end': len(lines), 'decl': 0}
         owners = [root]*len(lines)
         for entry in file['entries']:

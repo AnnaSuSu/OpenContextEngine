@@ -1,7 +1,8 @@
 /** Parse and bind only the frozen source set. Never emit, execute, or load repo plugins. */
 import ts from 'typescript';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync, realpathSync } from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const COMPILER_VERSION = '5.9.3';
 if (ts.version !== COMPILER_VERSION) throw new Error(`Expected TypeScript ${COMPILER_VERSION}; run npm ci`);
@@ -223,7 +224,8 @@ export function extract(files, maxLines = 65, settings = {}) {
   return { compilerVersion: ts.version, units };
 }
 
-if (process.argv[1] && new URL(import.meta.url).pathname === path.resolve(process.argv[1])) {
+if (process.argv[1] && existsSync(process.argv[1])
+    && realpathSync(fileURLToPath(import.meta.url)) === realpathSync(process.argv[1])) {
   try {
     const input = JSON.parse(readFileSync(0, 'utf8'));
     process.stdout.write(JSON.stringify(extract(input.files, input.maxLines, input.options)));

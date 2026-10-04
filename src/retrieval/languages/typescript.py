@@ -11,7 +11,7 @@ def extract(sources, max_lines=65, options=None):
                'maxLines': max_lines, 'options': options or {}}
     try:
         result = subprocess.run(['node', str(Path(__file__).with_suffix('.mjs'))],
-                                input=json.dumps(payload), text=True, capture_output=True,
+                                input=json.dumps(payload), encoding='utf-8', capture_output=True,
                                 timeout=120, check=False)
     except FileNotFoundError as error:
         raise RuntimeError('TypeScript indexing requires Node.js and npm ci') from error
