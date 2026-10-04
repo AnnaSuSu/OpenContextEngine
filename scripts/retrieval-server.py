@@ -41,7 +41,8 @@ def serve(config):
              'src/retrieval/languages/text.py','src/retrieval/languages/files.py',
              'src/retrieval/languages/python.py','src/retrieval/languages/go.py','src/retrieval/languages/go_ast.go','src/retrieval/languages/go_types.go',
              'src/retrieval/languages/typescript.py',
-             'src/retrieval/languages/typescript.mjs','package.json','package-lock.json']}}
+             'src/retrieval/languages/typescript.mjs','package.json','package-lock.json']
+            if name != 'package-lock.json' or (ROOT/name).is_file()}}
     model_base = config['reranker']['baseUrl'].removesuffix('/v1')
     if not live:
         with urlopen(model_base+'/healthz',timeout=10) as response:

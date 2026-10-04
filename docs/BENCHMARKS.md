@@ -77,13 +77,15 @@ This is a separate run from the speed table, with different structural indexes. 
 
 ## Engineering validation
 
-**97 tests verified: 61 Python + 36 Node.js**, including source fidelity, language relationships, embedding reuse, branch changes, update failures, HTTP authentication, and official MCP client integration. This includes ordinary `/rerank` compatibility, sparse-pair mapping, bounded concurrency, malformed provider responses, and identical retrieval under deterministic scores in both API modes. The automatic-workspace change passed all 36 Node.js tests, including seven new cases for project routing, concurrent first access, path validation, failure recovery, and worker shutdown; the unchanged Python suite retains its earlier 61-test result. This is a recorded local test result, not a live CI status badge.
+**107 tests verified: 61 Python + 46 Node.js**, including source fidelity, language relationships, embedding reuse, branch changes, update failures, HTTP authentication, and official MCP client integration. This includes ordinary `/rerank` compatibility, sparse-pair mapping, bounded concurrency, malformed provider responses, and identical retrieval under deterministic scores in both API modes. The CLI change passed all 46 Node.js tests, including shared configuration, private file permissions, dependency installation/reuse/failure, package contents, generated MCP configuration, and desktop PATH handling. The retrieval Python suite retains its earlier 61-test result. This is a recorded local test result, not a live CI status badge.
 
 A separate **real remote-model MCP smoke test** verified initial indexing, saved-file updates, deletion, and restart recovery. Editing one function embedded **one new document and reused two unchanged units**. Requests that encounter failed synchronization or source changes during retrieval return explicit errors instead of stale evidence.
 
 [Ordinary rerank and real-model MCP validation](eval/results/rerank-compat-20261004.json) · [Earlier remote MCP smoke record](eval/results/mcp-live-smoke-20261004.json) · [Tests](../tests) · [Smoke runner](../scripts/smoke-mcp.mjs)
 
 The [automatic-workspace remote-model smoke](eval/results/mcp-workspaces-20261004.json) also passed: first access, switching between two projects without mixing evidence, reusing an existing index, saved edits, deletion, and restoration after MCP restart. These are functional checks on tiny synthetic repositories, not a rerun of the retrieval benchmark.
+
+The [CLI installation validation](eval/results/cli-install-20261004.json) records installation from an npm tarball into an isolated prefix, automatic Python dependency setup, repeated setup with runtime reuse, terminal key masking, and real-model MCP lifecycle checks through the installed CLI. Publication is a separate release step.
 
 ```sh
 npm test

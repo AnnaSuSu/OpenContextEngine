@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "date": "2026-10-04",
+  "distribution": "private local tarball; not published to npm",
+  "package": {
+    "name": "opencontextengine",
+    "version": "0.1.0",
+    "filename": "opencontextengine-0.1.0.tgz",
+    "sizeBytes": 52049,
+    "sha256": "b53a9e143b0b22f174aab91f505b79eaad4669100c2b08567514fcbd3435d9dd",
+    "files": 37,
+    "credentialScan": "passed"
+  },
+  "tests": {
+    "node": 46,
+    "pythonPreviouslyVerified": 61,
+    "newCases": 10
+  },
+  "installation": {
+    "isolatedNpmPrefix": true,
+    "freshPythonDependencies": true,
+    "repeatSetupReusesRuntime": true,
+    "settingsSurviveReinstall": true,
+    "setupOutputExcludesKeys": true,
+    "terminalKeyEcho": "disabled and verified with a real PTY",
+    "doctor": "passed"
+  },
+  "mcp": {
+    "status": "passed",
+    "entrypoint": "installed-cli",
+    "mode": "automatic",
+    "startedAt": "2026-10-04T02:40:42.171Z",
+    "finishedAt": "2026-10-04T02:40:57.580Z",
+    "checks": [
+      {
+        "name": "initial-index-and-search",
+        "index": {
+          "mode": "live",
+          "identity": "f799fac3c21049c8609e59b8320c4739dec6f1bab3074cbe0d6cb5e135221116",
+          "freshness": "verified-after-search",
+          "completedAt": 1791081643.6217248
+        },
+        "elapsedMs": 3929
+      },
+      {
+        "name": "project-switch-and-reuse",
+        "identity": "f799fac3c21049c8609e59b8320c4739dec6f1bab3074cbe0d6cb5e135221116"
+      },
+      {
+        "name": "saved-edit-incremental-search",
+        "index": {
+          "mode": "live",
+          "identity": "5f25ec240d8f262b4932485339776a077f00595585811ba646ec23607f1e8cf6",
+          "freshness": "verified-after-search",
+          "completedAt": 1791081652.617815
+        },
+        "elapsedMs": 1621,
+        "embeddedDocuments": 1,
+        "reusedUnits": 2
+      },
+      {
+        "name": "deleted-file-removed",
+        "index": {
+          "mode": "live",
+          "identity": "2605337e74d73e912c3ac8b6d827631786a5a75cf40bcc2793f5a462a5985924",
+          "freshness": "verified-after-search",
+          "completedAt": 1791081654.029459
+        },
+        "elapsedMs": 1958
+      },
+      {
+        "name": "restart-restores-generation",
+        "identity": "2605337e74d73e912c3ac8b6d827631786a5a75cf40bcc2793f5a462a5985924"
+      }
+    ]
+  },
+  "scope": "Functional validation on macOS with synthetic repositories and configured remote models. No retrieval quality benchmark rerun. Linux support was not separately exercised in this run.",
+  "sourceSha256": {
+    "bin/opencontextengine.mjs": "7c1b3c7d556e67c9d140b0cc80225847bcebe43de72c6c51f9378e03cab22c4a",
+    "src/config.mjs": "f9678ba50cb6f22ff9924c6211103bca8af992a15d08d4b828856a46f19de23a",
+    "src/runtime.mjs": "b514d50dc76d775c535c110ca9ed00f02bd6aacaf4cf5d6366885d94478cbdff",
+    "src/setup.mjs": "95e2548ecd6058f394021618e208776826533743841f9e65adcf3fd8460d4e97",
+    "src/service.mjs": "af6ac039a369d19ba3949bb04cdbc82a0018b97f855c467cfeafdffc554176df",
+    "src/client.mjs": "f96764b8a0424ca042bfb754d5fcf2c4498cf0a89ea626422a2ed8a5b8096b23",
+    "scripts/retrieval-server.py": "c1ce7fe28b6f9bb0cb0bebb9f9bc94c4fde7491d8b2a1ac10e33032e27830753",
+    "package.json": "775bf57b3b3a995918a636dcd813f6cd3ff658d5fbc3128e3d29e921bf190897",
+    "requirements.txt": "66f7cf887e0ef2f315026e398a2d28d78d8ac5949d91b50f4fc9daf5fa253d99"
+  }
+}

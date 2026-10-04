@@ -9,9 +9,10 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 
 const run = resolve('.pilot-state/mcp-smoke', new Date().toISOString().replaceAll(':','-'));
 const root = join(run,'repo'), state = join(run,'index');
-const {values} = parseArgs({options:{'auto-workspace':{type:'boolean'}}});
+const {values} = parseArgs({options:{'auto-workspace':{type:'boolean'},cli:{type:'string'}}});
 const automatic = Boolean(values['auto-workspace']);
-const args = [resolve('scripts/mcp-opencontextengine.mjs'),...(automatic ? [] : ['--root',root]),'--state',state];
+const args = [...(values.cli ? [resolve(values.cli),'mcp'] : [resolve('scripts/mcp-opencontextengine.mjs')]),
+  ...(automatic ? [] : ['--root',root]),'--state',state];
 const workspace = automatic ? {directory_path:root} : {};
 await mkdir(root,{recursive:true});
 execFileSync('git',['init','-q',root]);
@@ -22,7 +23,8 @@ const transport = new StdioClientTransport({command:process.execPath,
   args,
   env:{...process.env},stderr:'pipe'});
 const client = new Client({name:'opencontextengine-remote-smoke',version:'1.0.0'});
-const report = {startedAt:new Date().toISOString(),mode:automatic ? 'automatic' : 'fixed',checks:[],modelCalls:'configured remote endpoints'};
+const report = {startedAt:new Date().toISOString(),mode:automatic ? 'automatic' : 'fixed',
+  entrypoint:values.cli ? 'installed-cli' : 'source-script',checks:[],modelCalls:'configured remote endpoints'};
 try {
   await client.connect(transport);
   transport.stderr?.resume();

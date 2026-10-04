@@ -1,12 +1,7 @@
-import { normalizeEnvironment } from './environment.mjs';
-import { readFileSync, existsSync } from 'node:fs';
-import { parseEnv } from 'node:util';
-import { resolve } from 'node:path';
-import { projectRoot } from './pilot/config.mjs';
+import { loadEnvironment } from './config.mjs';
 
 export function clientConfig(environment=process.env) {
-  const file=resolve(projectRoot,'.env');
-  const env={...normalizeEnvironment(existsSync(file)?parseEnv(readFileSync(file,'utf8')):{}),...normalizeEnvironment(environment)};
+  const env=loadEnvironment(environment);
   const url=new URL(env.OCE_BASE_URL || 'http://127.0.0.1:45005');
   if (url.username || url.password || url.search || url.hash ||
       !(url.protocol==='https:' || url.protocol==='http:' && url.hostname==='127.0.0.1')) throw new Error('Use HTTPS or an explicit loopback SSH forward');

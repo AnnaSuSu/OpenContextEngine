@@ -1,7 +1,6 @@
 {
   "name": "opencontextengine",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
   "engines": {
     "node": ">=22.14"
@@ -18,11 +17,48 @@
     "mcp": "node scripts/mcp-opencontextengine.mjs"
   },
   "dependencies": {
-    "@augmentcode/auggie-sdk": "0.2.0",
     "@modelcontextprotocol/sdk": "1.32.0",
-    "@openai/codex-sdk": "0.160.0",
-    "js-tiktoken": "1.0.21",
     "typescript": "5.9.3",
     "zod": "4.6.5"
-  }
+  },
+  "description": "Live code context for AI coding agents, with automatic workspaces and MCP.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnnaSuSu/OpenContextEngine.git"
+  },
+  "homepage": "https://github.com/AnnaSuSu/OpenContextEngine#readme",
+  "bin": {
+    "opencontextengine": "bin/opencontextengine.mjs"
+  },
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "files": [
+    "bin/",
+    "src/config.mjs",
+    "src/environment.mjs",
+    "src/client.mjs",
+    "src/service.mjs",
+    "src/workspaces.mjs",
+    "src/mcp.mjs",
+    "src/runtime.mjs",
+    "src/setup.mjs",
+    "src/eval/remote-models.mjs",
+    "src/retrieval/**/*.py",
+    "src/retrieval/**/*.mjs",
+    "src/retrieval/**/*.go",
+    "scripts/mcp-opencontextengine.mjs",
+    "scripts/retrieval-server.py",
+    "requirements.txt",
+    "docs/QUICKSTART.md",
+    "assets/brand/*.svg",
+    "docs/RERANKER_API.md"
+  ],
+  "devDependencies": {
+    "@augmentcode/auggie-sdk": "0.2.0",
+    "@openai/codex-sdk": "0.160.0",
+    "js-tiktoken": "1.0.21"
+  },
+  "private": true
 }

@@ -1,17 +1,14 @@
-import { normalizeEnvironment } from './environment.mjs';
 import { spawn } from 'node:child_process';
-import { existsSync, readFileSync, realpathSync } from 'node:fs';
+import { existsSync, realpathSync } from 'node:fs';
 import { createHash, randomBytes } from 'node:crypto';
 import { homedir } from 'node:os';
-import { resolve } from 'node:path';
+import { resolve, dirname, delimiter } from 'node:path';
 import { createInterface } from 'node:readline';
-import { parseEnv } from 'node:util';
-import { projectRoot } from './pilot/config.mjs';
+import { projectRoot, loadEnvironment } from './config.mjs';
 import { embeddingTransportConfig, remoteRerankerConfig, rerankerExecutionTransport } from './eval/remote-models.mjs';
 
 export function serviceConfig({root, state, port = 0} = {}, environment = process.env) {
-  const file = resolve(projectRoot, '.env');
-  const env = {...normalizeEnvironment(existsSync(file) ? parseEnv(readFileSync(file, 'utf8')) : {}), ...normalizeEnvironment(environment)};
+  const env = loadEnvironment(environment);
   const embedding = embeddingTransportConfig(env);
   const reranker = remoteRerankerConfig(env), runtime = rerankerExecutionTransport(env);
   const repository = root ? realpathSync(resolve(root)) : undefined;
@@ -23,7 +20,8 @@ export function serviceConfig({root, state, port = 0} = {}, environment = proces
   const defaultState = repository && (existsSync(currentState) ? currentState : existsSync(previousState) ? previousState : currentState);
   return {
     python: env.OCE_PYTHON || candidates.find(existsSync) || 'python3',
-    workerEnv: env.OCE_GO_BINARY ? {OCE_GO_BINARY:env.OCE_GO_BINARY} : {},
+    workerEnv: {...(env.OCE_GO_BINARY ? {OCE_GO_BINARY:env.OCE_GO_BINARY} : {}),
+      ...(env.TIKTOKEN_CACHE_DIR ? {TIKTOKEN_CACHE_DIR:env.TIKTOKEN_CACHE_DIR} : {})},
     config: {root: repository, state: state ? resolve(state) : repository
       ? defaultState : resolve(projectRoot, '.pilot-state/reponerve/index'),
     serviceKey: env.OCE_API_KEY || randomBytes(32).toString('hex'), port,
@@ -42,7 +40,8 @@ export function serviceConfig({root, state, port = 0} = {}, environment = proces
 export function startService(settings, {log = line => process.stderr.write(line + '\n')} = {}) {
   const {python, config} = settings;
   const child = spawn(python, [resolve(projectRoot, 'scripts/retrieval-server.py')], {
-    cwd: projectRoot, env: {...process.env, ...settings.workerEnv, OPENBLAS_NUM_THREADS:'2', OMP_NUM_THREADS:'2'},
+    cwd: projectRoot, env: {...process.env, ...settings.workerEnv,
+      PATH:dirname(process.execPath)+delimiter+(process.env.PATH || ''), OPENBLAS_NUM_THREADS:'2', OMP_NUM_THREADS:'2'},
     stdio:['pipe', 'pipe', 'pipe'],
   });
   const lines = createInterface({input: child.stdout});

@@ -8,7 +8,7 @@
   <p>
     <a href="docs/BENCHMARKS.md#seven-method-comparison"><img src="https://img.shields.io/badge/dev_evidence_coverage-94.79%25-23875b?style=flat-square" alt="Development evidence coverage: 94.79%"></a>
     <a href="docs/BENCHMARKS.md#seven-method-comparison"><img src="https://img.shields.io/badge/median_retrieval-1.73_s-23875b?style=flat-square" alt="Median retrieval: 1.73 seconds"></a>
-    <a href="docs/BENCHMARKS.md#engineering-validation"><img src="https://img.shields.io/badge/verified_tests-97-23875b?style=flat-square" alt="97 verified tests"></a>
+    <a href="docs/BENCHMARKS.md#engineering-validation"><img src="https://img.shields.io/badge/verified_tests-107-23875b?style=flat-square" alt="107 verified tests"></a>
     <a href="docs/QUICKSTART.md"><img src="https://img.shields.io/badge/MCP-stdio-193c34?style=flat-square" alt="MCP over stdio"></a>
   </p>
   <p><a href="#quick-start">Quick start</a> · <a href="docs/BENCHMARKS.md">Benchmarks</a> · <a href="docs/QUICKSTART.md">MCP setup</a></p>
@@ -35,25 +35,39 @@ Measured with the optional batch rerank API. 40 source-derived tasks, each asked
 
 Requires **macOS or Linux**, Node.js 22.14+, Python 3.10+, Git, and configured embedding/reranking services. Go repositories also need Go 1.22+.
 
+**Internal testing build. Not published to npm.** Install the provided archive:
+
+```sh
+npm install -g /path/to/opencontextengine-0.1.0.tgz
+opencontextengine setup
+```
+
+Setup installs isolated Python dependencies, saves your model settings, and prints MCP configuration. Paste that configuration into your client. API keys are entered without echo and stored in your user configuration, outside the installation directory.
+
+<details>
+<summary>Run from source or build an internal package</summary>
+
 ```sh
 git clone https://github.com/AnnaSuSu/OpenContextEngine.git
 cd OpenContextEngine
 npm ci
-python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-cp .env.example .env
+node bin/opencontextengine.mjs setup
+# Build an installable archive for internal testers:
+npm pack
 ```
 
-Set your model endpoints and keys in `.env`, then add this server to an MCP client:
+Use the absolute-path MCP configuration printed by setup.
+
+</details>
+
+For clients where the installed command is on `PATH`, the configuration is simply:
 
 ```json
 {
   "mcpServers": {
     "opencontextengine": {
-      "command": "node",
-      "args": [
-        "/absolute/path/to/OpenContextEngine/scripts/mcp-opencontextengine.mjs"
-      ]
+      "command": "opencontextengine",
+      "args": ["mcp"]
     }
   }
 }

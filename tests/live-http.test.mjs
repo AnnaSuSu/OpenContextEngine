@@ -46,3 +46,16 @@ test('Live HTTP refuses results if source changes during model retrieval',
     await assert.rejects(search('find save',{config,freshnessWaitMs:5000}),/Source changed during search/);
     assert.match((await search('find save',{config,freshnessWaitMs:5000})).context,/after/);
   });
+
+test('Managed workers can parse JavaScript when the desktop client PATH does not contain Node',
+  {skip:!python,timeout:15000}, async t => {
+    const original = process.env.PATH;
+    let service;
+    try {
+      process.env.PATH = '/usr/bin:/bin';
+      service = await fixture(t);
+    } finally {process.env.PATH = original;}
+    await writeFile(join(service.root,'store.js'),'export function persist() { return "desktop-path-ready"; }\n');
+    const result = await search('find persist',{config:service.config,freshnessWaitMs:5000});
+    assert.match(result.context,/desktop-path-ready/);
+  });
