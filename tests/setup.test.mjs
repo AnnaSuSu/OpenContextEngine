@@ -118,3 +118,17 @@ test('Setup persists explicit HTTP opt-in and native vector dimensions for subse
   assert.equal(saved.RERANK_BASE_URL,'http://rerank.example:8078');
   assert.doesNotThrow(() => validateModels(saved));
 });
+
+test('Setup saves both SSH forwards and rejects ambiguous reranker transport before installation', async t => {
+  const {environment} = await temporary(t);
+  const ssh = {EMBEDDING_SSH_TUNNEL_URL:'http://127.0.0.1:43079/v1',EMBEDDING_SSH_REMOTE:'operator@models.example:22',
+    RERANK_SSH_TUNNEL_URL:'http://127.0.0.1:43078/v1',RERANK_SSH_REMOTE:'operator@models.example:22'};
+  const env = {...environment,...models,...ssh};
+  await setup({environment:env,nonInteractive:true,execute:async () => ({stdout:''}),
+    install:async () => ({OCE_PYTHON:'/isolated/bin/python'}),log:()=>{}});
+  const saved = readUserConfig(environment);
+  for (const [key,value] of Object.entries(ssh)) assert.equal(saved[key],value);
+  await assert.rejects(setup({environment:{...env,RERANK_REMOTE_RUNTIME_URL:'http://127.0.0.1:8000/v1'},
+    nonInteractive:true,install:async () => assert.fail('Must not install'),log:()=>{}}),/Choose either/);
+  assert.deepEqual(readUserConfig(environment),saved);
+});

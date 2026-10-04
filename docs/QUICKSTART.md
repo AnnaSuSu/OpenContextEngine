@@ -56,6 +56,25 @@ For the [optional benchmark reranker server](RERANKER_API.md), you can optionall
 
 The launcher defaults to HTTPS model endpoints, with explicit HTTP opt-in and SSH/direct-worker transport options available in [the transport configuration](../src/eval/remote-models.mjs). It does not install or load model weights on the client. Repository fragments and queries are sent to the model endpoints you configure.
 
+For internal testing, both model APIs can use an existing SSH connection. Keep the logical `EMBEDDING_BASE_URL` and `RERANK_BASE_URL` unchanged so the vector cache retains its provider identity. Start a loopback-only forward in a separate terminal (replace the example host and server ports):
+
+```sh
+ssh -N -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 \
+  -L 127.0.0.1:43079:127.0.0.1:8079 \
+  -L 127.0.0.1:43078:127.0.0.1:8078 operator@model-host.example
+```
+
+Then start the CLI with these overrides, or save them with `setup --non-interactive`:
+
+```dotenv
+EMBEDDING_SSH_TUNNEL_URL=http://127.0.0.1:43079/v1
+EMBEDDING_SSH_REMOTE=operator@model-host.example:22
+RERANK_SSH_TUNNEL_URL=http://127.0.0.1:43078
+RERANK_SSH_REMOTE=operator@model-host.example:22
+```
+
+The rerank tunnel must preserve the configured base URL's path prefix (for example, `/v1` if required). Keep the SSH process running while using MCP. The CLI does not create SSH sessions or store SSH passwords, and a disconnected tunnel surfaces an error instead of falling back to public HTTP. Models continue to run on the remote server.
+
 ## 3. Add the MCP server
 
 Paste the MCP configuration printed by setup into your client, or print it again with `opencontextengine mcp-config`. It uses absolute Node and CLI paths so desktop clients do not need to find npm's global binary directory.

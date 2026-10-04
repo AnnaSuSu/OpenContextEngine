@@ -36,6 +36,10 @@ export function remoteRerankerConfig(env) {
 // permit launching a model process, nor accepting a loopback model on the Mac.
 export function rerankerExecutionTransport(env, host = { platform: process.platform, hostname: os.hostname() }) {
   const baseUrl = remoteModelUrl(env.RERANK_BASE_URL, {allowHttp:env.OCE_ALLOW_HTTP === '1'});
+  if (env.RERANK_SSH_TUNNEL_URL) {
+    if (env.RERANK_REMOTE_RUNTIME_URL) throw new Error('Choose either SSH forwarding or same-host reranker transport');
+    return sshForward(baseUrl, env.RERANK_SSH_TUNNEL_URL, env.RERANK_SSH_REMOTE, new URL(baseUrl).pathname);
+  }
   if (!env.RERANK_REMOTE_RUNTIME_URL) return { baseUrl, requestBaseUrl: baseUrl, transport: new URL(baseUrl).protocol.slice(0,-1) };
   const url = new URL(env.RERANK_REMOTE_RUNTIME_URL);
   if (host.platform !== 'linux' || env.RERANK_REMOTE_HOST !== host.hostname ||
@@ -51,11 +55,16 @@ export function rerankerExecutionTransport(env, host = { platform: process.platf
 export function embeddingTransportConfig(env) {
   const baseUrl = remoteModelUrl(env.EMBEDDING_BASE_URL, {allowHttp:env.OCE_ALLOW_HTTP === '1'});
   if (!env.EMBEDDING_SSH_TUNNEL_URL) return { baseUrl, requestBaseUrl: baseUrl, transport: new URL(baseUrl).protocol.slice(0,-1) };
-  const tunnel = new URL(env.EMBEDDING_SSH_TUNNEL_URL);
+  return sshForward(baseUrl, env.EMBEDDING_SSH_TUNNEL_URL, env.EMBEDDING_SSH_REMOTE, '/v1');
+}
+
+function sshForward(baseUrl, value, remote, path) {
+  const tunnel = new URL(value);
   if (tunnel.protocol !== 'http:' || tunnel.hostname !== '127.0.0.1' || !tunnel.port ||
-      tunnel.username || tunnel.password || tunnel.search || tunnel.hash || tunnel.pathname !== '/v1' ||
-      !env.EMBEDDING_SSH_REMOTE || !/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9.-]+:[0-9]+$/.test(env.EMBEDDING_SSH_REMOTE)) {
+      tunnel.username || tunnel.password || tunnel.search || tunnel.hash ||
+      tunnel.pathname.replace(/\/$/, '') !== path.replace(/\/$/, '') ||
+      !remote || !/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9.-]+:[0-9]+$/.test(remote)) {
     throw new Error('SSH model transport requires an explicit loopback forward and remote SSH authority');
   }
-  return { baseUrl, requestBaseUrl: tunnel.href, transport: 'ssh-tunnel', remote: env.EMBEDDING_SSH_REMOTE };
+  return { baseUrl, requestBaseUrl: tunnel.href.replace(/\/$/, ''), transport: 'ssh-tunnel', remote };
 }

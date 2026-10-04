@@ -74,3 +74,24 @@ test('Remote HTTP endpoints require explicit opt-in and preserve local model res
     assert.throws(() => remoteRerankerConfig({...opted,RERANK_BASE_URL:url}));
   }
 });
+
+test('Reranker SSH forwarding preserves provider identity and the API path prefix', () => {
+  for (const path of ['', '/v1', '/v2']) {
+    const env = {RERANK_BASE_URL:'https://models.example'+path,
+      RERANK_SSH_TUNNEL_URL:'http://127.0.0.1:43078'+path,RERANK_SSH_REMOTE:'operator@models.example:22'};
+    const result = rerankerExecutionTransport(env);
+    assert.equal(result.baseUrl,env.RERANK_BASE_URL);
+    assert.equal(result.requestBaseUrl,env.RERANK_SSH_TUNNEL_URL);
+    assert.equal(result.transport,'ssh-tunnel');
+    assert.equal(result.remote,env.RERANK_SSH_REMOTE);
+    for (const override of [{RERANK_SSH_REMOTE:''}, {RERANK_SSH_REMOTE:'unbound'},
+      {RERANK_SSH_TUNNEL_URL:'http://public.example:43078'+path},
+      {RERANK_SSH_TUNNEL_URL:'http://127.0.0.1:43078/wrong'},
+      {RERANK_SSH_TUNNEL_URL:'http://127.0.0.1'+path},
+      {RERANK_SSH_TUNNEL_URL:'http://user:secret@127.0.0.1:43078'+path},
+      {RERANK_SSH_TUNNEL_URL:env.RERANK_SSH_TUNNEL_URL+'?key=secret'},
+      {RERANK_REMOTE_RUNTIME_URL:'http://127.0.0.1:8000/v1'}]) {
+      assert.throws(() => rerankerExecutionTransport({...env,...override}));
+    }
+  }
+});

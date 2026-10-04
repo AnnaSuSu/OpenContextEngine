@@ -1,12 +1,13 @@
 import { createInterface } from 'node:readline/promises';
 import { Writable } from 'node:stream';
 import { configDirectory, loadEnvironment, saveUserConfig } from './config.mjs';
-import { remoteRerankerConfig, embeddingTransportConfig } from './eval/remote-models.mjs';
+import { remoteRerankerConfig, embeddingTransportConfig, rerankerExecutionTransport } from './eval/remote-models.mjs';
 import { ensureRuntime, run } from './runtime.mjs';
 
 export function validateModels(env) {
   embeddingTransportConfig(env);
   remoteRerankerConfig(env);
+  rerankerExecutionTransport(env);
   for (const key of ['EMBEDDING_API_KEY','EMBEDDING_MODEL']) {
     if (!env[key]?.trim()) throw new Error(`Set ${key}`);
   }
