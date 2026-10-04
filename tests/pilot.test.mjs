@@ -48,11 +48,13 @@ test('Probe forwards the exact tool call id and rejects an invented token', asyn
   assert.equal(result.passed, false);
 });
 test('Configuration preserves environment priority and redacts secrets', () => {
-  const c = loadConfig({ GPT_API_KEY: 'test-secret-value', GPT_REASONING_EFFORT: 'high' }, '/nonexistent/.env');
+  const c = loadConfig({ GPT_BASE_URL: 'https://provider.example.com/v1', GPT_API_KEY: 'test-secret-value', GPT_REASONING_EFFORT: 'high' }, '/nonexistent/.env');
   assert.equal(c.effort, 'high');
+  assert.equal(c.baseUrl, 'https://provider.example.com/v1');
+  assert.throws(() => loadConfig({ GPT_API_KEY: 'x' }, '/nonexistent/.env'), /Set GPT_BASE_URL/);
   assert.equal('apiKey' in publicConfig(c), false);
   assert.ok(!redact('error test-secret-value', [c.apiKey]).includes(c.apiKey));
-  assert.throws(() => loadConfig({ GPT_API_KEY: 'x', GPT_MODEL: 'gpt-6-astra' }, '/nonexistent/.env'), /frozen/);
+  assert.throws(() => loadConfig({ GPT_BASE_URL: 'https://provider.example.com/v1', GPT_API_KEY: 'x', GPT_MODEL: 'gpt-6-astra' }, '/nonexistent/.env'), /frozen/);
 });
 test('Evidence scoring rejects fabricated quotes and escaping paths', async () => {
   const root = await mkdtemp(join(tmpdir(), 'reponerve-score-'));

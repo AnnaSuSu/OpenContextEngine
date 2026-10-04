@@ -8,7 +8,8 @@ export const projectRoot = fileURLToPath(new URL('../../', import.meta.url));
 export function loadConfig(environment = process.env, envFile = resolve(projectRoot, '.env')) {
   const local = existsSync(envFile) ? parseEnv(readFileSync(envFile, 'utf8')) : {};
   const env = { ...local, ...environment };
-  const baseUrl = (env.GPT_BASE_URL || 'https://provider.example.com/v1').replace(/\/+$/, '');
+  if (!env.GPT_BASE_URL?.trim()) throw new Error('Set GPT_BASE_URL in the environment or project .env');
+  const baseUrl = env.GPT_BASE_URL.trim().replace(/\/+$/, '');
   const url = new URL(baseUrl);
   if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash) {
     throw new Error('GPT_BASE_URL must be an HTTPS URL without credentials, query or fragment');
