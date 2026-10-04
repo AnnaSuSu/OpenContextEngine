@@ -26,7 +26,7 @@ test('Official MCP stdio client initializes, discovers tools and retrieves updat
     const {root,config} = await fixture(t);
     await writeFile(join(root,'lib.py'),'def persist():\n    return "original"\n');
     const client = await connect(t,config);
-    assert.equal(client.getServerVersion().name,'opencontextengine');
+    assert.equal(client.getServerVersion().name,'open-context-engine');
     const tools = (await client.listTools()).tools;
     assert.deepEqual(tools.map(tool => tool.name).sort(),['index_status','search_code']);
     assert.equal(tools[1].annotations.readOnlyHint,true);
@@ -48,7 +48,7 @@ test('Official MCP stdio client initializes, discovers tools and retrieves updat
     assert.match(failure.content[0].text,/Index unavailable/);
     assert.doesNotMatch(failure.content[0].text,/return "updated"/);
     const compatible = await connect(t,config,true);
-    assert.equal(compatible.getServerVersion().name,'opencontextengine');
+    assert.equal(compatible.getServerVersion().name,'open-context-engine');
     const compatibleStatus = await compatible.callTool({name:'index_status',arguments:{}});
     assert.ok(!compatibleStatus.isError);
     assert.equal(compatibleStatus.structuredContent.root,await realpath(root));

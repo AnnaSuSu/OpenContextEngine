@@ -14,7 +14,7 @@ OpenContextEngine 使用官方 TypeScript MCP SDK 的 stdio transport，提供�
 ```json
 {
   "mcpServers": {
-    "opencontextengine": {
+    "open-context-engine": {
       "command": "node",
       "args": [
         "/absolute/path/to/OpenContextEngine/scripts/mcp-opencontextengine.mjs",

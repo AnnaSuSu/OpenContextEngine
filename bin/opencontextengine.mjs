@@ -10,12 +10,12 @@ import { serviceConfig } from '../src/service.mjs';
 const help = `OpenContextEngine — repository context for AI coding agents
 
 Usage:
-  opencontextengine setup [--python /path/to/python3] [--non-interactive]
-  opencontextengine mcp [--root /project] [--state /outside/index]
-  opencontextengine mcp --connect
-  opencontextengine mcp-config
-  opencontextengine doctor
-  opencontextengine --version
+  open-context-engine setup [--python /path/to/python3] [--non-interactive]
+  open-context-engine mcp [--root /project] [--state /outside/index]
+  open-context-engine mcp --connect
+  open-context-engine mcp-config
+  open-context-engine doctor
+  open-context-engine --version
 
 Setup installs isolated Python dependencies, saves shared model settings, and
 prints MCP configuration. Without --root, your agent supplies directory_path.
@@ -23,7 +23,7 @@ Requires macOS/Linux, Node.js 22.14+, Python 3.10+, and Git.
 `;
 function mcpConfig() {
   const env = process.env.OCE_CONFIG_HOME ? {OCE_CONFIG_HOME:configDirectory()} : undefined;
-  console.log(JSON.stringify({mcpServers:{opencontextengine:{command:process.execPath,
+  console.log(JSON.stringify({mcpServers:{'open-context-engine':{command:process.execPath,
     args:[fileURLToPath(import.meta.url),'mcp'],...(env ? {env} : {})}}},null,2));
 }
 try {
@@ -55,10 +55,10 @@ try {
     process.argv.splice(2,1);
     await import('../scripts/mcp-opencontextengine.mjs');
   } else {
-    throw new Error('Unknown command or arguments. Run opencontextengine --help');
+    throw new Error('Unknown command or arguments. Run open-context-engine --help');
   }
 } catch (error) {
   process.stderr.write(`OpenContextEngine: ${error.message}\n`);
-  process.stderr.write('Run opencontextengine setup to configure models and install Python dependencies.\n');
+  process.stderr.write('Run open-context-engine setup to configure models and install Python dependencies.\n');
   process.exitCode = 1;
 }

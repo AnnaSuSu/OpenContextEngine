@@ -9,8 +9,8 @@ Requires Node.js 22.14+, Python 3.10+, and Git. Go source analysis also needs Go
 **Internal testing only; no npm registry publication.** Install the archive supplied by the maintainer:
 
 ```sh
-npm install -g /path/to/opencontextengine-0.1.0.tgz
-opencontextengine setup
+npm install -g /path/to/open-context-engine-0.1.0.tgz
+open-context-engine setup
 ```
 
 `setup` asks for your embedding and reranking endpoints, keys, model names, and embedding dimensions. It creates a private Python virtual environment, installs NumPy and tiktoken, and preloads tokenizer data. No model weights are installed. API key input is not echoed. Use `--python /absolute/path/to/python3` to select a base interpreter.
@@ -26,13 +26,15 @@ node bin/opencontextengine.mjs setup
 
 Maintainers can build the archive with `npm pack`. The package is marked private to prevent accidental registry publication; this does not prevent local tarball installation.
 
+The CLI and package are named `open-context-engine`. The previous `opencontextengine` command remains an alias. Existing configuration and cache directories keep their paths, so saved keys and indexes are reused.
+
 ## 2. Shared model configuration
 
 Setup saves `~/.config/opencontextengine/config.json` with owner-only file permissions. All MCP clients running under the same user share these settings. Python environments live in the adjacent `runtimes/` directory. Use `OCE_CONFIG_HOME` to select a separate configuration directory; setup includes that override in its generated MCP configuration.
 
 Configuration precedence is **process environment → saved user settings → source checkout `.env` defaults**. The `.env` of the project being searched is never loaded. Existing source installations using `.env` and `OCE_PYTHON` continue to work.
 
-For automation, set the following environment variables and run `opencontextengine setup --non-interactive`:
+For automation, set the following environment variables and run `open-context-engine setup --non-interactive`:
 
 ```dotenv
 EMBEDDING_BASE_URL=https://your-embedding-service.example/v1
@@ -48,7 +50,7 @@ OCE_RERANK_API=rerank
 
 The embedding service must implement `POST /v1/embeddings`. By default, the reranker uses the ordinary `/rerank` API: requests contain `model`, `query`, `documents`, and `top_n`; responses must return every requested document in `results`, with its original `index` and a finite `relevance_score` between 0 and 1. Results may arrive in relevance order. Set the reranker base URL to the part before `/rerank`: for example, `https://provider.example/v1`, `/v2`, or `https://provider.example` for an unversioned endpoint.
 
-HTTPS is the default. For an explicitly trusted remote HTTP deployment, set `OCE_ALLOW_HTTP=1` before running `opencontextengine setup`; setup saves this choice in the shared configuration. HTTP transmits API keys and source text without encryption. Local model endpoints remain prohibited. Set `OCE_EMBEDDING_DIMENSIONS` to the service's actual output size (for example, `2560`); changing the provider or dimensions creates a new index generation and does not mix incompatible cached vectors.
+HTTPS is the default. For an explicitly trusted remote HTTP deployment, set `OCE_ALLOW_HTTP=1` before running `open-context-engine setup`; setup saves this choice in the shared configuration. HTTP transmits API keys and source text without encryption. Local model endpoints remain prohibited. Set `OCE_EMBEDDING_DIMENSIONS` to the service's actual output size (for example, `2560`); changing the provider or dimensions creates a new index generation and does not mix incompatible cached vectors.
 
 OpenContextEngine groups the needed pairs by query, reuses scores within each search, and makes at most two concurrent rerank requests by default. Optional `OCE_RERANK_CONCURRENCY` (1–8, default 2) and `OCE_RERANK_MAX_DOCUMENTS` (1–1,024, default 128) control concurrency and documents per request. It requests all scores and rejects missing, duplicate, or invalid result indices; errors are surfaced without silently switching endpoints.
 
@@ -77,15 +79,15 @@ The rerank tunnel must preserve the configured base URL's path prefix (for examp
 
 ## 3. Add the MCP server
 
-Paste the MCP configuration printed by setup into your client, or print it again with `opencontextengine mcp-config`. It uses absolute Node and CLI paths so desktop clients do not need to find npm's global binary directory.
+Paste the MCP configuration printed by setup into your client, or print it again with `open-context-engine mcp-config`. It uses absolute Node and CLI paths so desktop clients do not need to find npm's global binary directory.
 
-If your client already has `opencontextengine` on `PATH`, this shorter equivalent works:
+If your client already has `open-context-engine` on `PATH`, this shorter equivalent works:
 
 ```json
 {
   "mcpServers": {
-    "opencontextengine": {
-      "command": "opencontextengine",
+    "open-context-engine": {
+      "command": "open-context-engine",
       "args": ["mcp"]
     }
   }
@@ -129,20 +131,22 @@ This optional source-installation workflow shares a running worker, in addition 
 npm run serve-retrieval -- --root /absolute/path/to/your-repository --port 23505
 ```
 
-Configure each MCP client to run `opencontextengine mcp --connect` (or `node scripts/mcp-opencontextengine.mjs --connect` from source), with `OCE_BASE_URL=http://127.0.0.1:23505` and the same `OCE_API_KEY`. This mode always uses the shared worker's configured project: omit `directory_path`. Closing a client leaves the shared worker running.
+Configure each MCP client to run `open-context-engine mcp --connect` (or `node scripts/mcp-opencontextengine.mjs --connect` from source), with `OCE_BASE_URL=http://127.0.0.1:23505` and the same `OCE_API_KEY`. This mode always uses the shared worker's configured project: omit `directory_path`. Closing a client leaves the shared worker running.
 
 ## Check and upgrade
 
-Run `opencontextengine doctor` to check model configuration, Python dependencies, tokenizer data, and Git. This does not send code to model providers; endpoint authentication is checked during actual search.
+Run `open-context-engine doctor` to check model configuration, Python dependencies, tokenizer data, and Git. This does not send code to model providers; endpoint authentication is checked during actual search.
+
+If upgrading from the old package named `opencontextengine`, first run `npm uninstall -g opencontextengine` to avoid a command-name conflict. This leaves your saved model settings and indexes intact.
 
 For an internal upgrade, install the new archive and rerun setup:
 
 ```sh
-npm install -g /path/to/new-opencontextengine.tgz
-opencontextengine setup
+npm install -g /path/to/new-open-context-engine.tgz
+open-context-engine setup
 ```
 
-Press Enter to retain saved settings. Setup reuses a healthy managed Python runtime when its dependency requirements match; otherwise it builds a new environment before changing the saved configuration. Failed dependency installation preserves the previous settings and runtime. Old runtimes remain available for rollback. Restart the MCP client after an upgrade. Project indexes remain outside the package directory and continue to reuse compatible embeddings.
+Press Enter to retain saved settings. Setup reuses a healthy managed Python runtime when its dependency requirements match; otherwise it builds a new environment before changing the saved configuration. Failed dependency installation preserves the previous settings and runtime. Old runtimes remain available for rollback. When migrating from the old package name, replace the client entry with the configuration printed by setup: its absolute installation path has changed. Restart the MCP client after an upgrade. Project indexes remain outside the package directory and continue to reuse compatible embeddings.
 
 First-time setup requires network access to npm/PyPI and tokenizer data. If Python is missing or lacks `venv`/`pip`, install Python 3.10+ with those components, then rerun setup. The CLI does not install system Node, Python, Git, or Go.
 

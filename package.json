@@ -1,5 +1,5 @@
 {
-  "name": "opencontextengine",
+  "name": "open-context-engine",
   "version": "0.1.0",
   "type": "module",
   "engines": {
@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/AnnaSuSu/OpenContextEngine#readme",
   "bin": {
+    "open-context-engine": "bin/opencontextengine.mjs",
     "opencontextengine": "bin/opencontextengine.mjs"
   },
   "os": [

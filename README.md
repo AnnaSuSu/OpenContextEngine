@@ -40,8 +40,8 @@ Requires **macOS or Linux**, Node.js 22.14+, Python 3.10+, Git, and configured e
 **Internal testing build. Not published to npm.** Install the provided archive:
 
 ```sh
-npm install -g /path/to/opencontextengine-0.1.0.tgz
-opencontextengine setup
+npm install -g /path/to/open-context-engine-0.1.0.tgz
+open-context-engine setup
 ```
 
 Setup installs isolated Python dependencies, saves your model settings, and prints MCP configuration. Paste that configuration into your client. API keys are entered without echo and stored in your user configuration, outside the installation directory.
@@ -67,8 +67,8 @@ For clients where the installed command is on `PATH`, the configuration is simpl
 ```json
 {
   "mcpServers": {
-    "opencontextengine": {
-      "command": "opencontextengine",
+    "open-context-engine": {
+      "command": "open-context-engine",
       "args": ["mcp"]
     }
   }
