@@ -26,3 +26,21 @@ These scripts support the reports linked from [Benchmarks](../docs/BENCHMARKS.md
 | `benchmark-service.mjs`, `summarize-speed.py` | Client/service latency measurements and summaries |
 
 Other helpers in this directory prepare source snapshots, normalize native results, build retrieval plans, or bridge model APIs for those runners. Frozen data lives in `eval/`; reports and published JSON live in `docs/eval/`. Local runs, provider experiments, personal deployment notes, and retired experiments are not public benchmark dependencies.
+
+## Development-only model experiments
+
+The experiment helpers under `src/pilot/` and the retrieval-planning script use a separate GPT interface. Normal MCP searches only need embedding and reranking services; they do not use these settings.
+
+When running those experiments from source, add these values to your private `.env` or process environment:
+
+```dotenv
+GPT_BASE_URL=https://provider.example.com/v1
+GPT_API_KEY=
+GPT_MODEL=gpt-6.1-sol
+GPT_REASONING_EFFORT=medium
+GPT_TIMEOUT_MS=300000
+# Optional; omitted uses the project's own default identifier.
+# GPT_USER_AGENT=OpenContextEngine-Pilot/0.1
+```
+
+The pilot currently fixes the model to `gpt-6.1-sol`. These settings are not saved by the product setup wizard or required by the npm CLI.

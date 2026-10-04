@@ -144,13 +144,15 @@ Client references: [Codex MCP](https://developers.openai.com/codex/mcp) · [Clau
 
 ## Updates & storage
 
-Saved files are checked every second by default, with a 300 ms debounce. New files, deletions, renames, and branch changes update the index automatically. Embeddings are reused by model identity and actual input content. Structural analysis conservatively refreshes the affected language group to update references in unchanged files.
+Saved files are checked every second by default (`OCE_POLL_SECONDS=1`), with a 300 ms debounce (`OCE_DEBOUNCE_SECONDS=0.3`). New files, deletions, renames, and branch changes update the index automatically. Embeddings are reused by model identity and actual input content. Structural analysis conservatively refreshes the affected language group to update references in unchanged files.
 
 Search actively checks source hashes before retrieval and again before returning. It waits up to 30 seconds for synchronization (`freshnessWaitMs`, maximum 120 seconds). Failed updates, timeouts, or edits during retrieval produce explicit errors. Unsaved editor buffers are not indexed.
 
 State is stored in `~/.cache/opencontextengine/<repository-path-hash>/`. Override it with `--state /outside/repository/index`: automatic mode creates a separate path-hash subdirectory for each project; fixed `--root` mode uses that exact state directory. Existing installations automatically reuse their previous cache location. One worker may write to a state directory at a time. Stop that worker and remove the directory to delete stored source and embeddings.
 
 When model weights change under the same name, increment `OCE_EMBEDDING_REVISION`. A different provider, model name, or dimension count also invalidates vector reuse. Other models need separate compatibility and quality validation.
+
+Optional Go type analysis can be enabled with `OCE_LANGUAGE_OPTIONS='{"go":{"mode":"types"}}'`; the default uses syntax-based analysis. `OCE_PYTHON` selects an existing Python environment with the required dependencies; normal CLI installations use the runtime created by setup.
 
 ## Share one worker across clients
 
