@@ -27,6 +27,8 @@ OpenContextEngine is a **self-hostable code context engine** that turns natural-
 
 ![Required evidence coverage within the same context budget](assets/benchmarks/context-budget.svg)
 
+![Required evidence coverage and observed query time](assets/benchmarks/method-comparison.svg)
+
 **94.79% required evidence coverage · 1.73 s median retrieval · 69/80 queries with complete evidence.** Seven engines, four repositories, the same 4,000-token output budget. OpenContextEngine retained the most required evidence in this internal development evaluation.
 
 40 source-derived tasks, each asked in Chinese and English. Coverage measures source evidence, not coding-agent success. Timings reflect native retrieval for open tools and SDK client calls for ACE. [Full comparison, configurations, and per-query results →](docs/eval/METHOD_COMPARISON.md)
