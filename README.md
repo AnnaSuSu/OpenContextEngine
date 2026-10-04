@@ -1,5 +1,4 @@
 <div align="center">
-  <p><strong>English</strong> | <a href="README.zh-CN.md">简体中文</a></p>
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/brand/logo-lockup-dark.svg">
     <img src="assets/brand/logo-lockup.svg" alt="OpenContextEngine" width="660">
@@ -12,7 +11,7 @@
     <a href="docs/BENCHMARKS.md#engineering-validation"><img src="https://img.shields.io/badge/verified_tests-107-23875b?style=flat-square" alt="107 verified tests"></a>
     <a href="docs/QUICKSTART.md"><img src="https://img.shields.io/badge/MCP-stdio-193c34?style=flat-square" alt="MCP over stdio"></a>
   </p>
-  <p><a href="#quick-start">Quick start</a> · <a href="docs/BENCHMARKS.md">Benchmarks</a> · <a href="docs/QUICKSTART.md">MCP setup</a></p>
+  <p><a href="#quick-start">Quick start</a> · <a href="docs/BENCHMARKS.md">Benchmarks</a> · <a href="docs/QUICKSTART.md">MCP setup</a> · <strong>English</strong> | <a href="README.zh-CN.md">简体中文</a></p>
 </div>
 
 OpenContextEngine is a **self-hostable code context engine for AI coding agents**. Connect it to your agent through MCP to help it explore an unfamiliar codebase, locate implementations, and find the related code needed for a fix or feature.

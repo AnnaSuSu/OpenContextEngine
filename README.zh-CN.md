@@ -1,5 +1,4 @@
 <div align="center">
-  <p><a href="README.md">English</a> | <strong>简体中文</strong></p>
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/brand/logo-lockup-dark.svg">
     <img src="assets/brand/logo-lockup.svg" alt="OpenContextEngine" width="660">
@@ -12,7 +11,7 @@
     <a href="docs/BENCHMARKS.md#engineering-validation"><img src="https://img.shields.io/badge/verified_tests-107-23875b?style=flat-square" alt="107 项已验证测试"></a>
     <a href="docs/QUICKSTART.md"><img src="https://img.shields.io/badge/MCP-stdio-193c34?style=flat-square" alt="通过 stdio 接入 MCP"></a>
   </p>
-  <p><a href="#快速开始">快速开始</a> · <a href="docs/BENCHMARKS.md">评测报告</a> · <a href="docs/QUICKSTART.md">MCP 配置</a></p>
+  <p><a href="#快速开始">快速开始</a> · <a href="docs/BENCHMARKS.md">评测报告</a> · <a href="docs/QUICKSTART.md">MCP 配置</a> · <a href="README.md">English</a> | <strong>简体中文</strong></p>
 </div>
 
 OpenContextEngine 是一个**可自行部署、面向 AI 编程助手的代码上下文引擎**。通过 MCP 接入后，助手可以借助它理解陌生代码库、定位实现，以及查找修复问题或开发功能所需的相关代码。
