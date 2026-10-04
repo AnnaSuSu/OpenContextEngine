@@ -2,9 +2,9 @@
 
 常驻服务支持任意本地仓库的已保存文件。首次接入建立完整索引；后续按文件内容哈希检测变化，复用未变代码块的 embedding，后台构建新版本后一次切换。无需先提交 Git。
 
-## 运行
+## 独立服务运行（源码安装）
 
-当前支持 macOS / Linux，需要 Node.js 22.14+、Python 3.10+、Git；含 Go 文件时还需要 Go 编译器。模型继续使用 `.env` 中配置的远程 embedding 和 reranker，不在本机加载模型。
+当前支持 macOS / Linux，需要 Node.js 22.14+、Python 3.10+、Git；含 Go 文件时还需要 Go 编译器。模型使用配置的远程 embedding 和 reranker，不在本机加载模型。普通 MCP 用户按 [Quickstart](QUICKSTART.md) 安装并运行 `open-context-engine setup`，无需单独启动本节的 HTTP 服务。
 
 ```sh
 npm ci
@@ -14,7 +14,7 @@ python3 -m venv .venv
 npm run serve-retrieval -- --root /absolute/path/to/repository --port 23505
 ```
 
-Python 默认优先选择项目 `.venv`，也兼容现有试验环境，可用 `OCE_PYTHON` 指定解释器。Go 编译器可用 `OCE_GO_BINARY` 指定；选择 Go 类型分析使用 `OCE_LANGUAGE_OPTIONS='{"go":{"mode":"types"}}'`。默认仍是语法结构模式。
+npm 安装使用 `setup` 创建并保存的 Python 环境。源码运行可用 `OCE_PYTHON` 指定解释器；未指定时会查找源码目录的 `.venv` 等兼容路径，最后尝试 `python3`。Go 编译器可用 `OCE_GO_BINARY` 指定；选择 Go 类型分析使用 `OCE_LANGUAGE_OPTIONS='{"go":{"mode":"types"}}'`。默认仍是语法结构模式。
 
 索引默认存放在 `~/.cache/opencontextengine/<仓库路径哈希>/`，可通过 `--state /outside/repository/index` 指定；已有安装会自动复用旧缓存目录。状态目录必须在源码目录之外，避免索引自己的输出。同一状态目录只允许一个写入进程。停止服务后删除整个状态目录即可清除源码副本和向量；历史向量会持续保留，以复用分支切换前的内容。
 
@@ -22,7 +22,7 @@ HTTP 服务命令 `serve-retrieval` 不传 `--root` 时保留原有冻结索引�
 
 MCP 启动命令 `npm run mcp` 不传 `--root` 时使用自动工作区模式：Agent 每次调用 `search_code` 或 `index_status` 都传入绝对路径 `directory_path`，首次访问启动独立的项目进程和索引，后续复用。多个项目的进程会保持运行，客户端断开时统一停止。路径按真实目录规范化，符号链接不会启动重复进程；并发首次访问同一项目只启动一次。进程退出后，下次访问会重新启动并读取持久索引。自动模式的 `--state` 是缓存基目录，各项目使用独立路径哈希子目录。
 
-MCP 的 `--root` 继续固定一个项目，并拒绝切换到其他目录；`--connect` 继续连接已有服务，不接受 `directory_path`。模型配置仍来自 OpenContextEngine 安装目录的 `.env` 和进程环境，不读取目标项目的 `.env`。
+MCP 的 `--root` 继续固定一个项目，并拒绝切换到其他目录；`--connect` 继续连接已有服务，不接受 `directory_path`。模型配置优先级为进程环境变量 → `setup` 保存的用户配置 → OpenContextEngine 源码目录的 `.env`，不读取目标项目的 `.env`。
 
 ## 更新规则
 
@@ -31,7 +31,7 @@ MCP 的 `--root` 继续固定一个项目，并拒绝切换到其他目录；`--
 - 新增、修改、删除、重命名、`git switch`、`git pull` 都通过内容差异处理。删除文件的片段和引用不会进入新版本。
 - 文本文件按文件复用解析结果。Python、JS/TS、Go 的结构关系可能跨文件，当前保守地重分析发生变化的整个语言组；其他语言组复用。JS/TS 共享一组，Go 模块路径配置变化也会刷新解析。尚未实现编译器级的最小依赖失效范围。
 - embedding 缓存键包含模型渠道、模型名、维度、修订号和完整的实际模型输入。仅行号变化而输入未变时复用向量；重命名改变了路径输入时重新编码。修改关系但模型输入未变，也无需重新编码。
-- `EMBEDDING_MODEL`、`OCE_EMBEDDING_DIMENSIONS` 或渠道变化会使用新的向量缓存身份。相同模型名对应的权重更新时，增加 `OCE_EMBEDDING_REVISION`。默认 Qwen3-Embedding-4B / 1024 维已验证；其他模型需支持当前源码检索输入格式并另行评测。
+- `EMBEDDING_MODEL`、`OCE_EMBEDDING_DIMENSIONS` 或渠道变化会使用新的向量缓存身份。相同模型名对应的权重更新时，增加 `OCE_EMBEDDING_REVISION`。历史评测使用 Qwen3-Embedding-4B / 1024 维；配置时必须填写实际服务返回的维度，不应直接沿用评测值。其他模型需支持当前源码检索输入格式并另行评测。
 - 索引文件先写入独立版本目录，再原子替换版本指针；请求使用固定的内存版本。模型失败、语法错误或编辑过程中内容变化都不会覆盖正在使用的完整版本。
 
 这是一种自动轮询增量同步，不是文件系统事件监听；大型仓库的扫描和结构重分析成本仍需单独验证。

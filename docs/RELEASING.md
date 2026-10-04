@@ -7,7 +7,8 @@ Preparing an archive does not publish it or change GitHub repository visibility.
 
 1. Confirm the version in `package.json`, `package-lock.json`, and the MCP server agrees. Choose a new version if that version is already published.
 2. Run `npm ci` and `npm test` from a clean checkout with the Python dependencies installed. MCP integration tests need local loopback sockets; verify they are not skipped.
-3. Build and inspect the archive:
+3. Finalize the release README before packing: use the npm install command and remove pending-release notices. npm displays the README bundled with the release; later GitHub edits do not update it.
+4. Build and inspect the archive:
 
 ```sh
 mkdir -p .pilot-state/npm-release
@@ -15,9 +16,9 @@ npm pack --pack-destination .pilot-state/npm-release
 npm publish .pilot-state/npm-release/open-context-engine-0.1.0.tgz --dry-run --access public --registry https://registry.npmjs.org/
 ```
 
-4. Confirm the archive contains `LICENSE` and runtime files, and excludes credentials, `.env`, `.npmrc`, caches, test fixtures, model weights, and evaluation datasets.
-5. Install that exact archive into a temporary prefix outside the checkout. Check both CLI names, run `setup` and `doctor` with an isolated `OCE_CONFIG_HOME`, then connect through MCP and search a small fixture using configured model APIs. Do not include keys in the release report.
-6. Record the archive's SHA-256 digest. Publish the verified archive, not a newly packed working tree.
+5. Confirm the archive contains `LICENSE` and runtime files, and excludes credentials, `.env`, `.npmrc`, caches, test fixtures, model weights, and evaluation datasets.
+6. Install that exact archive into a temporary prefix outside the checkout. Check both CLI names, run `setup` and `doctor` with an isolated `OCE_CONFIG_HOME`, then connect through MCP and search a small fixture using configured model APIs. Do not include keys in the release report.
+7. Record the archive's SHA-256 digest. Publish the verified archive, not a newly packed working tree.
 
 ## Publish when the release is approved
 
@@ -38,6 +39,6 @@ npm publish .pilot-state/npm-release/open-context-engine-0.1.0.tgz --access publ
 npm view open-context-engine@0.1.0 version dist.integrity --registry https://registry.npmjs.org/
 ```
 
-Compare the registry integrity with the packed artifact, then verify a clean `npm install -g open-context-engine@0.1.0`. Update README and Quickstart to remove the pending-release notice and promote the npm install command. Git pushes, repository visibility, and release tags are separate actions.
+Compare the registry integrity with the packed artifact, then verify a clean `npm install -g open-context-engine@0.1.0`. Check the README on the npm package page as well; correcting it later requires publishing a new version. Git pushes, repository visibility, and release tags are separate actions.
 
 [Official npm publishing guide](https://docs.npmjs.com/creating-and-publishing-unscoped-public-packages/)

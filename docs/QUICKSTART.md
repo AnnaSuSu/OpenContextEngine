@@ -40,13 +40,15 @@ For automation, set the following environment variables and run `open-context-en
 EMBEDDING_BASE_URL=https://your-embedding-service.example/v1
 EMBEDDING_API_KEY=your-embedding-key
 EMBEDDING_MODEL=Qwen3-Embedding-4B
-OCE_EMBEDDING_DIMENSIONS=1024
+# Match the actual output size of your embedding endpoint.
+OCE_EMBEDDING_DIMENSIONS=2560
 
 RERANK_BASE_URL=https://your-reranker-service.example/v1
 RERANK_API_KEY=your-reranker-key
 RERANK_MODEL=Qwen3-Reranker-4B
-OCE_RERANK_API=rerank
 ```
+
+The setup prompt initially suggests `1024` dimensions; replace it with your endpoint's actual output size. The example above uses `2560`.
 
 The embedding service must implement `POST /v1/embeddings`. By default, the reranker uses the ordinary `/rerank` API: requests contain `model`, `query`, `documents`, and `top_n`; responses must return every requested document in `results`, with its original `index` and a finite `relevance_score` between 0 and 1. Results may arrive in relevance order. Set the reranker base URL to the part before `/rerank`: for example, `https://provider.example/v1`, `/v2`, or `https://provider.example` for an unversioned endpoint.
 
@@ -71,11 +73,11 @@ Then start the CLI with these overrides, or save them with `setup --non-interact
 ```dotenv
 EMBEDDING_SSH_TUNNEL_URL=http://127.0.0.1:43079/v1
 EMBEDDING_SSH_REMOTE=operator@model-host.example:22
-RERANK_SSH_TUNNEL_URL=http://127.0.0.1:43078
+RERANK_SSH_TUNNEL_URL=http://127.0.0.1:43078/v1
 RERANK_SSH_REMOTE=operator@model-host.example:22
 ```
 
-The rerank tunnel must preserve the configured base URL's path prefix (for example, `/v1` if required). Keep the SSH process running while using MCP. The CLI does not create SSH sessions or store SSH passwords, and a disconnected tunnel surfaces an error instead of falling back to public HTTP. Models continue to run on the remote server.
+The rerank tunnel must preserve the configured base URL's path prefix. The example above matches `RERANK_BASE_URL=https://your-reranker-service.example/v1`; if your provider uses an unversioned `/rerank` endpoint, omit `/v1` from both base URLs. Keep the SSH process running while using MCP. The CLI does not create SSH sessions or store SSH passwords, and a disconnected tunnel surfaces an error instead of falling back to public HTTP. Models continue to run on the remote server.
 
 ## 3. Add the MCP server
 

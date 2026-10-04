@@ -6,6 +6,8 @@ The published benchmarks used Qwen3-Reranker-4B with an optional batch API. Its 
 
 ## API modes
 
+The paths below belong to this reference server. For another provider, OpenContextEngine appends `/rerank` to `RERANK_BASE_URL`; a `/v1` prefix is only needed if that provider requires it.
+
 | Mode | Endpoint | Request | Response |
 | --- | --- | --- | --- |
 | Default | `POST /v1/rerank` | `model`, `query`, `documents`, `top_n` | `results` with original document `index` and `relevance_score` |
