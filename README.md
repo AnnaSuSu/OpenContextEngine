@@ -14,7 +14,9 @@
   <p><a href="#quick-start">Quick start</a> · <a href="docs/BENCHMARKS.md">Benchmarks</a> · <a href="docs/QUICKSTART.md">MCP setup</a></p>
 </div>
 
-OpenContextEngine is a **self-hostable code context engine** that turns natural-language tasks into relevant source code, with original file paths and line numbers. It combines semantic and keyword search, structural relationships, and neural reranking within a fixed context budget.
+OpenContextEngine is a **self-hostable code context engine for AI coding agents**. Connect it to your agent through MCP to help it explore an unfamiliar codebase, locate implementations, and find the related code needed for a fix or feature.
+
+It indexes your working directory and follows saved changes. Given a natural-language task, it combines semantic and keyword search, code relationships, and reranking to return relevant source snippets with file paths and line numbers, within a fixed context budget.
 
 ## Why OpenContextEngine
 
