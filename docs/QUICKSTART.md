@@ -6,10 +6,10 @@ OpenContextEngine runs a local repository index and calls configured model servi
 
 Requires Node.js 22.14+, Python 3.10+, and Git. Go source analysis also needs Go 1.22+ on `PATH`, or an explicit `OCE_GO_BINARY`.
 
-**First npm release in preparation; not yet published.** Install the archive supplied by the maintainer:
+Install the package from npm:
 
 ```sh
-npm install -g /path/to/open-context-engine-0.1.0.tgz
+npm install -g open-context-engine
 open-context-engine setup
 ```
 
@@ -24,7 +24,7 @@ npm ci
 node bin/opencontextengine.mjs setup
 ```
 
-After the first npm release, install with `npm install -g open-context-engine`, then run `open-context-engine setup`. Maintainers can build an archive with `npm pack`; see the [release checklist](https://github.com/AnnaSuSu/OpenContextEngine/blob/main/docs/RELEASING.md).
+For internal builds, maintainers can create an archive with `npm pack` and install it with `npm install -g /path/to/open-context-engine-0.1.0.tgz`. See the [release checklist](https://github.com/AnnaSuSu/OpenContextEngine/blob/main/docs/RELEASING.md).
 
 The CLI and package are named `open-context-engine`. The previous `opencontextengine` command remains an alias. Existing configuration and cache directories keep their paths, so saved keys and indexes are reused.
 
@@ -168,10 +168,10 @@ Run `open-context-engine doctor` to check model configuration, Python dependenci
 
 If upgrading from the old package named `opencontextengine`, first run `npm uninstall -g opencontextengine` to avoid a command-name conflict. This leaves your saved model settings and indexes intact.
 
-For an internal upgrade, install the new archive and rerun setup:
+To upgrade from npm and reuse your saved settings:
 
 ```sh
-npm install -g /path/to/new-open-context-engine.tgz
+npm install -g open-context-engine@latest
 open-context-engine setup
 ```
 
@@ -179,13 +179,13 @@ Press Enter to retain saved settings. Setup reuses a healthy managed Python runt
 
 First-time setup requires network access to npm/PyPI and tokenizer data. If Python is missing or lacks `venv`/`pip`, install Python 3.10+ with those components, then rerun setup. The CLI does not install system Node, Python, Git, or Go.
 
-## Internal testing checklist
+## Installation verification
 
-1. Install the supplied tarball on macOS or Linux and run setup with your model endpoints.
+1. Install from npm (or an internal tarball) on macOS or Linux and run setup with your model endpoints.
 2. Paste the generated MCP configuration into your client, restart it, and search a small project.
 3. Save an edit, add a file, and delete a file; verify search returns current source.
 4. Switch to another project and back; verify the results belong to the requested project.
-5. Restart the client and reinstall the archive; verify model settings and compatible indexes are retained.
+5. Restart the client and reinstall the package; verify model settings and compatible indexes are retained.
 
 For issues, include the CLI version, operating system, client name, and the error message. Keep API keys and private source code out of reports.
 

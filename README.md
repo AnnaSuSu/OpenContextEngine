@@ -37,7 +37,7 @@ Measured with the optional batch rerank API. 40 source-derived tasks, each asked
 
 Requires **macOS or Linux**, Node.js 22.14+, Python 3.10+, Git, and configured embedding/reranking services. Go repositories also need Go 1.22+.
 
-**Preparing the first npm release; not yet published.** Get the installation archive from the maintainer, then expand your client's guide. Model settings are shared across clients on the same machine.
+Install from npm, then expand your client's guide. Model settings are shared across clients on the same machine.
 
 <details>
 <summary><strong>Codex — install, connect, and search</strong></summary>
@@ -47,7 +47,7 @@ Requires **macOS or Linux**, Node.js 22.14+, Python 3.10+, Git, and configured e
 With Codex CLI already installed, run:
 
 ```sh
-npm install -g /path/to/open-context-engine-0.1.0.tgz
+npm install -g open-context-engine
 ```
 
 **2. Configure your models**
@@ -92,7 +92,7 @@ Codex supplies the project's absolute path as `directory_path`. The first reques
 With Claude Code already installed, run:
 
 ```sh
-npm install -g /path/to/open-context-engine-0.1.0.tgz
+npm install -g open-context-engine
 ```
 
 **2. Configure your models**
@@ -166,7 +166,7 @@ Use the absolute Node and CLI paths printed by setup. [Client-specific configura
 
 [Model configuration, troubleshooting, and update behavior →](docs/QUICKSTART.md)
 
-Once published, install with `npm install -g open-context-engine`. Until then, use the archive above. [Release checklist](docs/RELEASING.md).
+[npm package](https://www.npmjs.com/package/open-context-engine) · [Release checklist](docs/RELEASING.md).
 
 ## Explore
 
