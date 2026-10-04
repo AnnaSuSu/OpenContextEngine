@@ -4,13 +4,12 @@ import { projectRoot,redact } from '../../src/pilot/config.mjs';
 import { sha256 } from '../../src/eval/evidence.mjs';
 import { search,clientConfig } from '../../src/client.mjs';
 
-const repo=process.argv[2],ports={click:45009,httpx:45010,zod:45011};
-const probe=process.argv[3]==='--probe';
-if(!ports[repo]||process.argv.length!==(probe?4:3))throw Error('Usage: node scripts/expanded/regress.mjs click|httpx|zod');
+const repo=process.argv[2],ports={click:45006,httpx:45007,zod:45008};
+if(!ports[repo]||process.argv.length!==3)throw Error('Usage: node scripts/expanded/opencontextengine.mjs click|httpx|zod');
 const datasetId=`expanded-v1/${repo}`,base=resolve(projectRoot,'eval',datasetId);
 const read=name=>JSON.parse(readFileSync(resolve(base,name)));
 const freeze=read('freeze.json'),snapshot=read('snapshot.json');
-const engineFreeze=JSON.parse(readFileSync(resolve(projectRoot,'eval/regression-v6/engine-freeze.json')));
+const engineFreeze=JSON.parse(readFileSync(resolve(projectRoot,'eval/expanded-v1/engine-freeze.json')));
 for(const [name,hash] of Object.entries(freeze.sha256))if(sha256(readFileSync(resolve(base,name)))!==hash)throw Error(`Frozen input changed: ${name}`);
 for(const [name,hash] of Object.entries(engineFreeze.sha256))if(sha256(readFileSync(resolve(projectRoot,name)))!==hash)throw Error(`Frozen engine changed: ${name}`);
 for(const file of snapshot.files)if(sha256(readFileSync(resolve(projectRoot,'.pilot-state',datasetId,'corpus',file.path)))!==file.sha256)throw Error(`Corpus changed: ${file.path}`);
@@ -18,13 +17,13 @@ const config=clientConfig({...process.env,OCE_BASE_URL:`http://127.0.0.1:${ports
 const health=await(await fetch(`${config.baseUrl}/healthz`,{signal:AbortSignal.timeout(15000)})).json();
 if(health.status!=='ready'||health.queryCache!==false||health.engine!==engineFreeze.engine||health.index.files!==snapshot.files.length)throw Error('Worker identity/readiness mismatch');
 for(const [name,hash] of Object.entries(health.sourceSha256))if(engineFreeze.sha256[name]!==hash)throw Error(`Remote engine mismatch: ${name}`);
-const tasks=read('queries.json').cases.filter(task=>!probe||['safe-parsing','multipart-upload'].includes(task.id)).flatMap((task,i)=>(i%2?['en','zh']:['zh','en']).map(language=>({id:task.id,language,query:task.queries[language]})));
-const directory=resolve(projectRoot,'runs',`reponerve-v6-${probe?'probe':'regression'}-${repo}-${new Date().toISOString().replaceAll(':','-')}`);
+const tasks=read('queries.json').cases.flatMap((task,i)=>(i%2?['en','zh']:['zh','en']).map(language=>({id:task.id,language,query:task.queries[language]})));
+const directory=resolve(projectRoot,'runs',`reponerve-${repo}-expanded-${new Date().toISOString().replaceAll(':','-')}`);
 mkdirSync(directory,{recursive:true,mode:0o700});
 for(const name of [...Object.keys(freeze.sha256),'freeze.json'])copyFileSync(resolve(base,name),resolve(directory,name));
-copyFileSync(resolve(projectRoot,'eval/regression-v6/engine-freeze.json'),resolve(directory,'engine-freeze.json'));
-copyFileSync(resolve(projectRoot,'scripts/expanded/regress.mjs'),resolve(directory,'harness.mjs'));
-const report={schemaVersion:1,kind:probe?'development-probe':'development-regression',system:'reponerve-service',datasetId,startedAt:new Date().toISOString(),status:'running',commit:snapshot.commit,freeze,
+copyFileSync(resolve(projectRoot,'eval/expanded-v1/engine-freeze.json'),resolve(directory,'engine-freeze.json'));
+copyFileSync(resolve(projectRoot,'scripts/expanded/opencontextengine.mjs'),resolve(directory,'harness.mjs'));
+const report={schemaVersion:1,kind:'frozen-cross-repository-evaluation',system:'reponerve-service',datasetId,startedAt:new Date().toISOString(),status:'running',commit:snapshot.commit,freeze,
   config:{primaryBudgetTokens:4000,clientLocation:'user-Mac',transport:'authenticated-SSH-forward',baseUrl:config.baseUrl,queryCache:false,workerHealth:health},results:[]};
 const save=()=>writeFileSync(resolve(directory,'report.json'),JSON.stringify(report,null,2)+'\n',{mode:0o600});
 save();console.log(JSON.stringify({directory,queries:tasks.length}));

@@ -1,3 +1,4 @@
+import { normalizeEnvironment } from './environment.mjs';
 import { readFileSync, existsSync } from 'node:fs';
 import { parseEnv } from 'node:util';
 import { resolve } from 'node:path';
@@ -5,12 +6,12 @@ import { projectRoot } from './pilot/config.mjs';
 
 export function clientConfig(environment=process.env) {
   const file=resolve(projectRoot,'.env');
-  const env={...(existsSync(file)?parseEnv(readFileSync(file,'utf8')):{}),...environment};
-  const url=new URL(env.REPONERVE_BASE_URL || 'http://127.0.0.1:45005');
+  const env={...normalizeEnvironment(existsSync(file)?parseEnv(readFileSync(file,'utf8')):{}),...normalizeEnvironment(environment)};
+  const url=new URL(env.OCE_BASE_URL || 'http://127.0.0.1:45005');
   if (url.username || url.password || url.search || url.hash ||
       !(url.protocol==='https:' || url.protocol==='http:' && url.hostname==='127.0.0.1')) throw new Error('Use HTTPS or an explicit loopback SSH forward');
-  const apiKey=env.REPONERVE_API_KEY || env.RERANK_API_KEY;
-  if (!apiKey) throw new Error('Set REPONERVE_API_KEY or the existing project reranker key');
+  const apiKey=env.OCE_API_KEY || env.RERANK_API_KEY;
+  if (!apiKey) throw new Error('Set OCE_API_KEY or the existing project reranker key');
   return {baseUrl:url.href.replace(/\/$/,''),apiKey};
 }
 

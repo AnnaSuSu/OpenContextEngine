@@ -23,7 +23,7 @@ export function loadConfig(environment = process.env, envFile = resolve(projectR
   }
   if (!env.GPT_API_KEY?.trim()) throw new Error('Set GPT_API_KEY in the environment or project .env');
   return { baseUrl, model, effort, timeoutMs, apiKey: env.GPT_API_KEY.trim(),
-    userAgent: env.GPT_USER_AGENT || 'RepoNerve-Pilot/0.1' };
+    userAgent: env.GPT_USER_AGENT || 'OpenContextEngine-Pilot/0.1' };
 }
 
 export function publicConfig({ apiKey, ...config }) { return config; }

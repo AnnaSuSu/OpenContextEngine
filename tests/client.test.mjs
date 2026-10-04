@@ -1,12 +1,29 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {clientConfig,search} from '../src/client.mjs';
+import {serviceConfig} from '../src/service.mjs';
 
 test('Retrieval client permits SSH loopback or HTTPS, rejects credentials and cleartext public endpoints',()=>{
-  const env={REPONERVE_API_KEY:'test-key-not-a-real-secret',REPONERVE_BASE_URL:'http://127.0.0.1:45005'};
-  assert.equal(clientConfig(env).baseUrl,env.REPONERVE_BASE_URL);
+  const env={OCE_API_KEY:'test-key-not-a-real-secret',OCE_BASE_URL:'http://127.0.0.1:45005'};
+  assert.equal(clientConfig(env).baseUrl,env.OCE_BASE_URL);
+  const legacy={REPONERVE_API_KEY:'legacy-test-key',REPONERVE_BASE_URL:'http://127.0.0.1:45006'};
+  assert.deepEqual(clientConfig(legacy),{baseUrl:legacy.REPONERVE_BASE_URL,apiKey:legacy.REPONERVE_API_KEY});
+  assert.deepEqual(clientConfig({...legacy,...env}),{baseUrl:env.OCE_BASE_URL,apiKey:env.OCE_API_KEY});
+  for (const prefix of ['OCE_', 'REPONERVE_']) {
+    const settings=serviceConfig({root:'.',state:'/tmp/opencontextengine-config-test'}, {
+      EMBEDDING_BASE_URL:'https://embedding.example/v1',EMBEDDING_SSH_TUNNEL_URL:'',
+      RERANK_BASE_URL:'https://reranker.example/v1',RERANK_REMOTE_RUNTIME_URL:'',
+      RERANK_MODEL:'test',RERANK_API_KEY:'test-only',
+      [prefix+'PYTHON']:'/test/python',[prefix+'GO_BINARY']:'/test/go',
+      [prefix+'API_KEY']:'configuration-test-only',[prefix+'POLL_SECONDS']:'2',
+    });
+    assert.equal(settings.python,'/test/python');
+    assert.equal(settings.workerEnv.OCE_GO_BINARY,'/test/go');
+    assert.equal(settings.config.serviceKey,'configuration-test-only');
+    assert.equal(settings.config.pollSeconds,2);
+  }
   for(const url of ['http://public.example.com','https://user:pass@example.com','https://example.com?token=x']){
-    assert.throws(()=>clientConfig({...env,REPONERVE_BASE_URL:url}));
+    assert.throws(()=>clientConfig({...env,OCE_BASE_URL:url}));
   }
 });
 

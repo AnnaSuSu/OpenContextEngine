@@ -6,11 +6,12 @@ import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { fixture, python } from './helpers/live-service.mjs';
 
-async function connect(t, config) {
+async function connect(t, config, legacy=false) {
   const transport = new StdioClientTransport({command:process.execPath,
-    args:[resolve('scripts/mcp-reponerve.mjs'),'--connect'],stderr:'pipe',
-    env:{...process.env,REPONERVE_BASE_URL:config.baseUrl,REPONERVE_API_KEY:config.apiKey}});
-  const client = new Client({name:'reponerve-test',version:'1.0.0'});
+    args:[resolve(legacy ? 'scripts/mcp-reponerve.mjs' : 'scripts/mcp-opencontextengine.mjs'),'--connect'],stderr:'pipe',
+    env:{...process.env,...(legacy ? {REPONERVE_BASE_URL:config.baseUrl,REPONERVE_API_KEY:config.apiKey}
+      : {OCE_BASE_URL:config.baseUrl,OCE_API_KEY:config.apiKey})}});
+  const client = new Client({name:'opencontextengine-test',version:'1.0.0'});
   t.after(() => client.close());
   await client.connect(transport);
   return client;
@@ -21,6 +22,7 @@ test('Official MCP stdio client initializes, discovers tools and retrieves updat
     const {root,config} = await fixture(t);
     await writeFile(join(root,'lib.py'),'def persist():\n    return "original"\n');
     const client = await connect(t,config);
+    assert.equal(client.getServerVersion().name,'opencontextengine');
     const tools = (await client.listTools()).tools;
     assert.deepEqual(tools.map(tool => tool.name).sort(),['index_status','search_code']);
     assert.equal(tools[1].annotations.readOnlyHint,true);
@@ -41,6 +43,11 @@ test('Official MCP stdio client initializes, discovers tools and retrieves updat
     assert.equal(failure.isError,true);
     assert.match(failure.content[0].text,/Index unavailable/);
     assert.doesNotMatch(failure.content[0].text,/return "updated"/);
+    const compatible = await connect(t,config,true);
+    assert.equal(compatible.getServerVersion().name,'opencontextengine');
+    const compatibleStatus = await compatible.callTool({name:'index_status',arguments:{}});
+    assert.ok(!compatibleStatus.isError);
+    assert.equal(compatibleStatus.structuredContent.root,await realpath(root));
   });
 
 test('MCP schema rejects invalid inputs and reports service authentication failure',

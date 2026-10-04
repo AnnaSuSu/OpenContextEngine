@@ -1,6 +1,6 @@
 # Benchmarks & validation
 
-OpenContextEngine, formerly RepoNerve. Results recorded on **October 3–4, 2026**. Coverage measures whether returned source includes the required evidence for a task; it is not code-generation accuracy or agent task success.
+OpenContextEngine. Results recorded on **October 3–4, 2026**. Coverage measures whether returned source includes the required evidence for a task; it is not code-generation accuracy or agent task success.
 
 ## Retrieval speed
 
@@ -66,4 +66,4 @@ npm test
 node scripts/smoke-mcp.mjs
 ```
 
-Python tests involving Go require the Go toolchain (`REPONERVE_GO_BINARY` may specify its path). Large-repository indexing cost and independent retrieval quality remain to be measured.
+Python tests involving Go require the Go toolchain (`OCE_GO_BINARY` may specify its path). Large-repository indexing cost and independent retrieval quality remain to be measured.

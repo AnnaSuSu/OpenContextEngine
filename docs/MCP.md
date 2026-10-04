@@ -1,6 +1,6 @@
 # MCP 接入
 
-RepoNerve 使用官方 TypeScript MCP SDK 的 stdio transport，提供两个工具：
+OpenContextEngine 使用官方 TypeScript MCP SDK 的 stdio transport，提供两个工具：
 
 - `search_code(query, budget=4000, freshnessWaitMs=30000)`：检索指定仓库的当前源码，返回文件路径、原始行号、证据片段和索引版本。
 - `index_status()`：查看当前仓库、索引是否就绪、变动文件数、向量复用量和最近一次更新错误。
@@ -14,22 +14,22 @@ RepoNerve 使用官方 TypeScript MCP SDK 的 stdio transport，提供两个工�
 ```json
 {
   "mcpServers": {
-    "reponerve": {
+    "opencontextengine": {
       "command": "node",
       "args": [
-        "/absolute/path/to/RepoNerve/scripts/mcp-reponerve.mjs",
+        "/absolute/path/to/OpenContextEngine/scripts/mcp-opencontextengine.mjs",
         "--root",
         "/absolute/path/to/your-repository"
       ],
       "env": {
-        "REPONERVE_PYTHON": "/absolute/path/to/RepoNerve/.venv/bin/python"
+        "OCE_PYTHON": "/absolute/path/to/OpenContextEngine/.venv/bin/python"
       }
     }
   }
 }
 ```
 
-路径应替换成自己的绝对路径。该入口读取 RepoNerve 根目录的 `.env`，进程环境变量优先。索引默认在 `~/.cache/reponerve/<仓库路径哈希>/`，也可附加 `--state /outside/repository/index`。
+路径应替换成自己的绝对路径。该入口读取 OpenContextEngine 根目录的 `.env`，进程环境变量优先。索引默认在 `~/.cache/opencontextengine/<仓库路径哈希>/`，也可附加 `--state /outside/repository/index`。
 
 客户端启动 MCP 时会自动启动绑定该仓库的本机 HTTP worker，使用动态端口和认证密钥。首次索引在后台进行，MCP 可以立即响应工具发现；搜索会等待索引。关闭客户端、stdin EOF 或发送终止信号时，关联 worker 会退出。stdout 只发送 MCP 协议，日志写入 stderr。
 
@@ -40,7 +40,7 @@ RepoNerve 使用官方 TypeScript MCP SDK 的 stdio transport，提供两个工�
 同一索引目录只允许一个写入者。多个客户端需要共用时，先启动一个独立常驻服务：
 
 ```sh
-# .env 中配置 REPONERVE_API_KEY，至少 24 字符
+# .env 中配置 OCE_API_KEY，至少 24 字符
 npm run serve-retrieval -- --root /absolute/path/to/your-repository --port 23505
 ```
 
@@ -49,10 +49,10 @@ npm run serve-retrieval -- --root /absolute/path/to/your-repository --port 23505
 ```json
 {
   "command": "node",
-  "args": ["/absolute/path/to/RepoNerve/scripts/mcp-reponerve.mjs", "--connect"],
+  "args": ["/absolute/path/to/OpenContextEngine/scripts/mcp-opencontextengine.mjs", "--connect"],
   "env": {
-    "REPONERVE_BASE_URL": "http://127.0.0.1:23505",
-    "REPONERVE_API_KEY": "your-service-key"
+    "OCE_BASE_URL": "http://127.0.0.1:23505",
+    "OCE_API_KEY": "your-service-key"
   }
 }
 ```
@@ -73,7 +73,7 @@ npm run serve-retrieval -- --root /absolute/path/to/your-repository --port 23505
 
 ```sh
 npm test
-REPONERVE_GO_BINARY=/path/to/go .venv/bin/python -m unittest discover -s tests -p '*_test.py'
+OCE_GO_BINARY=/path/to/go .venv/bin/python -m unittest discover -s tests -p '*_test.py'
 # 下面会调用已配置的真实远程模型，并在 .pilot-state/mcp-smoke 下保存结果
 node scripts/smoke-mcp.mjs
 ```

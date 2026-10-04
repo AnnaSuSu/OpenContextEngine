@@ -2,7 +2,7 @@
 
 2026-10-03，ACE 官方 SDK `@augmentcode/auggie-sdk` 0.2.0、`DirectContext.search()`。固定 Django commit `f59aef2ee9b5c988fd4179d8f2835030bd76297c`，索引全部 883 个生产 Python 文件（5680101 字节）。10 道独立开发题，中英文各查一次，共 20 次，全部成功。中文为主成绩，英文为同题对照。
 
-这是 ACE 单组开发试点；RepoNerve 引擎与开源工具尚未参加比较。分数是预标注源码证据的覆盖，不是自然语言答案正确率。题目、范围及预算见 [协议](DJANGO_PROTOCOL_V1.md)。
+这是 ACE 单组开发试点；OpenContextEngine 引擎与开源工具尚未参加比较。分数是预标注源码证据的覆盖，不是自然语言答案正确率。题目、范围及预算见 [协议](DJANGO_PROTOCOL_V1.md)。
 
 ## 主结果及预算敏感性
 

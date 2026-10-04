@@ -7,7 +7,7 @@ import { fixture, python } from './helpers/live-service.mjs';
 import { startService } from '../src/service.mjs';
 
 test('A missing worker executable fails startup and closes without hanging', {timeout:2000}, async () => {
-  const worker = startService({python:'/nonexistent/reponerve/python',config:{}},{log:()=>{}});
+  const worker = startService({python:'/nonexistent/opencontextengine/python',config:{}},{log:()=>{}});
   await assert.rejects(worker.ready,/ENOENT/);
   await worker.close();
 });

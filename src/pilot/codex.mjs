@@ -25,7 +25,7 @@ export async function runCodex(config, { workspace, prompt, effort = config.effo
       !Number.isInteger(maxCommands) || maxCommands <= 0 || maxCommands > 64) {
     throw new Error('Run must have positive limits: at most 10 minutes and 64 commands');
   }
-  const isolatedHome = await mkdtemp(join(tmpdir(), 'reponerve-codex-'));
+  const isolatedHome = await mkdtemp(join(tmpdir(), 'opencontextengine-codex-'));
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(new Error('Pilot wall-clock budget exceeded')), wallTimeoutMs);
   const started = performance.now();
@@ -41,7 +41,7 @@ export async function runCodex(config, { workspace, prompt, effort = config.effo
       TMPDIR: join(isolatedHome, 'tmp'), CODEX_HOME: isolatedHome, GPT_API_KEY: config.apiKey };
     const codex = new Codex({ env, config: {
       model_provider: 'configured_provider', project_doc_max_bytes: 0,
-      model_providers: { configured_provider: { name: 'RepoNerve relay', base_url: config.baseUrl,
+      model_providers: { configured_provider: { name: 'OpenContextEngine relay', base_url: config.baseUrl,
         env_key: 'GPT_API_KEY', wire_api: 'responses', requires_openai_auth: false,
         request_max_retries: 0, stream_max_retries: 0, stream_idle_timeout_ms: streamIdleTimeoutMs,
         http_headers: { 'User-Agent': config.userAgent } } },
@@ -87,7 +87,7 @@ export async function runCodex(config, { workspace, prompt, effort = config.effo
 }
 
 export async function sdkSmoke(config) {
-  const workspace = await mkdtemp(join(tmpdir(), 'reponerve-smoke-'));
+  const workspace = await mkdtemp(join(tmpdir(), 'opencontextengine-smoke-'));
   const token = crypto.randomUUID();
   try {
     await mkdir(join(workspace, 'settings'));

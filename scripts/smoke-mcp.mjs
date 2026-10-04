@@ -14,9 +14,9 @@ await writeFile(join(root,'version.py'),'def current_version():\n    return "liv
 await writeFile(join(root,'helper.js'),'export function double(value) { return value * 2; }\n');
 await writeFile(join(root,'config.yaml'),'mode: development\n');
 const transport = new StdioClientTransport({command:process.execPath,
-  args:[resolve('scripts/mcp-reponerve.mjs'),'--root',root,'--state',state],
+  args:[resolve('scripts/mcp-opencontextengine.mjs'),'--root',root,'--state',state],
   env:{...process.env},stderr:'pipe'});
-const client = new Client({name:'reponerve-remote-smoke',version:'1.0.0'});
+const client = new Client({name:'opencontextengine-remote-smoke',version:'1.0.0'});
 const report = {startedAt:new Date().toISOString(),checks:[],modelCalls:'configured remote endpoints'};
 try {
   await client.connect(transport);
@@ -47,10 +47,10 @@ try {
   report.checks.push({name:'deleted-file-removed',index:removed.index,elapsedMs:removed.clientElapsedMs});
   // EOF closes the managed worker. Reopening the same index proves writer release.
   await client.close();
-  const restart = new Client({name:'reponerve-restart-smoke',version:'1.0.0'});
+  const restart = new Client({name:'opencontextengine-restart-smoke',version:'1.0.0'});
   try {
     await restart.connect(new StdioClientTransport({command:process.execPath,
-      args:[resolve('scripts/mcp-reponerve.mjs'),'--root',root,'--state',state],env:{...process.env},stderr:'pipe'}));
+      args:[resolve('scripts/mcp-opencontextengine.mjs'),'--root',root,'--state',state],env:{...process.env},stderr:'pipe'}));
     const result = await restart.callTool({name:'search_code',arguments:{query,freshnessWaitMs:120000}},undefined,{timeout:160000});
     assert.ok(!result.isError, result.content?.[0]?.text);
     assert.equal(result.structuredContent.index.identity,removed.index.identity);

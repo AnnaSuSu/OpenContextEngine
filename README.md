@@ -58,7 +58,7 @@ Set your model endpoints and keys in `.env`, then add this server to an MCP clie
     "opencontextengine": {
       "command": "node",
       "args": [
-        "/absolute/path/to/OpenContextEngine/scripts/mcp-reponerve.mjs",
+        "/absolute/path/to/OpenContextEngine/scripts/mcp-opencontextengine.mjs",
         "--root", "/absolute/path/to/your-repository"
       ]
     }
@@ -71,5 +71,3 @@ The MCP server starts the repository worker and maintains its index. **Save your
 ## Explore
 
 [Benchmark report](docs/BENCHMARKS.md) · [Raw evaluations](docs/eval/results) · [Retrieval engine](src/retrieval) · [Technical report](TECHNICAL_REPORT.md) · [Project goals](GOALS.md) · [Logo assets](assets/brand)
-
-Historical reports and internal commands retain the project's former name, **RepoNerve**.

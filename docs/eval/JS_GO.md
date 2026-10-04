@@ -8,10 +8,10 @@ Go 使用官方 `go/parser` 提取函数、接收者方法、类型、语句边�
 
 ## 使用
 
-`npm ci` 提供 JS/TS 解析器。Go 索引需要 Go 1.22+，本轮验证版本为 Go 1.27.1；可通过 `REPONERVE_GO_BINARY` 指定可执行文件。解析辅助程序只编译本项目的标准库实现，不编译或执行被分析仓库，不下载其依赖。辅助程序缓存按源码与工具链版本隔离。
+`npm ci` 提供 JS/TS 解析器。Go 索引需要 Go 1.22+，本轮验证版本为 Go 1.27.1；可通过 `OCE_GO_BINARY` 指定可执行文件。解析辅助程序只编译本项目的标准库实现，不编译或执行被分析仓库，不下载其依赖。辅助程序缓存按源码与工具链版本隔离。
 
 ```sh
-export REPONERVE_GO_BINARY=/path/to/go/bin/go
+export OCE_GO_BINARY=/path/to/go/bin/go
 python3 scripts/prepare-source.py /path/to/repository --output /tmp/snapshot.json
 python3 scripts/inspect-source.py /path/to/repository --snapshot /tmp/snapshot.json --output /tmp/structure.json
 ```

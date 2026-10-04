@@ -20,9 +20,9 @@ def toolchain(binary):
 
 
 def compiler():
-    binary = os.environ.get('REPONERVE_GO_BINARY') or shutil.which('go')
+    binary = os.environ.get('OCE_GO_BINARY') or os.environ.get('REPONERVE_GO_BINARY') or shutil.which('go')
     if not binary:
-        raise RuntimeError('Go indexing requires Go 1.22+ on PATH or REPONERVE_GO_BINARY')
+        raise RuntimeError('Go indexing requires Go 1.22+ on PATH or OCE_GO_BINARY')
     return binary, toolchain(binary)
 
 

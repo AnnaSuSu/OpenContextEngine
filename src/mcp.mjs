@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { search, indexStatus } from './client.mjs';
 
 export function createMcpServer(config) {
-  const server = new McpServer({name:'reponerve',version:'0.1.0'}, {
+  const server = new McpServer({name:'opencontextengine',version:'0.1.0'}, {
     instructions:'Search the configured repository for source evidence. Results include source paths and line numbers. '
       + 'Search waits for saved file changes to be indexed. If an update is pending or fails, inspect index_status and retry after it completes. '
       + 'Read target files again before editing, because code may change after a search.',

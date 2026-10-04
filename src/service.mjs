@@ -1,3 +1,4 @@
+import { normalizeEnvironment } from './environment.mjs';
 import { spawn } from 'node:child_process';
 import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import { createHash, randomBytes } from 'node:crypto';
@@ -10,28 +11,31 @@ import { embeddingTransportConfig, remoteRerankerConfig, rerankerExecutionTransp
 
 export function serviceConfig({root, state, port = 0} = {}, environment = process.env) {
   const file = resolve(projectRoot, '.env');
-  const env = {...(existsSync(file) ? parseEnv(readFileSync(file, 'utf8')) : {}), ...environment};
+  const env = {...normalizeEnvironment(existsSync(file) ? parseEnv(readFileSync(file, 'utf8')) : {}), ...normalizeEnvironment(environment)};
   const embedding = embeddingTransportConfig(env);
   const reranker = remoteRerankerConfig(env), runtime = rerankerExecutionTransport(env);
   const repository = root ? realpathSync(resolve(root)) : undefined;
   const workspaceId = repository && createHash('sha256').update(repository).digest('hex').slice(0, 24);
   const candidates = ['.venv/bin/python', '.pilot-state/baselines/cocoindex-venv/bin/python',
     '.pilot-state/language-adapters-venv/bin/python'].map(path => resolve(projectRoot, path));
+  const currentState = repository && resolve(homedir(), '.cache/opencontextengine', workspaceId);
+  const previousState = repository && resolve(homedir(), '.cache/reponerve', workspaceId);
+  const defaultState = repository && (existsSync(currentState) ? currentState : existsSync(previousState) ? previousState : currentState);
   return {
-    python: env.REPONERVE_PYTHON || candidates.find(existsSync) || 'python3',
-    workerEnv: env.REPONERVE_GO_BINARY ? {REPONERVE_GO_BINARY:env.REPONERVE_GO_BINARY} : {},
+    python: env.OCE_PYTHON || candidates.find(existsSync) || 'python3',
+    workerEnv: env.OCE_GO_BINARY ? {OCE_GO_BINARY:env.OCE_GO_BINARY} : {},
     config: {root: repository, state: state ? resolve(state) : repository
-      ? resolve(homedir(), '.cache/reponerve', workspaceId) : resolve(projectRoot, '.pilot-state/reponerve/index'),
-    serviceKey: env.REPONERVE_API_KEY || randomBytes(32).toString('hex'), port,
+      ? defaultState : resolve(projectRoot, '.pilot-state/reponerve/index'),
+    serviceKey: env.OCE_API_KEY || randomBytes(32).toString('hex'), port,
     embeddingUrl: embedding.requestBaseUrl, embeddingIdentity: embedding.baseUrl,
     embeddingKey: env.EMBEDDING_API_KEY,
     embeddingModel: env.EMBEDDING_MODEL || 'Qwen3-Embedding-4B',
-    embeddingDimensions: Number(env.REPONERVE_EMBEDDING_DIMENSIONS || 1024),
-    embeddingRevision: env.REPONERVE_EMBEDDING_REVISION || '1',
+    embeddingDimensions: Number(env.OCE_EMBEDDING_DIMENSIONS || 1024),
+    embeddingRevision: env.OCE_EMBEDDING_REVISION || '1',
     reranker: {...reranker, baseUrl: runtime.requestBaseUrl},
-    languageOptions: env.REPONERVE_LANGUAGE_OPTIONS ? JSON.parse(env.REPONERVE_LANGUAGE_OPTIONS) : {},
-    pollSeconds: Number(env.REPONERVE_POLL_SECONDS || 1),
-    debounceSeconds: Number(env.REPONERVE_DEBOUNCE_SECONDS || .3)},
+    languageOptions: env.OCE_LANGUAGE_OPTIONS ? JSON.parse(env.OCE_LANGUAGE_OPTIONS) : {},
+    pollSeconds: Number(env.OCE_POLL_SECONDS || 1),
+    debounceSeconds: Number(env.OCE_DEBOUNCE_SECONDS || .3)},
   };
 }
 

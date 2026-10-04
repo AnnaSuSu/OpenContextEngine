@@ -1,5 +1,5 @@
 {
-  "name": "reponerve",
+  "name": "opencontextengine",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -17,10 +17,10 @@
     "ace-django": "node scripts/ace-django.mjs",
     "score-django": "node scripts/score-django.mjs",
     "baseline": "node scripts/run-baseline.mjs",
-    "search": "node scripts/search-reponerve.mjs",
-    "serve-retrieval": "node scripts/serve-reponerve.mjs",
+    "search": "node scripts/search-opencontextengine.mjs",
+    "serve-retrieval": "node scripts/serve-opencontextengine.mjs",
     "benchmark-service": "node scripts/benchmark-service.mjs",
-    "mcp": "node scripts/mcp-reponerve.mjs"
+    "mcp": "node scripts/mcp-opencontextengine.mjs"
   },
   "dependencies": {
     "@augmentcode/auggie-sdk": "0.2.0",
