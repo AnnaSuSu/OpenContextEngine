@@ -12,7 +12,7 @@ test('npm package contains the runtime and excludes credentials, caches, benchma
   t.after(() => rm(cache,{recursive:true,force:true}));
   const result = await execute('npm',['pack','--dry-run','--json','--ignore-scripts','--cache',cache]);
   const [pack] = JSON.parse(result.stdout), files = new Set(pack.files.map(file => file.path));
-  for (const path of ['LICENSE','README.zh-CN.md','bin/opencontextengine.mjs','src/config.mjs','src/runtime.mjs','src/setup.mjs',
+  for (const path of ['LICENSE','README.md','README.zh-CN.md','bin/opencontextengine.mjs','src/config.mjs','src/runtime.mjs','src/setup.mjs',
     'src/mcp.mjs','src/workspaces.mjs','src/eval/remote-models.mjs','scripts/mcp-opencontextengine.mjs',
     'scripts/retrieval-server.py','src/retrieval/languages/typescript.mjs','src/retrieval/languages/go_ast.go',
     'src/retrieval/languages/go_types.go','src/retrieval/reranker.py','requirements.txt']) assert.ok(files.has(path),path);
@@ -24,7 +24,7 @@ test('npm package contains the runtime and excludes credentials, caches, benchma
   assert.ok(pack.files.find(file => file.path === 'bin/opencontextengine.mjs').mode & 0o111);
   const metadata = JSON.parse(await readFile('package.json'));
   assert.equal(metadata.name,'open-context-engine');
-  assert.equal(pack.filename,'open-context-engine-0.1.1.tgz');
+  assert.equal(pack.filename,'open-context-engine-0.1.2.tgz');
   assert.equal(metadata.bin['open-context-engine'],'bin/opencontextengine.mjs');
   assert.equal(metadata.bin.opencontextengine,'bin/opencontextengine.mjs');
   assert.notEqual(metadata.private,true);
@@ -42,7 +42,7 @@ test('CLI help, version, and generated MCP configuration work outside the source
   const help = await execute(process.execPath,[bin,'--help'],options);
   assert.match(help.stdout,/open-context-engine setup/);
   const version = await execute(process.execPath,[bin,'--version'],options);
-  assert.match(version.stdout,/^0\.1\.1\n$/);
+  assert.match(version.stdout,/^0\.1\.2\n$/);
   const config = await execute(process.execPath,[bin,'mcp-config'],options);
   const server = JSON.parse(config.stdout).mcpServers['open-context-engine'];
   assert.equal(server.command,process.execPath);
@@ -52,4 +52,19 @@ test('CLI help, version, and generated MCP configuration work outside the source
   const relative = await execute(process.execPath,[bin,'mcp-config'],{...options,env:{...options.env,OCE_CONFIG_HOME:'settings'}});
   assert.equal(JSON.parse(relative.stdout).mcpServers['open-context-engine'].env.OCE_CONFIG_HOME,join(await realpath(dir),'settings'));
   await assert.rejects(execute(process.execPath,[bin,'not-a-command'],options));
+});
+
+
+test('release archive explicitly selects the English README while keeping the translation', async t => {
+  const dir = await mkdtemp(join(tmpdir(), 'oce-release-test-'));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  const { stdout } = await execute(process.execPath, ['scripts/pack-release.mjs', dir]);
+  const [pack] = JSON.parse(stdout);
+  const archive = join(dir, pack.filename);
+  const { stdout: metadata } = await execute('tar', ['-xOf', archive, 'package/package.json']);
+  const manifest = JSON.parse(metadata);
+  assert.equal(manifest.readmeFilename, 'README.md');
+  assert.equal(manifest.readme, await readFile('README.md', 'utf8'));
+  const { stdout: translated } = await execute('tar', ['-xOf', archive, 'package/README.zh-CN.md']);
+  assert.equal(translated, await readFile('README.zh-CN.md', 'utf8'));
 });
