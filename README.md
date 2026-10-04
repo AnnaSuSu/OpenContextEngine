@@ -146,6 +146,10 @@ Your agent supplies the current project's absolute path as `directory_path`. To 
 
 [Model configuration, troubleshooting, and update behavior →](docs/QUICKSTART.md)
 
+## Explore
+
+[Benchmark report](docs/BENCHMARKS.md) · [Raw evaluations](docs/eval/results) · [Retrieval engine](src/retrieval)
+
 ## License
 
 [MIT](LICENSE) © 2026 AnnaSuSu.

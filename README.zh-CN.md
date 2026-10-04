@@ -146,6 +146,10 @@ Claude 会通过 `directory_path` 传入项目的绝对路径。首次请求会�
 
 [模型配置、问题排查和索引更新机制 →](docs/QUICKSTART.md)
 
+## 进一步了解
+
+[评测报告](docs/BENCHMARKS.md) · [原始评测数据](docs/eval/results) · [检索引擎源码](src/retrieval)
+
 ## 许可证
 
 [MIT](LICENSE) © 2026 AnnaSuSu。
