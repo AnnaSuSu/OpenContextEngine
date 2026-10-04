@@ -77,17 +77,21 @@ This is a separate run from the speed table, with different structural indexes. 
 
 ## Engineering validation
 
-**90 tests verified: 61 Python + 29 Node.js**, including source fidelity, language relationships, embedding reuse, branch changes, update failures, HTTP authentication, and official MCP client integration. This includes ordinary `/rerank` compatibility, sparse-pair mapping, bounded concurrency, malformed provider responses, and identical retrieval under deterministic scores in both API modes. This is a recorded local test result, not a live CI status badge.
+**97 tests verified: 61 Python + 36 Node.js**, including source fidelity, language relationships, embedding reuse, branch changes, update failures, HTTP authentication, and official MCP client integration. This includes ordinary `/rerank` compatibility, sparse-pair mapping, bounded concurrency, malformed provider responses, and identical retrieval under deterministic scores in both API modes. The automatic-workspace change passed all 36 Node.js tests, including seven new cases for project routing, concurrent first access, path validation, failure recovery, and worker shutdown; the unchanged Python suite retains its earlier 61-test result. This is a recorded local test result, not a live CI status badge.
 
 A separate **real remote-model MCP smoke test** verified initial indexing, saved-file updates, deletion, and restart recovery. Editing one function embedded **one new document and reused two unchanged units**. Requests that encounter failed synchronization or source changes during retrieval return explicit errors instead of stale evidence.
 
 [Ordinary rerank and real-model MCP validation](eval/results/rerank-compat-20261004.json) · [Earlier remote MCP smoke record](eval/results/mcp-live-smoke-20261004.json) · [Tests](../tests) · [Smoke runner](../scripts/smoke-mcp.mjs)
+
+The [automatic-workspace remote-model smoke](eval/results/mcp-workspaces-20261004.json) also passed: first access, switching between two projects without mixing evidence, reusing an existing index, saved edits, deletion, and restoration after MCP restart. These are functional checks on tiny synthetic repositories, not a rerun of the retrieval benchmark.
 
 ```sh
 npm test
 .venv/bin/python -m unittest discover -s tests -p '*_test.py'
 # Requires configured remote models; saves a separate report for each run.
 node scripts/smoke-mcp.mjs
+# Automatic workspace routing, project switching, and the same lifecycle checks.
+node scripts/smoke-mcp.mjs --auto-workspace
 ```
 
 Python tests involving Go require the Go toolchain (`OCE_GO_BINARY` may specify its path). Large-repository indexing cost and independent retrieval quality remain to be measured.

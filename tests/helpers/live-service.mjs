@@ -40,16 +40,16 @@ export async function fixture(t) {
   });
   await new Promise(resolveListen => models.listen(0,'127.0.0.1',resolveListen));
   const modelUrl = `http://127.0.0.1:${models.address().port}/v1`;
-  const worker = startService({python,config:{root,state:join(dir,'state'),port:0,
+  const settings = {python,config:{root,state:join(dir,'state'),port:0,
     serviceKey:'test-only-at-least-24-characters',embeddingUrl:modelUrl,
     embeddingIdentity:'https://test-model.invalid/v1',embeddingKey:'test-only',
-    reranker:{baseUrl:modelUrl,model:'fixture',apiKey:'test-only'},pollSeconds:.05,debounceSeconds:0}},
-    {log:() => {}});
+    reranker:{baseUrl:modelUrl,model:'fixture',apiKey:'test-only'},pollSeconds:.05,debounceSeconds:0}};
+  const worker = startService(settings, {log:() => {}});
   t.after(async () => {
     await worker.close();
     models.closeAllConnections();
     await new Promise(resolveClose => models.close(resolveClose));
     await rm(dir,{recursive:true,force:true});
   });
-  return {root,worker,config:await worker.ready,hooks};
+  return {root,worker,config:await worker.ready,hooks,settings,dir};
 }

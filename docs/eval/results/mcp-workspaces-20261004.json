@@ -1,0 +1,59 @@
+{
+  "status": "passed",
+  "mode": "automatic",
+  "startedAt": "2026-10-04T02:14:25.502Z",
+  "finishedAt": "2026-10-04T02:15:02.562Z",
+  "checks": [
+    {
+      "name": "initial-index-and-search",
+      "index": {
+        "mode": "live",
+        "identity": "c12a64cc16430782ac28db0a7e1a3444e3a68b83c5f6e496f58807ac62f1d53f",
+        "freshness": "verified-after-search",
+        "completedAt": 1791080068.771345
+      },
+      "elapsedMs": 4464
+    },
+    {
+      "name": "project-switch-and-reuse",
+      "identity": "c12a64cc16430782ac28db0a7e1a3444e3a68b83c5f6e496f58807ac62f1d53f"
+    },
+    {
+      "name": "saved-edit-incremental-search",
+      "index": {
+        "mode": "live",
+        "identity": "65e29a5a2c131c00f4ba7ec84ed119801b6c4fed2166a0c3e47a27066bfb3f7b",
+        "freshness": "verified-after-search",
+        "completedAt": 1791080089.393704
+      },
+      "elapsedMs": 2720,
+      "embeddedDocuments": 1,
+      "reusedUnits": 2
+    },
+    {
+      "name": "deleted-file-removed",
+      "index": {
+        "mode": "live",
+        "identity": "081f32f7121eeaf3c2d6e82ab0382650c70e50c162e007c070d6375772b1762f",
+        "freshness": "verified-after-search",
+        "completedAt": 1791080090.8858612
+      },
+      "elapsedMs": 1589
+    },
+    {
+      "name": "restart-restores-generation",
+      "identity": "081f32f7121eeaf3c2d6e82ab0382650c70e50c162e007c070d6375772b1762f"
+    }
+  ],
+  "validation": {
+    "nodeTests": 36,
+    "newWorkspaceCases": 7,
+    "scope": "Automatic MCP workspace lifecycle using synthetic repositories and configured remote models; no retrieval benchmark rerun."
+  },
+  "sourceSha256": {
+    "src/workspaces.mjs": "686e97d9b943b851a664cb5c484f4609d7be68ea5c1db39d3c31874ef3f6375e",
+    "src/mcp.mjs": "202e456417cad5cf7add685e2c3c1da8ae721a627d6b9bbf861298d58a897cd6",
+    "scripts/mcp-opencontextengine.mjs": "a4dddd2d04378bcc30a52a646ae99ba75c7d5533a180aa9fd00343dfcd6dde49",
+    "scripts/smoke-mcp.mjs": "51cdb1553c7a3564d48bcfda1c531ce922e0d0408aa1c82cc8699adad6fc785a"
+  }
+}

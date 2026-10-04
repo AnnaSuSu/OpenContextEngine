@@ -49,8 +49,7 @@ For clients that use `mcpServers`, add:
     "opencontextengine": {
       "command": "node",
       "args": [
-        "/absolute/path/to/OpenContextEngine/scripts/mcp-opencontextengine.mjs",
-        "--root", "/absolute/path/to/your-repository"
+        "/absolute/path/to/OpenContextEngine/scripts/mcp-opencontextengine.mjs"
       ],
       "env": {
         "OCE_PYTHON": "/absolute/path/to/OpenContextEngine/.venv/bin/python"
@@ -62,12 +61,22 @@ For clients that use `mcpServers`, add:
 
 Use absolute paths and your client's equivalent configuration format. The MCP process reads `.env` from the OpenContextEngine checkout; process environment values take precedence. Use the `OCE_*` configuration variables shown here.
 
-The server starts its repository worker automatically and stops it when the client disconnects. First-time indexing runs in the background.
+Without `--root`, the server uses **automatic workspace mode**. Your agent supplies the absolute project directory in `directory_path` on each tool call. No indexing starts until a project is requested; first access starts a repository worker and background indexing. Later calls reuse it. One MCP session can search multiple projects, each with an independent worker and persistent index. Workers stay active until the client disconnects, when all are stopped.
+
+The server does not infer your editor's project from its own launch directory. Its tool instructions tell the agent to use the project path supplied by the host, or inspect the current project directory. Missing, relative, or invalid paths return an error. Symbolic links to the same directory share a worker. Supply the same project root consistently, rather than a different subdirectory on each call.
+
+Example tool arguments (sent by your agent):
+
+```json
+{"directory_path":"/absolute/path/to/your-repository","query":"Where are user sessions validated?"}
+```
+
+To pin the server to one project instead, append `"--root", "/absolute/path/to/your-repository"` to `args`. In this mode `directory_path` may be omitted; a different project path is rejected. Existing fixed-project configurations continue to work.
 
 | Tool | Purpose |
 | --- | --- |
-| `search_code` | Describe the behavior you need. Returns source paths, line numbers, and relevant code; default budget: 4,000 tokens. |
-| `index_status` | Inspect indexing progress, active generation, vector reuse, and the latest update error. |
+| `search_code` | Pass `directory_path` and describe the behavior in `query`. Returns source paths, line numbers, and relevant code; default budget: 4,000 tokens. |
+| `index_status` | Pass `directory_path` to inspect indexing progress, active generation, vector reuse, and the latest update error. First access also starts that project's index. |
 
 ## Updates & storage
 
@@ -75,7 +84,7 @@ Saved files are checked every second by default, with a 300 ms debounce. New fil
 
 Search actively checks source hashes before retrieval and again before returning. It waits up to 30 seconds for synchronization (`freshnessWaitMs`, maximum 120 seconds). Failed updates, timeouts, or edits during retrieval produce explicit errors. Unsaved editor buffers are not indexed.
 
-State is stored in `~/.cache/opencontextengine/<repository-path-hash>/`. Override it with `--state /outside/repository/index`. Existing installations automatically reuse their previous cache location. One worker may write to a state directory at a time. Stop that worker and remove the directory to delete stored source and embeddings.
+State is stored in `~/.cache/opencontextengine/<repository-path-hash>/`. Override it with `--state /outside/repository/index`: automatic mode creates a separate path-hash subdirectory for each project; fixed `--root` mode uses that exact state directory. Existing installations automatically reuse their previous cache location. One worker may write to a state directory at a time. Stop that worker and remove the directory to delete stored source and embeddings.
 
 When model weights change under the same name, increment `OCE_EMBEDDING_REVISION`. A different provider, model name, or dimension count also invalidates vector reuse. Other models need separate compatibility and quality validation.
 
@@ -87,6 +96,6 @@ Set a `OCE_API_KEY` of at least 24 characters in `.env`, then run:
 npm run serve-retrieval -- --root /absolute/path/to/your-repository --port 23505
 ```
 
-Configure each MCP client to run `scripts/mcp-opencontextengine.mjs --connect`, with `OCE_BASE_URL=http://127.0.0.1:23505` and the same `OCE_API_KEY`. Closing a client leaves the shared worker running.
+Configure each MCP client to run `scripts/mcp-opencontextengine.mjs --connect`, with `OCE_BASE_URL=http://127.0.0.1:23505` and the same `OCE_API_KEY`. This mode always uses the shared worker's configured project: omit `directory_path`. Closing a client leaves the shared worker running.
 
 [Benchmark & test report](BENCHMARKS.md) · [Detailed update design](LIVE_INDEX.md) · [MCP implementation](../src/mcp.mjs)
