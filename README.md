@@ -80,8 +80,6 @@ Ask:
 
 Codex supplies the project's absolute path as `directory_path`. The first request starts indexing; if it is still building, ask Codex to check `index_status` and retry when ready. Later searches reuse the index, and saved changes update automatically.
 
-[Codex MCP reference](https://developers.openai.com/codex/mcp)
-
 </details>
 
 <details>
@@ -124,8 +122,6 @@ Run `/mcp` to check the connection, then ask:
 
 Claude supplies the project's absolute path as `directory_path`. The first request starts indexing; if it is still building, ask Claude to check `index_status` and retry when ready. Later searches reuse the index, and saved changes update automatically.
 
-[Claude Code MCP reference](https://code.claude.com/docs/en/mcp)
-
 </details>
 
 <details>
@@ -148,29 +144,7 @@ Your agent supplies the current project's absolute path as `directory_path`. To 
 
 </details>
 
-<details>
-<summary>Run from source or build an internal package</summary>
-
-```sh
-git clone https://github.com/AnnaSuSu/OpenContextEngine.git
-cd OpenContextEngine
-npm ci
-node bin/opencontextengine.mjs setup
-# Build an installable archive for internal testers:
-npm pack
-```
-
-Use the absolute Node and CLI paths printed by setup. [Client-specific configuration →](docs/QUICKSTART.md#client-setup-notes)
-
-</details>
-
 [Model configuration, troubleshooting, and update behavior →](docs/QUICKSTART.md)
-
-[npm package](https://www.npmjs.com/package/open-context-engine) · [Release checklist](docs/RELEASING.md).
-
-## Explore
-
-[Benchmark report](docs/BENCHMARKS.md) · [Raw evaluations](docs/eval/results) · [Retrieval engine](src/retrieval) · [Logo assets](assets/brand)
 
 ## License
 

@@ -80,8 +80,6 @@ codex
 
 Codex 会通过 `directory_path` 传入项目的绝对路径。首次请求会启动索引；如果还在构建，让 Codex 调用 `index_status` 检查进度，待就绪后重试。后续搜索复用索引，保存代码后自动更新。
 
-[Codex MCP 官方文档](https://developers.openai.com/codex/mcp)
-
 </details>
 
 <details>
@@ -124,8 +122,6 @@ claude
 
 Claude 会通过 `directory_path` 传入项目的绝对路径。首次请求会启动索引；如果还在构建，让 Claude 调用 `index_status` 检查进度，待就绪后重试。后续搜索复用索引，保存代码后自动更新。
 
-[Claude Code MCP 官方文档](https://code.claude.com/docs/en/mcp)
-
 </details>
 
 <details>
@@ -148,29 +144,7 @@ Claude 会通过 `directory_path` 传入项目的绝对路径。首次请求会�
 
 </details>
 
-<details>
-<summary>从源码运行或构建内测安装包</summary>
-
-```sh
-git clone https://github.com/AnnaSuSu/OpenContextEngine.git
-cd OpenContextEngine
-npm ci
-node bin/opencontextengine.mjs setup
-# 构建供内测安装的压缩包：
-npm pack
-```
-
-使用安装向导输出的 Node 和 CLI 绝对路径。[各客户端配置说明 →](docs/QUICKSTART.md#client-setup-notes)
-
-</details>
-
 [模型配置、问题排查和索引更新机制 →](docs/QUICKSTART.md)
-
-[npm 安装包](https://www.npmjs.com/package/open-context-engine) · [发布流程](docs/RELEASING.md)
-
-## 进一步了解
-
-[评测报告](docs/BENCHMARKS.md) · [原始评测数据](docs/eval/results) · [检索引擎源码](src/retrieval) · [Logo 素材](assets/brand)
 
 ## 许可证
 
