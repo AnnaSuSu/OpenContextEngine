@@ -78,16 +78,3 @@ Your agent passes the current project's absolute path as `directory_path`. The M
 ## Explore
 
 [Benchmark report](docs/BENCHMARKS.md) · [Raw evaluations](docs/eval/results) · [Retrieval engine](src/retrieval) · [Logo assets](assets/brand)
-
-## Repository layout
-
-| Directory | Contents |
-| --- | --- |
-| `src/` | Retrieval engine, model API clients, MCP and service code |
-| `tests/` | Automated regression and integration tests |
-| `docs/` | Setup, architecture, and published evaluation reports |
-| `eval/` | Frozen benchmark protocols, queries, reference evidence, and snapshots |
-| `scripts/` | Product entry points and public evaluation tools ([guide](scripts/README.md)) |
-| `assets/` | Project branding and published benchmark charts |
-
-Machine-specific notes, provider experiments, and retired development material belong in the ignored `.local/` directory. Keep secrets in the ignored `.env`; publish only generic configuration in `.env.example`.
