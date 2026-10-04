@@ -37,7 +37,7 @@ OpenContextEngine 是一个**可自行部署、面向 AI 编程助手的代码�
 
 需要 **macOS、Linux 或 Windows**、Node.js 22.14+、Python 3.10+、Git，以及已配置好的向量和重排服务。分析 Go 仓库还需要 Go 1.22+。
 
-当前源码已加入原生 Windows 兼容代码，Windows 环境验证和包含这些改动的 npm 版本发布尚待完成。Windows 用户请暂时按[源码安装说明](docs/QUICKSTART.md#1-install)操作。
+**0.1.3** 起支持原生 Windows，安装命令可在 PowerShell 中运行。
 
 通过 npm 安装，展开你所用客户端的教程即可。同一台机器、同一用户下的多个客户端可以共用模型配置。下方链接的详细技术文档目前为英文。
 

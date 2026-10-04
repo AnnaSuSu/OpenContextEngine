@@ -4,7 +4,7 @@ The persistent service supports saved files in any local repository. First acces
 
 ## Run a separate service from source
 
-Host platforms are macOS / Linux / Windows, requiring Node.js 22.14+, Python 3.10+, and Git. Native Windows compatibility is included in source; Windows runner validation and an npm release containing these changes are pending. Repositories with Go files also require a Go compiler. Models run through configured remote embedding and reranking services, without local model loading. For ordinary MCP use, follow the [Quickstart](QUICKSTART.md) and run `open-context-engine setup`; a separate HTTP service is unnecessary.
+Supported platforms are macOS / Linux / Windows, requiring Node.js 22.14+, Python 3.10+, and Git. Native Windows support requires version 0.1.3 or later. Repositories with Go files also require a Go compiler. Models run through configured remote embedding and reranking services, without local model loading. For ordinary MCP use, follow the [Quickstart](QUICKSTART.md) and run `open-context-engine setup`; a separate HTTP service is unnecessary.
 
 ```sh
 npm ci

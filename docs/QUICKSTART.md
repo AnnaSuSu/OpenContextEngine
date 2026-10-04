@@ -1,6 +1,6 @@
 # Connect OpenContextEngine to your agent
 
-OpenContextEngine runs a local repository index and calls configured model services for embeddings and reranking. Its MCP interface uses stdio. Host platforms: **macOS, Linux, and Windows**. Native Windows compatibility is included in source; Windows runner validation and an npm release containing these changes are pending.
+OpenContextEngine runs a local repository index and calls configured model services for embeddings and reranking. Its MCP interface uses stdio. Supported hosts: **macOS, Linux, and Windows**. Native Windows support requires version **0.1.3** or later.
 
 ## 1. Install
 
@@ -24,15 +24,15 @@ npm ci
 node bin/opencontextengine.mjs setup
 ```
 
-On Windows, use the source installation above until a compatible npm release is published. Run it in PowerShell with `node`, `npm`, `python`, and `git` on `PATH`; WSL is not required. Setup defaults to `python` and uses `Scripts/python.exe` inside its virtual environment. To select a particular interpreter, run:
+On Windows, run the npm installation commands in PowerShell with `node`, `npm`, `python`, and `git` on `PATH`; WSL is not required. Setup defaults to `python` and uses `Scripts/python.exe` inside its virtual environment. To select a particular interpreter, run:
 
 ```powershell
-node bin/opencontextengine.mjs setup --python "C:\Program Files\Python312\python.exe"
+open-context-engine setup --python "C:\Program Files\Python312\python.exe"
 ```
 
 Use native absolute project paths such as `C:\Users\you\project` in MCP calls. Generated MCP JSON escapes backslashes automatically.
 
-For internal builds, maintainers can create an archive with `npm pack` and install it with `npm install -g /path/to/open-context-engine-0.1.2.tgz`. See the [release checklist](https://github.com/AnnaSuSu/OpenContextEngine/blob/main/docs/RELEASING.md).
+For internal builds, maintainers can create an archive with `npm pack` and install it with `npm install -g /path/to/open-context-engine-0.1.3.tgz`. See the [release checklist](https://github.com/AnnaSuSu/OpenContextEngine/blob/main/docs/RELEASING.md).
 
 The CLI and package are named `open-context-engine`. The previous `opencontextengine` command remains an alias. Existing configuration and cache directories keep their paths, so saved keys and indexes are reused.
 
@@ -193,7 +193,7 @@ First-time setup requires network access to npm/PyPI and tokenizer data. If Pyth
 
 ## Installation verification
 
-1. Install from npm (or an internal tarball) on macOS/Linux, or from source on Windows until a compatible release is published, and run setup with your model endpoints.
+1. Install from npm (or an internal tarball) on macOS, Linux, or Windows and run setup with your model endpoints.
 2. Paste the generated MCP configuration into your client, restart it, and search a small project.
 3. Save an edit, add a file, and delete a file; verify search returns current source.
 4. Switch to another project and back; verify the results belong to the requested project.
