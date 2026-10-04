@@ -225,7 +225,7 @@ export function extract(files, maxLines = 65, settings = {}) {
 }
 
 if (process.argv[1] && existsSync(process.argv[1])
-    && realpathSync(fileURLToPath(import.meta.url)) === realpathSync(process.argv[1])) {
+    && realpathSync.native(fileURLToPath(import.meta.url)) === realpathSync.native(process.argv[1])) {
   try {
     const input = JSON.parse(readFileSync(0, 'utf8'));
     process.stdout.write(JSON.stringify(extract(input.files, input.maxLines, input.options)));

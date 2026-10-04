@@ -45,12 +45,16 @@ export async function fixture(t) {
     serviceKey:'test-only-at-least-24-characters',embeddingUrl:modelUrl,
     embeddingIdentity:'https://test-model.invalid/v1',embeddingKey:'test-only',
     reranker:{baseUrl:modelUrl,model:'fixture',apiKey:'test-only'},pollSeconds:.05,debounceSeconds:0}};
-  const worker = startService(settings, {log:() => {}});
+  const logs = [];
+  const worker = startService(settings, {log:line => logs.push(line)});
   t.after(async () => {
     await worker.close();
     models.closeAllConnections();
     await new Promise(resolveClose => models.close(resolveClose));
     await rm(dir,{recursive:true,force:true});
   });
-  return {root,worker,config:await worker.ready,hooks,settings,dir};
+  let config;
+  try {config = await worker.ready;}
+  catch (error) {throw new Error([error.message,...logs.slice(-10)].join('\n'),{cause:error});}
+  return {root,worker,config,hooks,settings,dir};
 }

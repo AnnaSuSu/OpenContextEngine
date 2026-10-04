@@ -12,7 +12,7 @@ export function serviceConfig({root, state, port = 0} = {}, environment = proces
   const env = loadEnvironment(environment);
   const embedding = embeddingTransportConfig(env);
   const reranker = remoteRerankerConfig(env), runtime = rerankerExecutionTransport(env);
-  const repository = root ? realpathSync(resolve(root)) : undefined;
+  const repository = root ? realpathSync.native(resolve(root)) : undefined;
   const workspaceId = repository && createHash('sha256').update(repository).digest('hex').slice(0, 24);
   const candidates = ['.venv', '.pilot-state/baselines/cocoindex-venv',
     '.pilot-state/language-adapters-venv'].map(path => venvPython(resolve(projectRoot, path)));

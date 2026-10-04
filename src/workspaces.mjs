@@ -4,7 +4,7 @@ import { createHash } from 'node:crypto';
 import { serviceConfig, startService } from './service.mjs';
 
 function directory(path) {
-  const canonical = realpathSync(path);
+  const canonical = realpathSync.native(path);
   if (!statSync(canonical).isDirectory()) throw new Error('directory_path must point to a directory');
   return canonical;
 }

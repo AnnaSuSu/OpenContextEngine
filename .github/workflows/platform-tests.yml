@@ -20,6 +20,7 @@ jobs:
       PYTHONUTF8: '1'
       PYTHONIOENCODING: utf-8
       PYTHONPATH: tests
+      TIKTOKEN_CACHE_DIR: ${{ runner.temp }}/opencontextengine-tokenizer
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -35,6 +36,8 @@ jobs:
           cache: false
       - run: npm ci
       - run: python -m pip install -r requirements.txt
+      - name: Cache the tokenizer before starting test workers
+        run: python -c "import numpy, tiktoken; tiktoken.get_encoding('cl100k_base')"
       - name: Verify native setup and managed virtual environment
         env:
           OCE_CONFIG_HOME: .pilot-state/platform-setup
