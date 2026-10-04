@@ -51,7 +51,7 @@ export async function fixture(t) {
     await worker.close();
     models.closeAllConnections();
     await new Promise(resolveClose => models.close(resolveClose));
-    await rm(dir,{recursive:true,force:true});
+    await rm(dir,{recursive:true,force:true,maxRetries:5,retryDelay:100});
   });
   let config;
   try {config = await worker.ready;}
