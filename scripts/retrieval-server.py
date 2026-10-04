@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import re
 import secrets
+from socketserver import TCPServer
 import sys
 import threading
 import time
@@ -15,6 +16,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src' / 'retrieval'))
 from routed import RoutedEngine, VERSION
 from live import LiveIndex, IndexUnavailable
+
+
+class LoopbackHTTPServer(ThreadingHTTPServer):
+    def server_bind(self):
+        # This worker binds a numeric loopback address; reverse DNS is unnecessary.
+        TCPServer.server_bind(self)
+        self.server_name, self.server_port = self.server_address
 
 
 def plan_query(query):
@@ -119,7 +127,7 @@ def serve(config):
             finally:
                 lock.release()
 
-    server = ThreadingHTTPServer(('127.0.0.1',config.get('port',23505)),Handler)
+    server = LoopbackHTTPServer(('127.0.0.1',config.get('port',23505)),Handler)
     server.daemon_threads = True
     print(json.dumps({'listening':f'http://127.0.0.1:{server.server_port}',
                       'health':{'status':'running','mode':'live'} if live else health}),flush=True)
