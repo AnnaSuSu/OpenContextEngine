@@ -113,6 +113,35 @@ To pin the server to one project instead, append `"--root", "/absolute/path/to/y
 | `search_code` | Pass `directory_path` and describe the behavior in `query`. Returns source paths, line numbers, and relevant code; default budget: 4,000 tokens. |
 | `index_status` | Pass `directory_path` to inspect indexing progress, active generation, vector reuse, and the latest update error. First access also starts that project's index. |
 
+### Client setup notes
+
+Start with the expandable **Codex** or **Claude Code** guide in the [README](../README.md#quick-start). The CLI registration commands there assume the installed executable is on the client's `PATH`.
+
+For desktop clients or source installations, run `open-context-engine mcp-config` (or `node bin/opencontextengine.mjs mcp-config` from the checkout). Use the absolute `command` and `args` values it prints. Codex uses TOML rather than the printed `mcpServers` JSON; add or update this entry in `~/.codex/config.toml`, replacing the example paths:
+
+```toml
+[mcp_servers.open-context-engine]
+command = "/absolute/path/to/node"
+args = ["/absolute/path/to/bin/opencontextengine.mjs", "mcp"]
+startup_timeout_sec = 30
+tool_timeout_sec = 180
+```
+
+For Claude Code, use those same paths with its registration command:
+
+```sh
+claude mcp add --transport stdio --scope user open-context-engine -- /absolute/path/to/node /absolute/path/to/bin/opencontextengine.mjs mcp
+```
+
+Quote paths that contain spaces. If the generated configuration includes `env` (for example, a custom `OCE_CONFIG_HOME`), preserve it: use `[mcp_servers.open-context-engine.env]` in Codex or `--env OCE_CONFIG_HOME=/absolute/config/path` before `--transport stdio` in the Claude command. Keep your model keys in the shared OpenContextEngine settings saved by setup. Restart the client after changing its configuration.
+
+- **Command not found:** use the absolute paths above and confirm the Node executable still exists after a Node upgrade.
+- **Tools missing:** check `codex mcp get open-context-engine` for the saved Codex entry, or `/mcp` inside Claude Code for connection status; restart the client after configuration changes.
+- **First search is still indexing:** ask the agent to call `index_status` for the same project. Once it reports ready, retry `search_code`. Large repositories can take longer than a single tool call's timeout. If status reports an error, resolve that error before retrying.
+- **Model configuration or authentication errors:** rerun `open-context-engine setup`. `open-context-engine doctor` checks local configuration and dependencies; an actual search checks access to the model APIs. If using SSH forwarding, keep the tunnel running.
+
+Client references: [Codex MCP](https://developers.openai.com/codex/mcp) · [Claude Code MCP](https://code.claude.com/docs/en/mcp).
+
 ## Updates & storage
 
 Saved files are checked every second by default, with a 300 ms debounce. New files, deletions, renames, and branch changes update the index automatically. Embeddings are reused by model identity and actual input content. Structural analysis conservatively refreshes the affected language group to update references in unchanged files.

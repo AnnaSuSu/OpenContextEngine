@@ -37,14 +37,116 @@ Measured with the optional batch rerank API. 40 source-derived tasks, each asked
 
 Requires **macOS or Linux**, Node.js 22.14+, Python 3.10+, Git, and configured embedding/reranking services. Go repositories also need Go 1.22+.
 
-**Internal testing build. Not published to npm.** Install the provided archive:
+**Internal testing build. Not published to npm.** Get the installation archive from the maintainer, then expand your client's guide. Model settings are shared across clients on the same machine.
+
+<details>
+<summary><strong>Codex — install, connect, and search</strong></summary>
+
+**1. Install the CLI**
+
+With Codex CLI already installed, run:
 
 ```sh
 npm install -g /path/to/open-context-engine-0.1.0.tgz
+```
+
+**2. Configure your models**
+
+```sh
 open-context-engine setup
 ```
 
-Setup installs isolated Python dependencies, saves your model settings, and prints MCP configuration. Paste that configuration into your client. API keys are entered without echo and stored in your user configuration, outside the installation directory.
+Enter your embedding and reranking base URLs, API keys, model names, and embedding dimensions. Setup installs isolated Python dependencies and saves your settings. The default reranker uses the ordinary `/rerank` API. [Endpoint examples →](docs/QUICKSTART.md#2-shared-model-configuration)
+
+**3. Add the MCP server**
+
+```sh
+codex mcp add open-context-engine -- open-context-engine mcp
+codex mcp get open-context-engine
+```
+
+The second command checks the saved configuration. These commands assume `open-context-engine` is on the client's `PATH`. For the desktop app or source installations, use the [absolute-path configuration](docs/QUICKSTART.md#client-setup-notes). Restart an already-running Codex client after adding the server.
+
+**4. Search your project**
+
+```sh
+cd /path/to/your-project
+codex
+```
+
+Ask:
+
+> Use open-context-engine's search_code tool to explain this project's main functionality. Include the entry points and relevant file paths and line numbers.
+
+Codex supplies the project's absolute path as `directory_path`. The first request starts indexing; if it is still building, ask Codex to check `index_status` and retry when ready. Later searches reuse the index, and saved changes update automatically.
+
+[Codex MCP reference](https://developers.openai.com/codex/mcp)
+
+</details>
+
+<details>
+<summary><strong>Claude Code — install, connect, and search</strong></summary>
+
+**1. Install the CLI**
+
+With Claude Code already installed, run:
+
+```sh
+npm install -g /path/to/open-context-engine-0.1.0.tgz
+```
+
+**2. Configure your models**
+
+```sh
+open-context-engine setup
+```
+
+Enter your embedding and reranking base URLs, API keys, model names, and embedding dimensions. Setup installs isolated Python dependencies and saves your settings. If you already completed setup for Codex, reuse those settings and skip this step. [Endpoint examples →](docs/QUICKSTART.md#2-shared-model-configuration)
+
+**3. Add the MCP server**
+
+```sh
+claude mcp add --transport stdio --scope user open-context-engine -- open-context-engine mcp
+```
+
+User scope makes the server available across your projects. For a shared project configuration, run the command from that project and replace `--scope user` with `--scope project`. These commands assume `open-context-engine` is on the client's `PATH`; see [client setup notes](docs/QUICKSTART.md#client-setup-notes) for absolute paths. Restart an already-running Claude Code session after adding the server.
+
+**4. Search your project**
+
+```sh
+cd /path/to/your-project
+claude
+```
+
+Run `/mcp` to check the connection, then ask:
+
+> Use open-context-engine's search_code tool to explain this project's main functionality. Include the entry points and relevant file paths and line numbers.
+
+Claude supplies the project's absolute path as `directory_path`. The first request starts indexing; if it is still building, ask Claude to check `index_status` and retry when ready. Later searches reuse the index, and saved changes update automatically.
+
+[Claude Code MCP reference](https://code.claude.com/docs/en/mcp)
+
+</details>
+
+<details>
+<summary>Other MCP clients</summary>
+
+[Install and run setup](docs/QUICKSTART.md#1-install), then use the configuration printed by `open-context-engine mcp-config` in your client's supported format. For clients that accept `mcpServers` JSON and can find the installed command on `PATH`:
+
+```json
+{
+  "mcpServers": {
+    "open-context-engine": {
+      "command": "open-context-engine",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+Your agent supplies the current project's absolute path as `directory_path`. To pin one project, add `"--root", "/absolute/path/to/your-repository"` to `args`.
+
+</details>
 
 <details>
 <summary>Run from source or build an internal package</summary>
@@ -58,24 +160,11 @@ node bin/opencontextengine.mjs setup
 npm pack
 ```
 
-Use the absolute-path MCP configuration printed by setup.
+Use the absolute Node and CLI paths printed by setup. [Client-specific configuration →](docs/QUICKSTART.md#client-setup-notes)
 
 </details>
 
-For clients where the installed command is on `PATH`, the configuration is simply:
-
-```json
-{
-  "mcpServers": {
-    "open-context-engine": {
-      "command": "open-context-engine",
-      "args": ["mcp"]
-    }
-  }
-}
-```
-
-Your agent passes the current project's absolute path as `directory_path`. The MCP server starts its index on first use and reuses it across searches. To pin one project, add `--root /absolute/path/to/your-repository`. **Save your code; the index follows.** [Model configuration, shared services, and update behavior →](docs/QUICKSTART.md)
+[Model configuration, troubleshooting, and update behavior →](docs/QUICKSTART.md)
 
 ## Explore
 
