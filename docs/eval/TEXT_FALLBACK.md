@@ -1,20 +1,20 @@
-# 通用文本保底
+# Generic text fallback
 
-2026-10-04。未知语言、配置和脚本现在可进入现有向量召回、BM25、两轮重排与预算选择流程。Python 和 TypeScript/TSX 继续使用原结构适配器；其他合格文本标记为 `language=text`，不表示已支持该语言的语义解析。
+2026-10-04. Unknown languages, configuration, and scripts can now use the existing vector retrieval, BM25, two-wave reranking, and budget-selection pipeline. Python and TypeScript/TSX retain their original structural adapters. Other eligible text is marked `language=text`, without claiming semantic parsing support for those languages.
 
-## 行为与边界
+## Behavior and boundaries
 
-- 文本按原始物理行切片，默认最多 65 行、目标不超过 1,800 字符，优先在后半段空行处结束。超长单行保持完整，不伪造子行；沿用现有模型输入长度与输出预算限制，因此不保证超长单行能完整参与模型评分或最终输出。
-- 保留路径、起止行号和原文，统一 CRLF/CR/LF，UTF-8 BOM 不进入片段。Unicode 段落分隔符不会被误当作物理换行，也不会在最终返回时改变行号。
-- 每个文本片段有独立标识，关系与边列表为空；不通过名称相同猜测函数调用、跨文件引用或跨语言关系。
-- 统一排除常见依赖/构建目录、锁文件、压缩产物、常见二进制后缀、本地 `.env`、私钥后缀、匹配生成标记（例如 `Code generated ... DO NOT EDIT.`）的文件，以及符号链接。内容检查还排除二进制控制字节、非 UTF-8 和超过 1 MiB 的文件。排除策略有限且明确，不声称能识别所有生成代码。
-- 自动发现优先使用 Git 的 tracked + unignored 文件集合，遵守 Git ignore 规则；普通目录使用不跟随链接的递归遍历。快照保留排除原因；直接传入快照时也执行文件资格检查，索引元数据记录接受/排除数量。
-- 已支持语言的语法错误仍明确报错，不静默改为文本。空白文件不产生片段；全部为空或被排除时明确拒绝构建，不发起模型请求。
-- 文件策略、文本适配器和源码摘要参与索引身份；既有索引需要按新身份重建。在线模型请求轮数仍为一次 embedding、最多两轮 rerank，不增加单独的文本模型通道。
+- Split text on original physical lines, by default at most 65 lines with a target of at most 1,800 characters, preferring a blank-line boundary in the latter half. Keep an exceptionally long single line intact rather than inventing sublines. Existing model-input and output-budget limits still apply, so a very long line may not fully participate in model scoring or final output.
+- Retain paths, start/end line numbers, and original text. Normalize CRLF/CR/LF and omit UTF-8 BOM from units. Unicode paragraph separators are not mistaken for physical line breaks and do not change final returned line numbers.
+- Each text unit has a distinct identifier and empty relationship/edge lists. Matching names do not imply function calls, cross-file references, or cross-language relationships.
+- Exclude common dependency/build directories, lockfiles, compressed outputs, common binary extensions, local `.env`, private-key extensions, files matching generated-code markers such as `Code generated ... DO NOT EDIT.`, and symbolic links. Content checks also exclude binary control bytes, non-UTF-8 text, and files over 1 MiB. The exclusion policy is explicit and limited, without claiming to detect all generated code.
+- Automatic discovery prefers Git's tracked + unignored file set and honors ignore rules. Ordinary directories use recursive traversal without following links. Snapshots retain exclusion reasons; directly supplied snapshots also undergo file-eligibility checks, and index metadata records accepted/excluded counts.
+- Syntax errors in supported languages still fail explicitly rather than silently falling back to text. Blank files produce no units. An entirely blank or excluded input explicitly rejects index construction without model requests.
+- File policy, text adapter, and source digests participate in index identity; existing indexes must rebuild for the new identity. Online model rounds remain one embedding and at most two rerank waves, without a separate text-model path.
 
-## 使用
+## Usage
 
-生成快照时把输出放在被索引目录外，避免输出文件被下一轮发现为源码：
+Place snapshot outputs outside the indexed directory so they are not discovered as source on the next pass:
 
 ```sh
 python3 scripts/prepare-source.py /path/to/repository --output /tmp/source-snapshot.json
@@ -22,34 +22,34 @@ python3 scripts/inspect-source.py /path/to/repository \
   --snapshot /tmp/source-snapshot.json --output /tmp/source-units.json
 ```
 
-以上只解析和检查文件，不调用模型。快照可以传给现有 `build_index` / retrieval worker；模型继续使用已授权远程服务。本次没有新增 Tree-sitter、LSP 或任意仓库一键部署服务。
+These commands only parse and inspect files, without model calls. Pass snapshots to the existing `build_index` / retrieval worker; models continue to use authorized remote services. This change adds no Tree-sitter, LSP, or one-command deployment service for arbitrary repositories.
 
-## 验证
+## Validation
 
-本地自动测试覆盖混合语言、无扩展名配置、CRLF/BOM/Unicode、完整行切片、超长行、排除原因、Git ignore、路径与链接边界、缓存复用、空索引，以及原检索模型预算。24 个 Python 测试和 23 个 Node 测试通过。
+Local automated tests cover mixed languages, extensionless configuration, CRLF/BOM/Unicode, complete-line slicing, long lines, exclusion reasons, Git ignore, path/link boundaries, cache reuse, empty indexes, and existing retrieval-model budgets. All 24 Python and 23 Node tests passed.
 
-Click、HTTPX、Zod 的 52 个原有文件重新解析后，2,333 个代码单元的全部字段与旧索引一致；使用新代码单元回放原 v6 的 60 份选择结果，返回文本逐字一致。这是结构兼容与确定性回放，不是新跑 60 次模型查询。详见 [兼容性记录](results/text-fallback-compatibility-20261004.json)。
+Reparsing the original 52 Click, HTTPX, and Zod files leaves all fields of 2,333 code units identical to the old index. Replaying the original v6 selection results for 60 responses with the new units yields byte-identical output text. This is structural compatibility and deterministic replay, not 60 new model queries. See the [compatibility records](results/text-fallback-compatibility-20261004.json).
 
-### 新混合仓库
+### New mixed-language repository
 
-固定公开 `evanw/esbuild` 的 `v0.25.0`，commit `e9174d671b1882758cd32ac5e146200f5bee3e45`。它未用于此前参数调节。自动发现后纳入 321 个文件（8,529,804 字节），排除 17 项；其中 301 个文件走文本保底、20 个 TypeScript 文件走结构解析。共 7,865 个片段：文本 5,590、TypeScript 2,275。相对仅计算本仓库的结构化片段，文本保底增加 5,590 个片段；这是索引量说明，不是前后查询性能对照。
+Freeze public `evanw/esbuild` at `v0.25.0`, commit `e9174d671b1882758cd32ac5e146200f5bee3e45`, unused in earlier parameter tuning. Automatic discovery includes 321 files (8,529,804 bytes), excluding 17 items. Text fallback handles 301 files and structural parsing handles 20 TypeScript files. The 7,865 units comprise 5,590 text and 2,275 TypeScript units. Text fallback adds 5,590 units beyond this repository's structural-only units; this describes index volume, not a before/after query-performance comparison.
 
-查询前冻结 8 个源码导出的任务，各有中英文版本：Go 布尔选项与 watch 生命周期、JS 子进程输入与平台依赖生成、TS 同步 worker、YAML 发布工作流、Make 测试入口、Shell 二进制安装。答案只在本地离线评分；远程 worker 只获得公开源码、问题和实现。统一 4,000 token、80 个二轮候选上限，无查询缓存；新协议在查询前统一排除参考跨度中的纯空行。
+Before querying, freeze 8 source-derived tasks with Chinese and English variants: Go boolean options and watch lifecycle, JS subprocess input and platform-dependency generation, TS synchronous worker, YAML release workflow, Make test entry point, and Shell binary installation. Answers are used only for local offline scoring; the remote worker receives only public source, questions, and implementation. Use a uniform 4,000-token budget, at most 80 second-wave candidates, and no query cache. Before querying, the new protocol uniformly excludes blank-only lines from reference spans.
 
-修复后的首次完整索引耗时 **286.59 秒**，共 984 个离线 embedding 请求。16 条实际查询全部完成：
+The first complete post-fix index took **286.59 seconds**, with 984 offline embedding requests. All 16 actual queries completed:
 
-| 指标 | 结果 |
+| Metric | Result |
 | --- | ---: |
-| 必需证据覆盖率 | **81.25%** |
-| 找齐全部证据 | **12/16（75%）** |
-| 查询中位耗时 | **6.283 秒** |
-| 查询 P95 | **8.758 秒** |
-| 返回源码/行号不一致 | **0** |
+| Required evidence coverage | **81.25%** |
+| Complete-evidence queries | **12/16 (75%)** |
+| Median query time | **6.283 seconds** |
+| Query P95 | **8.758 seconds** |
+| Returned source / line-number mismatches | **0** |
 
-Go 布尔选项、JS 子进程标准输入关闭、TS 同步 worker、YAML 发布验证、Make 测试入口和 Shell 安装这 6 道题的中英文均完整覆盖。Go watch 生命周期中英文均未覆盖冻结参考；JS 平台依赖生成中英文均只覆盖汇总平台包名，遗漏写回包配置。因此本轮证明可检索性与流程兼容，没有证明文本片段已具备结构化检索的完整性。
+Both language variants fully cover 6 tasks: Go boolean options, JS subprocess stdin closure, TS synchronous worker, YAML release validation, Make test entry point, and Shell installation. Both miss the frozen reference for Go watch lifecycle. Both JS platform-dependency queries recover platform package-name aggregation but miss package-configuration writeback. This validates searchability and pipeline compatibility, without establishing the completeness of structural retrieval for text units.
 
-逐题输出、漏项和索引信息见 [实测结果](results/text-fallback-smoke-20261004.json)。数据见 `eval/text-fallback-v1/`，执行与核验脚本见 `scripts/text-fallback/`。另一套 Python 核对确认了全部 7,865 个本地/远程代码单元一致、索引身份一致，并独立逐行核验 16 份返回源码、重算全部参考事实得分，与 Node 评分器一致。原始输出保留于本地 `runs/text-fallback-v1/`，按仓库约定不入 Git。
+See [observed results](results/text-fallback-smoke-20261004.json) for per-query output, omissions, and index information. Data is in `eval/text-fallback-v1/`; execution and verification scripts are in `scripts/text-fallback/`. Separate Python checks confirm all 7,865 local/remote units and index identities match, independently verify all 16 returned responses line by line, and recompute every reference-fact score in agreement with the Node scorer. Original outputs remain locally in `runs/text-fallback-v1/`, excluded from Git by repository convention.
 
-这是一组小型功能验证，题目由源码导出，不是独立 benchmark；没有重跑 ACE，也不能据此声明所有语言已达到 Python/TS 的召回质量。耗时为远程进程内部时间，不与之前 Mac 客户端的 4.51 秒直接比较。
+This is small functional validation using source-derived tasks, not an independent benchmark. ACE was not rerun, and results do not establish Python/TS-level retrieval quality for all languages. Latency is internal to the remote process and is not directly comparable with the earlier Mac-client 4.51 seconds.
 
-构建期间曾在查询前中止一次索引，以修复 Unicode 物理行处理；冻结问题和答案未改变。最终结果仅统计修复后的完整构建与查询。
+One index build was aborted before querying to fix Unicode physical-line handling. Frozen questions and answers stayed unchanged. Final results include only the complete post-fix build and queries.

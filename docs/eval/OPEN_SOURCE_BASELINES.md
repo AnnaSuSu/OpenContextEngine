@@ -1,76 +1,76 @@
-# 开源首查对照执行记录（历史）
+# Open-source first-search comparison records (historical)
 
-**本页保留 10 月 3 日的早期摸底。10 月 4 日已完成七方法、四仓库的新对照，ContextWeaver 的两个大文件也已补齐；当前结果与图表请见[七方法英文报告](METHOD_COMPARISON.md)。**
+**This page retains the early exploration from October 3. A new seven-method, four-repository comparison completed on October 4, including ContextWeaver's two previously omitted large files. See the [seven-method report](METHOD_COMPARISON.md) for current results and charts.**
 
-2026-10-03 开始接入，评测使用远程模型服务。当前 ACE、CocoIndex、ContextWeaver 均完成 20 次查询，作为原型开发的初步参照。
+Integration began on 2026-10-03 using remote-model services. ACE, CocoIndex, and ContextWeaver each completed 20 queries as preliminary references for prototype development.
 
-**当时按开发摸底处理：不为两份大文件的索引差异重跑，不继续扩大开源基线数量。OpenContextEngine 原型已完成同题比较，模型只在远程服务器运行。**
+**At that stage, this was development exploration: no rerun for the two large-file indexing differences and no expansion of the baseline count. The OpenContextEngine prototype completed the same-task comparison with models running only on remote servers.**
 
-参考答案 v2、4,000 token 下的首查覆盖率：
+First-search coverage with reference answers v2 at 4,000 tokens:
 
-| 方法 | 中文 | 英文 |
+| Method | Chinese | English |
 | --- | --- | --- |
 | ACE / DirectContext | 86.5% | 84.0% |
 | CocoIndex Code | 24.0% | 33.5% |
-| ContextWeaver + Qwen3 重排 | 26.0% | 17.7% |
-| OpenContextEngine AST 原型 + Qwen3 重排 | 86.33% | 84.67% |
+| ContextWeaver + Qwen3 reranking | 26.0% | 17.7% |
+| OpenContextEngine AST prototype + Qwen3 reranking | 86.33% | 84.67% |
 
-OpenContextEngine 此轮统一使用原问题及通用分句，不使用生成式规划。中文/英文完整任务召回均为 5/10，与 ACE 相同；查询中位耗时 15.23 秒，ACE 为 2.82 秒。部署与流水线不同，耗时不是隔离算法比较。结构、逐题结果和已知局限见 [原型记录](OPENCONTEXTENGINE_PROTOTYPE.md)。随后默认切换为两轮批量评分与常驻服务，同题覆盖率不变，实际 Mac 客户端中位 3.27 秒、P95 4.79 秒，见[速度重构](OPENCONTEXTENGINE_SPEED.md)；上表保留首轮对照。
+OpenContextEngine uses original questions and generic clause splitting throughout, without generative planning. Complete-task retrieval is 5/10 in both languages, matching ACE. Median query time is 15.23 seconds versus ACE's 2.82 seconds. Different deployments and pipelines prevent an isolated algorithm-speed comparison. See the [prototype record](OPENCONTEXTENGINE_PROTOTYPE.md) for structure, per-task results, and limitations. The subsequent default uses two batch-scoring waves and a persistent service, preserving same-task coverage with actual Mac-client median 3.27 seconds and P95 4.79 seconds; see the [speed refactor](OPENCONTEXTENGINE_SPEED.md). The table retains the first comparison.
 
-ContextWeaver 默认 100 KiB 文件限制跳过了两个较大的 ORM 文件（881 / 883），本轮作为粗略参照保留，后续七方法对比已补齐大文件。它的返回通常只有 266–1,373 token；其文件与片段选择较紧，未用满 4,000 token 预算。以上是 10 道开发题、20 个中英文查询的一次结果，不是论文结论。机器可读对比和遗漏分类见 [结果](results/django-comparison-20261003.json)。
+ContextWeaver's default 100 KiB file limit skipped two large ORM files (881 / 883). This run remains a rough reference; the subsequent seven-method comparison includes those files. Responses typically contain only 266–1,373 tokens, with conservative file and snippet selection that does not fill the 4,000-token budget. These are one-run results on 10 development tasks and 20 bilingual queries, not a research-paper conclusion. See the [results](results/django-comparison-20261003.json) for machine-readable comparison and omission categories.
 
-## 固定比较方式
+## Fixed comparison procedure
 
-沿用 [Django 协议](DJANGO_PROTOCOL_V1.md)的 883 个生产 Python 文件、10 道中英文配对题、参考答案 v2 和 2,000 / 4,000 / 8,000 token 预算。工具只收到源码及查询，参考答案用于离线评分。使用工具自己的切分、索引和检索实现，保存原生 JSON 后再转换成带路径、行号的文本，不补充返回片段之外的源码，不重排。
+Use the [Django protocol](DJANGO_PROTOCOL_V1.md): 883 production Python files, 10 bilingual paired tasks, reference answers v2, and 2,000 / 4,000 / 8,000-token budgets. Tools receive only source and queries; references are used for offline scoring. Preserve each tool's own splitting, indexing, and retrieval implementation. Save native JSON before formatting text with paths and line numbers, without adding source beyond returned snippets or reranking.
 
-ACE 保留服务原始文本。开源组的结构化返回以统一简洁文本表示；这存在序列化开销差异，需要在最终比较中注明，不能把整个差值都归为检索算法效果。所有路径、行号都计入最终 token 预算。
+ACE retains its original service text. Structured open-source results use a consistent compact text format, creating serialization-overhead differences that must be reported rather than attributed wholly to retrieval algorithms. All paths and line numbers count against the final token budget.
 
-## 当前优先接入
+## Initial integration priorities
 
-| 组别 | 固定版本 | 运行配置 | 状态 |
+| Group | Pinned revision | Configuration | Status |
 | --- | --- | --- | --- |
-| CocoIndex Code | `8ec0ff3510be526e699028db5b64e10a0a8359b3` | 原生递归切分与 SQLite 向量检索；单查最多 60 片段，之后统一截 token 前缀 | 已完成；736 个非空文件、8,002 片段；索引 245.7 秒，20 次查询全通过 |
-| ContextWeaver | `42375d315e180da258ebb983215004dbbf98c00d` | 原生检索默认参数；Qwen3-Embedding-4B；远程 Qwen3-Reranker-4B | 已完成 20 次查询；默认文件大小限制实际索引 881 文件 |
+| CocoIndex Code | `8ec0ff3510be526e699028db5b64e10a0a8359b3` | Native recursive splitting and SQLite vector retrieval; at most 60 units per query, then uniform token-prefix truncation | Completed: 736 nonempty files, 8,002 units; indexing 245.7 seconds; all 20 queries passed |
+| ContextWeaver | `42375d315e180da258ebb983215004dbbf98c00d` | Native retrieval defaults; Qwen3-Embedding-4B; remote Qwen3-Reranker-4B | Completed 20 queries; default file-size limit indexed 881 files |
 
-CocoIndex 的 883 个输入文件中有 147 个为空或只有空白，原生索引器会跳过，非空文件 736 个；这与只给它 736 个文件是不同的。其默认切分 1,000 字符、最小 250、重叠 150，本次总片段字符数 5,949,219。
+Of CocoIndex's 883 input files, 147 are empty or whitespace-only and skipped by its native indexer, leaving 736 nonempty files. All input files were supplied; 736 is the post-indexing nonempty count. Default splitting uses 1,000 characters, minimum 250, and overlap 150; total unit text is 5,949,219 characters.
 
-ContextWeaver 默认检索要求重排服务。本次比较使用远程模型接口，客户端不加载模型。
+ContextWeaver's default retrieval requires a reranking service. This comparison uses remote APIs, with no model loading on the client.
 
-本次评测使用远程 Qwen3-Reranker-4B，替换了上游默认的 BGE 重排模型；比较结果需保留这一配置差异。重排接口和通用实现见 [重排 API 说明](../RERANKER_API.md)。服务连通性验收不等于 ContextWeaver 检索成绩。
+Remote Qwen3-Reranker-4B replaces the upstream default BGE reranker; comparisons must retain this configuration distinction. See the [reranker API](../RERANKER_API.md) for the interface and generic implementation. Service connectivity checks are not ContextWeaver retrieval-quality results.
 
-统一 embedding 使用现有 Qwen3-Embedding-4B 服务，输出 1,024 维。服务单条输入只有 1,024 token；ContextWeaver 的 embedding 客户端据此配置 `EMBEDDINGS_MAX_CONTEXT_TOKENS=1024`，使用上游已有的长文本分拆与向量合并逻辑。不会假装服务支持默认的 8,192 token。模型权重的远程哈希尚不可得；缓存按端点、模型、维度及部署日期隔离。
+The shared embedding service is the existing Qwen3-Embedding-4B deployment, returning 1,024 dimensions with a 1,024-token input limit. ContextWeaver sets `EMBEDDINGS_MAX_CONTEXT_TOKENS=1024`, using upstream long-text splitting and vector merging. The service does not support the default 8,192-token window. Remote model-weight hashes were unavailable; caches are isolated by endpoint, model, dimensions, and deployment date.
 
-## 接入与限额
+## Integration and limits
 
-`scripts/run-baseline.mjs` 复制固定语料并检查源码版本，启动有界 embedding 转发网关，运行原生工具，保存原始结果与哈希。网关每批最多 8 条，通过 HTTPS 或显式配置的 SSH 转发访问同一远程 embedding 服务。每次尝试最多 30 秒，针对超时、连接失败和指定临时 HTTP 错误最多尝试 3 次，所有尝试计入上限。鉴权、参数、响应格式错误不重试，也不改输入或换模型。
+`scripts/run-baseline.mjs` copies frozen source and verifies its revision, starts a bounded embedding-forwarding gateway, runs native tools, and stores original results and hashes. Gateway batches contain at most 8 inputs, accessing the same remote embedding service over HTTPS or explicitly configured SSH forwarding. Attempts are capped at 30 seconds, with at most 3 attempts for timeouts, connection failures, and specified transient HTTP errors; every attempt counts against limits. Authentication, parameter, and response-format errors are not retried, and inputs or models are not changed.
 
-单轮最多 6,000 次远程请求和 6,000 万输入字符。ContextWeaver 按服务输入窗口拆分后会超过初版 2,000 次请求上限，因此在取得其查询结果前将执行器统一上限提高；已完成的 CocoIndex 只用了 1,022 次，未触及原上限。模型、语料、工具参数和评分预算不变。根据实际远程吞吐，索引与首查上限由 20 分钟调整为 90 分钟，后续单查仍最多 2 分钟，整轮最多 100 分钟。检索质量的题目、答案和 token 预算没有变化。运行前保存执行脚本副本及哈希；索引必须无错误且包含全部非空输入文件，才进行查询。
+Each run permits at most 6,000 remote requests and 60 million input characters. ContextWeaver's splitting for the service input window exceeded the initial 2,000-request limit, so the shared runner cap increased before its query results were obtained. Completed CocoIndex used only 1,022 requests and never reached the old cap. Models, source, tool parameters, and scoring budgets are unchanged. Based on actual remote throughput, the indexing-and-first-query limit increased from 20 to 90 minutes; later queries remain capped at 2 minutes, and the full run at 100 minutes. Retrieval-quality questions, answers, and token budgets are unchanged. Save runner copies and hashes before execution; querying begins only after error-free indexing that includes all nonempty input files.
 
-Embedding 网关只做缓存和远程请求转发，不运行模型；真实 embedding 密钥留在网关。重排只接受明确配置的远程 HTTPS 地址，拒绝本机、回环和本地域名，未配置时直接停止，绝不回退到本机模型。ContextWeaver 在专用 Node 进程中把 `os.homedir()` 指向本项目隔离状态目录，不改全局 HOME 或上游检索源码。
+The embedding gateway only caches and forwards remote requests; it runs no models and retains the actual embedding key. Reranking requires an explicitly configured remote HTTPS address and rejects local, loopback, and local-domain addresses. Missing configuration stops execution without local-model fallback. ContextWeaver runs in a dedicated Node process with `os.homedir()` redirected to this project's isolated state directory, without changing global HOME or upstream retrieval source.
 
 ```sh
-# 安装纯远程客户端依赖并配置远程模型后，才可运行：
+# Run only after installing remote-client dependencies and configuring remote models:
 npm run baseline -- cocoindex
 npm run baseline -- contextweaver
 npm run score-django -- RUN_DIRECTORY answers.v2.json
 ```
 
-本机原环境已删除，当前运行使用云服务器的专用环境；项目不会自动下载安装本机模型。
+The previous local environment was removed; current execution uses a dedicated cloud-server environment. The project does not automatically download or install local models.
 
-`BASELINE_RESEARCH_ROOT` 可指定固定上游源码检出目录，`BASELINE_EXECUTION_LOCATION` 会写入运行报告。当前依然是开发试点执行器，尚非可移植安装器。远程 embedding 的鉴权、1,024 维向量及语义排序已验证；持续批量索引中出现过超时，两组端到端检索现已完成。
+`BASELINE_RESEARCH_ROOT` selects the pinned upstream checkout directory, and `BASELINE_EXECUTION_LOCATION` is recorded in reports. This remains a development-pilot runner rather than a portable installer. Remote embedding authentication, 1,024-dimensional vectors, and semantic ordering were verified. Sustained batch indexing encountered timeouts; both end-to-end retrieval groups subsequently completed.
 
-## 云端执行
+## Cloud execution
 
-执行器位于授权云服务器 `/root/reponerve-baselines/worker`，两个上游版本保持不变，Node 固定为 22.14.0。只上传固定公开 Django 源码、查询与执行脚本；参考答案留在本机离线评分。云端已核对全部 883 个文件的清单与 SHA256。开源组的执行位置与 ACE 的客户端位置不同，因此不能将原始耗时差全部归因于检索算法。
+The runner is on the authorized cloud server at `/root/reponerve-baselines/worker`, with unchanged upstream revisions and Node pinned to 22.14.0. Only frozen public Django source, queries, and runners are uploaded; reference answers remain local for offline scoring. The cloud host verified the manifest and SHA256 of all 883 files. Open-source execution and the ACE client run in different locations, so timing differences cannot be attributed entirely to retrieval algorithms.
 
-ContextWeaver 的 ONNX 可选组件下载曾因 HTTP 302 失败，使用其官方 `ONNXRUNTIME_NODE_INSTALL=skip` 选项跳过额外组件后安装、编译成功。本轮显式使用 `EMBEDDINGS_PROVIDER=remote`，未加载本地 embedding 模型。
+ContextWeaver's optional ONNX component download failed with HTTP 302. Installation and compilation succeeded with its official `ONNXRUNTIME_NODE_INSTALL=skip` option. This run explicitly uses `EMBEDDINGS_PROVIDER=remote`, without local embedding models.
 
-公网转发延迟影响批量索引，当前改用评测服务器到 embedding 服务器的直接 SSH 隧道。同一 8 段输入的初步对照中，SSH 为 306–393 ms，公网 HTTPS 为 3331–4106 ms；随后服务器内网 SSH 连续 10 批均成功，每批 8 段为 165–243 ms。这些只是连通性诊断，不能作为正式性能成绩。修复通道后从干净索引重新评测；表中仅对应修复后的运行。
+Public forwarding latency affected batch indexing, so the evaluation server switched to a direct SSH tunnel to the embedding server. In a preliminary comparison of the same 8 inputs, SSH took 306–393 ms versus public HTTPS at 3331–4106 ms. Subsequent inter-server SSH completed 10 consecutive batches of 8 inputs at 165–243 ms each. These are connectivity diagnostics, not formal performance scores. Evaluation restarted from a clean index after the transport fix; the table contains only corrected runs.
 
-SSH 隧道由调用方建立，只绑定 `127.0.0.1`，远端为模型服务器；以下 SSH 身份已替换为示例。运行时设置 `EMBEDDING_SSH_TUNNEL_URL=http://127.0.0.1:42002/v1` 和 `EMBEDDING_SSH_REMOTE=operator@model-host.example:22`。逻辑 `EMBEDDING_BASE_URL` 保持原服务地址；转发方式和远端身份写入报告。该配置不安装或加载本机模型。
+The caller establishes the SSH tunnel, binding only `127.0.0.1` and targeting the model server. SSH identities below use example values. Set `EMBEDDING_SSH_TUNNEL_URL=http://127.0.0.1:42002/v1` and `EMBEDDING_SSH_REMOTE=operator@model-host.example:22`. Logical `EMBEDDING_BASE_URL` retains the original service address; reports record transport and remote identity. This setup installs or loads no local models.
 
-## 后续决策
+## Subsequent decisions
 
-当前三组参照已用于 OpenContextEngine 第一版比较。grepai、Claude Context、OCE 暂不继续运行；Serena 和 codebase-memory-mcp 留作后续符号/关系能力参考。
+The three reference groups informed OpenContextEngine's first prototype comparison. At this stage, grepai, Claude Context, and OCE runs were deferred; Serena and codebase-memory-mcp remained references for later symbol/relationship capabilities.
 
-原型针对完整函数/类表示、复合任务拆分、语义与词法召回、符号关系补全和预算内的互补证据选择进行结构性实现。不得把这些开发题的答案、文件路径或符号写进检索规则。先在现有开发题上看效果，结果不冒充未见测试集成绩。
+The prototype implements complete function/class representations, compound-task splitting, semantic and lexical retrieval, symbol-relationship completion, and complementary evidence selection within budget. Do not encode these development tasks' answers, paths, or symbols into retrieval rules. Evaluate first on the existing development tasks without presenting them as unseen test-set results.

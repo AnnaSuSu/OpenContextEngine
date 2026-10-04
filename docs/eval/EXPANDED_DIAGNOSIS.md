@@ -1,57 +1,57 @@
-# 扩展评测漏项诊断
+# Expanded evaluation omission diagnosis
 
-2026-10-03。检查 Zod `safe-parsing` 与 HTTPX `multipart-upload` 的中英文四条查询。仅追加诊断记录；冻结题目、参考答案、检索引擎和原始成绩均未修改。
+2026-10-03. Inspect the four Chinese/English queries for Zod `safe-parsing` and HTTPX `multipart-upload`. This adds diagnostic records only; frozen questions, reference answers, retrieval engine, and original scores are unchanged.
 
-## 结论
+## Findings
 
-HTTPX 是评分将空白行当作必需证据造成的伪漏项，之前报告将其解释为业务代码缺失不准确。Zod 是真实漏检，主要发生在初始候选筛选和关系扩展后的候选保留阶段；相关源码已经正确建入索引。
+HTTPX's apparent omission comes from scoring blank lines as required evidence. The earlier report incorrectly interpreted it as missing business code. Zod is a real retrieval omission, primarily in initial candidate filtering and candidate retention after relationship expansion. Its relevant source was indexed correctly.
 
-为定位阶段，在独立进程中读取原索引，运行原查询和原 4,000 token 预算，只在冻结引擎返回前增加中间变量记录。四次诊断响应的 SHA256 与正式评测逐字节一致，因此以下阶段路径解释的是原先同样的输出，不是用改写后的查询推测原因。共四次 embedding、八次 rerank 请求；不将此次诊断混入正式延迟或成绩统计。
+To locate the failing stages, a separate process reads the original index and runs the original queries with the original 4,000-token budget, adding only intermediate-variable recording before the frozen engine returns. All four diagnostic response SHA256 hashes match the formal evaluation byte for byte. The stage traces therefore explain the original outputs rather than infer causes from rewritten queries. This uses four embedding and eight rerank requests; diagnostic timings and scores are excluded from formal aggregates.
 
-## HTTPX：50% 是两个空白行造成的
+## HTTPX: two blank lines account for the 50% score
 
-原参考答案把跨函数的连续跨度视为一个完整事实。评分器 `src/eval/evidence.mjs:85` 要求跨度内每一行都出现，而结构索引只要求覆盖所有非空源码行。
+The original reference treats a continuous span across functions as one complete fact. The scorer at `src/eval/evidence.mjs:85` requires every line in that span, while the structural index requires coverage of all nonblank source lines.
 
-| 被判缺失的事实 | 唯一未返回行 | 实际内容 |
+| Fact scored as missing | Only unreturned line | Actual content |
 | --- | --- | --- |
-| 字段转换与逐个序列化 | `httpx/_multipart.py:257` | 空白行，位于 `_iter_fields` 与 `iter_chunks` 之间 |
-| 文件头与文件块输出 | `httpx/_multipart.py:218` | 空白行，位于 `render_data` 与 `render` 之间 |
+| Field conversion and individual serialization | `httpx/_multipart.py:257` | Blank line between `_iter_fields` and `iter_chunks` |
+| File headers and file-chunk output | `httpx/_multipart.py:218` | Blank line between `render_data` and `render` |
 
-两种语言都已召回、重排并最终选中七个相关方法片段，包括 `FileField.render_data`、`FileField.render`、`MultipartStream._iter_fields` 和 `MultipartStream.iter_chunks`。所有标准要求的非空源码行均已返回，两个事实被判不完整仅因上述空行。按非空源码证据计算，该题中英文都应为 100%，与 ACE 相同。
+Both languages retrieve, rerank, and select seven relevant method units, including `FileField.render_data`, `FileField.render`, `MultipartStream._iter_fields`, and `MultipartStream.iter_chunks`. All required nonblank source lines are returned. Only the blank lines make the two facts incomplete. Under nonblank-source scoring, both language variants should score 100%, matching ACE.
 
-对原始 120 份响应统一执行“仅忽略缺失的空白行”诊断，只有这两条发生变化，其他查询不变。诊断口径下 OpenContextEngine 总体覆盖率为 **91.81%**、完整召回 **50/60（83.33%）**；ACE 仍为 **85.69%**、**40/60（66.67%）**。这是明确标记的诊断重算，原 `scores.v1.json` 与冻结口径 **90.14% / 48/60** 保留。正式采用新口径时应版本化协议并统一重算，不只给单个系统补分。
+Applying a uniform diagnostic that ignores only missing blank lines to all 120 original responses changes only these two queries. Diagnostic OpenContextEngine coverage is **91.81%**, with complete retrieval on **50/60 (83.33%)**; ACE remains **85.69%** and **40/60 (66.67%)**. This is explicitly marked diagnostic rescoring. Original `scores.v1.json` and frozen **90.14% / 48/60** results are retained. Formal adoption should version the protocol and rescore all systems consistently rather than credit only one system.
 
-## Zod：已索引的关键代码没有进入最终候选
+## Zod: indexed key code never reaches final candidates
 
-必需证据涉及四个片段，总计约 362 token（按引擎的片段成本计量）：
+Required evidence spans four units totaling about 362 tokens by the engine's unit-cost measure:
 
-| 片段 | ID | 源码行 | 中文路径 | 英文路径 |
+| Unit | ID | Source lines | Chinese trace | English trace |
 | --- | ---: | --- | --- | --- |
-| `handleResult` 主体 | 324 | `src/types.ts:98–106` | 最终选中 | 最终选中 |
-| `handleResult.error` getter | 325 | `src/types.ts:107–112` | 关系扩展找到，保留前排名 104，被裁掉 | 未进入候选集合 |
-| `ZodType.parse` | 368 | `src/types.ts:241–245` | 关系扩展找到，保留前排名 109，被裁掉 | 未进入候选集合 |
-| `ZodType.safeParse` | 369 | `src/types.ts:247–266` | 关系扩展找到，保留前排名 110，被裁掉 | 未进入候选集合 |
+| `handleResult` body | 324 | `src/types.ts:98–106` | Selected | Selected |
+| `handleResult.error` getter | 325 | `src/types.ts:107–112` | Found by relationship expansion; rank 104 before retention, then cut | Never enters candidate set |
+| `ZodType.parse` | 368 | `src/types.ts:241–245` | Found by relationship expansion; rank 109 before retention, then cut | Never enters candidate set |
+| `ZodType.safeParse` | 369 | `src/types.ts:247–266` | Found by relationship expansion; rank 110 before retention, then cut | Never enters candidate set |
 
-**中文的直接原因是关系扩展成果被再次裁掉。** 首轮 dense/BM25 融合池没有包含三个关键片段；沿静态关系扩展时找到了它们，但它们没有首轮重排分，原始融合分也为 0。保留逻辑用已有分数筛选，导致它们在第二轮模型评分之前就被删除。并非第二轮模型已看过这些代码后判定其不相关。
+**For Chinese, relationship-expanded candidates are cut again.** The first dense/BM25 fusion pool lacks three key units. Static relationship expansion finds them, but they have no first-wave reranking scores and their original fusion scores are 0. Retention filters on existing scores and removes them before second-wave model scoring. The second-wave model never sees and rejects this code.
 
-对应 `src/retrieval/batched.py:81–84`：先取排名前 64 个，再补关系扩展中融合分最高的 16 个，最后去重。本题这 16 个全在前 64 中，补充操作没有带入任何新片段。虽有 118 个候选、65 个扩展片段，实际只有 64 个进入第二轮。getter、parse、safeParse 的扩展排序分别为 54、62、63，不在补充范围。
+At `src/retrieval/batched.py:81–84`, retention takes the top 64 candidates, adds the 16 expanded candidates with the highest fusion scores, then deduplicates. All 16 additions already occur in the top 64, so no new unit is added. Although there are 118 candidates and 65 expanded units, only 64 reach the second wave. The getter, parse, and safeParse rank 54, 62, and 63 within expansion, outside the added range.
 
-**英文的遗漏更早。** 三个关键片段没有进入首轮各子问题的 28 个融合候选。`handleResult` 主体虽已召回，但首轮重排在相关候选池中最高只到第 7 名，而扩展种子仅取每池前 3 个，因此没有通过它把 getter 和关联入口带入。`safeParse` 与已选种子 `ParseContext` 有关系，但该种子只扩展融合分最高的 10 个邻居，`safeParse` 未被保留。该查询最终同样只保留了 64 个片段。
+**For English, the omission occurs earlier.** Three key units do not reach the 28 fused first-wave candidates for each subquestion. The `handleResult` body is retrieved, but its best first-wave rank in a relevant pool is 7, while expansion uses only the top 3 seeds per pool. It therefore does not bring in the getter or related entry points. `safeParse` is related to the selected seed `ParseContext`, but that seed expands only the 10 neighbors with highest fusion scores, excluding `safeParse`. This query also retains only 64 units.
 
-还有两个放大因素：
+Two factors amplify the problem:
 
-- TypeScript 适配器将内嵌 `get error()` 单独切成片段。主体能命中，完整的失败结果构造却要依赖额外片段；这使得“命中函数的一部分”和“完整证据”之间出现差距。
-- 中文正则拆分会丢掉不足 8 个字符的子句，因此“错误怎样汇总”没有成为单独子问题。英文保留了对应子问题却仍失败，说明这不是唯一原因。
+- The TypeScript adapter splits the nested `get error()` into its own unit. Finding the body does not provide complete failure-result construction without another unit, creating a gap between partial function retrieval and complete evidence.
+- Chinese regex splitting discards clauses shorter than 8 characters, so the clause asking how errors are aggregated does not become a separate subquestion. English retains the equivalent subquestion and still fails, so this is not the sole cause.
 
-“0%”指三个事实都没完全满足，不表示完全没找到相关代码：成功结果分支已经返回，但错误构造、解析入口和上下文创建仍缺失。该问题发生在最终 token 打包之前，单纯提高输出 token 上限不能把未保留的候选加回来。
+The 0% score means none of the three facts is completely satisfied, not that no related code is found. The success-result branch is returned, but error construction, parsing entry points, and context creation remain missing. This occurs before final token packing; increasing the output cap alone cannot restore discarded candidates.
 
-## 后续修改应验证的方向
+## Directions for subsequent validation
 
-本次不修改算法。可优先做范围有限的验证：评分忽略空白行；让关系扩展保留槽实际补入尚未保留的候选，并适当利用调用/所属等关系类型；检查短方法与内嵌 getter 的语义完整性。需要防止以扩大所有候选和重排次数换质量而显著拖慢服务。上述方向尚未通过改动后的实测，不宣称必然恢复 Zod 成绩。
+This diagnosis does not change the algorithm. Prioritize bounded checks: ignore blank lines in scoring; make relationship-expansion slots actually add unretained candidates and use relationship types such as calls and containment; inspect semantic completeness of short methods and nested getters. Avoid materially slowing the service by expanding all candidates or adding reranking rounds. These directions have not yet been tested after implementation and do not guarantee recovery of Zod scores.
 
-## 证据
+## Evidence
 
-- [四条查询的阶段摘要与原输出一致性](results/expanded-stage-diagnosis-20261003.json)
-- [全量 120 条的空白行诊断](results/expanded-blank-line-diagnostic-20261003.json)
-- 完整阶段记录与源码单元：`.pilot-state/expanded-v1/diagnostics/`。
-- 捕获脚本：`scripts/diagnostics/retrieval-stages.py` / `.mjs`；原始执行脚本归档：`.pilot-state/expanded-v1/diagnostic-harness.tar.gz`。
+- [Four-query stage summary and original-output equivalence](results/expanded-stage-diagnosis-20261003.json)
+- [Blank-line diagnosis across all 120 queries](results/expanded-blank-line-diagnostic-20261003.json)
+- Full stage records and source units: `.pilot-state/expanded-v1/diagnostics/`.
+- Capture scripts: `scripts/diagnostics/retrieval-stages.py` / `.mjs`; archived original harness: `.pilot-state/expanded-v1/diagnostic-harness.tar.gz`.

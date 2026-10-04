@@ -1,90 +1,90 @@
-# OpenContextEngine 速度重构：保留覆盖率，缩短在线执行路径
+# OpenContextEngine speed refactor: preserve coverage and shorten online execution
 
-2026-10-03。默认引擎改为 `batched-dag-v4`，已部署到授权 GPU 服务器，提供常驻 HTTP 服务与 Mac CLI。固定 4,000 token 预算下，中文 / 英文参考证据覆盖率保持 **86.33% / 84.67%**；Mac 经 SSH 调用的三轮 60 次请求中，中位 **3.2705 秒**、P95 **4.790 秒**、最大 **4.904 秒**。原版中位 15.2315 秒，实测缩短约 **4.66 倍**。
+2026-10-03. The default engine changed to `batched-dag-v4`, deployed on an authorized GPU server with a persistent HTTP service and Mac CLI. At a fixed 4,000-token budget, Chinese / English reference-evidence coverage remains **86.33% / 84.67%**. Across three Mac-client rounds over SSH, totaling 60 requests, median latency is **3.2705 seconds**, P95 **4.790 seconds**, and maximum **4.904 seconds**. The original median was 15.2315 seconds, an observed speedup of about **4.66 times**.
 
-这是同一组 Django 十道开发题、20 个中英文查询重复三轮；60 次请求不是 60 道独立题。模型与索引常驻，每次查询重新执行 embedding 与神经重排，没有查询结果缓存。质量指标是源码核验的参考证据覆盖率，不是人工相关性判断或任务成功率。尚未达到客户端中位低于 3 秒，也未验证其他仓库。
+These repeat the same ten Django development tasks and 20 bilingual queries for three rounds; 60 requests are not 60 independent tasks. Models and indexes remain resident, but every query reruns embedding and neural reranking without a query-result cache. Quality measures source-verified reference-evidence coverage, not human relevance or task success. Client median latency remains above 3 seconds, and other repositories were not yet validated in this experiment.
 
-## 同题实验与最终选择
+## Same-task experiments and final choice
 
-统一使用参考答案 v2，答案只用于离线评分。模型保持 Qwen3-Embedding-4B 与 Qwen3-Reranker-4B，模型推理全部在远程服务器。
+All variants use reference answers v2 for offline scoring only. Models remain Qwen3-Embedding-4B and Qwen3-Reranker-4B, with all inference on remote servers.
 
-| 方案 | 中文覆盖率 | 英文覆盖率 | 查询数 | 中位延迟 | P95 | 选择 |
+| Variant | Chinese coverage | English coverage | Queries | Median latency | P95 | Decision |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| ACE / DirectContext，原有参照 | 86.50% | 84.00% | 20 | 2.824 s | 3.629 s | 保留参照 |
-| OpenContextEngine 原版串行执行 | 86.33% | 84.67% | 20 | 15.232 s | 68.279 s | 历史基线 |
-| 单阶段整体重排 | 86.33% | 79.17% | 20 | 1.408 s | 1.998 s | 英文覆盖下降，未采用 |
-| 完整函数实体检索 | 80.83% | 79.17% | 20 | 1.592 s | 1.891 s | 双语覆盖下降，未采用 |
-| 两轮批量评分，服务器内测 | 86.33% | 84.67% | 20 | 3.093 s | 4.380 s | 通过质量检查 |
-| **两轮批量评分，Mac 客户端，batch 32 / 8192 tokens** | **86.33%** | **84.67%** | **60** | **3.271 s** | **4.790 s** | **最终默认** |
-| 同一算法，Mac 客户端，batch 64 / 16384 tokens | 86.33% | 84.67% | 60 | 3.843 s | 5.219 s | 更慢，已恢复 batch 32 |
+| ACE / DirectContext, existing reference | 86.50% | 84.00% | 20 | 2.824 s | 3.629 s | Retained reference |
+| Original serial OpenContextEngine | 86.33% | 84.67% | 20 | 15.232 s | 68.279 s | Historical baseline |
+| Single-stage whole-query reranking | 86.33% | 79.17% | 20 | 1.408 s | 1.998 s | Rejected: lower English coverage |
+| Complete-function entity retrieval | 80.83% | 79.17% | 20 | 1.592 s | 1.891 s | Rejected: lower coverage in both languages |
+| Two batch-scoring waves, server-side test | 86.33% | 84.67% | 20 | 3.093 s | 4.380 s | Passed quality checks |
+| **Two batch-scoring waves, Mac client, batch 32 / 8192 tokens** | **86.33%** | **84.67%** | **60** | **3.271 s** | **4.790 s** | **Final default** |
+| Same algorithm, Mac client, batch 64 / 16384 tokens | 86.33% | 84.67% | 60 | 3.843 s | 5.219 s | Slower; restored batch 32 |
 
-延迟取每次完整查询记录；P95 用 nearest-rank，偶数样本的中位数取中央两值平均。原版与最终版的部署链路、常驻方式及批量执行不同，4.66 倍是端到端工程改进，不能全部归因于单一算法组件。ACE 的服务内部硬件、模型与流水线不同，这组结果也不支持“全面超过 ACE”。
+Latency uses each complete query record. P95 is nearest-rank; medians for even sample counts average the middle two values. Original and final variants differ in transport, persistence, and batching. The 4.66-times improvement is end-to-end engineering work, not the effect of one algorithm component. ACE also differs in internal hardware, models, and pipeline; these results do not establish broad superiority over ACE.
 
-三轮最终客户端结果分别为：
+The three final client rounds are:
 
-| 轮次 | 中位 | P95 | 最大 | 中文 / 英文完整任务召回 |
+| Round | Median | P95 | Maximum | Complete task retrieval, Chinese / English |
 | --- | ---: | ---: | ---: | --- |
-| 1 | 3.207 s | 4.835 s | 4.841 s | 5/10、5/10 |
-| 2 | 3.271 s | 4.503 s | 4.904 s | 5/10、5/10 |
-| 3 | 3.274 s | 4.485 s | 4.790 s | 5/10、5/10 |
+| 1 | 3.207 s | 4.835 s | 4.841 s | 5/10, 5/10 |
+| 2 | 3.271 s | 4.503 s | 4.904 s | 5/10, 5/10 |
+| 3 | 3.274 s | 4.485 s | 4.790 s | 5/10, 5/10 |
 
-三轮的宏平均覆盖率相同；全部 60 次完成，返回源码逐行校验无无效引用，输出均在 4,000 token 内。以上延迟不含首次索引及服务启动：原索引构建 346.2 秒，常驻引擎初始化约 2.2 秒。客户端循环旋转查询顺序，未在重复轮次间复用查询向量、重排分数或结果。
+Macro-average coverage is identical across rounds. All 60 requests completed, returned source passed line-by-line verification without invalid references, and outputs stayed within 4,000 tokens. Latency excludes initial indexing and service startup: the original index took 346.2 seconds to build, and persistent-engine initialization about 2.2 seconds. The client rotates query order between rounds without reusing query vectors, reranking scores, or results.
 
-## 为什么保留两轮评分
+## Why retain two scoring waves
 
-单阶段方案先通过向量、词法与结构关系拼成候选，再只做一次整体神经评分。它确实更快，但英文候选上限已下降，最终重排无法找回候选之外的证据。完整函数实体方案也没有改善这一取舍，因此没有通过改题、特殊符号规则或参考答案提示来补分。
+The single-stage variant builds candidates through vector, lexical, and structural retrieval, then performs only one whole-query neural scoring pass. It is faster, but its English candidate coverage is already lower, so final reranking cannot recover evidence outside the candidate set. Complete-function entities do not improve this tradeoff. Questions, special symbol rules, and reference-answer hints were not used to recover scores.
 
-最终方案保留原版候选、种子扩展与预算选择逻辑，重排计算按数据依赖组织：
+The final approach preserves original candidate generation, seed expansion, and budget selection, organizing reranking by data dependencies:
 
 ```mermaid
 flowchart LR
-  Q[自然语言任务与通用分句] --> E[一次批量查询向量请求]
-  E --> R[向量与词法混合召回]
-  R --> W1[第一轮：全部查询与候选配对批量评分]
-  W1 --> G[按评分选种子并扩展静态关系]
-  G --> W2[第二轮：整体评分与缺失维度评分合并]
-  W2 --> P[覆盖收益与 token 预算选择]
-  P --> O[带路径和行号的原始源码]
+  Q[Natural-language task and generic clauses] --> E[One batched query-embedding request]
+  E --> R[Hybrid vector and lexical retrieval]
+  R --> W1[Wave one: batch all query-candidate pairs]
+  W1 --> G[Choose scored seeds and expand static relationships]
+  G --> W2[Wave two: combine whole-query and missing-dimension scores]
+  W2 --> P[Select by coverage gain and token budget]
+  P --> O[Original source with paths and line numbers]
 ```
 
-第一轮各子问题的评分相互独立，可合并为一次 `/v1/rerank-batch`。关系扩展依赖第一轮种子，因此保留这一顺序；扩展后的整体评分与各维度缺失评分再次合并。相同「查询、片段」配对只在单次搜索内去重，搜索结束即丢弃。
+First-wave subquestion scores are independent and can be combined into one `/v1/rerank-batch` request. Relationship expansion depends on first-wave seeds, preserving that order. Whole-query scores and missing per-dimension scores after expansion are combined again. Identical query/unit pairs are deduplicated only within a search and discarded afterward.
 
-GPU 对所有待评分配对按 token 长度分组，默认最多 32 对、padding 后最多 8,192 token；仍用同一 4B 模型的 BF16 yes/no logits。更大的 batch/token 容量在这批短代码候选上变慢，实测后未启用。单请求公共前缀 KV 复用也未带来稳定收益，已回退。
+The GPU groups pairs by token length, with at most 32 pairs and 8,192 padded tokens by default, using the same 4B model's BF16 yes/no logits. Larger batch/token capacities were slower on these short-code candidates and were not enabled. Shared-prefix KV reuse within a request also produced no stable benefit and was reverted.
 
-结构及词法索引常驻进程，Mac 经 SSH 访问检索服务；检索服务在同一 GPU 服务器本地调用重排，另通过服务器间 SSH 连接 embedding。减少重复初始化和公网转发等待也是本次改善的一部分。当前使用 Python AST、静态符号与关系、混合召回及预算选择；没有实现 ColBERT 或生成式缺口分析。
+Structural and lexical indexes stay resident. The Mac accesses retrieval over SSH; retrieval calls reranking locally on the same GPU server and embedding through inter-server SSH. Avoiding repeated initialization and public forwarding delays contributes to the improvement. The implementation uses Python AST, static symbols and relationships, hybrid retrieval, and budget selection; ColBERT and generative gap analysis are not implemented.
 
-## 现在如何使用
+## Usage for this historical deployment
 
-项目 `.env` 已有远程模型配置。客户端默认 `OCE_BASE_URL=http://127.0.0.1:45005`；未单独设置 `OCE_API_KEY` 时使用已有 `RERANK_API_KEY`，密钥不出现在命令参数或本文中。
+The project `.env` contains remote-model configuration. The client defaults to `OCE_BASE_URL=http://127.0.0.1:45005`. Without a separate `OCE_API_KEY`, it uses the existing `RERANK_API_KEY`; keys appear neither in command arguments nor in this document.
 
 ```sh
-npm run --silent search -- '找到 Django 内置网页登录的处理代码：用户提交账号密码后，怎么验证身份并建立登录会话？'
+npm run --silent search -- 'Find the code handling Django built-in web login: after a user submits a username and password, how is identity verified and a login session established?'
 ```
 
-stdout 返回源码上下文，stderr 返回客户端延迟、检索延迟、token 数和缓存状态。当前服务加载冻结的 Django 索引，尚未提供任意仓库一键接入。服务只监听远程 `127.0.0.1:23505`；若本机 45005 的 SSH 隧道已断开，可在单独终端建立（设置自己的 `SSH_PORT` 并替换示例主机）：
+stdout returns source context. stderr reports client latency, retrieval latency, token count, and cache state. At this stage, the service loads a frozen Django index without one-command onboarding for arbitrary repositories. It listens only on remote `127.0.0.1:23505`. If the local 45005 SSH tunnel is disconnected, establish it in a separate terminal, setting your own `SSH_PORT` and replacing the example host:
 
 ```sh
 ssh -N -L 127.0.0.1:45005:127.0.0.1:23505 -p "$SSH_PORT" operator@evaluation-host.example
 ```
 
-HTTP 接口为 `POST /search`，需要 Bearer 鉴权，JSON 参数是 `query`、`budget`（默认 4000）与 `trace`（默认 false）。`GET /healthz` 返回引擎版本、源码哈希、索引元数据与重排配置；该接口表示启动时加载的配置，实际调用仍可能受远程模型或网络可用性影响。当前单请求执行并设置排队与客户端超时，尚未验证并发吞吐。
+The HTTP interface is `POST /search` with Bearer authentication and JSON fields `query`, `budget` (default 4000), and `trace` (default false). `GET /healthz` returns engine version, source hashes, index metadata, and reranking configuration. This reflects startup configuration; actual calls remain subject to remote-model and network availability. Requests execute one at a time, with queue and client timeouts. Concurrent throughput was not validated.
 
-本次测量使用常驻检索进程及远程重排服务。重排接口和通用服务实现见 [重排 API 说明](../RERANKER_API.md)。
+Measurements use the persistent retrieval process and remote reranking service. See the [reranker API](../RERANKER_API.md) for the interface and generic service implementation.
 
-## 验证与可复现证据
+## Validation and reproducible evidence
 
-- Node 客户端、远程模型配置与评测工具：23 项测试通过。
-- Python 检索：4 项测试通过，包括固定配对分数下，批量执行与参考实现的最终输出完全一致；真实模型仍可能因 BF16 批次形状产生小幅分数变化。
-- API 已检查鉴权失败与非法输入；最终部署核对本地/远程源码 SHA256、batch 32 与 8192 token 配置，并通过真实 CLI 查询。
-- [机器可读结果](results/reponerve-speed-20261003.json) 保存各轮路径、配置、延迟、质量、报告/评分哈希及最终部署状态；[最终健康快照](results/reponerve-speed-final-health-20261003.json) 单独保存部署指纹。
+- Node client, remote-model configuration, and evaluation tools: 23 tests passed.
+- Python retrieval: 4 tests passed, including identical final outputs between batch execution and the reference implementation under fixed pair scores. Real models may still have small score changes due to BF16 batch shape.
+- API checks cover authentication failures and invalid inputs. Final deployment verifies local/remote source SHA256, batch 32 / 8192-token configuration, and a real CLI query.
+- [Machine-readable results](results/reponerve-speed-20261003.json) retain round paths, configuration, latency, quality, report/scoring hashes, and final deployment state. The [final health snapshot](results/reponerve-speed-final-health-20261003.json) separately stores deployment fingerprints.
 
 ```sh
-# 在本地已有冻结语料、原始运行记录时重建汇总；不访问模型。
+# Rebuild summaries from local frozen source and original run records, without model calls.
 python3 scripts/summarize-speed.py
-# 通过当前服务重新执行三轮；会产生 60 次实际查询。
+# Repeat three rounds against the current service, making 60 actual queries.
 npm run benchmark-service
-# 对某轮保存的原始输出离线评分。
+# Score a round's saved original outputs offline.
 npm run score-django -- RUN_DIRECTORY answers.v2.json
 ```
 
-原始记录保存在本机 `runs/`，该目录不进入 Git；汇总中的路径与哈希用于定位和核对这些记录。所有实验使用现有开发题选择架构与配置，没有独立保留集。跨仓库、首次冷启动、长任务与多客户端吞吐仍需另测。
+Original records remain in local `runs/`, excluded from Git. Summary paths and hashes locate and verify them. All experiments use existing development tasks to choose architecture and configuration, without an independent held-out set. Cross-repository behavior, initial cold starts, long tasks, and multi-client throughput require separate measurement.

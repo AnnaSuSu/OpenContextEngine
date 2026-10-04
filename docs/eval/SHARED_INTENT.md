@@ -1,22 +1,22 @@
-# 共享整体评分的检索提速
+# Faster retrieval with shared whole-query scores
 
-2026-10-04。常驻检索入口默认使用 `shared-intent-v4`。候选的完整问题评分在单次搜索内复用，子问题使用已有向量计算相对关联度；保留按评分扩展关系、候选保护及短函数上下文。整体问题最高分低于 0.1 时，第二轮改用真实子问题评分，避免模型对完整问题评分失常。输出选择阈值由 0.015 调至 0.005，以利用剩余预算保留低分依赖。
+2026-10-04. The persistent retrieval entry point defaults to `shared-intent-v4`. Whole-query candidate scores are reused within each search, while subquestions use existing vectors to calculate relative relevance. Score-based relationship expansion, candidate protection, and short-function context are retained. If the highest whole-query score is below 0.1, the second wave uses actual subquestion scoring to handle poor whole-query model scores. The output-selection threshold changes from 0.015 to 0.005, using remaining budget to retain low-scoring dependencies.
 
-每次仍为一次 embedding、最多两轮重排、最多 80 个最终重排候选、4,000 token；不跨查询缓存。`BatchedEngine` 保留为完整子问题评分的对照实现。服务健康信息显示实际引擎版本。
+Each search still uses one embedding request, at most two reranking waves, at most 80 final reranking candidates, and 4,000 tokens, without cross-query caching. `BatchedEngine` remains the comparison implementation with full subquestion scoring. Service health reports the actual engine version.
 
-## 同源对照
+## Comparison on the same source
 
-固定原索引、问题和参考答案，模型仍为远程 Qwen3-Embedding-4B / Qwen3-Reranker-4B。原版和第二版交替运行，随后对发现的两个具体退步修复并执行最终 76 条验证。以下延迟是远程进程内部耗时，原版取前一轮对照、最终版取修复后独立运行；均无并行索引负载。
+Original indexes, questions, and reference answers are fixed, with remote Qwen3-Embedding-4B / Qwen3-Reranker-4B unchanged. The original and second variants run alternately; two observed regressions are then fixed before final validation on 76 queries. Latencies below are internal to the remote process. Original results come from the preceding comparison run, and final results from a separate post-fix run, both without concurrent indexing load.
 
-| 仓库 | 查询数 | 原版中位 | 最终中位 | 原版覆盖率 | 最终覆盖率 |
+| Repository | Queries | Original median | Final median | Original coverage | Final coverage |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | esbuild | 16 | 6.368 s | 2.546 s | 81.25% | 81.25% |
 | Click | 20 | 4.952 s | 2.001 s | 98.75% | 100% |
 | HTTPX | 20 | 4.391 s | 1.801 s | 85% | 85% |
 | Zod | 20 | 3.766 s | 1.551 s | 98.33% | 98.33% |
 
-逐题比较 75 条不变、1 条改善、0 条退步。全部返回通过原始源码、行号、响应哈希与预算检查。题目用于开发验证，结果不能替代独立样本表现；没有重跑 ACE。
+Per-query comparison shows 75 unchanged, 1 improved, and 0 regressed. All outputs pass original-source, line-number, response-hash, and budget checks. Tasks are used for development validation and do not establish independent-sample performance. ACE was not rerun.
 
-第一种仅按局部子问题评分的方案在 esbuild 漏掉一题，未采用。第二版在 HTTPX 提前停止选择、在 Zod 出现整体评分偏低，分别由预算选择阈值与低置信度评分修复。这些记录保留在本地 `runs/roadmap-routing-v1` 至 `v4`，最终逐题数据和源码指纹见[机器可读报告](results/shared-intent-20261004.json)。
+The first approach, using only local subquestion scores, missed one esbuild task and was rejected. The second variant stopped selection too early on HTTPX and produced low whole-query scores on Zod. These were fixed with the budget-selection threshold and low-confidence scoring fallback respectively. Records remain locally in `runs/roadmap-routing-v1` through `v4`; final per-query data and source fingerprints are in the [machine-readable report](results/shared-intent-20261004.json).
 
-`scripts/roadmap/compare.py` 只读取问题和固定索引，`score.mjs` 在本地加载答案评分；`run.mjs` 只在已配置的远程评测主机上运行。索引构建和模型启动不计入上述延迟。此提交更新代码默认入口，既有服务进程需使用新代码启动后才会生效。
+`scripts/roadmap/compare.py` reads only questions and frozen indexes; `score.mjs` loads reference answers locally for scoring; `run.mjs` runs only on the configured remote evaluation host. Index builds and model startup are excluded from latency. This change updates the default code entry point; existing service processes must restart with the new code to use it.

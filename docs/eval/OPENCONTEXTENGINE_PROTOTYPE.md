@@ -1,80 +1,80 @@
-# OpenContextEngine 第一版结构检索原型
+# OpenContextEngine first structural-retrieval prototype
 
-本页保留原版历史结果。当前默认已改为两轮批量评分与常驻服务，同题 4,000 token 覆盖率不变，Mac 客户端三轮中位 3.27 秒、P95 4.79 秒；详见[速度重构与使用方式](OPENCONTEXTENGINE_SPEED.md)。
+This page retains the original historical results. The default subsequently changed to two batch-scoring waves and a persistent service, preserving coverage on the same tasks at 4,000 tokens. Three Mac-client rounds have a median of 3.27 seconds and P95 of 4.79 seconds; see the [speed refactor and usage](OPENCONTEXTENGINE_SPEED.md).
 
-2026-10-03。按开发摸底推进，先复用现有 Django 10 题、20 个中英文查询，暂不扩展基线数量。当前模型只有用户授权服务器上的 Qwen3-Embedding-4B 和 Qwen3-Reranker-4B；客户端不加载模型。
+2026-10-03. This development exploration reuses the existing 10 Django tasks and 20 Chinese/English queries without adding baselines. Models are limited to Qwen3-Embedding-4B and Qwen3-Reranker-4B on the user-authorized server; the client loads no models.
 
-## 已实现
+## Implemented behavior
 
-核心在 `src/retrieval/engine.py`，不包含 Django 专有路径、任务 ID、答案或符号规则。
+The core is `src/retrieval/engine.py`, without Django-specific paths, task IDs, answers, or symbol rules.
 
-1. 通过 Python AST 提取模块、类主体和函数源码区间，保留路径、限定名、原始行号。长区间优先沿语句边界切分，每段最多 65 行；超长单条语句允许按行拆开。类头与函数主体分别表示，同一函数的多个区间互相连接。
-2. 依据模块导入别名、同模块函数、`self`/`cls` 方法名及类继承建立静态候选关系。动态接收者不猜测；这些边是检索线索，并非运行时调用图的准确性保证。
-3. 每个查询子句分别做 1,024 维向量检索和 BM25 词法检索，以倒数排名融合；模型输入带路径、符号与代码。
-4. 重排各子句候选，再扩展少量高分种子的静态邻居，并对合并候选做整体与子句重排。
-5. 根据整体相关性、子句的边际覆盖收益和片段 token 成本选择原始区间，计入路径、行号，把输出控制在 4,000 token 内。
+1. Extract module, class-body, and function source spans with Python AST, retaining paths, qualified names, and original line numbers. Split long spans preferentially at statement boundaries, with at most 65 lines per unit; exceptionally long statements may be split by line. Class headers and function bodies are represented separately, with links between spans of the same function.
+2. Build static candidate relationships from module import aliases, same-module functions, `self`/`cls` method names, and class inheritance. Do not guess dynamic receivers. Edges are retrieval clues, not guaranteed runtime call-graph accuracy.
+3. Run 1,024-dimensional vector retrieval and BM25 lexical retrieval per query clause, combining them with reciprocal rank fusion. Model inputs include paths, symbols, and code.
+4. Rerank each clause's candidates, expand a few high-scoring seeds' static neighbors, then rerank merged candidates against the whole query and its clauses.
+5. Select original spans using overall relevance, marginal clause coverage, and unit token cost, counting paths and line numbers within 4,000 tokens.
 
-“完整”以选中的区间为单位，不意味着每个长函数都能完整返回，也不保证已经找全一次行为链。Embedding 文本最多 2,200 字符，服务还会应用其 1,024 token 输入上限；重排文本最多 5,000 字符。切分和截断都可能损失信息。
+Completeness applies to selected spans, not every long function or an entire behavior chain. Embedding text is capped at 2,200 characters, with the service also applying its 1,024-token input cap. Reranking text is capped at 5,000 characters. Splitting and truncation can lose information.
 
-## 本轮查询规划
+## Query planning for this run
 
-GPT 查询规划接口在完成少量请求后不可用。因此，本轮 **所有 20 个查询统一使用原问题与通用分句规则**，没有混用部分生成式计划，也没有翻译或答案提示。`scripts/literal-retrieval-plans.mjs` 只依据标点和常见连接词拆分，最多四个子句。
+The GPT planning endpoint became unavailable after a few requests. Therefore, **all 20 final queries use their original wording and generic clause splitting**, without mixing in generated plans, translations, or answer hints. `scripts/literal-retrieval-plans.mjs` splits only on punctuation and common conjunctions, producing at most four clauses.
 
-`scripts/plan-retrieval.mjs` 是另一个可选实验入口，使用项目配置的远程 GPT 接口生成计划；不属于这轮最终成绩。当前生成式路径不是完全自托管方案，不能与原型的开放权重模型路径混称。
+`scripts/plan-retrieval.mjs` is a separate optional experiment using the project's configured remote GPT endpoint to generate plans. It is excluded from these final scores. That generative path is not fully self-hosted and should be distinguished from the prototype's open-weight model path.
 
-## 运行
+## Execution
 
-评测执行器 `scripts/run-opencontextengine.mjs` 启动纯 HTTP embedding 网关和 Python 工作进程，保存原问题、计划、原始源码返回、候选/选择诊断及运行代码副本。工作进程只读冻结源码、查询与计划；参考答案在检索完成后附加，由本机离线评分。
+The runner `scripts/run-opencontextengine.mjs` starts an HTTP-only embedding gateway and Python worker, recording original questions, plans, returned source, candidate/selection diagnostics, and a copy of execution code. The worker reads only frozen source, queries, and plans. Reference answers are attached after retrieval for local offline scoring.
 
-核心 Python 依赖为 `numpy` 与 `tiktoken`。当前云端执行器复用之前建好的纯客户端环境 `.pilot-state/baselines/cocoindex-venv/bin/python`；不是通用安装器，也不是已完成的 MCP 产品。
+Core Python dependencies are `numpy` and `tiktoken`. The cloud runner reuses the existing client-only environment `.pilot-state/baselines/cocoindex-venv/bin/python`; it is neither a portable installer nor a completed MCP product at this stage.
 
 ```sh
 node scripts/literal-retrieval-plans.mjs
 node scripts/run-opencontextengine.mjs
-# 在保有冻结参考答案的本机评分：
+# Score locally where frozen reference answers are available:
 node scripts/score-django.mjs RUN_DIRECTORY answers.v2.json
 ```
 
-首轮索引覆盖 883 个输入文件中的 736 个非空文件，共 12,333 个源码区间、40,205 条静态关系（含区间延续与父类主体链接）。空白文件不生成检索区间。
+The first index covers 736 nonempty files out of 883 inputs, yielding 12,333 source spans and 40,205 static relationships, including span continuation and parent-class body links. Blank files create no retrieval spans.
 
-## 结果
+## Results
 
-运行目录：`runs/reponerve-django-2026-10-03T12-53-21.093Z`。20/20 查询完成，参考答案 v2、4,000 token 下：
+Run directory: `runs/reponerve-django-2026-10-03T12-53-21.093Z`. All 20/20 queries completed. With reference answers v2 at 4,000 tokens:
 
-| 方法 | 中文覆盖率 | 英文覆盖率 | 完整任务数（中/英） | 查询中位耗时 |
+| Method | Chinese coverage | English coverage | Complete tasks (Chinese / English) | Median query time |
 | --- | --- | --- | --- | --- |
-| ACE / DirectContext | 86.5% | 84.0% | 5/10、5/10 | 2.82 秒 |
-| CocoIndex Code | 24.0% | 33.5% | 0/10、0/10 | 0.15 秒 |
-| ContextWeaver + Qwen3 重排 | 26.0% | 17.67% | 1/10、0/10 | 2.88 秒 |
-| OpenContextEngine AST 原型 + Qwen3 重排 | 86.33% | 84.67% | 5/10、5/10 | 15.23 秒 |
+| ACE / DirectContext | 86.5% | 84.0% | 5/10, 5/10 | 2.82 s |
+| CocoIndex Code | 24.0% | 33.5% | 0/10, 0/10 | 0.15 s |
+| ContextWeaver + Qwen3 reranking | 26.0% | 17.67% | 1/10, 0/10 | 2.88 s |
+| OpenContextEngine AST prototype + Qwen3 reranking | 86.33% | 84.67% | 5/10, 5/10 | 15.23 s |
 
-本轮 OpenContextEngine 中文比 ACE 低 0.17 个百分点，英文高 0.67 个百分点，按开发摸底看基本接近，不能据此宣称领先。不同部署、序列化和流水线影响耗时；没有做统计检验或消融实验，不能把所有收益单独归因于 AST 或图扩展。
+OpenContextEngine is 0.17 percentage points below ACE in Chinese and 0.67 above in English. These exploratory results are broadly similar and do not establish a lead. Deployment, serialization, and pipeline differences affect timing. Without statistical tests or ablations, gains cannot be attributed solely to AST or graph expansion.
 
-原型索引 346.2 秒；20 次查询合计 431.4 秒，中位 15.23 秒，范围 5.00–72.30 秒。整轮 871.6 秒，另含约 94 秒的引擎初始化等开销。Embedding 共 1,562 个请求、12,396 个输入、0 缓存命中、0 失败、0 重试；该数量包含索引与查询。没有把 GPT 接口可用性尝试计入这轮的查询耗时。
+Prototype indexing took 346.2 seconds. The 20 queries totaled 431.4 seconds, with a median of 15.23 seconds and range of 5.00–72.30 seconds. The full run took 871.6 seconds, including about 94 seconds for engine initialization and other overhead. Embedding used 1,562 requests and 12,396 inputs, with 0 cache hits, 0 failures, and 0 retries, including indexing and queries. GPT-availability probes are excluded from these query timings.
 
-原型在 2,000 token 下为中文 67.33%、英文 73.67%；8,000 token 结果与 4,000 相同，因为引擎本身最多选择 4,000 token。后者不是“给原型 8,000 token 再检索”的实验。
+At 2,000 tokens, coverage is 67.33% in Chinese and 73.67% in English. The 8,000-token scores equal the 4,000-token scores because the engine selects at most 4,000 tokens; this is not a fresh retrieval run with an 8,000-token budget.
 
-### 逐题覆盖率（4,000 token）
+### Per-task coverage at 4,000 tokens
 
-| 任务 | ACE 中/英 | OpenContextEngine 中/英 |
+| Task | ACE Chinese / English | OpenContextEngine Chinese / English |
 | --- | --- | --- |
-| 登录 | 80% / 80% | 80% / 80% |
-| 路由 | 100% / 50% | 75% / 100% |
-| 中间件 | 75% / 75% | 100% / 50% |
-| 事务 | 75% / 100% | 100% / 100% |
+| Login | 80% / 80% | 80% / 80% |
+| Routing | 100% / 50% | 75% / 100% |
+| Middleware | 75% / 75% | 100% / 50% |
+| Transactions | 75% / 100% | 100% / 100% |
 | CSRF | 60% / 60% | 100% / 100% |
-| 页面缓存 | 100% / 100% | 100% / 100% |
-| 配置 | 100% / 100% | 66.67% / 100% |
-| 文件上传 | 100% / 100% | 75% / 75% |
-| 信号 | 75% / 75% | 100% / 75% |
-| 视图权限 | 100% / 100% | 66.67% / 66.67% |
+| Page caching | 100% / 100% | 100% / 100% |
+| Settings | 100% / 100% | 66.67% / 100% |
+| File uploads | 100% / 100% | 75% / 75% |
+| Signals | 75% / 75% | 100% / 75% |
+| View permissions | 100% / 100% | 66.67% / 66.67% |
 
-### 下一步瓶颈
+### Remaining bottlenecks
 
-中文未完整覆盖的 5 个参考证据单元中，4 个在返回中已有部分源码、1 个未出现；英文为 5 个部分返回、1 个未出现。重点是选中区间后的证据完整性，以及跨语言表达的选择稳定性；并非只需继续增加候选数量。当前输出预算内的选择仍会留下关键方法或相邻区间缺口。
+Of 5 incompletely covered Chinese reference units, 4 are partially returned and 1 absent. For English, 5 are partial and 1 absent. Priorities are evidence completeness after span selection and selection stability across language variants, rather than simply increasing candidate count. Budgeted selection still leaves gaps in key methods or adjacent spans.
 
-第二个瓶颈是延迟：按子句多次重排，质量接近 ACE 的同时调用量较高。后续应先做通用的关联区间联合选择和重排调用合并/剪枝，再检查不同项目。不要将上表的具体任务、路径、答案符号写进规则。
+Latency is the second bottleneck: repeated clause-specific reranking produces quality near ACE with a high call count. Subsequent work should first test generic joint selection of related spans and reranking-call consolidation/pruning, then other projects. Do not encode these tasks, paths, or answer symbols into retrieval rules.
 
-离线汇总见 [机器可读比较](results/django-comparison-20261003.json)。原始查询、返回文本、逐次诊断、执行源码快照、两版评分保存在上述运行目录。下载归档 SHA256：`cf6eb9d065d6537290c17ae6591a76243b0bac8759355c4b392f952e433b7dea`。
+See the [machine-readable comparison](results/django-comparison-20261003.json). Original queries, returned text, per-request diagnostics, execution-source snapshots, and both score versions remain in the run directory above. Downloaded archive SHA256: `cf6eb9d065d6537290c17ae6591a76243b0bac8759355c4b392f952e433b7dea`.
 
-验证：现有 Node 测试 20/20 通过；新增 Python 结构测试 2/2 通过，覆盖原始源码区间还原、长函数切分、导入/方法链接和动态接收者不误连；20 个实际返回均完成源码证据校验与 token 评分。该数据用于决定下一步结构改进，不代表未见项目的泛化能力。
+Validation: existing Node tests passed 20/20; added Python structure tests passed 2/2, covering source-span reconstruction, long-function splitting, import/method links, and unresolved dynamic receivers. All 20 actual responses passed source-evidence checks and token scoring. These results guide structural improvements and do not establish generalization to unseen projects.

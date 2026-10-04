@@ -1,101 +1,101 @@
-# 跨仓库首查评测：Click、HTTPX、Zod
+# Cross-repository first-search evaluation: Click, HTTPX, and Zod
 
-2026-10-03；冻结版本 `expanded-v1`。新增 30 道自然语言任务、95 项源码证据；每题中英文各一次，每个系统 60 次，共 120 次查询。以下不合并此前用于开发调参的 Django 十题。
+2026-10-03; frozen version `expanded-v1`. This adds 30 natural-language tasks and 95 source-evidence units, each queried once in Chinese and English: 60 queries per system, 120 total. The earlier ten Django tasks used for development tuning are excluded from these aggregates.
 
-> 诊断勘误：HTTPX 文件上传的两条 50% 记录仅缺函数间空白行，业务证据已完整返回；之前将其解释为真实代码漏检不准确。本文保留冻结口径，原因及统一诊断重算见[漏项诊断](EXPANDED_DIAGNOSIS.md)。Zod 解析入口仍是真实漏检。
+> Diagnostic correction: the two HTTPX upload results scored at 50% lack only blank lines between functions; all business-code evidence was returned. The earlier interpretation as missing code was inaccurate. This report retains frozen scoring. See the [omission diagnosis](EXPANDED_DIAGNOSIS.md) for the cause and uniform diagnostic rescoring. The Zod parsing entry point is still a real retrieval omission.
 
-## 4,000 token 主指标
+## Main metrics at 4,000 tokens
 
-必需证据覆盖率：每个事实要求全部标准源码行被真实返回；先在题内等权，再在仓库内和仓库间等权。完整召回率要求该查询找齐所有标注事实。
+Required evidence coverage counts a fact only when all required source lines are actually returned. Facts are equally weighted within tasks, tasks within repositories, and repositories overall. Complete-retrieval rate requires every annotated fact for the query.
 
-| 仓库 | OpenContextEngine 中文 | ACE 中文 | OpenContextEngine 英文 | ACE 英文 |
+| Repository | OpenContextEngine Chinese | ACE Chinese | OpenContextEngine English | ACE English |
 | --- | ---: | ---: | ---: | ---: |
 | click | 97.50% | 88.33% | 100.00% | 95.00% |
 | httpx | 85.00% | 76.67% | 85.00% | 76.67% |
 | zod | 86.67% | 87.50% | 86.67% | 90.00% |
-| 总体 | 89.72% | 84.17% | 90.56% | 87.22% |
+| Overall | 89.72% | 84.17% | 90.56% | 87.22% |
 
-| 总体指标 | OpenContextEngine | ACE |
+| Overall metric | OpenContextEngine | ACE |
 | --- | ---: | ---: |
-| 证据覆盖率（中英合并） | 90.14% | 85.69% |
-| 完整召回率 | 80.00% | 66.67% |
-| 找齐全部证据的查询 | 48/60 | 40/60 |
-| 成功查询 | 60/60 | 60/60 |
-| 客户端查询中位耗时 | 3.76 秒 | 2.15 秒 |
-| 客户端查询 P95 | 5.94 秒 | 3.16 秒 |
+| Evidence coverage (both languages) | 90.14% | 85.69% |
+| Complete-retrieval rate | 80.00% | 66.67% |
+| Complete-evidence queries | 48/60 | 40/60 |
+| Successful queries | 60/60 | 60/60 |
+| Median client query time | 3.76 s | 2.15 s |
+| Client query P95 | 5.94 s | 3.16 s |
 
-60 组成对查询中，OpenContextEngine 覆盖率胜 / 平 / 负为 **15 / 40 / 5**。中文与英文来自相同 30 道任务，不能当作 60 个独立样本。中位数取中间两值平均，P95 使用 nearest-rank。
+Across 60 matched query comparisons, OpenContextEngine coverage wins / ties / losses are **15 / 40 / 5**. Chinese and English variants come from the same 30 tasks and are not 60 independent samples. Medians average the middle two values; P95 uses nearest-rank.
 
-## 结果解读与明确漏项
+## Interpretation and confirmed omissions
 
-在本轮冻结的 4,000 token 口径下，OpenContextEngine 总体领先 4.44 个百分点，优势来自 Click 与 HTTPX；Zod 中英文平均 86.67%，低于 ACE 的 88.75%。ACE 查询中位约快 1.75 倍。新语言已经走通同一架构，但检索质量仍有局部短板。
+Under this run's frozen 4,000-token scoring, OpenContextEngine leads overall by 4.44 percentage points, driven by Click and HTTPX. Zod averages 86.67% across languages, below ACE's 88.75%. ACE's median query is about 1.75 times faster. The architecture works across the added languages, with local retrieval-quality gaps.
 
-- Zod `safe-parsing` 中英文：OpenContextEngine 0%，ACE 100%。原始上下文返回了多种类型内部校验片段，却没有覆盖标准要求的解析入口、上下文构造和结果包装。
-- HTTPX `multipart-upload` 中英文：冻结评分为 OpenContextEngine 50%、ACE 100%，后续查明只缺两个空白行；业务代码已完整返回。详见上述诊断勘误。
-- Zod `tagged-union` 中文：OpenContextEngine 66.67%，ACE 100%，遗漏标签映射构造。
-- OpenContextEngine 还漏了部分 Cookie、代理匹配、解码与原子写入证据；并非所有漏项都输给 ACE，逐题列表在机器可读汇总中。
+- Zod `safe-parsing`, both languages: OpenContextEngine 0%, ACE 100%. Original context includes internal validation spans for several types but misses the required parsing entry point, context construction, and result wrapper.
+- HTTPX `multipart-upload`, both languages: frozen scores are OpenContextEngine 50%, ACE 100%. Later diagnosis found only two missing blank lines, with business code fully returned. See the correction above.
+- Zod `tagged-union`, Chinese: OpenContextEngine 66.67%, ACE 100%, missing tag-map construction.
+- OpenContextEngine also misses some cookie, proxy-matching, decoding, and atomic-write evidence. Not every omission loses to ACE; per-query details are in the machine-readable summary.
 
-ACE 原始返回平均约 5,461 token，原始证据覆盖率 94.58%；OpenContextEngine 平均约 3,631 token，覆盖率 90.14%。等预算主指标说明本轮 OpenContextEngine 的有限上下文保留效果较好，不能据此说其总体候选召回更全。要区分召回、重排和预算选择的贡献，仍需单独消融。
+ACE's original responses average about 5,461 tokens with 94.58% evidence coverage; OpenContextEngine averages about 3,631 tokens with 90.14% coverage. Equal-budget metrics show better evidence retention within limited context in this run, not more complete overall candidate recall. Separate ablations are still needed to distinguish recall, reranking, and budget-selection contributions.
 
-本轮完成后只做评分与源码核验，没有针对这些漏项改参数或重跑挑选成绩。
+After this run, only scoring and source verification were performed. Parameters were not adjusted for these omissions, and queries were not rerun to select better scores.
 
-## 范围与冻结条件
+## Scope and frozen conditions
 
-| 仓库与版本 | Commit | 源码文件 | OpenContextEngine 片段 |
+| Repository and version | Commit | Source files | OpenContextEngine units |
 | --- | --- | ---: | ---: |
 | click 8.1.8 | `934813e4d421071a1b3db3973c02fe2721359a6e` | 16 | 598 |
 | httpx 0.28.1 | `26d48e0634e6ee9cdc0533996db289ce4b430177` | 23 | 583 |
 | zod v3.24.2 | `e30870369d5b8f31ff4d0130d4439fd997deb523` | 13 | 1152 |
 
-两组使用同一生产源码子集：Click `src/click`、HTTPX `httpx`、Zod `src`，排除测试、示例、benchmark、文档和依赖。52 个文件共 826,815 字节。题目不直接提供文件名或函数名；中文/英文顺序按题交替。
+Both systems use the same production-source subsets: Click `src/click`, HTTPX `httpx`, and Zod `src`, excluding tests, examples, benchmarks, documentation, and dependencies. The 52 files total 826,815 bytes. Questions do not directly supply file or function names; language order alternates by task.
 
-配置在查询前冻结：`batched-dag-v4`、`structural-units-v2`、Qwen3-Embedding-4B、Qwen3-Reranker-4B、两轮批量重排（批大小 32，批次 token 预算 8192），无跨查询缓存。Python/TypeScript 共用同一检索主流程；所有模型在远程 GPU 上推理。ACE 使用 `@augmentcode/auggie-sdk@0.2.0` 的 `DirectContext.search`。未增加 Agent 或外部查询改写。
+Configuration was frozen before querying: `batched-dag-v4`, `structural-units-v2`, Qwen3-Embedding-4B, Qwen3-Reranker-4B, two batch-reranking waves (batch size 32, batch token budget 8192), and no cross-query cache. Python and TypeScript share the retrieval pipeline; all models run on remote GPUs. ACE uses `DirectContext.search` from `@augmentcode/auggie-sdk@0.2.0`. No agent or external query rewriting was added.
 
-ACE 请求 `maxOutputLength: 40000`，归档其实际返回值；两个系统的结果均保留原始顺序，用 `cl100k_base` 计量 4,000 token 上限，包含路径和行号；超限时截断并丢弃末尾不完整行。没有根据标准答案挑选片段。OpenContextEngine 在线就按 4,000 token 选择。
+ACE requests `maxOutputLength: 40000`, with actual outputs archived. Both systems preserve original result order and use `cl100k_base` for the 4,000-token cap, including paths and line numbers. Excess output is truncated and incomplete trailing lines removed. References do not influence snippet selection. OpenContextEngine selects within 4,000 tokens online.
 
-源码、题目、答案和引擎均记录 SHA256。题目和标准证据由 Codex 阅读源码后、查询前编写；本轮未根据输出修订答案或调整引擎。这是新仓库上的内部扩展验证，不是第三方独立标注、盲测或公开保留集。三个库较小且知名，不能外推到大型陌生项目。
+Source, questions, answers, and engine are recorded with SHA256 hashes. Codex wrote tasks and reference evidence from source before querying; this run did not revise answers or tune the engine based on outputs. This is internal expanded validation on new repositories, not independent third-party annotation, blind testing, or a public held-out set. The three libraries are small and well known; results do not establish behavior on large unfamiliar projects.
 
-## 延迟与索引
+## Latency and indexing
 
-两个系统都从同一台 Mac 发起请求，每个系统内部串行；两个系统的执行时间有重叠，后端互相独立。OpenContextEngine 经认证 SSH 转发，ACE 访问官方 API；硬件、部署与输出长度不同，因此耗时是本次部署体验，不是算法隔离实验。索引和查询分开计时，模型已常驻；没有并发或模型冷启动测量。
+Both systems receive requests from the same Mac, serially within each system. Their execution periods overlap, with independent backends. OpenContextEngine uses authenticated SSH forwarding, while ACE accesses its official API. Hardware, deployment, and output lengths differ, so timings describe these deployments rather than isolate algorithm performance. Indexing and querying are timed separately with resident models; concurrency and model cold starts were not measured.
 
-| 仓库 | OpenContextEngine 查询中位 / P95（秒） | ACE 查询中位 / P95（秒） | OpenContextEngine 首次索引（秒） | ACE 上传及索引（秒） |
+| Repository | OpenContextEngine query median / P95 (s) | ACE query median / P95 (s) | OpenContextEngine initial index (s) | ACE upload and index (s) |
 | --- | ---: | ---: | ---: | ---: |
 | click | 4.37 / 6.09 | 2.19 / 3.30 | 17.79 | 125.95 |
 | httpx | 3.85 / 5.60 | 2.10 / 2.98 | 16.88 | 124.86 |
 | zod | 3.26 / 4.21 | 2.17 / 2.73 | 32.58 | 5.52 |
 
-OpenContextEngine 首次建索引后曾因新部署缺少 TypeScript 编译器而重启，补齐固定版本依赖后复用 Python 索引并完成 Zod；此过程发生在正式查询之前，没有改变冻结算法。表中 OpenContextEngine 使用索引元数据保留的首次构建耗时。ACE 三个仓库均报告所有文件为 newlyUploaded。索引时延包含不同服务的上传、轮询等过程，不可直接解释为解析或 GPU 性能差。
+After initial indexing, OpenContextEngine restarted because the new deployment lacked the TypeScript compiler. Installing the pinned dependency allowed Python index reuse and Zod completion. This preceded formal queries and did not change the frozen algorithm. The table uses initial-build timings retained in index metadata. ACE reported every file as newlyUploaded for all three repositories. Index latency includes different upload and polling processes and cannot directly measure parser or GPU performance differences.
 
-## 补充预算与输出检查
+## Supplementary budgets and output checks
 
-| 输出前缀预算 | OpenContextEngine 覆盖率 | ACE 覆盖率 |
+| Output-prefix budget | OpenContextEngine coverage | ACE coverage |
 | --- | ---: | ---: |
 | 2000 | 85.00% | 42.78% |
 | 4000 | 90.14% | 85.69% |
 | 8000 | 90.14% | 94.58% |
 
-2,000/8,000 均为同一原始响应的离线前缀评分；OpenContextEngine 的原始请求预算仍是 4,000，因此 8,000 档不能称为两个系统各自按 8,000 token 检索的结果。
+The 2,000/8,000 results score offline prefixes of the same original responses. OpenContextEngine's original request budget remains 4,000, so the 8,000 setting does not represent both systems retrieving independently at an 8,000-token budget.
 
-| 原始输出诊断 | OpenContextEngine | ACE |
+| Original-output diagnostic | OpenContextEngine | ACE |
 | --- | ---: | ---: |
-| 原始响应平均 token | 3630.7 | 5461.4 |
-| 原始响应证据覆盖率 | 90.14% | 94.58% |
-| 与冻结源码不一致的编号行 | 0 | 6 |
+| Mean original-response tokens | 3630.7 | 5461.4 |
+| Original-response evidence coverage | 90.14% | 94.58% |
+| Numbered lines mismatching frozen source | 0 | 6 |
 
-ACE 的 6 处编号行不一致全部是实际响应末尾被字符上限截断的半行，均未得分；4,000 token 主指标两组均为 0 处不一致。这不能解释为生成了 6 处虚构源码。
+All 6 ACE line mismatches are partial lines at actual response ends truncated by the character limit; none scored. At the primary 4,000-token budget, both systems have 0 mismatches. These are not 6 instances of fabricated source.
 
-原始响应长度不同，所以原始覆盖率仅作诊断，不能替代等预算主指标。未标注的代码不自动算无关，未测量完整精确率；ACE 未返回可用于核算的计费数据，不推算费用。
+Original response lengths differ, so original-response coverage is diagnostic and does not replace the equal-budget metric. Unannotated code is not automatically irrelevant; full precision was not measured. ACE supplied no billing data suitable for cost calculation, so costs are not estimated.
 
-## 归档与复核
+## Archives and review
 
-- 冻结输入：`eval/expanded-v1/{click,httpx,zod}`，引擎冻结：`eval/expanded-v1/engine-freeze.json`。
-- [机器可读汇总](results/expanded-comparison-20261003.json) 包含逐题差值、漏项、报告/评分哈希及原始运行目录。
-- [完整性核验](results/expanded-audit-20261003.json) 核对冻结文件、源码、远程索引身份、引擎哈希、120 份原始响应及 OpenContextEngine 的预算/无查询缓存状态。
-- 运行：`node scripts/expanded/ace.mjs click|httpx|zod` 和 `node scripts/expanded/opencontextengine.mjs click|httpx|zod`；前者会访问订阅 API，后者需要已授权的远程服务与 SSH 转发。
-- 离线评分：`node scripts/expanded/score.mjs RUN_DIRECTORY`；汇总：`node scripts/expanded/summarize.mjs SIX_RUN_DIRECTORIES`；审计：`python3 scripts/expanded/audit.py SIX_RUN_DIRECTORIES`。
+- Frozen inputs: `eval/expanded-v1/{click,httpx,zod}`; frozen engine: `eval/expanded-v1/engine-freeze.json`.
+- The [machine-readable summary](results/expanded-comparison-20261003.json) includes per-query differences, omissions, report/scoring hashes, and original run directories.
+- The [completeness audit](results/expanded-audit-20261003.json) checks frozen files, source, remote index identities, engine hashes, 120 original responses, and OpenContextEngine's budget and lack of query caching.
+- Run: `node scripts/expanded/ace.mjs click|httpx|zod` and `node scripts/expanded/opencontextengine.mjs click|httpx|zod`. The former calls the subscription API; the latter requires authorized remote services and SSH forwarding.
+- Offline scoring: `node scripts/expanded/score.mjs RUN_DIRECTORY`; summary: `node scripts/expanded/summarize.mjs SIX_RUN_DIRECTORIES`; audit: `python3 scripts/expanded/audit.py SIX_RUN_DIRECTORIES`.
 
-原始运行目录：
+Original run directories:
 
 - `runs/ace-click-expanded-2026-10-03T15-32-08.412Z`
 - `runs/ace-httpx-expanded-2026-10-03T15-35-01.321Z`

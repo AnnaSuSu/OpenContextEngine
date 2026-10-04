@@ -1,55 +1,55 @@
-# 候选保留与短函数证据完整性修复
+# Candidate retention and complete short-function evidence
 
-2026-10-04，当前引擎 `batched-dag-v6`。针对 [expanded-v1 漏项诊断](EXPANDED_DIAGNOSIS.md) 中已经暴露的问题修改，再用同一批 30 道中英文配对题进行 60 次回归。这是开发回归，不是新的保留集成绩；没有重新查询 ACE，也没有修改原始参考答案或评分程序。
+2026-10-04, engine `batched-dag-v6`. Changes address issues already exposed in the [expanded-v1 omission diagnosis](EXPANDED_DIAGNOSIS.md), then run 60 regression queries on the same 30 bilingual tasks. This is development regression, not a new held-out result. ACE was not queried again, and original reference answers and scoring code are unchanged.
 
-## 修复结果
+## Results
 
-4,000 token、原 `answers.v1.json` 冻结口径：
+At 4,000 tokens, using the original frozen `answers.v1.json` scoring:
 
-| 指标 | 修复前 v4 | 修复后 v6 |
+| Metric | Before: v4 | After: v6 |
 | --- | ---: | ---: |
-| 总体必需证据覆盖率 | 90.14% | 94.03% |
-| 找齐全部证据的查询 | 48/60 | 51/60 |
-| Click 覆盖率（中英平均） | 98.75% | 98.75% |
-| HTTPX 覆盖率（中英平均） | 85.00% | 85.00% |
-| Zod 覆盖率（中英平均） | 86.67% | 98.33% |
-| 查询中位耗时 | 3.76 秒 | 4.51 秒 |
-| 查询 P95 | 5.94 秒 | 6.98 秒 |
-| 查询成功 | 60/60 | 60/60 |
+| Overall required evidence coverage | 90.14% | 94.03% |
+| Complete-evidence queries | 48/60 | 51/60 |
+| Click coverage (language mean) | 98.75% | 98.75% |
+| HTTPX coverage (language mean) | 85.00% | 85.00% |
+| Zod coverage (language mean) | 86.67% | 98.33% |
+| Median query time | 3.76 s | 4.51 s |
+| Query P95 | 5.94 s | 6.98 s |
+| Successful queries | 60/60 | 60/60 |
 
-逐条对照为 3 条改善、57 条不变、0 条下降：Zod `safe-parsing` 中英文均从 0% 到 100%，`tagged-union` 中文从 66.67% 到 100%。Zod 尚有 `async-refinement` 英文的一项证据未完整返回。
+Per-query comparison shows 3 improvements, 57 unchanged, and 0 regressions: Zod `safe-parsing` rises from 0% to 100% in both languages, and Chinese `tagged-union` from 66.67% to 100%. One evidence unit in English `async-refinement` remains incomplete.
 
-HTTPX 的两个空白行评分问题仍按原冻结规则计分，以免将评分口径变化混进算法收益。若对前后两组统一忽略缺失的空白行，诊断覆盖率为 **91.81% → 95.69%**，完整召回为 **50/60 → 53/60**。两种口径均保存在机器记录中，未覆盖原始成绩。
+HTTPX's two blank-line scoring issues retain the original rules to avoid mixing a scoring change with algorithm gains. Uniformly ignoring missing blank lines in both groups produces diagnostic coverage of **91.81% → 95.69%** and complete retrieval of **50/60 → 53/60**. Both scoring variants are recorded without overwriting original results.
 
-## 实现
+## Implementation
 
-修改位于 `src/retrieval/batched.py`，继续共用 Python/TypeScript 结构接口，索引与模型配置未变。
+Changes are in `src/retrieval/batched.py`, retaining the shared Python/TypeScript structural interface and unchanged index and model configuration.
 
-1. **候选名额实际补入新片段。** 保留前 64 个核心候选，另留 16 个不重复的结构候选；不足时从原排序补齐，总计不超过 80。修复原先 16 个全部与前 64 重合而实际只留下 64 个的问题。
-2. **尚未评分的结构候选继承来源证据。** 从核心候选沿调用、同符号片段、函数内部所属关系寻找新片段，以已有相关性、关系置信度和新邻居数量排序。不会要求新片段先具备它尚未获得的首轮评分；类型引用、导入和类级成员关系不用于这条新增优先通道。
-3. **有界地保留短函数的完整上下文。** 同一短函数的主体、内嵌 getter 等按源结构组合，并可沿调用者补充至多两层。单个函数组成本不超过 256 token，超过 4 个调用者的公共函数不扩展，整个组合最多 768 token。最终选择按组合的实际新增 token 成本计价，去重后仍严格限制为 4,000 token。较大的函数继续保留原片段粒度。
+1. **Candidate slots add new units.** Retain the top 64 core candidates plus 16 distinct structural candidates. Fill remaining capacity from the original ranking, with at most 80 total. This fixes the case where all 16 additions overlap the top 64 and only 64 survive.
+2. **Unscored structural candidates inherit evidence from their source.** Follow calls, same-symbol units, and function-containment relationships from core candidates, ranking additions by existing relevance, relationship confidence, and new-neighbor count. New units need not already have a first-wave score. Type references, imports, and class-level membership do not use this added priority route.
+3. **Keep complete short-function context within bounds.** Group a short function's body and nested getters using source structure, optionally following callers for at most two levels. Each function group costs at most 256 tokens; common functions with more than 4 callers are not expanded; the full group is capped at 768 tokens. Final selection charges actual incremental token cost, deduplicates, and remains within 4,000 tokens. Larger functions retain the existing unit granularity.
 
-第三项解决了仅找到 `handleResult` 主体却丢掉错误 getter，以及未带回短解析入口的问题。补充片段来自已经验证的源码和静态关系；没有语言/仓库/题目名称特判。部分补充片段未独立重排，诊断输出用 `contextOnly` 与 `selectionAnchor` 显式标记，不能把它们算成独立模型判断。
+The third change recovers the error getter alongside `handleResult` and the short parsing entry points. Additional units come from verified source and static relationships, without language, repository, or task-name special cases. Some are not reranked independently; diagnostics explicitly mark `contextOnly` and `selectionAnchor`, so they cannot count as independent model judgments.
 
-第二轮最多 80 个片段、一次 embedding 请求和最多两轮 rerank 请求；无跨查询缓存。名额被真正填满后，实际评分对数比旧版增加，本次延迟相应上升约 0.75 秒（中位约 20%）。前后均从同一 Mac 访问同样的远程模型，但各只有一轮 60 条查询，不作统计显著性或并发吞吐结论。
+Limits remain at most 80 second-wave units, one embedding request, and at most two reranking waves, without cross-query caching. Filling the slots increases actual scored pairs and latency by about 0.75 seconds (roughly 20% at the median). Both runs use the same Mac and remote models, with only one 60-query run each; no statistical-significance or concurrent-throughput claim is made.
 
-## 验证与版本记录
+## Validation and version records
 
-- 16 项 Python 测试通过，覆盖重复名额、无首轮分数的调用者/内嵌片段、类型引用过滤、候选补齐、两层上下文边界、公共函数不扩展及原有语言/检索行为。
-- 23 项 Node 测试通过。
-- 完整回归验证原始输出哈希、当前与远程引擎哈希、相同索引身份、冻结输入/答案一致，以及真实源码行、无重复输出片段、4,000 token 上限、80 个重排片段上限和调用轮数。
-- v5 仅修候选保留时，Zod 定向结果为中文 33.33%、英文 0%，不足以解决完整证据问题。这轮记录保留在 `runs/reponerve-v5-probe-*`，不作为最终成绩。随后加入有界短函数上下文，v6 定向与完整回归均恢复目标题中英文 100%。没有据完整回归结果再调参。
-- v6 启动时健康探测曾遇到一次连接重置；服务就绪后重试，首次失败发生在发出查询和建立结果目录之前。完整回归 60 次查询没有失败。
-- 修复在独立远程 worker 中验证，原 v4 评测服务与原始记录保留。模型部署、语言适配器、参考答案、评分器和 Git 历史功能均未改动。
+- All 16 Python tests passed, covering duplicate slots, callers/nested units without first-wave scores, type-reference filtering, candidate filling, two-level context limits, common-function exclusion, and existing language/retrieval behavior.
+- All 23 Node tests passed.
+- Full regression checks original-output hashes, local and remote engine hashes, matching index identities, unchanged frozen inputs/answers, real source lines, no duplicate output units, the 4,000-token cap, the 80-unit reranking cap, and request-wave counts.
+- With candidate retention alone in v5, targeted Zod scores were 33.33% in Chinese and 0% in English, insufficient for complete evidence. Records remain in `runs/reponerve-v5-probe-*` and are not final results. After adding bounded short-function context, both targeted and full v6 regressions restore the target task to 100% in both languages. No tuning followed the full regression results.
+- A v6 startup health probe encountered one connection reset. It was retried after service readiness, before any query or result-directory creation. All 60 full-regression queries succeeded.
+- Validation used a separate remote worker, retaining the original v4 evaluation service and records. Model deployment, language adapters, reference answers, scorer, and Git-history functionality are unchanged.
 
-## 归档
+## Archives
 
-- [机器可读回归与逐题变化](results/candidate-fix-20261004.json)
-- 冻结引擎：`eval/regression-v6/engine-freeze.json`；上一版探针配置保留于 `eval/regression-v5/engine-freeze.json`。
-- 运行脚本：`scripts/expanded/regress.mjs`，服务启动：`scripts/expanded/serve-fixed.mjs`，离线比较与完整性校验：`scripts/expanded/compare-fix.py`。
-- 完整运行目录：
+- [Machine-readable regression and per-query changes](results/candidate-fix-20261004.json)
+- Frozen engine: `eval/regression-v6/engine-freeze.json`; previous probe configuration: `eval/regression-v5/engine-freeze.json`.
+- Runner: `scripts/expanded/regress.mjs`; service startup: `scripts/expanded/serve-fixed.mjs`; offline comparison and integrity checks: `scripts/expanded/compare-fix.py`.
+- Full run directories:
   - `runs/reponerve-v6-regression-click-2026-10-03T16-12-34.807Z`
   - `runs/reponerve-v6-regression-httpx-2026-10-03T16-14-23.565Z`
   - `runs/reponerve-v6-regression-zod-2026-10-03T16-16-00.747Z`
 
-运行 `node scripts/expanded/regress.mjs click`（或 `httpx`、`zod`）需要相应的已授权远程 worker 与 SSH 转发；原始 v4 比较应继续使用归档结果，不混入这次开发回归。
+Running `node scripts/expanded/regress.mjs click` (or `httpx`, `zod`) requires the corresponding authorized remote worker and SSH forward. Original v4 comparisons should keep using archived results without mixing in this development regression.

@@ -1,72 +1,72 @@
-# Django ACE 首轮语义搜索结果
+# Django ACE first-run semantic-search results
 
-2026-10-03，ACE 官方 SDK `@augmentcode/auggie-sdk` 0.2.0、`DirectContext.search()`。固定 Django commit `f59aef2ee9b5c988fd4179d8f2835030bd76297c`，索引全部 883 个生产 Python 文件（5680101 字节）。10 道独立开发题，中英文各查一次，共 20 次，全部成功。中文为主成绩，英文为同题对照。
+2026-10-03. Official ACE SDK `@augmentcode/auggie-sdk` 0.2.0, `DirectContext.search()`. Frozen Django commit `f59aef2ee9b5c988fd4179d8f2835030bd76297c`; all 883 production Python files indexed (5680101 bytes). Each of 10 independent development tasks was queried once in Chinese and once in English: 20 successful queries. Chinese is the primary result, with English as the paired comparison.
 
-这是 ACE 单组开发试点；OpenContextEngine 引擎与开源工具尚未参加比较。分数是预标注源码证据的覆盖，不是自然语言答案正确率。题目、范围及预算见 [协议](DJANGO_PROTOCOL_V1.md)。
+This was an ACE-only development pilot; the OpenContextEngine engine and open-source tools had not yet entered the comparison. Scores measure preannotated source-evidence coverage, not natural-language answer accuracy. See the [protocol](DJANGO_PROTOCOL_V1.md) for tasks, scope, and budgets.
 
-## 主结果及预算敏感性
+## Main results and budget sensitivity
 
-以下使用修订参考答案 v2，每题等权平均；一个事实要求的一组源码证据全部出现才计为命中。保留原始排名的响应前缀，路径和行号也占 token 预算。
+The table uses revised reference answers v2, averaging tasks equally. A fact counts only when all required source evidence appears. Response prefixes preserve the original ranking, and paths and line numbers count against the token budget.
 
-| Token 预算 | 中文覆盖率 | 英文覆盖率 | 中文完整命中题 | 英文完整命中题 |
+| Token budget | Chinese coverage | English coverage | Complete Chinese tasks | Complete English tasks |
 | --- | --- | --- | --- | --- |
 | 2,000 | 66% | 60.17% | 3/10 | 2/10 |
 | 4,000 | 86.5% | 84% | 5/10 | 5/10 |
 | 8,000 | 88.5% | 88.5% | 5/10 | 5/10 |
 
-4,000 token 时，中文参考证据遗漏率 13.5%，英文 16%；中文领先 2.5 个百分点。8,000 token 时均为 88.5%。本轮原始响应只有 4,331–5,057 token，所以 8,000 token 等于全部已返回内容，并不代表 ACE 能在该预算内额外补查。只有一次运行、一个仓库和 10 道开发题，不作显著性或普遍语言优势结论。
+At 4,000 tokens, the reference-evidence omission rate is 13.5% for Chinese and 16% for English, a Chinese lead of 2.5 percentage points. Both reach 88.5% at 8,000 tokens. Original responses contain only 4,331–5,057 tokens, so the 8,000-token score includes all returned content; it does not mean ACE performed additional retrieval at that budget. One run, one repository, and 10 development tasks do not support statistical significance or a general language advantage.
 
-| 题目 | 中文命中事实 / 总事实 | 英文命中事实 / 总事实 |
+| Task | Chinese covered facts / total | English covered facts / total |
 | --- | --- | --- |
-| 网页登录 | 4/5 | 4/5 |
-| 路由加载与匹配 | 4/4 | 2/4 |
-| 中间件执行 | 3/4 | 3/4 |
-| 事务与嵌套 | 3/4 | 4/4 |
-| 表单防伪校验 | 3/5 | 3/5 |
-| 页面缓存 | 4/4 | 4/4 |
-| 项目配置加载 | 3/3 | 3/3 |
-| 上传内存与磁盘 | 4/4 | 4/4 |
-| 信号分发与异常 | 3/4 | 3/4 |
-| 类视图权限控制 | 3/3 | 3/3 |
+| Web login | 4/5 | 4/5 |
+| Route loading and matching | 4/4 | 2/4 |
+| Middleware execution | 3/4 | 3/4 |
+| Transactions and nesting | 3/4 | 4/4 |
+| Form CSRF validation | 3/5 | 3/5 |
+| Page caching | 4/4 | 4/4 |
+| Project settings loading | 3/3 | 3/3 |
+| Upload memory and disk handling | 4/4 | 4/4 |
+| Signal dispatch and exceptions | 3/4 | 3/4 |
+| Class-based view permissions | 3/3 | 3/3 |
 
-## 参考答案的一处修正
+## One reference-answer correction
 
-首查前冻结的 v1 在 4,000 token 下为中文 **84%**、英文 **81.5%**，完整命中分别为 4/10、5/10；[原始分数](../../eval/results/django-ace-20261003/scores.v1.json)原样保留。
+The v1 answers frozen before retrieval scored **84%** in Chinese and **81.5%** in English at 4,000 tokens, with complete coverage on 4/10 and 5/10 tasks respectively. The [original scores](../../eval/results/django-ace-20261003/scores.v1.json) are retained unchanged.
 
-运行后人工复核发现，`routing/request-to-view` 要求提供“实际执行视图”的代码，但中英文题目仅问“路由配置如何加载、路径如何匹配到视图”。v2 删除此项中超出题意的 `base.py:181、197` 要求，保留 `313–315` 的路径解析与匹配结果。总题数及 40 个事实数不变，其余 39 个事实原样保留。
+Post-run manual review found that `routing/request-to-view` required code that actually executes the view, while both questions asked only how routing configuration is loaded and how a path is matched to a view. v2 removes the out-of-scope `base.py:181, 197` requirements and retains path resolution and matching results at `313–315`. The task count and 40 facts are unchanged; the other 39 facts are retained as written.
 
-这是查看 ACE 返回后作出的修正，并非盲审。两种语言使用同一版本离线重算，没有重跑检索；后续所有工具也必须使用同一版本。4,000 token 时两种语言均增加 2.5 个百分点。v1 完整事实列表见 [原答案](DJANGO_REFERENCE_V1.md)，修订事实与依据见 [answers.v2.json](../../eval/django-v1/answers.v2.json)，逐事实结果见 [v2 分数](../../eval/results/django-ace-20261003/scores.v2.json)。
+This correction followed inspection of ACE outputs and was not blind review. Both languages were rescored offline with the same version, without rerunning retrieval; subsequent tools must use that same version. Both gain 2.5 percentage points at 4,000 tokens. See the [original v1 answers](DJANGO_REFERENCE_V1.md), [answers.v2.json and revision rationale](../../eval/django-v1/answers.v2.json), and [per-fact v2 scores](../../eval/results/django-ace-20261003/scores.v2.json).
 
-## 仍缺少的证据
+## Evidence still missing
 
-| 题目 | 对原始响应与预算前缀的复核 |
+| Task | Review of original responses and budget prefixes |
 | --- | --- |
-| 登录 | 两种语言都找到表单、后端分发、密码判断与会话写入；缺默认后端的账号可认证条件实现。 |
-| 路由 | 中文 v2 完整。英文原始响应已有加载路由列表的代码，但排在 4,000 token 之后；递归遍历匹配的指定证据在原始响应中也未齐。 |
-| 同步中间件 | 两种语言都找到构建链及请求钩子短路；同步视图中间件返回响应后是否继续调用视图的证据不全，异步分支不能代替题目指定的同步分支。 |
-| 事务 | 英文完整；中文缺退出后的自动提交状态恢复，提交、回滚和嵌套的主要证据已找到。 |
-| CSRF | 两种语言都缺执行入口中何时应用 Origin/Referer 校验的完整证据；token 校验拒绝分支在原始响应中可覆盖，但被 4,000 token 前缀截去。 |
-| 信号 | 两种语言都找到注册、普通发送和容错异常处理；缺按发送者筛选及解引用存活接收者的完整片段。 |
+| Login | Both languages find the form, backend dispatch, password checks, and session writes; the default backend's account-eligibility condition is missing. |
+| Routing | Chinese is complete under v2. The original English response includes URL-pattern loading beyond 4,000 tokens; required recursive-matching evidence is incomplete even in the original response. |
+| Synchronous middleware | Both find chain construction and request-hook short-circuiting. Evidence for whether synchronous view middleware continues to the view after returning a response is incomplete; the asynchronous branch cannot replace the requested synchronous branch. |
+| Transactions | English is complete. Chinese misses autocommit restoration after exit, while the main commit, rollback, and nesting evidence is present. |
+| CSRF | Both miss complete evidence for when the execution entry point applies Origin/Referer checks. Token-validation rejection is covered in the original responses but cut off by the 4,000-token prefix. |
+| Signals | Both find registration, normal sending, and robust exception handling; complete sender filtering and dereferencing of live receivers are missing. |
 
-“事实未命中”不代表整个功能没找到，也不证明检索结果无法支持合理回答；这里采用版本化的严格源码片段覆盖标准。参考答案仍可能遗漏等价实现或过度细化，需要继续按版本修正。未标注代码不能直接算无关，所以本轮未报告噪声率。
+An uncovered fact does not mean the entire feature was missed or that the returned context cannot support a reasonable answer. This uses a versioned, strict source-span coverage standard. References may still omit equivalent implementations or be overly detailed, requiring further versioned corrections. Unannotated code is not automatically irrelevant, so no noise rate is reported.
 
-## 耗时、返回截断及成本
+## Timing, response truncation, and cost
 
-- 建索引 99.421 秒；20 次查询累计 58.535 秒；整轮 157.979 秒。
-- 单次查询中位数 2.824 秒，范围 2.301–4.497 秒。
-- 共 39 次 HTTP 请求全部返回 200，其中 20 次检索请求，没有观察到检索重试。
-- 请求最大返回 40,000 字符，实际每份为 19,027–20,000 字符。7 份原始响应最后一条带行号源码被截断，评分器拒绝给这些不完整行记分；其余带行号源码通过固定版本比对。这里只记录观察现象，未定位服务端或 SDK 限制原因。
-- SDK 未提供本轮账单金额或计费 token；上述 token 是返回文本本地计数，不能当成实际收费量。
+- Indexing took 99.421 seconds; 20 queries totaled 58.535 seconds; the full run took 157.979 seconds.
+- Median query time was 2.824 seconds, ranging from 2.301–4.497 seconds.
+- All 39 HTTP requests returned 200, including 20 retrieval requests. No retrieval retry was observed.
+- The requested response cap was 40,000 characters; actual responses contained 19,027–20,000 characters. The last numbered source line was truncated in 7 original responses. The scorer rejected these incomplete lines; other numbered lines matched the frozen revision. This records the observation without attributing the limit to the server or SDK.
+- The SDK supplied neither billing amounts nor billed tokens for this run. The token counts above measure returned text locally and do not represent billed usage.
 
-## 保存与复现
+## Retention and reproduction
 
-本地原始目录为 `runs/ace-django-2026-10-03T09-25-00.710Z/`，包含 20 份原始响应、冻结输入、两版评分、各预算前缀与 SDK 索引状态。可纳入 Git 的 [运行统计](../../eval/results/django-ace-20261003/report.json)不包含凭据或租户地址；原始响应和索引状态留在被忽略的本地目录。
+The local original directory is `runs/ace-django-2026-10-03T09-25-00.710Z/`, containing 20 original responses, frozen inputs, both score versions, budget prefixes, and SDK index status. The publishable [run statistics](../../eval/results/django-ace-20261003/report.json) contain no credentials or tenant addresses. Original responses and index status remain in the ignored local directory.
 
-本地归档为 `runs/archives/django-ace-20261003.tar.gz`，包含固定生产源码、Django 许可证、查询、协议、两版参考答案和评分、原始响应、运行时实现与当前评分器。归档有逐文件 SHA256 清单，外部 SHA256 文件用于检查压缩包完整性。凭据和 SDK 索引状态不纳入归档。归档只保存在当前机器，尚未做异机备份。
+The local archive `runs/archives/django-ace-20261003.tar.gz` includes frozen production source, the Django license, queries, protocol, both answer and score versions, original responses, runtime implementation, and the current scorer. A per-file SHA256 manifest and an external SHA256 file verify archive integrity. Credentials and SDK index status are excluded. The archive is stored only on this machine, without a backup on another machine.
 
 ```sh
-# 默认按运行目录里的冻结 v1 评分；以下显式使用 v2。
+# The default uses frozen v1 answers in the run directory; select v2 explicitly below.
 npm run score-django -- runs/ace-django-2026-10-03T09-25-00.710Z answers.v2.json
 ```
 
-评分只读本地固定源码和已保存响应，不访问 ACE。14 项测试通过，包含互补片段、等价证据、伪造源码、预算截断、重复返回及既有 SDK 接入测试。下一步可让开源检索器使用同样的 883 个文件和 10 道配对题，避免先改题再比较。
+Scoring reads only local frozen source and saved responses, without contacting ACE. All 14 tests passed, covering complementary spans, equivalent evidence, fabricated source, budget truncation, duplicate returns, and existing SDK integration. Subsequent open-source comparisons should use the same 883 files and 10 paired tasks rather than changing questions first.
