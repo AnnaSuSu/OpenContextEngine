@@ -105,3 +105,16 @@ test('Setup validates models before installing and does not overwrite saved conf
   assert.deepEqual(readUserConfig(environment),before);
   for (const value of ['0','NaN','1.5','']) assert.throws(() => validateModels({...models,OCE_EMBEDDING_DIMENSIONS:value}));
 });
+
+test('Setup persists explicit HTTP opt-in and native vector dimensions for subsequent launches', async t => {
+  const {environment} = await temporary(t);
+  await setup({environment:{...environment,...models,OCE_ALLOW_HTTP:'1',OCE_EMBEDDING_DIMENSIONS:'2560',
+    EMBEDDING_BASE_URL:'http://embedding.example:8079/v1',RERANK_BASE_URL:'http://rerank.example:8078'},
+    nonInteractive:true,execute:async () => ({stdout:''}),
+    install:async () => ({OCE_PYTHON:'/isolated/bin/python'}),log:()=>{}});
+  const saved = readUserConfig(environment);
+  assert.equal(saved.OCE_ALLOW_HTTP,'1');
+  assert.equal(saved.OCE_EMBEDDING_DIMENSIONS,'2560');
+  assert.equal(saved.RERANK_BASE_URL,'http://rerank.example:8078');
+  assert.doesNotThrow(() => validateModels(saved));
+});

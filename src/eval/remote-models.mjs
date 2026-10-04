@@ -1,16 +1,16 @@
 import os from 'node:os';
 
 // User requirement: model inference must run on a separately authorized server.
-export function remoteModelUrl(value) {
+export function remoteModelUrl(value, {allowHttp = false} = {}) {
   const url = new URL(value);
   const host = url.hostname.toLowerCase().replace(/^\[|\]$/g, '');
   const local = new Set(['localhost', 'localhost.localdomain', '0.0.0.0', '::', '::1', os.hostname().toLowerCase()]);
   for (const addresses of Object.values(os.networkInterfaces())) {
     for (const address of addresses ?? []) local.add(address.address.toLowerCase());
   }
-  if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash ||
+  if (!(url.protocol === 'https:' || (allowHttp && url.protocol === 'http:')) || url.username || url.password || url.search || url.hash ||
       local.has(host) || /^127\./.test(host) || host.endsWith('.localhost') || host.endsWith('.local')) {
-    throw new Error('Model endpoint must be remote HTTPS; local model inference is prohibited');
+    throw new Error('Model endpoint must be remote HTTPS (or explicitly enable OCE_ALLOW_HTTP=1); local model inference is prohibited');
   }
   return url.href.replace(/\/$/, '');
 }
@@ -26,7 +26,7 @@ export function remoteRerankerConfig(env) {
     if (!Number.isInteger(value) || value < 1 || value > maximum) throw new Error(`${name} must be an integer from 1 to ${maximum}`);
     return value;
   };
-  return { baseUrl: remoteModelUrl(env.RERANK_BASE_URL), model: env.RERANK_MODEL, apiKey: env.RERANK_API_KEY,
+  return { baseUrl: remoteModelUrl(env.RERANK_BASE_URL, {allowHttp:env.OCE_ALLOW_HTTP === '1'}), model: env.RERANK_MODEL, apiKey: env.RERANK_API_KEY,
     api, concurrency: integer('OCE_RERANK_CONCURRENCY', 2, 8),
     maxDocuments: integer('OCE_RERANK_MAX_DOCUMENTS', 128, 1024) };
 }
@@ -35,8 +35,8 @@ export function remoteRerankerConfig(env) {
 // service without a round trip through the public HTTPS proxy. This does not
 // permit launching a model process, nor accepting a loopback model on the Mac.
 export function rerankerExecutionTransport(env, host = { platform: process.platform, hostname: os.hostname() }) {
-  const baseUrl = remoteModelUrl(env.RERANK_BASE_URL);
-  if (!env.RERANK_REMOTE_RUNTIME_URL) return { baseUrl, requestBaseUrl: baseUrl, transport: 'https' };
+  const baseUrl = remoteModelUrl(env.RERANK_BASE_URL, {allowHttp:env.OCE_ALLOW_HTTP === '1'});
+  if (!env.RERANK_REMOTE_RUNTIME_URL) return { baseUrl, requestBaseUrl: baseUrl, transport: new URL(baseUrl).protocol.slice(0,-1) };
   const url = new URL(env.RERANK_REMOTE_RUNTIME_URL);
   if (host.platform !== 'linux' || env.RERANK_REMOTE_HOST !== host.hostname ||
       url.protocol !== 'http:' || url.hostname !== '127.0.0.1' || !url.port ||
@@ -49,8 +49,8 @@ export function rerankerExecutionTransport(env, host = { platform: process.platf
 // Explicit SSH forwarding reaches a remote service; no local model is loaded.
 // Cache identity remains the logical provider URL when transport changes.
 export function embeddingTransportConfig(env) {
-  const baseUrl = remoteModelUrl(env.EMBEDDING_BASE_URL);
-  if (!env.EMBEDDING_SSH_TUNNEL_URL) return { baseUrl, requestBaseUrl: baseUrl, transport: 'https' };
+  const baseUrl = remoteModelUrl(env.EMBEDDING_BASE_URL, {allowHttp:env.OCE_ALLOW_HTTP === '1'});
+  if (!env.EMBEDDING_SSH_TUNNEL_URL) return { baseUrl, requestBaseUrl: baseUrl, transport: new URL(baseUrl).protocol.slice(0,-1) };
   const tunnel = new URL(env.EMBEDDING_SSH_TUNNEL_URL);
   if (tunnel.protocol !== 'http:' || tunnel.hostname !== '127.0.0.1' || !tunnel.port ||
       tunnel.username || tunnel.password || tunnel.search || tunnel.hash || tunnel.pathname !== '/v1' ||

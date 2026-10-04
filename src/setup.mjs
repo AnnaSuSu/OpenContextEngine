@@ -48,7 +48,7 @@ export async function setup({environment = process.env, nonInteractive = false, 
         ['EMBEDDING_BASE_URL','Embedding base URL (including /v1)'],
         ['EMBEDDING_API_KEY','Embedding API key',true],['EMBEDDING_MODEL','Embedding model'],
         ['OCE_EMBEDDING_DIMENSIONS','Embedding dimensions'],
-        ['RERANK_BASE_URL','Rerank base URL (including /v1 or /v2)'],
+        ['RERANK_BASE_URL','Rerank base URL (before /rerank; include a version prefix if required)'],
         ['RERANK_API_KEY','Rerank API key',true],['RERANK_MODEL','Rerank model'],
       ]) env[key] = await questions.ask(label,env[key] || '',Boolean(secret));
     } finally {questions.close();}

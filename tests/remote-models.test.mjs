@@ -52,3 +52,25 @@ test('SSH transport requires an explicit loopback forward while retaining remote
   assert.throws(() => embeddingTransportConfig({ ...env, EMBEDDING_BASE_URL: 'http://localhost:8000/v1' }));
   assert.equal(embeddingTransportConfig({ EMBEDDING_BASE_URL: env.EMBEDDING_BASE_URL }).transport, 'https');
 });
+
+test('Remote HTTP endpoints require explicit opt-in and preserve local model restrictions', () => {
+  const env = {EMBEDDING_BASE_URL:'http://models.example:8079/v1',
+    RERANK_BASE_URL:'http://models.example:8078',RERANK_MODEL:'test',RERANK_API_KEY:'test-only'};
+  for (const flag of [undefined,'0','true','']) {
+    const config = {...env,OCE_ALLOW_HTTP:flag};
+    assert.throws(() => embeddingTransportConfig(config), /OCE_ALLOW_HTTP/);
+    assert.throws(() => remoteRerankerConfig(config), /OCE_ALLOW_HTTP/);
+    assert.throws(() => rerankerExecutionTransport(config), /OCE_ALLOW_HTTP/);
+  }
+  const opted = {...env,OCE_ALLOW_HTTP:'1'};
+  assert.equal(embeddingTransportConfig(opted).requestBaseUrl,env.EMBEDDING_BASE_URL);
+  assert.equal(embeddingTransportConfig(opted).transport,'http');
+  assert.equal(remoteRerankerConfig(opted).baseUrl,env.RERANK_BASE_URL);
+  assert.equal(rerankerExecutionTransport(opted).transport,'http');
+  for (const url of ['http://127.1:8079/v1','http://[::1]:8079/v1','http://localhost:8079/v1',
+    'http://host.local:8079/v1','http://user:secret@models.example/v1',
+    'http://models.example/v1?key=secret','http://models.example/v1#secret','ftp://models.example/v1']) {
+    assert.throws(() => embeddingTransportConfig({...opted,EMBEDDING_BASE_URL:url}));
+    assert.throws(() => remoteRerankerConfig({...opted,RERANK_BASE_URL:url}));
+  }
+});

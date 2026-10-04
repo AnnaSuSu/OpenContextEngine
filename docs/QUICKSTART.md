@@ -46,13 +46,15 @@ RERANK_MODEL=Qwen3-Reranker-4B
 OCE_RERANK_API=rerank
 ```
 
-The embedding service must implement `POST /v1/embeddings`. By default, the reranker uses the ordinary `/rerank` API: requests contain `model`, `query`, `documents`, and `top_n`; responses must return every requested document in `results`, with its original `index` and a finite `relevance_score` between 0 and 1. Results may arrive in relevance order. Use the provider's versioned base URL (for example, `https://provider.example/v1` or `/v2`), without appending `/rerank` yourself.
+The embedding service must implement `POST /v1/embeddings`. By default, the reranker uses the ordinary `/rerank` API: requests contain `model`, `query`, `documents`, and `top_n`; responses must return every requested document in `results`, with its original `index` and a finite `relevance_score` between 0 and 1. Results may arrive in relevance order. Set the reranker base URL to the part before `/rerank`: for example, `https://provider.example/v1`, `/v2`, or `https://provider.example` for an unversioned endpoint.
+
+HTTPS is the default. For an explicitly trusted remote HTTP deployment, set `OCE_ALLOW_HTTP=1` before running `opencontextengine setup`; setup saves this choice in the shared configuration. HTTP transmits API keys and source text without encryption. Local model endpoints remain prohibited. Set `OCE_EMBEDDING_DIMENSIONS` to the service's actual output size (for example, `2560`); changing the provider or dimensions creates a new index generation and does not mix incompatible cached vectors.
 
 OpenContextEngine groups the needed pairs by query, reuses scores within each search, and makes at most two concurrent rerank requests by default. Optional `OCE_RERANK_CONCURRENCY` (1–8, default 2) and `OCE_RERANK_MAX_DOCUMENTS` (1–1,024, default 128) control concurrency and documents per request. It requests all scores and rejects missing, duplicate, or invalid result indices; errors are surfaced without silently switching endpoints.
 
 For the [optional benchmark reranker server](RERANKER_API.md), you can optionally set `OCE_RERANK_API=rerank-batch` to combine multiple queries into its custom `/rerank-batch` endpoint. The default `rerank` mode works with this server too. Qwen3-Embedding-4B / Qwen3-Reranker-4B are the evaluated models; the published seven-method benchmark used the custom batch mode. Other providers and models still need compatibility and quality validation, especially if they score documents jointly rather than independently. Changing document batch limits may then affect scores.
 
-The launcher requires HTTPS model endpoints, with explicit SSH/direct-worker transport options available in [the transport configuration](../src/eval/remote-models.mjs). It does not install or load model weights on the client. Repository fragments and queries are sent to the model endpoints you configure.
+The launcher defaults to HTTPS model endpoints, with explicit HTTP opt-in and SSH/direct-worker transport options available in [the transport configuration](../src/eval/remote-models.mjs). It does not install or load model weights on the client. Repository fragments and queries are sent to the model endpoints you configure.
 
 ## 3. Add the MCP server
 
