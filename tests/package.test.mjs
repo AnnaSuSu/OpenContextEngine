@@ -12,7 +12,7 @@ test('npm package contains the runtime and excludes credentials, caches, benchma
   t.after(() => rm(cache,{recursive:true,force:true}));
   const result = await execute('npm',['pack','--dry-run','--json','--ignore-scripts','--cache',cache]);
   const [pack] = JSON.parse(result.stdout), files = new Set(pack.files.map(file => file.path));
-  for (const path of ['bin/opencontextengine.mjs','src/config.mjs','src/runtime.mjs','src/setup.mjs',
+  for (const path of ['LICENSE','bin/opencontextengine.mjs','src/config.mjs','src/runtime.mjs','src/setup.mjs',
     'src/mcp.mjs','src/workspaces.mjs','src/eval/remote-models.mjs','scripts/mcp-opencontextengine.mjs',
     'scripts/retrieval-server.py','src/retrieval/languages/typescript.mjs','src/retrieval/languages/go_ast.go',
     'src/retrieval/languages/go_types.go','src/retrieval/reranker.py','requirements.txt']) assert.ok(files.has(path),path);
@@ -27,7 +27,9 @@ test('npm package contains the runtime and excludes credentials, caches, benchma
   assert.equal(pack.filename,'open-context-engine-0.1.0.tgz');
   assert.equal(metadata.bin['open-context-engine'],'bin/opencontextengine.mjs');
   assert.equal(metadata.bin.opencontextengine,'bin/opencontextengine.mjs');
-  assert.equal(metadata.private,true); // Internal testing only; prevent accidental npm publication.
+  assert.notEqual(metadata.private,true);
+  assert.equal(metadata.license,'MIT');
+  assert.deepEqual(metadata.publishConfig,{access:'public',registry:'https://registry.npmjs.org/'});
   assert.ok(!metadata.dependencies['@augmentcode/auggie-sdk']);
   assert.ok(!metadata.dependencies['@openai/codex-sdk']);
 });

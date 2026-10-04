@@ -1,0 +1,43 @@
+# Publishing OpenContextEngine to npm
+
+Package: `open-context-engine`. Initial version: `0.1.0`. License: MIT.
+Preparing an archive does not publish it or change GitHub repository visibility.
+
+## Prepare and verify
+
+1. Confirm the version in `package.json`, `package-lock.json`, and the MCP server agrees. Choose a new version if that version is already published.
+2. Run `npm ci` and `npm test` from a clean checkout with the Python dependencies installed. MCP integration tests need local loopback sockets; verify they are not skipped.
+3. Build and inspect the archive:
+
+```sh
+mkdir -p .pilot-state/npm-release
+npm pack --pack-destination .pilot-state/npm-release
+npm publish .pilot-state/npm-release/open-context-engine-0.1.0.tgz --dry-run --access public --registry https://registry.npmjs.org/
+```
+
+4. Confirm the archive contains `LICENSE` and runtime files, and excludes credentials, `.env`, `.npmrc`, caches, test fixtures, model weights, and evaluation datasets.
+5. Install that exact archive into a temporary prefix outside the checkout. Check both CLI names, run `setup` and `doctor` with an isolated `OCE_CONFIG_HOME`, then connect through MCP and search a small fixture using configured model APIs. Do not include keys in the release report.
+6. Record the archive's SHA-256 digest. Publish the verified archive, not a newly packed working tree.
+
+## Publish when the release is approved
+
+Confirm the repository is ready for public access separately. Check the intended npm account and current package availability:
+
+```sh
+npm login --registry https://registry.npmjs.org/
+npm whoami --registry https://registry.npmjs.org/
+npm view open-context-engine versions --json --registry https://registry.npmjs.org/
+```
+
+An E404 means no public package is visible; it does not reserve the name. Complete npm's authentication and any requested two-factor verification interactively. Never commit npm tokens or put them in the release report.
+
+Only after approval, publish the verified archive:
+
+```sh
+npm publish .pilot-state/npm-release/open-context-engine-0.1.0.tgz --access public --registry https://registry.npmjs.org/
+npm view open-context-engine@0.1.0 version dist.integrity --registry https://registry.npmjs.org/
+```
+
+Compare the registry integrity with the packed artifact, then verify a clean `npm install -g open-context-engine@0.1.0`. Update README and Quickstart to remove the pending-release notice and promote the npm install command. Git pushes, repository visibility, and release tags are separate actions.
+
+[Official npm publishing guide](https://docs.npmjs.com/creating-and-publishing-unscoped-public-packages/)

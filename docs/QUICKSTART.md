@@ -6,7 +6,7 @@ OpenContextEngine runs a local repository index and calls configured model servi
 
 Requires Node.js 22.14+, Python 3.10+, and Git. Go source analysis also needs Go 1.22+ on `PATH`, or an explicit `OCE_GO_BINARY`.
 
-**Internal testing only; no npm registry publication.** Install the archive supplied by the maintainer:
+**First npm release in preparation; not yet published.** Install the archive supplied by the maintainer:
 
 ```sh
 npm install -g /path/to/open-context-engine-0.1.0.tgz
@@ -24,7 +24,7 @@ npm ci
 node bin/opencontextengine.mjs setup
 ```
 
-Maintainers can build the archive with `npm pack`. The package is marked private to prevent accidental registry publication; this does not prevent local tarball installation.
+After the first npm release, install with `npm install -g open-context-engine`, then run `open-context-engine setup`. Maintainers can build an archive with `npm pack`; see the [release checklist](https://github.com/AnnaSuSu/OpenContextEngine/blob/main/docs/RELEASING.md).
 
 The CLI and package are named `open-context-engine`. The previous `opencontextengine` command remains an alias. Existing configuration and cache directories keep their paths, so saved keys and indexes are reused.
 

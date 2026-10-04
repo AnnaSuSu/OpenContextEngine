@@ -61,5 +61,21 @@
     "@openai/codex-sdk": "0.160.0",
     "js-tiktoken": "1.0.21"
   },
-  "private": true
+  "license": "MIT",
+  "author": "AnnaSuSu",
+  "keywords": [
+    "mcp",
+    "code-search",
+    "code-context",
+    "codex",
+    "claude-code",
+    "retrieval"
+  ],
+  "bugs": {
+    "url": "https://github.com/AnnaSuSu/OpenContextEngine/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
 }

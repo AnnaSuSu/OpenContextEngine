@@ -37,7 +37,7 @@ Measured with the optional batch rerank API. 40 source-derived tasks, each asked
 
 Requires **macOS or Linux**, Node.js 22.14+, Python 3.10+, Git, and configured embedding/reranking services. Go repositories also need Go 1.22+.
 
-**Internal testing build. Not published to npm.** Get the installation archive from the maintainer, then expand your client's guide. Model settings are shared across clients on the same machine.
+**Preparing the first npm release; not yet published.** Get the installation archive from the maintainer, then expand your client's guide. Model settings are shared across clients on the same machine.
 
 <details>
 <summary><strong>Codex — install, connect, and search</strong></summary>
@@ -166,6 +166,12 @@ Use the absolute Node and CLI paths printed by setup. [Client-specific configura
 
 [Model configuration, troubleshooting, and update behavior →](docs/QUICKSTART.md)
 
+Once published, install with `npm install -g open-context-engine`. Until then, use the archive above. [Release checklist](docs/RELEASING.md).
+
 ## Explore
 
 [Benchmark report](docs/BENCHMARKS.md) · [Raw evaluations](docs/eval/results) · [Retrieval engine](src/retrieval) · [Logo assets](assets/brand)
+
+## License
+
+[MIT](LICENSE) © 2026 AnnaSuSu.
