@@ -1,0 +1,88 @@
+# Seven-method code retrieval comparison
+
+October 4, 2026. **40 source-derived tasks, 80 Chinese/English queries per method, four repositories, 4,000-token output budget.** This is an internal development evaluation. It measures required source evidence, not coding-agent task success.
+
+![Evidence coverage and observed latency](../../assets/benchmarks/method-comparison.svg)
+
+## Results
+
+| Method | Evidence coverage | Complete-evidence queries | Median query time | P95 |
+| --- | ---: | ---: | ---: | ---: |
+| OpenContextEngine | 94.79% | 69/80 | 1.731 s | 2.216 s |
+| Augment Context Engine SDK | 85.42% | 49/80 | 2.271 s | 3.379 s |
+| oce-ai/oce (API reranker; optional LLM off) | 69.31% | 26/80 | 0.949 s | 1.351 s |
+| Claude Context (hybrid) | 55.12% | 17/80 | 0.223 s | 0.250 s |
+| CocoIndex Code | 47.60% | 13/80 | 0.121 s | 0.155 s |
+| ContextWeaver | 35.35% | 9/80 | 1.107 s | 2.053 s |
+| grepai (hybrid) | 27.38% | 3/80 | 0.169 s | 0.613 s |
+
+Timings describe these deployments: open-source tools ran serially on the same authorized Linux evaluation host with existing remote models; ACE was called through its official SDK from the Mac client. Warm indexes and models; indexing excluded. They do not isolate algorithm speed, hardware, network, or cost.
+
+## Per-repository evidence coverage
+
+| Method | Django | Click | HTTPX | Zod |
+| --- | ---: | ---: | ---: | ---: |
+| OpenContextEngine | 90.83% | 100.00% | 90.00% | 98.33% |
+| Augment Context Engine SDK | 85.00% | 88.33% | 76.67% | 91.67% |
+| oce-ai/oce (API reranker; optional LLM off) | 54.75% | 82.50% | 61.67% | 78.33% |
+| Claude Context (hybrid) | 46.75% | 56.25% | 60.83% | 56.67% |
+| CocoIndex Code | 28.75% | 54.58% | 50.42% | 56.67% |
+| ContextWeaver | 23.08% | 41.25% | 16.25% | 60.83% |
+| grepai (hybrid) | 8.67% | 43.75% | 27.92% | 29.17% |
+
+## Context efficiency
+
+![Coverage within returned context budgets](../../assets/benchmarks/context-budget.svg)
+
+The 1,000/2,000/3,000-token points are offline prefixes of the same original responses. They preserve native result order and do not use answers to choose snippets. They are not new searches optimized for each budget. Native tools may return less than the allowed budget; flat curves can reflect shorter responses as well as missing evidence.
+
+## Controlled inputs and scoring
+
+- All seven methods receive the same frozen production-source subsets and natural-language queries: Django, Click, HTTPX, and Zod. Ten tasks per repository, with paired Chinese and English wording. No reference answers are sent to retrieval workers or model services.
+- Qwen3-Embedding-4B, 1,024 dimensions and a deployed 1,024-token input limit, is shared by open-source methods. Where supported, API reranking uses Qwen3-Reranker-4B. ACE uses its proprietary service; its internal models are not controlled. No model weights or inference run on the Mac.
+- Every returned code line is checked against the frozen source. Evidence units require all nonblank reference lines, with alternative spans supported. The earlier strict span scores are also retained in the JSON. This uniform blank-line correction prevents omitted whitespace from being counted as missing business logic.
+- `cl100k_base` measures output tokens, including paths and line numbers. Excess output is truncated in native order at a complete line. Structured results are formatted without reading extra source or reordering snippets. grepai’s `File:` display header is metadata and does not consume physical source line numbers. Native JSON/text responses remain archived.
+- Query coverage is averaged within each query and then equally across all 80 queries; each repository contributes 20. Complete-evidence queries must recover every reference unit. Bilingual variants are paired, not 80 independent tasks.
+
+## Source fidelity
+
+Scores include source fidelity: returned nonblank lines must match both the physical line number and exact source text. At 4,000 tokens, mismatched numbered-line occurrences were 3,907 for Claude Context, 216 for ContextWeaver, 68 for CocoIndex, and zero for the other methods. These counts include native trimming, partial lines and line-coordinate differences; they are not hallucination counts. The harness does not reconstruct omitted code or repair native coordinates from the corpus. This metric therefore evaluates usable source evidence as returned, not semantic retrieval relevance alone.
+
+## Native configurations
+
+| Method | Executed configuration |
+| --- | --- |
+| OpenContextEngine | Current `shared-intent-v4`, structural units, hybrid recall, two reranking waves; 4,000-token selection. |
+| ACE | `@augmentcode/auggie-sdk@0.2.0`, `DirectContext.search`, original responses preserved. |
+| CocoIndex Code | Pinned native recursive splitter and SQLite vector search; up to 60 native results. |
+| ContextWeaver | Pinned native search defaults and Qwen3 API reranker; file-size cap increased to 5 MB so both formerly skipped Django files are included. |
+| grepai | Pinned native hybrid search, RRF enabled, default chunking/boosts/file deduplication; up to 60 results. |
+| Claude Context | Pinned native AST splitter (including its default large-file/parser fallback) and Milvus Lite 2.5.1 dense + BM25 hybrid retrieval with native RRF; up to 60 results. |
+| oce-ai/oce | Pinned personal-mode pipeline, cAST, native retrieval and API reranker; optional generative rewrite, intent classification and LLM reranking disabled. Background monitoring is disabled to avoid SQLite write conflicts; empty files remain in scope but do not block index readiness. |
+
+Upstream versions and exact source/reference fingerprints are recorded in the [protocol](../../eval/method-comparison-v1/protocol.json). These are configured deployments, not every project’s best possible configuration. Open-source native chunkers and selection policies differ by design. The common embedding service input window is a constraint for every open-source method.
+
+Serena and codebase-memory-mcp provide symbol/navigation or graph tools rather than a directly comparable one-shot natural-language retrieval entry point in the inspected versions. Their capabilities remain covered in the [technical survey](../../TECHNICAL_REPORT.md); they receive no invented accuracy score. Augment context-connectors is an integration layer over ACE, not an additional independent retrieval engine.
+
+## Setup checks and compatibility
+
+The first successful complete run of each final configuration is used; setup failures are not assigned zero retrieval quality. Claude Context uses the official force-reindex option, Milvus Lite 2.5.1 compatible with its pinned Node SDK, lossless conversion of Int64 line-number strings, and native ignore patterns for the 147 empty Django files (the embedding service rejects whitespace-only inputs). All 736 nonempty Django files remain eligible. grepai batches are split into groups of eight by the shared gateway without altering text. OCE readiness checks every nonempty uploaded file; empty files remain in the query scope. No upstream search implementation was patched to improve scores.
+
+## Evidence and reproduction
+
+- [Per-query results, missing units, strict scores and run fingerprints](results/method-comparison-20261004.json)
+- [Completeness and fingerprint audit](results/method-audit-20261004.json) · [Persistent native-index audit](results/method-index-audit-20261004.json) · [Tool and model environment](results/method-environment-20261004.json)
+- [Explicit run manifest](../../eval/method-comparison-v1/runs.json)
+- [Baseline executor](../../scripts/benchmarks/run-baseline.mjs) and [additional native adapters](../../scripts/benchmarks/run-native.py)
+- [Offline scorer](../../scripts/benchmarks/score-methods.mjs), [chart generator](../../scripts/benchmarks/plot-methods.py), and [report generator](../../scripts/benchmarks/report-methods.py)
+
+The executors target the existing authorized evaluation environment, with pinned upstream checkouts and remote API credentials supplied separately. They are research runners, not a portable installation script. Raw responses are under the ignored `runs/` directory; the published JSON retains per-query scores and SHA256 fingerprints.
+
+```sh
+node scripts/benchmarks/score-methods.mjs eval/method-comparison-v1/runs.json
+node scripts/benchmarks/audit-methods.mjs
+python scripts/benchmarks/plot-methods.py
+python scripts/benchmarks/report-methods.py
+```
+
+The tasks were derived from source and have been used during OpenContextEngine development. No independent held-out or blinded benchmark claim is made. No monetary cost was measured. Results do not establish superiority on arbitrary repositories, an unrestricted output budget, or end-to-end coding tasks.

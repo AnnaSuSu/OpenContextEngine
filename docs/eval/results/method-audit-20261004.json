@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "status": "passed",
+  "systems": 7,
+  "datasets": 4,
+  "runs": 28,
+  "responses": 560,
+  "checks": [
+    "Frozen source/query/reference fingerprints match protocol",
+    "Every method completed every query on every repository",
+    "Every archived response hash matches its retrieval report",
+    "Native upstream source unchanged",
+    "All scored prefixes stay within token budgets",
+    "All open methods use the same SSH-forwarded embedding transport with no gateway cache or failures",
+    "Claude Context stores every nonempty source file; ContextWeaver stores all 883 Django files including formerly skipped large files",
+    "Exact source-line validation applied uniformly; native metadata normalized without source expansion"
+  ],
+  "perSystem": [
+    {
+      "system": "ace",
+      "completed": 80,
+      "invalidNumberedLinesAt4000": 0
+    },
+    {
+      "system": "claude-context",
+      "completed": 80,
+      "invalidNumberedLinesAt4000": 3907
+    },
+    {
+      "system": "cocoindex",
+      "completed": 80,
+      "invalidNumberedLinesAt4000": 68
+    },
+    {
+      "system": "contextweaver",
+      "completed": 80,
+      "invalidNumberedLinesAt4000": 216
+    },
+    {
+      "system": "grepai",
+      "completed": 80,
+      "invalidNumberedLinesAt4000": 0
+    },
+    {
+      "system": "oce",
+      "completed": 80,
+      "invalidNumberedLinesAt4000": 0
+    },
+    {
+      "system": "opencontextengine",
+      "completed": 80,
+      "invalidNumberedLinesAt4000": 0
+    }
+  ],
+  "comparisonSha256": "69bc9d33a11acc9fa845c0e5bd79cf33f4af00b3564563d763852fe2071a5372"
+}

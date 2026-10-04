@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "claudeContext": [
+    {
+      "dataset": "django-v1",
+      "nonemptyFiles": 736,
+      "reportedEntityCount": 11836,
+      "nativeIndexedChunks": 11836,
+      "enumeratedUniqueIds": 11817,
+      "missingNonemptyFiles": []
+    },
+    {
+      "dataset": "expanded-v1/click",
+      "nonemptyFiles": 16,
+      "reportedEntityCount": 496,
+      "nativeIndexedChunks": 496,
+      "enumeratedUniqueIds": 496,
+      "missingNonemptyFiles": []
+    },
+    {
+      "dataset": "expanded-v1/httpx",
+      "nonemptyFiles": 23,
+      "reportedEntityCount": 462,
+      "nativeIndexedChunks": 462,
+      "enumeratedUniqueIds": 462,
+      "missingNonemptyFiles": []
+    },
+    {
+      "dataset": "expanded-v1/zod",
+      "nonemptyFiles": 13,
+      "reportedEntityCount": 350,
+      "nativeIndexedChunks": 350,
+      "enumeratedUniqueIds": 349,
+      "missingNonemptyFiles": []
+    }
+  ],
+  "contextWeaverDjango": {
+    "sourceFilesVerified": 883,
+    "formerlySkippedFiles": [
+      {
+        "path": "django/db/models/query.py",
+        "characters": 107026
+      },
+      {
+        "path": "django/db/models/sql/query.py",
+        "characters": 120134
+      }
+    ]
+  },
+  "status": "passed"
+}

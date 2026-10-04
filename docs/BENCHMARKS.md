@@ -2,6 +2,30 @@
 
 OpenContextEngine. Results recorded on **October 3–4, 2026**. Coverage measures whether returned source includes the required evidence for a task; it is not code-generation accuracy or agent task success.
 
+## Seven-method comparison
+
+**560 successful queries: seven engines × 40 tasks × two languages**, on frozen Django, Click, HTTPX and Zod source subsets. All methods use the same 4,000-token output budget.
+
+![Evidence coverage by context budget](../assets/benchmarks/context-budget.svg)
+
+| Method | Required evidence coverage | Complete-evidence queries | Median query time |
+| --- | ---: | ---: | ---: |
+| OpenContextEngine | 94.79% | 69/80 | 1.731 s |
+| Augment Context Engine SDK | 85.42% | 49/80 | 2.271 s |
+| oce-ai/oce | 69.31% | 26/80 | 0.949 s |
+| Claude Context (hybrid) | 55.12% | 17/80 | 0.223 s |
+| CocoIndex Code | 47.60% | 13/80 | 0.121 s |
+| ContextWeaver | 35.35% | 9/80 | 1.107 s |
+| grepai (hybrid) | 27.38% | 3/80 | 0.169 s |
+
+OpenContextEngine leads on all four repositories and all four scored context budgets in this internal development set. At 4,000 tokens, coverage is **9.38 percentage points above ACE**, with **20 more complete-evidence queries**.
+
+The comparison uses exact source-line verification, ignoring required blank lines. It measures evidence retention, including returned source fidelity. Native snippet formatting and line-coordinate errors can affect scores. Open tools use native query timings on the remote evaluation host; ACE uses SDK client timings. The curve uses offline prefixes of the same responses at 1,000/2,000/3,000/4,000 tokens. These are development tasks, not an independent held-out benchmark.
+
+[Full English report and quality–latency chart](eval/METHOD_COMPARISON.md) · [Per-query scores](eval/results/method-comparison-20261004.json) · [Completeness audit](eval/results/method-audit-20261004.json)
+
+The following sections preserve earlier experiments with different datasets or configurations.
+
 ## Retrieval speed
 
 The `shared-intent-v4` update was evaluated on **76 development queries** across four repositories. Queries, source indexes, and reference evidence were held fixed. Qwen3-Embedding-4B and Qwen3-Reranker-4B ran on remote model services; each response had a **4,000-token budget** with no cross-query result cache.

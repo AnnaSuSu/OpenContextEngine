@@ -6,8 +6,8 @@
   <p><strong>Precise code context for AI coding agents.</strong></p>
   <p>Find related code across files. Follow its connections. Give your agent the evidence it needs.</p>
   <p>
-    <a href="docs/BENCHMARKS.md#retrieval-speed"><img src="https://img.shields.io/badge/dev_evidence_coverage-91.67%25-23875b?style=flat-square" alt="Development evidence coverage: 91.67%"></a>
-    <a href="docs/BENCHMARKS.md#retrieval-speed"><img src="https://img.shields.io/badge/median_retrieval-1.90_s-23875b?style=flat-square" alt="Median retrieval: 1.90 seconds"></a>
+    <a href="docs/BENCHMARKS.md#seven-method-comparison"><img src="https://img.shields.io/badge/dev_evidence_coverage-94.79%25-23875b?style=flat-square" alt="Development evidence coverage: 94.79%"></a>
+    <a href="docs/BENCHMARKS.md#seven-method-comparison"><img src="https://img.shields.io/badge/median_retrieval-1.73_s-23875b?style=flat-square" alt="Median retrieval: 1.73 seconds"></a>
     <a href="docs/BENCHMARKS.md#engineering-validation"><img src="https://img.shields.io/badge/verified_tests-83-23875b?style=flat-square" alt="83 verified tests"></a>
     <a href="docs/QUICKSTART.md"><img src="https://img.shields.io/badge/MCP-stdio-193c34?style=flat-square" alt="MCP over stdio"></a>
   </p>
@@ -25,17 +25,11 @@ OpenContextEngine is a **self-hostable code context engine** that turns natural-
 
 ## Measured results
 
-**1.90 s median retrieval with 91.67% evidence coverage** across 76 development queries on Click, HTTPX, Zod, and esbuild, within a 4,000-token budget. The speed update reduced the median from 4.71 s, with no per-query coverage regressions. These are server-side timings with indexes and models already loaded.
+![Required evidence coverage within the same context budget](assets/benchmarks/context-budget.svg)
 
-An earlier frozen comparison used **30 tasks in Chinese and English**, with the same 4,000-token output budget for both engines:
+**94.79% required evidence coverage · 1.73 s median retrieval · 69/80 queries with complete evidence.** Seven engines, four repositories, the same 4,000-token output budget. OpenContextEngine retained the most required evidence in this internal development evaluation.
 
-| Metric | OpenContextEngine | Augment Context Engine¹ |
-| --- | ---: | ---: |
-| Required evidence coverage | **90.14%** | 85.69% |
-| Queries returning all required evidence | **48 / 60** | 40 / 60 |
-| Median client latency | 3.76 s | **2.15 s** |
-
-¹ ACE was accessed through its official SDK. These internal, source-derived evaluations are not independent benchmarks; the later speed run did not rerun ACE. [Read the reports, methodology, and raw results →](docs/BENCHMARKS.md)
+40 source-derived tasks, each asked in Chinese and English. Coverage measures source evidence, not coding-agent success. Timings reflect native retrieval for open tools and SDK client calls for ACE. [Full comparison, configurations, and per-query results →](docs/eval/METHOD_COMPARISON.md)
 
 ## Quick start
 

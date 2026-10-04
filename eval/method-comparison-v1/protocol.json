@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "date": "2026-10-04",
+  "engineRevision": "0e1903884d1ff93f268b52081c98a1364f4370b5",
+  "datasets": [
+    "django-v1",
+    "expanded-v1/click",
+    "expanded-v1/httpx",
+    "expanded-v1/zod"
+  ],
+  "independentTasks": 40,
+  "queriesPerSystem": 80,
+  "primaryBudgetTokens": 4000,
+  "secondaryPrefixBudgets": [
+    1000,
+    2000,
+    3000
+  ],
+  "referencePolicy": "All nonblank reference source lines required; historical strict span score retained. Same correction applied to all methods.",
+  "systems": [
+    "opencontextengine",
+    "ace",
+    "cocoindex",
+    "contextweaver",
+    "grepai",
+    "claude-context",
+    "oce"
+  ],
+  "upstream": {
+    "cocoindex-io/cocoindex-code": "8ec0ff3510be526e699028db5b64e10a0a8359b3",
+    "yoanbernabeu/grepai": "eb941fe8072b7a9af87e2604896456ae16a5127d",
+    "zilliztech/claude-context": "6fc318b4e3ce58e2898b00a9c3538ead9e24dee5",
+    "oraios/serena": "d0f7f92631c23dc4c5ed0b5ccd35bc623b19a809",
+    "DeusData/codebase-memory-mcp": "96c3f41cf334d87670cb085f1fcf16f637293222",
+    "oce-ai/oce": "da312e1b8a6ece7a239a4c5df880a2f6b967ccc7",
+    "hsingjui/ContextWeaver": "42375d315e180da258ebb983215004dbbf98c00d",
+    "augmentcode/context-connectors": "f7d6472ae626c98fd768f64cdfd6160145eefa77"
+  },
+  "modelPolicy": {
+    "embedding": "Qwen3-Embedding-4B",
+    "dimensions": 1024,
+    "inputTokenLimit": 1024,
+    "reranker": "Qwen3-Reranker-4B",
+    "inference": "existing authorized remote services only",
+    "generativeQueryRewrite": false,
+    "LLMRerank": false
+  },
+  "selectionPolicy": "Fixed upstream retrieval implementations, native order, path/line normalization only, no answer-based result selection. CocoIndex/grepai/Claude Context max 60 results; other native defaults. ContextWeaver file size cap 5 MB.",
+  "latencyPolicy": "Warm model services and indexes; serial queries per method; no gateway query embedding cache. Native server or CLI timings for open tools; official SDK client time for ACE. Deployment timing, not isolated algorithm speed.",
+  "sources": {
+    "eval/django-v1/answers.v1.json": "429d0288073ca8c5d3d7638ceeeb1430c2c8e1399c6c02ccb0fe46836966f458",
+    "eval/django-v1/answers.v2.json": "6923b8d2558dd151adac538dbecf5f4384af104fe6a8262fc566de0790409ab5",
+    "eval/django-v1/freeze.json": "32c11257a71fd2675cbd2a30353bf69f1cf512ecada099619cc06c0dd899e23f",
+    "eval/django-v1/protocol.json": "aadc0bba1e59f6615e64c1162194bb2c86b254853ce599fc30d0eaad5fa3657b",
+    "eval/django-v1/queries.json": "e4ff7d77a5c2f6ee8a99bad2cc3d0f7043cbbc3743a3dd20e34736e823f2427f",
+    "eval/django-v1/snapshot.json": "c1c3ab1991cf6892fda5ce8086e32f56db1cdd3cda1253f1551a49a8f51fbe7c",
+    "eval/expanded-v1/click/answers.v1.json": "b16150352978c2ce2766c7c7fb92431ed00deed2182ae38659e1fa39e239ca59",
+    "eval/expanded-v1/click/freeze.json": "5ce7dbfeaf555951e56eb6a6ca35b76f6c409256690bb1288452e5039b713b47",
+    "eval/expanded-v1/click/protocol.json": "713e5d2f1f99a70cf35b8b9baecaaba8d5d9a6af10a58b3713cefed5a05ca500",
+    "eval/expanded-v1/click/queries.json": "9ad17e942072fdf2d149f303f6f5260143e8ad6f3d42fb47053ee2b275921125",
+    "eval/expanded-v1/click/snapshot.json": "a52ebf73ebd0cfd9ffeb91a87d8d40db254a410c2bd8c56380fec535248c4ddf",
+    "eval/expanded-v1/httpx/answers.v1.json": "589890630757fbce171e5321eeff06faf1f42a975ef9383cb9eb511320705c1b",
+    "eval/expanded-v1/httpx/freeze.json": "55a39e7c0ca12454905f81d4797a7c8f1bde2f6e6322f8688fb482e39e7a135a",
+    "eval/expanded-v1/httpx/protocol.json": "9ce9ecc0f14638b07143f2389e53ca099b5b3eb7a58b1f6d5d8fbc5a45d732fa",
+    "eval/expanded-v1/httpx/queries.json": "d26320ac45359823faa309cd639109b81013eed3f548d900b13b0adb719b1bae",
+    "eval/expanded-v1/httpx/snapshot.json": "fba4d58332e0b34dcfdbc9fa7c99c8ea791b64eb7d70a167ca9c212b8f08b719",
+    "eval/expanded-v1/zod/answers.v1.json": "b9c6ae677a500239e7f260cd53862681d2b4b0be55d7c728d13611c8510f038e",
+    "eval/expanded-v1/zod/freeze.json": "85e4281a95f156d12aa085340f95b5cdef59a4650c135bed8c3ba14fa5d2f5d7",
+    "eval/expanded-v1/zod/protocol.json": "87def83bbfb33d18b27fa6e71c78d38c14db7ce6846a07cc6a8f844507f4dd68",
+    "eval/expanded-v1/zod/queries.json": "4e994f86c29d7bbe599f664447e1250d8162fda38c1cec1844a9179de8e40e00",
+    "eval/expanded-v1/zod/snapshot.json": "ae80d9552ad630041030ed380ba8cfeca253fb65060b57297409a1051d670c44"
+  },
+  "runtimeCompatibility": {
+    "claude-context": {
+      "milvusLite": "2.5.1",
+      "forceReindex": true,
+      "int64LineNumbers": "Lossless decimal string to integer conversion",
+      "emptyFiles": "Native customIgnorePatterns excludes whitespace-only files; no nonempty source excluded by adapter"
+    },
+    "oce": {
+      "monitoring": false,
+      "indexReadiness": "All nonempty uploaded blobs must be ready; empty blobs remain in query scope"
+    },
+    "grepai": {
+      "displayHeader": "Remove native File metadata before assigning source line numbers",
+      "clientBatchLimit": 2048,
+      "upstreamBatchLimit": 8
+    }
+  }
+}

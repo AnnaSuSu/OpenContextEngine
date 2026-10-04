@@ -1,0 +1,145 @@
+{
+  "protocol": "eval/method-comparison-v1/protocol.json",
+  "runs": [
+    {
+      "system": "ace",
+      "dataset": "django-v1",
+      "run": "ace-django-2026-10-04T00-34-33.083Z"
+    },
+    {
+      "system": "ace",
+      "dataset": "expanded-v1/click",
+      "run": "ace-click-expanded-2026-10-04T00-32-14.434Z"
+    },
+    {
+      "system": "ace",
+      "dataset": "expanded-v1/httpx",
+      "run": "ace-httpx-expanded-2026-10-04T00-32-59.713Z"
+    },
+    {
+      "system": "ace",
+      "dataset": "expanded-v1/zod",
+      "run": "ace-zod-expanded-2026-10-04T00-33-43.938Z"
+    },
+    {
+      "system": "claude-context",
+      "dataset": "django-v1",
+      "run": "claude-context-django-v1-2026-10-04T01-21-19.413Z"
+    },
+    {
+      "system": "claude-context",
+      "dataset": "expanded-v1/click",
+      "run": "claude-context-expanded-v1-click-2026-10-04T01-16-01.367Z"
+    },
+    {
+      "system": "claude-context",
+      "dataset": "expanded-v1/httpx",
+      "run": "claude-context-expanded-v1-httpx-2026-10-04T01-16-26.723Z"
+    },
+    {
+      "system": "claude-context",
+      "dataset": "expanded-v1/zod",
+      "run": "claude-context-expanded-v1-zod-2026-10-04T01-16-49.943Z"
+    },
+    {
+      "system": "cocoindex",
+      "dataset": "django-v1",
+      "run": "cocoindex-django-v1-2026-10-04T00-27-03.121Z"
+    },
+    {
+      "system": "cocoindex",
+      "dataset": "expanded-v1/click",
+      "run": "cocoindex-expanded-v1-click-2026-10-04T00-25-56.271Z"
+    },
+    {
+      "system": "cocoindex",
+      "dataset": "expanded-v1/httpx",
+      "run": "cocoindex-expanded-v1-httpx-2026-10-04T00-26-22.031Z"
+    },
+    {
+      "system": "cocoindex",
+      "dataset": "expanded-v1/zod",
+      "run": "cocoindex-expanded-v1-zod-2026-10-04T00-26-44.050Z"
+    },
+    {
+      "system": "contextweaver",
+      "dataset": "django-v1",
+      "run": "contextweaver-django-v1-2026-10-04T00-35-38.650Z"
+    },
+    {
+      "system": "contextweaver",
+      "dataset": "expanded-v1/click",
+      "run": "contextweaver-expanded-v1-click-2026-10-04T00-33-08.949Z"
+    },
+    {
+      "system": "contextweaver",
+      "dataset": "expanded-v1/httpx",
+      "run": "contextweaver-expanded-v1-httpx-2026-10-04T00-34-02.396Z"
+    },
+    {
+      "system": "contextweaver",
+      "dataset": "expanded-v1/zod",
+      "run": "contextweaver-expanded-v1-zod-2026-10-04T00-34-54.702Z"
+    },
+    {
+      "system": "grepai",
+      "dataset": "django-v1",
+      "run": "grepai-django-v1-2026-10-04T00-59-31.782Z"
+    },
+    {
+      "system": "grepai",
+      "dataset": "expanded-v1/click",
+      "run": "grepai-expanded-v1-click-2026-10-04T00-48-04.547Z"
+    },
+    {
+      "system": "grepai",
+      "dataset": "expanded-v1/httpx",
+      "run": "grepai-expanded-v1-httpx-2026-10-04T00-48-17.969Z"
+    },
+    {
+      "system": "grepai",
+      "dataset": "expanded-v1/zod",
+      "run": "grepai-expanded-v1-zod-2026-10-04T00-48-30.477Z"
+    },
+    {
+      "system": "oce",
+      "dataset": "django-v1",
+      "run": "oce-django-v1-2026-10-04T01-02-42.957Z"
+    },
+    {
+      "system": "oce",
+      "dataset": "expanded-v1/click",
+      "run": "oce-expanded-v1-click-2026-10-04T00-49-23.915Z"
+    },
+    {
+      "system": "oce",
+      "dataset": "expanded-v1/httpx",
+      "run": "oce-expanded-v1-httpx-2026-10-04T00-49-46.863Z"
+    },
+    {
+      "system": "oce",
+      "dataset": "expanded-v1/zod",
+      "run": "oce-expanded-v1-zod-2026-10-04T00-50-19.013Z"
+    },
+    {
+      "system": "opencontextengine",
+      "dataset": "django-v1",
+      "run": "opencontextengine-django-v1-2026-10-04T00-47-16.443Z"
+    },
+    {
+      "system": "opencontextengine",
+      "dataset": "expanded-v1/click",
+      "run": "opencontextengine-expanded-v1-click-2026-10-04T00-45-24.428Z"
+    },
+    {
+      "system": "opencontextengine",
+      "dataset": "expanded-v1/httpx",
+      "run": "opencontextengine-expanded-v1-httpx-2026-10-04T00-46-05.381Z"
+    },
+    {
+      "system": "opencontextengine",
+      "dataset": "expanded-v1/zod",
+      "run": "opencontextengine-expanded-v1-zod-2026-10-04T00-46-42.776Z"
+    }
+  ]
+}
