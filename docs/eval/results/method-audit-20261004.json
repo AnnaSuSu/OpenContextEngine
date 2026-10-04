@@ -52,5 +52,7 @@
       "invalidNumberedLinesAt4000": 0
     }
   ],
-  "comparisonSha256": "69bc9d33a11acc9fa845c0e5bd79cf33f4af00b3564563d763852fe2071a5372"
+  "comparisonSha256": "69bc9d33a11acc9fa845c0e5bd79cf33f4af00b3564563d763852fe2071a5372",
+  "publishedComparisonSha256": "d811120dd1e1428de4599f1690a3a4896944b3fa8d9cd5fdd8d404cd741ca33f",
+  "publicationNote": "Private service addresses and SSH identities replaced with example values. comparisonSha256 retains the historical run artifact hash; publishedComparisonSha256 identifies the sanitized published file. Scores and timings are unchanged."
 }

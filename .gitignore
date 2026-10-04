@@ -12,3 +12,7 @@ __pycache__/
 /GOALS.md
 /MODEL_PROVIDERS.md
 /TECHNICAL_REPORT.md
+
+# Private development archive and local Python environments
+/.local/
+/.venv/

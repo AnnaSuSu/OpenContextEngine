@@ -61,15 +61,15 @@ GPU 对所有待评分配对按 token 长度分组，默认最多 32 对、paddi
 npm run --silent search -- '找到 Django 内置网页登录的处理代码：用户提交账号密码后，怎么验证身份并建立登录会话？'
 ```
 
-stdout 返回源码上下文，stderr 返回客户端延迟、检索延迟、token 数和缓存状态。当前服务加载冻结的 Django 索引，尚未提供任意仓库一键接入。服务只监听远程 `127.0.0.1:23505`；若本机 45005 的 SSH 隧道已断开，可在单独终端建立：
+stdout 返回源码上下文，stderr 返回客户端延迟、检索延迟、token 数和缓存状态。当前服务加载冻结的 Django 索引，尚未提供任意仓库一键接入。服务只监听远程 `127.0.0.1:23505`；若本机 45005 的 SSH 隧道已断开，可在单独终端建立（设置自己的 `SSH_PORT` 并替换示例主机）：
 
 ```sh
-ssh -N -L 127.0.0.1:45005:127.0.0.1:23505 -p 40006 operator@evaluation-host.example
+ssh -N -L 127.0.0.1:45005:127.0.0.1:23505 -p "$SSH_PORT" operator@evaluation-host.example
 ```
 
 HTTP 接口为 `POST /search`，需要 Bearer 鉴权，JSON 参数是 `query`、`budget`（默认 4000）与 `trace`（默认 false）。`GET /healthz` 返回引擎版本、源码哈希、索引元数据与重排配置；该接口表示启动时加载的配置，实际调用仍可能受远程模型或网络可用性影响。当前单请求执行并设置排队与客户端超时，尚未验证并发吞吐。
 
-服务器上的 `npm run serve-retrieval` 通过已有专用 Python 环境启动常驻检索进程。当前进程可独立于 SSH 会话运行，但检索服务与 embedding 隧道尚未配置主机重启自启；重排服务由独立 Supervisor 管理。服务配置见 [远程重排说明](../../deploy/reranker/README.md)。
+本次测量使用常驻检索进程及远程重排服务。重排接口和通用服务实现见 [重排 API 说明](../RERANKER_API.md)。
 
 ## 验证与可复现证据
 

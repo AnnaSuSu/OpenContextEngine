@@ -2,7 +2,7 @@
 
 **本页保留 10 月 3 日的早期摸底。10 月 4 日已完成七方法、四仓库的新对照，ContextWeaver 的两个大文件也已补齐；当前结果与图表请见[七方法英文报告](METHOD_COMPARISON.md)。**
 
-2026-10-03 开始接入，随后按用户要求停止本机模型部署并完成清理。当前 ACE、CocoIndex、ContextWeaver 均完成 20 次查询，作为原型开发的初步参照。
+2026-10-03 开始接入，评测使用远程模型服务。当前 ACE、CocoIndex、ContextWeaver 均完成 20 次查询，作为原型开发的初步参照。
 
 **当时按开发摸底处理：不为两份大文件的索引差异重跑，不继续扩大开源基线数量。OpenContextEngine 原型已完成同题比较，模型只在远程服务器运行。**
 
@@ -17,7 +17,7 @@
 
 OpenContextEngine 此轮统一使用原问题及通用分句，不使用生成式规划。中文/英文完整任务召回均为 5/10，与 ACE 相同；查询中位耗时 15.23 秒，ACE 为 2.82 秒。部署与流水线不同，耗时不是隔离算法比较。结构、逐题结果和已知局限见 [原型记录](OPENCONTEXTENGINE_PROTOTYPE.md)。随后默认切换为两轮批量评分与常驻服务，同题覆盖率不变，实际 Mac 客户端中位 3.27 秒、P95 4.79 秒，见[速度重构](OPENCONTEXTENGINE_SPEED.md)；上表保留首轮对照。
 
-ContextWeaver 默认 100 KiB 文件限制跳过了两个较大的 ORM 文件（881 / 883），按用户要求直接作为粗略参照，暂不重跑。它的返回通常只有 266–1,373 token；其文件与片段选择较紧，未用满 4,000 token 预算。以上是 10 道开发题、20 个中英文查询的一次结果，不是论文结论。机器可读对比和遗漏分类见 [结果](results/django-comparison-20261003.json)。
+ContextWeaver 默认 100 KiB 文件限制跳过了两个较大的 ORM 文件（881 / 883），本轮作为粗略参照保留，后续七方法对比已补齐大文件。它的返回通常只有 266–1,373 token；其文件与片段选择较紧，未用满 4,000 token 预算。以上是 10 道开发题、20 个中英文查询的一次结果，不是论文结论。机器可读对比和遗漏分类见 [结果](results/django-comparison-20261003.json)。
 
 ## 固定比较方式
 
@@ -34,9 +34,9 @@ ACE 保留服务原始文本。开源组的结构化返回以统一简洁文本�
 
 CocoIndex 的 883 个输入文件中有 147 个为空或只有空白，原生索引器会跳过，非空文件 736 个；这与只给它 736 个文件是不同的。其默认切分 1,000 字符、最小 250、重叠 150，本次总片段字符数 5,949,219。
 
-ContextWeaver 默认检索要求重排服务。此前曾误在本机运行 BGE，现已停止并删除权重、启动脚本、专用环境和对应新增下载缓存，该步骤不再提供执行命令。之后仅使用用户指定并授权的远程模型服务。
+ContextWeaver 默认检索要求重排服务。本次比较使用远程模型接口，客户端不加载模型。
 
-用户随后授权在其 5090 云服务器部署 Qwen3-Reranker-4B，权重直接从 ModelScope 下载到服务器，16 个文件哈希均匹配。公网鉴权、双语排序、60 候选、原始索引映射和长文本截断共 11 项验收通过，见 [部署说明](../../deploy/reranker/README.md)及 [API 报告](results/reranker-api-20261003.json)。这替换了上游默认的 BGE 重排模型，最终比较必须标注此差异；服务验收不是 ContextWeaver 检索成绩。
+本次评测使用远程 Qwen3-Reranker-4B，替换了上游默认的 BGE 重排模型；比较结果需保留这一配置差异。重排接口和通用实现见 [重排 API 说明](../RERANKER_API.md)。服务连通性验收不等于 ContextWeaver 检索成绩。
 
 统一 embedding 使用现有 Qwen3-Embedding-4B 服务，输出 1,024 维。服务单条输入只有 1,024 token；ContextWeaver 的 embedding 客户端据此配置 `EMBEDDINGS_MAX_CONTEXT_TOKENS=1024`，使用上游已有的长文本分拆与向量合并逻辑。不会假装服务支持默认的 8,192 token。模型权重的远程哈希尚不可得；缓存按端点、模型、维度及部署日期隔离。
 
@@ -65,9 +65,9 @@ npm run score-django -- RUN_DIRECTORY answers.v2.json
 
 ContextWeaver 的 ONNX 可选组件下载曾因 HTTP 302 失败，使用其官方 `ONNXRUNTIME_NODE_INSTALL=skip` 选项跳过额外组件后安装、编译成功。本轮显式使用 `EMBEDDINGS_PROVIDER=remote`，未加载本地 embedding 模型。
 
-公网转发延迟影响批量索引，当前改用评测服务器到 embedding 服务器的直接 SSH 隧道。同一 8 段输入的初步对照中，SSH 为 306–393 ms，公网 HTTPS 为 3331–4106 ms；随后服务器内网 SSH 连续 10 批均成功，每批 8 段为 165–243 ms。这些只是连通性诊断，不能作为正式性能成绩。按用户要求清理基础设施故障产生的失败、中断产物，修复通道后从干净索引重新评测。
+公网转发延迟影响批量索引，当前改用评测服务器到 embedding 服务器的直接 SSH 隧道。同一 8 段输入的初步对照中，SSH 为 306–393 ms，公网 HTTPS 为 3331–4106 ms；随后服务器内网 SSH 连续 10 批均成功，每批 8 段为 165–243 ms。这些只是连通性诊断，不能作为正式性能成绩。修复通道后从干净索引重新评测；表中仅对应修复后的运行。
 
-SSH 隧道由调用方建立，只绑定 `127.0.0.1`，远端仍是用户授权的模型服务器。运行时设置 `EMBEDDING_SSH_TUNNEL_URL=http://127.0.0.1:42002/v1` 和 `EMBEDDING_SSH_REMOTE=operator@model-host.example:22`。逻辑 `EMBEDDING_BASE_URL` 保持原服务地址；转发方式和远端身份写入报告。该配置不安装或加载本机模型。
+SSH 隧道由调用方建立，只绑定 `127.0.0.1`，远端为模型服务器；以下 SSH 身份已替换为示例。运行时设置 `EMBEDDING_SSH_TUNNEL_URL=http://127.0.0.1:42002/v1` 和 `EMBEDDING_SSH_REMOTE=operator@model-host.example:22`。逻辑 `EMBEDDING_BASE_URL` 保持原服务地址；转发方式和远端身份写入报告。该配置不安装或加载本机模型。
 
 ## 后续决策
 

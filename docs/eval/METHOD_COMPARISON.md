@@ -70,6 +70,8 @@ The first successful complete run of each final configuration is used; setup fai
 
 ## Evidence and reproduction
 
+Private service addresses and SSH identities in published metadata use example values. Scores and timings are unchanged. Historical hashes identify original run artifacts; the published audit may additionally record `publishedComparisonSha256` for a sanitized comparison JSON.
+
 - [Per-query results, missing units, strict scores and run fingerprints](results/method-comparison-20261004.json)
 - [Completeness and fingerprint audit](results/method-audit-20261004.json) · [Persistent native-index audit](results/method-index-audit-20261004.json) · [Tool and model environment](results/method-environment-20261004.json)
 - [Explicit run manifest](../../eval/method-comparison-v1/runs.json)
