@@ -149,3 +149,7 @@ Your agent supplies the current project's absolute path as `directory_path`. To 
 ## License
 
 [MIT](LICENSE) © 2026 AnnaSuSu.
+
+## Acknowledgments
+
+Thanks to the [LINUX DO](https://linux.do/) community.

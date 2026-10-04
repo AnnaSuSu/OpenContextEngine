@@ -149,3 +149,7 @@ Claude 会通过 `directory_path` 传入项目的绝对路径。首次请求会�
 ## 许可证
 
 [MIT](LICENSE) © 2026 AnnaSuSu。
+
+## 致谢
+
+感谢 [LINUX DO](https://linux.do/) 社区。
