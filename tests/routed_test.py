@@ -15,7 +15,7 @@ class RoutedTest(unittest.TestCase):
             'language': 'python', 'kind': 'function', 'text': f'def save_{i}():\n    return {i}',
             'start': i*3+1, 'end': i*3+2, 'owner': None, 'edges': [], 'relations': []} for i in range(60)]
         return RoutedEngine(units, np.ones((60, 4), dtype=np.float32), 'http://embedding/v1',
-                            {'baseUrl': 'http://rerank/v1', 'model': 'test', 'apiKey': 'test'})
+                            {'baseUrl': 'http://rerank/v1', 'model': 'test', 'apiKey': 'test', 'api': 'rerank-batch'})
 
     def run_search(self, full_score):
         calls = []

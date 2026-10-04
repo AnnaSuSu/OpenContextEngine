@@ -1,15 +1,15 @@
 """Compile the reference retrieval DAG into two batched neural scoring waves.
 
 Candidate retention reserves distinct structural neighbors before neural scoring.
-Independent query/document scores share length-sorted GPU batches; duplicate
+Scoring uses ordinary rerank calls or optional multi-query batches. Duplicate
 pairs are reused only within one request. No response or cross-query cache.
 """
 from collections import defaultdict
-import math
 import time
 import numpy as np
 
 from engine import Engine, document, post
+from reranker import rerank_pairs
 
 VERSION = 'batched-dag-v6'
 
@@ -146,19 +146,14 @@ class BatchedEngine(Engine):
                 imap = {uid:i for i,uid in enumerate(ids)}
                 pairs = [(qmap[q],imap[uid]) for q,uid in needed]
                 before = time.monotonic()
-                data = post(self.reranker['baseUrl']+'/rerank-batch',{
-                    'model':self.reranker['model'],'queries':query_list,
-                    'documents':[document(self.units[uid],5000) for uid in ids],'pairs':pairs},self.reranker['apiKey'])
+                data = rerank_pairs(self.reranker, query_list,
+                    [document(self.units[uid],5000) for uid in ids], pairs, post)
                 rows = data['results']
-                if len(rows)!=len(needed) or {r['index'] for r in rows}!=set(range(len(needed))):
-                    raise ValueError('Incomplete neural pair batch')
                 for row in rows:
-                    pair = pairs[row['index']]
                     value = row['relevance_score']
-                    if (row['query_index'],row['document_index'])!=pair or not math.isfinite(value) or not 0<=value<=1:
-                        raise ValueError('Invalid neural pair mapping or score')
                     pair_cache[needed[row['index']]] = value
                 waves.append({'elapsedMs':round((time.monotonic()-before)*1000),
+                    'requests':data['meta']['request_count'],
                     'modelMs':data.get('meta',{}).get('elapsed_ms'),'pairs':len(needed),
                     'reusedPairs':len(requested)-len(needed),'inputTokens':data.get('usage',{}).get('input_tokens'),
                     'maxBatchSize':data.get('meta',{}).get('max_batch_size'),
@@ -217,7 +212,8 @@ class BatchedEngine(Engine):
         return raw,{'version':getattr(self, 'version', VERSION),'elapsedMs':round((end-start)*1000),'tokens':len(self.encoding.encode(raw)),
             'candidateCount':len(candidates),'rerankedCount':len(retained),'expandedCount':len(expanded),
             'retention':retention,
-            'modelRequests':{'embedding':1,'rerank':len(waves)},'queryCache':False,'pairCacheScope':'one-search-only',
+            'modelRequests':{'embedding':1,'rerank':sum(w['requests'] for w in waves)},
+            'rerankApi':self.reranker.get('api','rerank'),'queryCache':False,'pairCacheScope':'one-search-only',
             'waves':waves,'timingMs':{'embedding':round((embedding_at-start)*1000),'recall':round((recalled_at-embedding_at)*1000),
                 'rerank':sum(w['elapsedMs'] for w in waves),'rerankModel':sum(w['modelMs'] or 0 for w in waves),
                 'graphAndBookkeeping':round((ranked_at-recalled_at)*1000)-sum(w['elapsedMs'] for w in waves),

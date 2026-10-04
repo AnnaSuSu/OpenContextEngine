@@ -19,7 +19,16 @@ export function remoteRerankerConfig(env) {
   if (!env.RERANK_BASE_URL || !env.RERANK_MODEL || !env.RERANK_API_KEY) {
     throw new Error('A user-approved remote reranker is required. No local model will be installed or started.');
   }
-  return { baseUrl: remoteModelUrl(env.RERANK_BASE_URL), model: env.RERANK_MODEL, apiKey: env.RERANK_API_KEY };
+  const api = env.OCE_RERANK_API ?? 'rerank';
+  if (!['rerank', 'rerank-batch'].includes(api)) throw new Error('OCE_RERANK_API must be rerank or rerank-batch');
+  const integer = (name, fallback, maximum) => {
+    const value = Number(env[name] ?? fallback);
+    if (!Number.isInteger(value) || value < 1 || value > maximum) throw new Error(`${name} must be an integer from 1 to ${maximum}`);
+    return value;
+  };
+  return { baseUrl: remoteModelUrl(env.RERANK_BASE_URL), model: env.RERANK_MODEL, apiKey: env.RERANK_API_KEY,
+    api, concurrency: integer('OCE_RERANK_CONCURRENCY', 2, 8),
+    maxDocuments: integer('OCE_RERANK_MAX_DOCUMENTS', 128, 1024) };
 }
 
 // An explicitly named authorized Linux worker can reach its own remote GPU

@@ -14,6 +14,7 @@ test('Retrieval client permits SSH loopback or HTTPS, rejects credentials and cl
       EMBEDDING_BASE_URL:'https://embedding.example/v1',EMBEDDING_SSH_TUNNEL_URL:'',
       RERANK_BASE_URL:'https://reranker.example/v1',RERANK_REMOTE_RUNTIME_URL:'',
       RERANK_MODEL:'test',RERANK_API_KEY:'test-only',
+      OCE_RERANK_API:'rerank',OCE_RERANK_CONCURRENCY:'3',OCE_RERANK_MAX_DOCUMENTS:'64',
       [prefix+'PYTHON']:'/test/python',[prefix+'GO_BINARY']:'/test/go',
       [prefix+'API_KEY']:'configuration-test-only',[prefix+'POLL_SECONDS']:'2',
     });
@@ -21,6 +22,9 @@ test('Retrieval client permits SSH loopback or HTTPS, rejects credentials and cl
     assert.equal(settings.workerEnv.OCE_GO_BINARY,'/test/go');
     assert.equal(settings.config.serviceKey,'configuration-test-only');
     assert.equal(settings.config.pollSeconds,2);
+    assert.equal(settings.config.reranker.api,'rerank');
+    assert.equal(settings.config.reranker.concurrency,3);
+    assert.equal(settings.config.reranker.maxDocuments,64);
   }
   for(const url of ['http://public.example.com','https://user:pass@example.com','https://example.com?token=x']){
     assert.throws(()=>clientConfig({...env,OCE_BASE_URL:url}));

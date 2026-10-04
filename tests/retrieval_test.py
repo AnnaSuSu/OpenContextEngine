@@ -64,7 +64,7 @@ class CascadeTest(unittest.TestCase):
 
     def make_retention_engine(self, units):
         return BatchedEngine(units, np.zeros((len(units), 3)), 'http://unused',
-                             {'baseUrl': 'http://unused', 'model': 'test', 'apiKey': 'test'})
+                             {'baseUrl': 'http://unused', 'model': 'test', 'apiKey': 'test', 'api': 'rerank-batch'})
 
     def test_graph_slots_are_distinct_and_unscored_neighbors_reach_second_wave(self):
         engine = self.make_retention_engine(self.retention_engine())
@@ -152,7 +152,7 @@ class CascadeTest(unittest.TestCase):
             self.assertFalse(changed['cacheHit'])
             self.assertNotEqual(first['identity'], changed['identity'])
             retriever = BatchedEngine(units, vectors, 'http://remote/v1',
-                {'baseUrl': 'http://remote/v1', 'model': 'test', 'apiKey': 'test'})
+                {'baseUrl': 'http://remote/v1', 'model': 'test', 'apiKey': 'test', 'api': 'rerank-batch'})
             plan = {'intent': 'save a record', 'facets': [{'question': 'save a record', 'terms': ['save']}]}
             raw, debug = retriever.search(plan, budget=200)
             self.assertIn('store.ts', raw)
@@ -190,7 +190,7 @@ class CascadeTest(unittest.TestCase):
             'kind':'function','text':f'def function_{i}():\n    return {i}', 'start':i*3+1,'end':i*3+2,
             'edges':[(i+1)%50,(i+7)%50],'owner':None} for i in range(50)]
         vectors = np.random.default_rng(19).normal(size=(50,16)).astype(np.float32)
-        args = (units,vectors,'http://embed/v1',{'baseUrl':'http://rank/v1','model':'test','apiKey':'test'})
+        args = (units,vectors,'http://embed/v1',{'baseUrl':'http://rank/v1','model':'test','apiKey':'test','api':'rerank-batch'})
         reference, batched = Engine(*args), BatchedEngine(*args)
         counts = {'pairs':0,'single':0}
         def relevance(q,d):

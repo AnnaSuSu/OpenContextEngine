@@ -66,7 +66,7 @@ try:
   from routed import RoutedEngine
   state=Path('/root/reponerve-baselines/worker/.pilot-state/reponerve/index') if C['dataset']=='django-v1' else Path('/root/reponerve-baselines/expanded-worker/.pilot-state')/C['dataset']/'index'
   units=json.loads((state/'units.json').read_text()); vectors=np.load(state/'vectors.npy')
-  engine=RoutedEngine(units,vectors,C['embeddingUrl'],{'baseUrl':C['rerankerUrl'],'apiKey':C['rerankerKey'],'model':'Qwen3-Reranker-4B'},C['embeddingKey'])
+  engine=RoutedEngine(units,vectors,C['embeddingUrl'],{'baseUrl':C['rerankerUrl'],'apiKey':C['rerankerKey'],'model':'Qwen3-Reranker-4B','api':'rerank-batch'},C['embeddingKey'])
   plan=runpy.run_path(str(ROOT/'scripts/retrieval-server.py'))['plan_query']
   report['config'].update(engine='shared-intent-v4',unitsSha256=sha((state/'units.json').read_bytes()),code={str(p.relative_to(ROOT)):sha(p.read_bytes()) for p in (ROOT/'src/retrieval').glob('*.py')})
  elif SYSTEM=='oce':

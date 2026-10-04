@@ -4,7 +4,7 @@ OpenContextEngine. Results recorded on **October 3–4, 2026**. Coverage measure
 
 ## Seven-method comparison
 
-**560 successful queries: seven engines × 40 tasks × two languages**, on frozen Django, Click, HTTPX and Zod source subsets. All methods use the same 4,000-token output budget.
+**560 successful queries: seven engines × 40 tasks × two languages**, on frozen Django, Click, HTTPX and Zod source subsets. All methods use the same 4,000-token output budget. OpenContextEngine used its optional `/rerank-batch` mode for this run.
 
 ![Evidence coverage by context budget](../assets/benchmarks/context-budget.svg)
 
@@ -77,11 +77,11 @@ This is a separate run from the speed table, with different structural indexes. 
 
 ## Engineering validation
 
-**83 tests verified: 55 Python + 28 Node.js**, including source fidelity, language relationships, embedding reuse, branch changes, update failures, HTTP authentication, and official MCP client integration. This is a recorded local test result, not a live CI status badge.
+**90 tests verified: 61 Python + 29 Node.js**, including source fidelity, language relationships, embedding reuse, branch changes, update failures, HTTP authentication, and official MCP client integration. This includes ordinary `/rerank` compatibility, sparse-pair mapping, bounded concurrency, malformed provider responses, and identical retrieval under deterministic scores in both API modes. This is a recorded local test result, not a live CI status badge.
 
 A separate **real remote-model MCP smoke test** verified initial indexing, saved-file updates, deletion, and restart recovery. Editing one function embedded **one new document and reused two unchanged units**. Requests that encounter failed synchronization or source changes during retrieval return explicit errors instead of stale evidence.
 
-[Remote MCP smoke record](eval/results/mcp-live-smoke-20261004.json) · [Tests](../tests) · [Smoke runner](../scripts/smoke-mcp.mjs)
+[Ordinary rerank and real-model MCP validation](eval/results/rerank-compat-20261004.json) · [Earlier remote MCP smoke record](eval/results/mcp-live-smoke-20261004.json) · [Tests](../tests) · [Smoke runner](../scripts/smoke-mcp.mjs)
 
 ```sh
 npm test

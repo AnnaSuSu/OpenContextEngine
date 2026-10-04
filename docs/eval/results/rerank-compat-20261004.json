@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-04",
+  "status": "passed",
+  "defaultApi": "rerank",
+  "tests": {
+    "python": 61,
+    "node": 29,
+    "total": 90
+  },
+  "remoteApiComparison": {
+    "status": "passed",
+    "model": "Qwen3-Reranker-4B",
+    "pairs": 6,
+    "maximumAbsoluteScoreDifference": 0.0002039293758571148,
+    "outputs": {
+      "rerank": {
+        "scores": [
+          0.7772998809814453,
+          0.003376612439751625,
+          0.00011959858238697052,
+          0.18242551386356354,
+          0.9603611826896667,
+          0.00041731575038284063
+        ],
+        "httpRequests": 2,
+        "elapsedMs": 775
+      },
+      "rerank-batch": {
+        "scores": [
+          0.7772998809814453,
+          0.0031726830638945103,
+          0.00012731103925034404,
+          0.18242551386356354,
+          0.9603611826896667,
+          0.00040448151412419975
+        ],
+        "httpRequests": 1,
+        "elapsedMs": 1592
+      }
+    },
+    "scope": "Same remote Qwen3 service, identical inputs; not a third-party provider or latency benchmark",
+    "sourceSha256": "55ab723114e90d16b04125171bac5281649f34d7afd8c9e953747357d89616ae"
+  },
+  "mcp": {
+    "api": "rerank",
+    "status": "passed",
+    "checks": [
+      "initial-index-and-search",
+      "saved-edit-incremental-search",
+      "deleted-file-removed",
+      "restart-restores-generation"
+    ],
+    "startedAt": "2026-10-04T01:53:33.015Z",
+    "finishedAt": "2026-10-04T01:53:54.553Z"
+  },
+  "limitations": [
+    "Remote checks used the existing Qwen3 service, not paid third-party providers.",
+    "Equivalent deterministic pair scores produce identical retrieval. Real GPU batching produced a small score difference; this is not a new quality or latency benchmark."
+  ],
+  "sourceSha256": {
+    "src/retrieval/reranker.py": "55ab723114e90d16b04125171bac5281649f34d7afd8c9e953747357d89616ae",
+    "src/retrieval/batched.py": "855e46016037752c21e91902ef879f239a5b3bc0ea06bff70cfcd01abac9886d",
+    "src/eval/remote-models.mjs": "54c538fc84cd60acb710c7dbc8d7886756ca67064b36c91851c98477697e654c"
+  }
+}

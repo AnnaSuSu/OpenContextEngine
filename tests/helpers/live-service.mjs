@@ -24,6 +24,9 @@ export async function fixture(t) {
       if (request.url === '/v1/embeddings') {
         if (hooks.embedding) await hooks.embedding(body);
         result = {data:body.input.map((_,index) => ({index,embedding:[1,...Array(1023).fill(0)]}))};
+      } else if (request.url === '/v1/rerank') {
+        if (hooks.rerank) await hooks.rerank(body);
+        result = {results:body.documents.map((_,index) => ({index,relevance_score:.95})).reverse()};
       } else if (request.url === '/v1/rerank-batch') {
         if (hooks.rerank) await hooks.rerank(body);
         result = {results:body.pairs.map(([query_index,document_index],index) =>

@@ -28,9 +28,14 @@ OCE_EMBEDDING_DIMENSIONS=1024
 RERANK_BASE_URL=https://your-reranker-service.example/v1
 RERANK_API_KEY=your-reranker-key
 RERANK_MODEL=Qwen3-Reranker-4B
+OCE_RERANK_API=rerank
 ```
 
-The embedding service must implement `POST /v1/embeddings`. The reranker must implement OpenContextEngine's `POST /v1/rerank-batch` contract; a generic `/rerank` endpoint alone is insufficient. The [included reranker server](../deploy/reranker/server.py) implements it. Qwen3-Embedding-4B / Qwen3-Reranker-4B are the evaluated models.
+The embedding service must implement `POST /v1/embeddings`. By default, the reranker uses the ordinary `/rerank` API: requests contain `model`, `query`, `documents`, and `top_n`; responses must return every requested document in `results`, with its original `index` and a finite `relevance_score` between 0 and 1. Results may arrive in relevance order. Use the provider's versioned base URL (for example, `https://provider.example/v1` or `/v2`), without appending `/rerank` yourself.
+
+OpenContextEngine groups the needed pairs by query, reuses scores within each search, and makes at most two concurrent rerank requests by default. Optional `OCE_RERANK_CONCURRENCY` (1–8, default 2) and `OCE_RERANK_MAX_DOCUMENTS` (1–1,024, default 128) control concurrency and documents per request. It requests all scores and rejects missing, duplicate, or invalid result indices; errors are surfaced without silently switching endpoints.
+
+For the [included reranker server](../deploy/reranker/server.py), you can optionally set `OCE_RERANK_API=rerank-batch` to combine multiple queries into its custom `/rerank-batch` endpoint. The default `rerank` mode works with this server too. Qwen3-Embedding-4B / Qwen3-Reranker-4B are the evaluated models; the published seven-method benchmark used the custom batch mode. Other providers and models still need compatibility and quality validation, especially if they score documents jointly rather than independently. Changing document batch limits may then affect scores.
 
 The launcher requires HTTPS model endpoints, with explicit SSH/direct-worker transport options available in [the transport configuration](../src/eval/remote-models.mjs). It does not install or load model weights on the client. Repository fragments and queries are sent to the model endpoints you configure.
 

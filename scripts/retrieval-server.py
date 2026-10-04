@@ -36,7 +36,7 @@ def serve(config):
     health = {'status':'ready','engine':VERSION,'index':index,'queryCache':False,
         'initializationMs':round((time.monotonic()-initialized)*1000),
         'sourceSha256':{name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in
-            ['src/retrieval/engine.py','src/retrieval/batched.py','src/retrieval/routed.py','scripts/retrieval-server.py',
+            ['src/retrieval/engine.py','src/retrieval/batched.py','src/retrieval/routed.py','src/retrieval/reranker.py','scripts/retrieval-server.py',
              'src/retrieval/languages/__init__.py','src/retrieval/languages/schema.py',
              'src/retrieval/languages/text.py','src/retrieval/languages/files.py',
              'src/retrieval/languages/python.py','src/retrieval/languages/go.py','src/retrieval/languages/go_ast.go','src/retrieval/languages/go_types.go',

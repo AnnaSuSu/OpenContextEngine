@@ -139,7 +139,7 @@ class TextFallbackTest(unittest.TestCase):
                 return {'results': [{'index': i, 'query_index': q, 'document_index': d,
                                      'relevance_score': .9} for i, (q, d) in enumerate(payload['pairs'])]}
             engine = BatchedEngine(units, matrix, 'http://unused',
-                                   {'baseUrl': 'http://unused', 'model': 'test', 'apiKey': 'test'})
+                                   {'baseUrl': 'http://unused', 'model': 'test', 'apiKey': 'test', 'api': 'rerank-batch'})
             plan = {'intent': 'connection timeout', 'facets': [{'question': 'connection timeout', 'terms': []}]}
             with patch('batched.post', side_effect=models):
                 raw, debug = engine.search(plan)
