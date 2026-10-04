@@ -2,8 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {clientConfig,search} from '../src/client.mjs';
 import {serviceConfig} from '../src/service.mjs';
+import {mkdtempSync, rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import {join} from 'node:path';
 
-test('Retrieval client permits SSH loopback or HTTPS, rejects credentials and cleartext public endpoints',()=>{
+test('Retrieval client permits SSH loopback or HTTPS, rejects credentials and cleartext public endpoints',t=>{
+  const configHome=mkdtempSync(join(tmpdir(),'oce-client-config-'));
+  t.after(()=>rmSync(configHome,{recursive:true,force:true}));
   const env={OCE_API_KEY:'test-key-not-a-real-secret',OCE_BASE_URL:'http://127.0.0.1:45005'};
   assert.equal(clientConfig(env).baseUrl,env.OCE_BASE_URL);
   const legacy={REPONERVE_API_KEY:'legacy-test-key',REPONERVE_BASE_URL:'http://127.0.0.1:45006'};
@@ -11,6 +16,7 @@ test('Retrieval client permits SSH loopback or HTTPS, rejects credentials and cl
   assert.deepEqual(clientConfig({...legacy,...env}),{baseUrl:env.OCE_BASE_URL,apiKey:env.OCE_API_KEY});
   for (const prefix of ['OCE_', 'REPONERVE_']) {
     const settings=serviceConfig({root:'.',state:'/tmp/opencontextengine-config-test'}, {
+      OCE_CONFIG_HOME:configHome,
       EMBEDDING_BASE_URL:'https://embedding.example/v1',EMBEDDING_SSH_TUNNEL_URL:'',
       RERANK_BASE_URL:'https://reranker.example/v1',RERANK_REMOTE_RUNTIME_URL:'',
       RERANK_MODEL:'test',RERANK_API_KEY:'test-only',
