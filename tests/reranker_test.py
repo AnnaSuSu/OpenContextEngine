@@ -14,6 +14,31 @@ CONFIG = {'baseUrl': 'https://provider.invalid/v2/', 'model': 'fixture', 'apiKey
 
 
 class RerankerTest(unittest.TestCase):
+    def test_dashscope_maps_nested_sorted_results_and_usage(self):
+        calls = []
+        def post(url, body, key):
+            self.assertEqual(url, 'https://provider.invalid/v2/services/rerank/text-rerank/text-rerank')
+            self.assertEqual(key, 'test')
+            self.assertEqual(body['parameters']['top_n'], len(body['input']['documents']))
+            self.assertEqual(set(body), {'model', 'input', 'parameters'})
+            calls.append(body)
+            return {'output': {'results': [{'index': i, 'relevance_score': float(d)}
+                    for i, d in reversed(list(enumerate(body['input']['documents'])))]},
+                    'usage': {'total_tokens': 10}}
+        pairs = [(1, 2), (0, 1), (1, 0), (1, 2)]
+        result = rerank_pairs({**CONFIG, 'api': 'dashscope', 'maxDocuments': 1},
+                              ['first', 'second'], ['.1', '.2', '.3'], pairs, post)
+        self.assertEqual([r['relevance_score'] for r in result['results']], [.3, .2, .1, .3])
+        self.assertEqual(result['usage']['input_tokens'], 30)
+        self.assertEqual(len(calls), 3)
+
+    def test_dashscope_rejects_malformed_and_incomplete_nested_results(self):
+        for data in [{}, {'code': 'InvalidApiKey'}, {'output': None},
+                     {'output': {'results': []}},
+                     {'output': {'results': [{'index': 0, 'relevance_score': float('nan')}]}}]:
+            with self.subTest(data=data), self.assertRaises(ValueError):
+                rerank_pairs({**CONFIG, 'api': 'dashscope'}, ['q'], ['d'], [(0, 0)], lambda *args: data)
+
     def test_sparse_pairs_sorted_responses_chunking_and_deduplication(self):
         calls = []
         def post(url, body, key):

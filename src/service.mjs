@@ -30,6 +30,7 @@ export function serviceConfig({root, state, port = 0} = {}, environment = proces
     embeddingKey: env.EMBEDDING_API_KEY,
     embeddingModel: env.EMBEDDING_MODEL || 'Qwen3-Embedding-4B',
     embeddingDimensions: Number(env.OCE_EMBEDDING_DIMENSIONS || 1024),
+    embeddingBatchSize: Number(env.OCE_EMBEDDING_BATCH_SIZE ?? 64),
     embeddingRevision: env.OCE_EMBEDDING_REVISION || '1',
     reranker: {...reranker, baseUrl: runtime.requestBaseUrl},
     languageOptions: env.OCE_LANGUAGE_OPTIONS ? JSON.parse(env.OCE_LANGUAGE_OPTIONS) : {},

@@ -67,6 +67,27 @@ class LiveTests(unittest.TestCase):
         self.assertEqual(fourth.info['embeddedDocuments'], 0)
         self.assertEqual({unit['path'] for unit in fourth.engine}, {'c.txt'})
 
+    def test_provider_batch_limit_and_cache_reuse(self):
+        for i in range(43):
+            self.write(f'{i}.txt', f'unique document {i}\n')
+        manager = self.manager(embeddingBatchSize=20)
+        sizes = []
+        def embed(url, body, key, timeout):
+            sizes.append(len(body['input']))
+            return self.embed(url, body, key, timeout)
+        manager.embed = embed
+        built = self.build(manager)
+        self.assertEqual(sizes, [20, 20, 3])
+        manager.close()
+        restored = self.manager(embeddingBatchSize=10)
+        self.assertEqual(restored.identity(restored.scan()), built.identity)
+        self.assertEqual(self.build(restored).info['embeddedDocuments'], 0)
+
+    def test_invalid_embedding_batch_size(self):
+        for value in [0, 65, True, 1.5, '20', None]:
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, 'batch size'):
+                self.manager(embeddingBatchSize=value)
+
     def test_cross_file_relations_refresh_and_units_equal_full_build(self):
         self.write('lib.py','def save():\n    pass\n')
         self.write('main.py','from lib import save\ndef run():\n    save()\n')

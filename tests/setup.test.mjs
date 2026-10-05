@@ -10,6 +10,17 @@ import { setup, validateModels } from '../src/setup.mjs';
 const models = {EMBEDDING_BASE_URL:'https://embedding.example/v1',EMBEDDING_API_KEY:'embedding-test-secret',
   EMBEDDING_MODEL:'embedding-test',OCE_EMBEDDING_DIMENSIONS:'1024',RERANK_BASE_URL:'https://rerank.example/v1',
   RERANK_API_KEY:'rerank-test-secret',RERANK_MODEL:'rerank-test'};
+
+test('Provider embedding batch size is validated and preserved in shared config', async t => {
+  const {environment} = await temporary(t);
+  const configured = {...models,OCE_EMBEDDING_BATCH_SIZE:'20',OCE_RERANK_API:'dashscope'};
+  assert.doesNotThrow(() => validateModels(configured));
+  saveUserConfig(configured,environment);
+  assert.equal(readUserConfig(environment).OCE_EMBEDDING_BATCH_SIZE,'20');
+  for (const value of ['0','65','NaN','1.5','']) {
+    assert.throws(() => validateModels({...models,OCE_EMBEDDING_BATCH_SIZE:value}),/batch size/);
+  }
+});
 async function temporary(t) {
   const dir = await mkdtemp(join(tmpdir(),'oce-setup-'));
   t.after(() => rm(dir,{recursive:true,force:true}));

@@ -33,8 +33,8 @@ def checked_rows(data, count):
 
 def rerank_pairs(config, queries, documents, pairs, post):
     api = config.get('api', 'rerank')
-    if api not in ('rerank', 'rerank-batch'):
-        raise ValueError('Rerank API must be rerank or rerank-batch')
+    if api not in ('rerank', 'rerank-batch', 'dashscope'):
+        raise ValueError('Rerank API must be rerank, rerank-batch or dashscope')
     concurrency = bounded_integer(config.get('concurrency', 2), 'Rerank concurrency', 8)
     limit = bounded_integer(config.get('maxDocuments', 128), 'Rerank document limit', 1024)
     for q, d in pairs:
@@ -42,7 +42,8 @@ def rerank_pairs(config, queries, documents, pairs, post):
             raise ValueError('Invalid requested rerank pair')
     if not pairs:
         return {'results': [], 'meta': {'request_count': 0}}
-    url = config['baseUrl'].rstrip('/') + '/' + api
+    path = 'services/rerank/text-rerank/text-rerank' if api == 'dashscope' else api
+    url = config['baseUrl'].rstrip('/') + '/' + path
     if api == 'rerank-batch':
         data = post(url, {'model': config['model'], 'queries': queries,
                          'documents': documents, 'pairs': pairs}, config['apiKey'])
@@ -61,9 +62,14 @@ def rerank_pairs(config, queries, documents, pairs, post):
 
     def request(job):
         q, ids = job
-        data = post(url, {'model': config['model'], 'query': queries[q],
-                         'documents': [documents[d] for d in ids], 'top_n': len(ids)}, config['apiKey'])
-        rows = checked_rows(data, len(ids))
+        inputs = {'query': queries[q], 'documents': [documents[d] for d in ids]}
+        body = ({'model': config['model'], 'input': inputs, 'parameters': {'top_n': len(ids)}}
+                if api == 'dashscope' else {'model': config['model'], **inputs, 'top_n': len(ids)})
+        data = post(url, body, config['apiKey'])
+        rows = checked_rows(data.get('output') if api == 'dashscope' and isinstance(data, dict) else data, len(ids))
+        if api == 'dashscope':
+            usage = data.get('usage', {})
+            data = {**data, 'usage': {'input_tokens': usage.get('total_tokens')} if isinstance(usage, dict) else {}}
         return {(q, ids[row['index']]): row['relevance_score'] for row in rows}, data
 
     # Fail the whole wave on any error; never silently drop a query or switch API.

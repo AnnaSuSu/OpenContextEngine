@@ -10,6 +10,7 @@ test('Rerank defaults to the ordinary API with bounded provider settings', () =>
   assert.equal(config.concurrency,2);
   assert.equal(config.maxDocuments,128);
   assert.equal(remoteRerankerConfig({...env,OCE_RERANK_API:'rerank-batch'}).api,'rerank-batch');
+  assert.equal(remoteRerankerConfig({...env,OCE_RERANK_API:'dashscope'}).api,'dashscope');
   for (const override of [{OCE_RERANK_API:'auto'}, {OCE_RERANK_CONCURRENCY:'0'},
     {OCE_RERANK_CONCURRENCY:'9'}, {OCE_RERANK_MAX_DOCUMENTS:'1.5'}, {OCE_RERANK_MAX_DOCUMENTS:''}]) {
     assert.throws(() => remoteRerankerConfig({...env,...override}));

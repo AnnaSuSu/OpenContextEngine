@@ -60,6 +60,20 @@ The setup prompt initially suggests `1024` dimensions; replace it with your endp
 
 The embedding service must implement `POST /v1/embeddings`. By default, the reranker uses the ordinary `/rerank` API: requests contain `model`, `query`, `documents`, and `top_n`; responses must return every requested document in `results`, with its original `index` and a finite `relevance_score` between 0 and 1. Results may arrive in relevance order. Set the reranker base URL to the part before `/rerank`: for example, `https://provider.example/v1`, `/v2`, or `https://provider.example` for an unversioned endpoint.
 
+For Alibaba Cloud Model Studio, use its OpenAI-compatible embedding endpoint and select the DashScope rerank format:
+
+```dotenv
+EMBEDDING_BASE_URL=https://YOUR_WORKSPACE.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
+EMBEDDING_MODEL=qwen3.7-text-embedding
+OCE_EMBEDDING_DIMENSIONS=1024
+OCE_EMBEDDING_BATCH_SIZE=20
+RERANK_BASE_URL=https://YOUR_WORKSPACE.cn-beijing.maas.aliyuncs.com/api/v1
+RERANK_MODEL=qwen3.7-text-rerank
+OCE_RERANK_API=dashscope
+```
+
+Supply your API key through `EMBEDDING_API_KEY` and `RERANK_API_KEY`, then run setup to save these settings. DashScope mode calls `/services/rerank/text-rerank/text-rerank`, nests the request under `input` and `parameters`, and reads `output.results`. The embedding model defaults to 1024 dimensions and accepts up to 20 texts per request; `OCE_EMBEDDING_BATCH_SIZE` limits index-building batches (default 64, range 1–64). Query embedding uses at most five texts per MCP search. Clear any previous SSH transport overrides when switching to direct HTTPS endpoints. Changing the embedding provider or model rebuilds the index; existing embeddings are retained for reuse with their original configuration.
+
 HTTPS is the default. For an explicitly trusted remote HTTP deployment, set `OCE_ALLOW_HTTP=1` before running `open-context-engine setup`; setup saves this choice in the shared configuration. HTTP transmits API keys and source text without encryption. Local model endpoints remain prohibited. Set `OCE_EMBEDDING_DIMENSIONS` to the service's actual output size (for example, `2560`); changing the provider or dimensions creates a new index generation and does not mix incompatible cached vectors.
 
 OpenContextEngine groups the needed pairs by query, reuses scores within each search, and makes at most two concurrent rerank requests by default. Optional `OCE_RERANK_CONCURRENCY` (1–8, default 2) and `OCE_RERANK_MAX_DOCUMENTS` (1–1,024, default 128) control concurrency and documents per request. It requests all scores and rejects missing, duplicate, or invalid result indices; errors are surfaced without silently switching endpoints.

@@ -20,7 +20,7 @@ export function remoteRerankerConfig(env) {
     throw new Error('A user-approved remote reranker is required. No local model will be installed or started.');
   }
   const api = env.OCE_RERANK_API ?? 'rerank';
-  if (!['rerank', 'rerank-batch'].includes(api)) throw new Error('OCE_RERANK_API must be rerank or rerank-batch');
+  if (!['rerank', 'rerank-batch', 'dashscope'].includes(api)) throw new Error('OCE_RERANK_API must be rerank, rerank-batch or dashscope');
   const integer = (name, fallback, maximum) => {
     const value = Number(env[name] ?? fallback);
     if (!Number.isInteger(value) || value < 1 || value > maximum) throw new Error(`${name} must be an integer from 1 to ${maximum}`);

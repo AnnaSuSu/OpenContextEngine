@@ -64,6 +64,9 @@ class LiveIndex:
         self.dimensions = self.embedding['dimensions']
         if type(self.dimensions) is not int or not 1 <= self.dimensions <= 65536:
             raise ValueError('Invalid embedding dimensions')
+        self.batch_size = config.get('embeddingBatchSize', 64)
+        if type(self.batch_size) is not int or not 1 <= self.batch_size <= 64:
+            raise ValueError('Embedding batch size must be an integer from 1 to 64')
         self.embed, self.engine_factory = embed, engine_factory
         self.condition = threading.Condition()
         self.stop_event = threading.Event()
@@ -179,10 +182,10 @@ class LiveIndex:
                         continue
                 missing[key] = text
             entries = list(missing.items())
-            for offset in range(0, len(entries), 64):
+            for offset in range(0, len(entries), self.batch_size):
                 if self.stop_event.is_set():
                     raise SourceChanged()
-                batch = entries[offset:offset+64]
+                batch = entries[offset:offset+self.batch_size]
                 result = self.embed(self.config['embeddingUrl']+'/embeddings',
                     {'model': self.embedding['model'], 'input': [text for _, text in batch]},
                     self.config.get('embeddingKey', 'local-only'), timeout=60)
