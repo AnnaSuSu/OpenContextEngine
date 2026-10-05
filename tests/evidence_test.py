@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import patch
 import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src/retrieval'))
-from evidence import EvidenceEngine
+from evidence import EvidenceEngine, requested_languages
 
 
 def unit(i, path, text, name=None, start=1, kind='function', relations=()):
@@ -69,11 +69,11 @@ class EvidenceTest(unittest.TestCase):
         self.assertEqual(context.count('Path: app.py'), 2)
         self.assertNotRegex(context, r'\n[3-9]\t')
 
-    def test_relevant_test_can_supply_implementation_outside_dense_top40(self):
-        units = [unit(i, f'tests/test_{i}.py', 'def check():\n    assert True') for i in range(45)]
-        units[0]['relations'] = [{'kind': 'calls', 'target': 44}]
-        units[0]['edges'] = [44]
-        units[44] = unit(44, 'app.py', 'def handler():\n    return True')
+    def test_relevant_test_can_supply_implementation_outside_recall_window(self):
+        units = [unit(i, f'tests/test_{i}.py', 'def check():\n    assert True') for i in range(85)]
+        units[0]['relations'] = [{'kind': 'calls', 'target': 84}]
+        units[0]['edges'] = [84]
+        units[84] = unit(84, 'app.py', 'def handler():\n    return True')
         context, debug, _ = self.search(units, query='Find implementation for the behavior')
         self.assertIn('Path: app.py', context)
         self.assertGreater(debug['expandedCount'], 0)
@@ -113,6 +113,43 @@ class EvidenceTest(unittest.TestCase):
                                        scores=lambda q, d: .99 if 'types.ts' in d else .5)
         self.assertEqual(debug['selected'][0]['id'], 0)
         self.assertIn('interface Response', context)
+
+    def test_language_scope_recalls_implementation_beyond_global_window(self):
+        units = [dict(unit(i, f'go/app{i}.go', 'func run() {\n    execute()\n}'), language='go') for i in range(90)]
+        units.append(unit(90, 'app.py', 'def run():\n    execute()'))
+        context, debug, _ = self.search(units, query='Find the Python implementation', budget=120)
+        self.assertEqual(debug['selected'][0]['id'], 90)
+        self.assertIn('Path: app.py', context)
+
+    def test_resolved_local_helper_stays_with_entry_despite_lower_rank(self):
+        units = [unit(0, 'sdk.py', 'def ask():\n    return decode()', relations=[{'kind': 'calls', 'target': 21}])]
+        units += [unit(i, f'other{i}.py', 'def ask():\n    return stream()') for i in range(1, 21)]
+        units.append(unit(21, 'sdk.py', 'def decode():\n    return message_id', start=10))
+        def scores(q, d):
+            return .6 if 'def decode' in d else (.99 if 'Path: sdk.py' in d else .95)
+        context, debug, _ = self.search(units, query='Find streaming request and message identifier handling', budget=300, scores=scores)
+        self.assertIn(21, debug['selected'][0]['bundle'])
+        self.assertIn('return message_id', context)
+
+    def test_larger_budgets_keep_the_8k_core_selected_source(self):
+        units = [unit(i, f'app{i}.py', 'def run():\n' + '    operation()\n' * 25) for i in range(90)]
+        previous = set()
+        for budget in (8000, 16000, 24000):
+            _, debug, _ = self.search(units, query='Find implementation', budget=budget)
+            selected = {i for row in debug['selected'] for i in row['bundle']}
+            self.assertTrue(previous <= selected)
+            previous = selected
+
+    def test_language_scope_does_not_confuse_go_verb_with_language(self):
+        self.assertEqual(requested_languages('How do messages go through the Python SDK?'), {'python'})
+        self.assertEqual(requested_languages('Find the Go implementation'), {'go'})
+        self.assertEqual(requested_languages('Find Python and TypeScript implementations'), {'python', 'typescript'})
+
+    def test_irrelevant_local_helper_is_not_bundled(self):
+        units = [unit(0, 'app.py', 'def ask():\n    return 1', relations=[{'kind': 'calls', 'target': 1}]),
+                 unit(1, 'app.py', 'def unrelated():\n    return 2', start=10)]
+        _, debug, _ = self.search(units, query='Find ask', scores=lambda q, d: .99 if 'def ask' in d else .01)
+        self.assertEqual(debug['selected'][0]['bundle'], [0])
 
     def test_malformed_embedding_fails_before_selection(self):
         units = [unit(0, 'app.py', 'def save():\n    pass')]

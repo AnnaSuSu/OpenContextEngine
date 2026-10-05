@@ -14,7 +14,7 @@ import numpy as np
 from engine import Engine, document, post
 from reranker import rerank_pairs
 
-VERSION = 'evidence-v1'
+VERSION = 'evidence-v2'
 
 
 def source_role(unit):
@@ -32,6 +32,23 @@ def requested_role(query):
     if re.search(r'^(?:find|show|locate|list)\s+(?:the\s+)?(?:docs?|documentation|readme)\b|^(?:查找|找到|列出|展示).{0,5}文档', query, re.I):
         return 'documentation'
     return 'implementation'
+
+
+def requested_languages(query):
+    """Honor explicit language scope without guessing from repository names."""
+    languages = set()
+    for pattern, values in [
+        (r'\bpython\b', {'python'}),
+        (r'\bgolang\b', {'go'}),
+        (r'\btypescript\b', {'typescript'}),
+        (r'\bjavascript\b', {'javascript', 'typescript'}),
+        (r'\b(?:frontend|front-end|react)\b|前端', {'javascript', 'typescript'}),
+    ]:
+        if re.search(pattern, query, re.I):
+            languages.update(values)
+    if re.search(r'\bGo\b|\bgo\s+(?:code|service|backend|worker|implementation)\b', query):
+        languages.add('go')
+    return languages
 
 
 class EvidenceEngine(Engine):
@@ -75,7 +92,7 @@ class EvidenceEngine(Engine):
         family = self.symbols.get(unit['symbol'], [uid]) if unit.get('name') else [uid]
         if unit['kind'] not in {'function', 'method'}:
             return [uid]
-        if sum(self.costs[i] for i in family) <= max(256, budget * .4):
+        if sum(self.costs[i] for i in family) <= 3200:
             return sorted(family, key=lambda i: self.units[i]['start'])
         return [uid]
 
@@ -106,6 +123,8 @@ class EvidenceEngine(Engine):
                 return 1.0
             return self.substance(uid)
         intent = plan['intent']
+        languages = requested_languages(intent)
+        scoped = np.asarray([not languages or u.get('language') in languages for u in self.units])
         facets = list(dict.fromkeys(f['question'] for f in plan['facets'] if f['question'] != intent))[:4]
         queries = [intent] + [facet + '\nContext for this part of the request: ' + intent for facet in facets]
         result = post(self.embed_url + '/embeddings', {'model': self.embedding_model,
@@ -121,7 +140,13 @@ class EvidenceEngine(Engine):
         for col, query in enumerate(queries):
             channels = []
             for scores in (dense[:, col], self.lexical(query)):
-                ids = [int(uid) for uid in np.argsort(-scores, kind='stable')[:40] if scores[uid] > 0]
+                order = np.argsort(-scores, kind='stable')
+                # Candidate depth is independent of the response token budget.
+                # Keep global recall and add a separate explicit-language lane.
+                ids = [int(uid) for uid in order[:40] if scores[uid] > 0]
+                if languages:
+                    local = [int(uid) for uid in order if scoped[uid] and scores[uid] > 0][:80]
+                    ids = list(dict.fromkeys(ids + local))
                 candidates.update(ids)
                 channels.append(ids)
             recall.append(channels)
@@ -179,7 +204,7 @@ class EvidenceEngine(Engine):
                 return 0.0
             # Rank separates saturated probability-like scores. No inverse cost
             # reward: a short test must not displace a better-ranked body.
-            return (.5 * relevance + .5 * math.exp(-ranks[q, uid] / 8)) * substance(uid) * max(0.0, scores[0, uid])
+            return (.5 * relevance + .5 * math.exp(-ranks[q, uid] / 8)) * substance(uid) * max(0.0, scores[0, uid]) * (1.0 if scoped[uid] else .25)
 
         # Tests often describe behavior more explicitly than the implementation.
         # Propagate relevance only along resolved source references, bounded by
@@ -210,15 +235,26 @@ class EvidenceEngine(Engine):
                     continue
                 bundle = [uid]
                 if self.roles[uid] == primary == 'implementation':
-                    # A short helper explicitly referenced by the implementation
-                    # is part of its explanation (for example validation paired
-                    # with mutation). Keep that source evidence together.
+                    # Relevant local helpers are part of the entry point explanation.
+                    # Keep their source evidence with the calling implementation.
                     references = {r['target'] for r in self.units[uid].get('relations', [])
                                   if r.get('resolution') == 'explicit-doc-reference'}
-                    extras = [i for i in sorted(references) if i in candidates and i not in selected_set
-                              and self.roles[i] == 'implementation' and self.costs[i] <= min(256, budget * .1) and max(scores[col, i] for col in range(len(queries))) >= .5]
-                    if sum(self.costs[i] for i in extras) <= min(256, budget * .1):
-                        bundle.extend(extras)
+                    # Resolved local callees explain the selected entry point.
+                    # Bound fan-out, cost and relevance so utility hubs cannot
+                    # pull arbitrary dependencies into the answer.
+                    local_calls = {i for i in self.callees[uid]
+                                   if self.units[i]['path'] == self.units[uid]['path']}
+                    if len({self.units[i]['symbol'] for i in local_calls}) <= 8:
+                        references.update(local_calls)
+                    extras = [i for i in references if i in candidates and i not in selected_set and i != uid
+                              and self.roles[i] == 'implementation' and substance(i) >= .5
+                              and self.costs[i] <= 1000 and scores[0, i] >= .5]
+                    extras.sort(key=lambda i: (-scores[0, i], i))
+                    extra_cost = 0
+                    for i in extras[:3]:
+                        if extra_cost + self.costs[i] <= 1600:
+                            bundle.append(i)
+                            extra_cost += self.costs[i]
                 cost = sum(self.costs[i] for i in bundle)
                 if spent + cost > (budget if limit is None else limit):
                     bundle, cost = [uid], self.costs[uid]
@@ -242,28 +278,29 @@ class EvidenceEngine(Engine):
 
         primary_ids = [i for i in candidates if self.roles[i] == primary and substance(i) >= .5]
         facets = list(range(1, len(queries))) or [0]
-        # Cover behavior facets before following dependencies and continuations.
-        # If the requested role is unavailable, ordinary selection can still
-        # return documentation or tests as useful navigation evidence.
-        for _ in range(3):
+        # Build a stable 8k core, then add evidence. Candidate scoring and family
+        # completion do not depend on the output budget.
+        for stage in range(8000, max(8000, budget) + 8000, 8000):
+            ceiling = min(stage, budget)
+            for _ in range(3):
+                for q in facets:
+                    choose(primary_ids, q, 'primary', ceiling * .82)
+            for _ in range(2):
+                companions = {i for uid in selected for i in self.callees[uid]
+                              if i in candidates and self.roles[i] == primary and substance(i) >= .5}
+                choose(companions, phase='dependency', limit=ceiling * .82)
+            continuations = {i for uid in selected for i in self.bundle(uid, budget)}
+            while choose(continuations, phase='continuation', limit=ceiling * .85):
+                pass
             for q in facets:
-                choose(primary_ids, q, 'primary', budget * .82)
-        for _ in range(2):
-            companions = {i for uid in selected for i in self.callees[uid]
-                          if i in candidates and self.roles[i] == primary and substance(i) >= .5}
-            choose(companions, phase='dependency', limit=budget * .82)
-        continuations = {i for uid in selected for i in self.bundle(uid, budget)}
-        while choose(continuations, phase='continuation', limit=budget * .85):
-            pass
-        for q in facets:
-            choose(primary_ids, q, 'primary', budget * .85)
-        if primary == 'implementation' and re.search(r'\btests?\b|测试|回归', plan['intent'], re.I):
-            tests = [i for i in candidates if self.roles[i] == 'test']
-            related = [i for i in tests if self.callees[i] & selected_set]
-            for q in facets:
-                choose(related or tests, q, 'support')
-        while choose(candidates):
-            pass
+                choose(primary_ids, q, 'primary', ceiling * .85)
+            if primary == 'implementation' and re.search(r'\btests?\b|测试|回归', intent, re.I):
+                tests = [i for i in candidates if self.roles[i] == 'test']
+                related = [i for i in tests if self.callees[i] & selected_set]
+                for q in facets:
+                    choose(related or tests, q, 'support', ceiling)
+            while choose(candidates, limit=ceiling):
+                pass
         context = self.render_selection(selected)
         tokens = len(self.encoding.encode_ordinary(context))
         if tokens > budget:
