@@ -14,7 +14,8 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src' / 'retrieval'))
-from routed import RoutedEngine, VERSION
+from evidence import EvidenceEngine, VERSION
+from planning import plan_query
 from live import LiveIndex, IndexUnavailable
 
 
@@ -24,11 +25,6 @@ class LoopbackHTTPServer(ThreadingHTTPServer):
         TCPServer.server_bind(self)
         self.server_name, self.server_port = self.server_address
 
-
-def plan_query(query):
-    parts = [part.strip() for part in re.split(r'[:：;；，]|,\s+(?=how|which|why|where|what)|\s+and\s+(?=how|which|why|where|what)', query, flags=re.I) if len(part.strip()) > 7]
-    facets = parts if 1 < len(parts) <= 4 else [query]
-    return {'intent':query,'facets':[{'question':part,'terms':re.findall(r'[A-Za-z][A-Za-z0-9_]*',part)} for part in facets]}
 
 
 def serve(config):
@@ -40,14 +36,14 @@ def serve(config):
     else:
         units = json.loads((state / 'units.json').read_text())
         index = json.loads((state / 'metadata.json').read_text())
-        retrieval = RoutedEngine(units, np.load(state/'vectors.npy'), config['embeddingUrl'], config['reranker'], config['embeddingKey'])
+        retrieval = EvidenceEngine(units, np.load(state/'vectors.npy'), config['embeddingUrl'], config['reranker'], config['embeddingKey'])
     health = {'status':'ready','engine':VERSION,'index':index,'queryCache':False,
         'initializationMs':round((time.monotonic()-initialized)*1000),
         'sourceSha256':{name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in
-            ['src/retrieval/engine.py','src/retrieval/batched.py','src/retrieval/routed.py','src/retrieval/reranker.py','scripts/retrieval-server.py',
+            ['src/retrieval/engine.py','src/retrieval/batched.py','src/retrieval/routed.py','src/retrieval/evidence.py','src/retrieval/planning.py','src/retrieval/reranker.py','scripts/retrieval-server.py',
              'src/retrieval/languages/__init__.py','src/retrieval/languages/schema.py',
              'src/retrieval/languages/text.py','src/retrieval/languages/files.py',
-             'src/retrieval/languages/python.py','src/retrieval/languages/go.py','src/retrieval/languages/go_ast.go','src/retrieval/languages/go_types.go',
+             'src/retrieval/languages/python.py','src/retrieval/languages/python_calls.py','src/retrieval/languages/go.py','src/retrieval/languages/go_ast.go','src/retrieval/languages/go_types.go',
              'src/retrieval/languages/typescript.py',
              'src/retrieval/languages/typescript.mjs','package.json','package-lock.json']
             if name != 'package-lock.json' or (ROOT/name).is_file()}}

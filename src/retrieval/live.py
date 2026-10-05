@@ -17,7 +17,7 @@ import numpy as np
 from engine import document, post
 from languages import adapter_manifest, source_units
 from languages.files import discover_snapshot
-from routed import RoutedEngine
+from evidence import EvidenceEngine
 from writer_lock import acquire_writer_lock
 
 
@@ -42,7 +42,7 @@ class Generation:
 
 
 class LiveIndex:
-    def __init__(self, config, *, embed=post, engine_factory=RoutedEngine):
+    def __init__(self, config, *, embed=post, engine_factory=EvidenceEngine):
         self.config = config
         self.root = Path(config['root']).resolve()
         self.state = Path(config['state']).resolve()
