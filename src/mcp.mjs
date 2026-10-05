@@ -34,7 +34,9 @@ export function createMcpServer(config, {resolveConfig, automatic = false} = {})
       const selected = await selectConfig(directory_path);
       const result = await search(query,{budget,freshnessWaitMs,config:selected,signal:extra.signal});
       if (result.index?.mode !== 'live') throw new Error('This service uses a frozen index; connect to a service started with --root');
-      return {content:[{type:'text',text:result.context || 'No matching source context.'}],structuredContent:result};
+      const warning = result.index.degradedFiles
+        ? `Note: ${result.index.degradedFiles} file(s) indexed as plain text after syntax errors; inspect index_status for paths and locations.\n\n` : '';
+      return {content:[{type:'text',text:warning + (result.context || 'No matching source context.')}],structuredContent:result};
     } catch (error) {
       return {isError:true,content:[{type:'text',text:error.message}]};
     }

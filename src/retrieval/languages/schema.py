@@ -8,6 +8,13 @@ RELATION_KINDS = frozenset({'calls', 'member_of', 'inherits', 'implements',
                             'same_symbol', 'imports', 'references_type'})
 
 
+class SourceSyntaxError(ValueError):
+    """File-local syntax diagnostics, distinct from adapter or validation failures."""
+    def __init__(self, diagnostics):
+        super().__init__('Source syntax errors')
+        self.diagnostics = diagnostics
+
+
 @dataclass(frozen=True)
 class SourceFile:
     path: str

@@ -115,7 +115,8 @@ def serve(config):
                     'retrievalMs':debug['elapsedMs'],'queueMs':queued,
                     'serverElapsedMs':round((time.monotonic()-start)*1000),'queryCache':False,
                     'index': {'mode':'live','identity':generation.identity,'freshness':'verified-after-search',
-                              'completedAt':generation.info['completedAt']} if live else {'mode':'frozen'}}
+                              'completedAt':generation.info['completedAt'],
+                              'degradedFiles':generation.info.get('degradedFiles', 0)} if live else {'mode':'frozen'}}
                 if body.get('trace'):
                     response['diagnostics'] = debug
                 self.reply(200,response)

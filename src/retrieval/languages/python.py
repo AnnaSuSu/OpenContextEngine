@@ -5,18 +5,25 @@ not fully resolved); confidence is a provenance category, not a probability.
 """
 import ast
 from collections import defaultdict
+from .schema import SourceSyntaxError
 
 def extract(sources, max_lines=65, options=None):
     if options:
         raise ValueError("Python adapter does not accept language options")
     units, trees, aliases, class_bases = [], {}, {}, {}
+    diagnostics = []
     for source in sources:
         path, text = source.path, source.text
         lines = text.splitlines()
         module = path.removesuffix('.py').replace('/', '.')
         if module.endswith('.__init__'):
             module = module[:-9]
-        tree = ast.parse(text, filename=path)
+        try:
+            tree = ast.parse(text, filename=path)
+        except SyntaxError as error:
+            diagnostics.append({'path': path, 'language': 'python', 'errorType': type(error).__name__,
+                                'line': error.lineno or 1, 'column': error.offset or 1})
+            continue
         trees[module] = tree
         imports = {}
         for n in tree.body:
@@ -74,6 +81,8 @@ def extract(sources, max_lines=65, options=None):
 
         definitions(tree.body)
 
+    if diagnostics:
+        raise SourceSyntaxError(diagnostics)
     symbols = defaultdict(list)
     for u in units:
         symbols[u['symbol']].append(u['id'])

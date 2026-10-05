@@ -17,6 +17,48 @@ from batched import BatchedEngine
 
 
 class TextFallbackTest(unittest.TestCase):
+    def test_python_templates_fallback_without_losing_healthy_relations(self):
+        sources = {'template.py': 'async def test_<entry_point>():\r\n    pass\r\n',
+                   'bad.py': 'def incomplete(\n',
+                   'lib.py': 'def save():\n    return 1\n',
+                   'main.py': 'from lib import save\ndef run():\n    return save()\n'}
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            files = self.write(root, sources)
+            report, cache = {}, {}
+            units = source_units(root, files, report=report, cache=cache)
+            again_report = {}
+            self.assertEqual(source_units(root, files, report=again_report, cache=cache), units)
+            self.assertEqual(again_report, report)
+            self.assertEqual(report['degradedFiles'], 2)
+            self.assertEqual({d['path'] for d in report['parseDiagnostics']}, {'template.py', 'bad.py'})
+            self.assertTrue(all(d['line'] == 1 and d['fallback'] == 'text' for d in report['parseDiagnostics']))
+            fallback = [u for u in units if u['language'] == 'text']
+            self.assertEqual({u['path'] for u in fallback}, {'template.py', 'bad.py'})
+            self.assertTrue(all(not u['edges'] and not u['relations'] for u in fallback))
+            self.assertTrue(any(units[r['target']]['path'] == 'lib.py'
+                                for u in units if u['name'] == 'run' for r in u['relations']))
+            # A broken callee must not retain its previous symbol or incoming edge.
+            sources['lib.py'] = 'def save(\n'
+            files = self.write(root, sources)
+            broken = source_units(root, files, cache=cache)
+            self.assertFalse(any(u['relations'] for u in broken if u['name'] == 'run'))
+            sources['lib.py'] = 'def save():\n    return 2\n'
+            fixed = source_units(root, self.write(root, sources), cache=cache)
+            self.assertTrue(any(fixed[r['target']]['path'] == 'lib.py'
+                                for u in fixed if u['name'] == 'run' for r in u['relations']))
+
+    def test_adapter_runtime_failure_does_not_fallback(self):
+        with tempfile.TemporaryDirectory() as directory:
+            files = self.write(Path(directory), {'ok.py': 'value = 1\n'})
+            with patch('languages.python.extract', side_effect=RuntimeError('parser unavailable')):
+                with self.assertRaisesRegex(RuntimeError, 'parser unavailable'):
+                    source_units(directory, files)
+
+    def test_fallback_implementation_is_in_structural_cache_identity(self):
+        manifest = adapter_manifest([{'path': 'only.py'}])
+        self.assertIn('text.py', manifest['sourceSha256'])
+
     def write(self, root, sources):
         files = []
         for name, value in sources.items():

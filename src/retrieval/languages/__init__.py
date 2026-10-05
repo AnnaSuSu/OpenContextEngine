@@ -8,7 +8,7 @@ import sys
 
 from . import python, typescript, text, go
 from .files import path_exclusion, read_text
-from .schema import SCHEMA_VERSION, SourceFile, validate_units
+from .schema import SCHEMA_VERSION, SourceFile, SourceSyntaxError, validate_units
 
 ADAPTERS = {'python': python, 'typescript': typescript, 'javascript': typescript, 'go': go, 'text': text}
 EXTENSIONS = {'.py': 'python', '.ts': 'typescript', '.tsx': 'typescript',
@@ -25,7 +25,8 @@ def adapter_manifest(files, language_options=None):
     options = language_options or {}
     if not isinstance(options, dict) or set(options) - set(ADAPTERS):
         raise ValueError('Unknown language options')
-    paths = [Path(__file__), Path(__file__).with_name('schema.py'), Path(__file__).with_name('files.py')]
+    paths = [Path(__file__), Path(__file__).with_name('schema.py'), Path(__file__).with_name('files.py'),
+             Path(text.__file__)]
     for language in languages:
         paths.append(Path(ADAPTERS[language].__file__))
         if language in {'typescript', 'javascript'}:
@@ -40,6 +41,29 @@ def adapter_manifest(files, language_options=None):
                                   if language == 'go' else text.VERSION)
                         for language in languages},
             'sourceSha256': {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in paths}}
+
+
+def extract_with_fallback(adapter, sources, max_lines, settings):
+    try:
+        return adapter.extract(sources, max_lines, settings)
+    except SourceSyntaxError as error:
+        diagnostics = {item['path']: item for item in error.diagnostics}
+        if not diagnostics or not set(diagnostics) <= {source.path for source in sources}:
+            raise ValueError('Invalid syntax diagnostic paths') from error
+        # Rebuild relations using only valid source. Never preserve partial AST
+        # output or let a broken module supply symbols to its healthy callers.
+        valid = [source for source in sources if source.path not in diagnostics]
+        units = adapter.extract(valid, max_lines, settings) if valid else []
+        for source in sources:
+            if source.path not in diagnostics:
+                continue
+            fallback = text.extract([source], max_lines)
+            for unit in fallback:
+                unit['id'] += len(units)
+            if fallback:
+                fallback[0]['parseDiagnostic'] = {**diagnostics[source.path], 'fallback': 'text'}
+            units.extend(fallback)
+        return units
 
 
 def source_units(root, files, max_lines=65, language_options=None, report=None, cache=None):
@@ -98,7 +122,7 @@ def source_units(root, files, max_lines=65, language_options=None, report=None, 
             ], sort_keys=True).encode()).hexdigest() if cache is not None else None)
             previous = cache.get(key) if cache is not None else None
             extracted = (deepcopy(previous[1]) if previous and previous[0] == fingerprint
-                         else ADAPTERS[language].extract(batch, max_lines, settings))
+                         else extract_with_fallback(ADAPTERS[language], batch, max_lines, settings))
             if cache is not None:
                 pending_cache[key] = (fingerprint, deepcopy(extracted))
             offset = len(units)
@@ -124,6 +148,9 @@ def source_units(root, files, max_lines=65, language_options=None, report=None, 
         cache.clear()
         cache.update(pending_cache)
     if report is not None:
+        diagnostics = [unit['parseDiagnostic'] for unit in units if 'parseDiagnostic' in unit]
         report.update(inputFiles=len(files), acceptedFiles=len(sources), excluded=excluded,
-                      fallbackFiles=sum(language_for(source.path) == 'text' for source in sources))
+                      fallbackFiles=len({source.path for source in sources if language_for(source.path) == 'text'}
+                                        | {item['path'] for item in diagnostics}),
+                      degradedFiles=len(diagnostics), parseDiagnostics=diagnostics)
     return units

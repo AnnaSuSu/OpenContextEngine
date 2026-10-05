@@ -167,7 +167,9 @@ class LiveIndex:
 
     def _build(self, snapshot, identity):
         start = time.monotonic()
-        units = source_units(self.root, snapshot['files'], language_options=self.options, cache=self.parse_cache)
+        report = {}
+        units = source_units(self.root, snapshot['files'], language_options=self.options,
+                             cache=self.parse_cache, report=report)
         documents = [document(unit) for unit in units]
         keys = [digest([self.embedding, text]) for text in documents]
         vectors, missing = {}, {}
@@ -210,6 +212,7 @@ class LiveIndex:
                 'changedFiles': sum(previous.get(path) != sha for path, sha in now.items()),
                 'deletedFiles': len(previous.keys() - now.keys()), 'embedding': self.embedding,
                 'languageUnits': dict(Counter(unit['language'] for unit in units)),
+                'degradedFiles': report['degradedFiles'], 'parseDiagnostics': report['parseDiagnostics'],
                 'indexingMs': round((time.monotonic()-start)*1000), 'completedAt': time.time()}
         folder = self.state/('generation-'+uuid.uuid4().hex)
         folder.mkdir(mode=0o700)
