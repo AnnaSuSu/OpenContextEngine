@@ -29,6 +29,8 @@ def adapter_manifest(files, language_options=None):
              Path(text.__file__)]
     for language in languages:
         paths.append(Path(ADAPTERS[language].__file__))
+        if language == 'python':
+            paths.append(Path(python.__file__).with_name('python_calls.py'))
         if language in {'typescript', 'javascript'}:
             paths.append(Path(typescript.__file__).with_suffix('.mjs'))
         if language == 'go':

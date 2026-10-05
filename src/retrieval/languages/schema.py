@@ -3,9 +3,9 @@ from dataclasses import dataclass
 import math
 from typing import TypedDict
 
-SCHEMA_VERSION = 'source-units-v2'
+SCHEMA_VERSION = 'source-units-v3'
 RELATION_KINDS = frozenset({'calls', 'member_of', 'inherits', 'implements',
-                            'same_symbol', 'imports', 'references_type'})
+                            'same_symbol', 'imports', 'references_type', 'references_value'})
 
 
 class SourceSyntaxError(ValueError):
