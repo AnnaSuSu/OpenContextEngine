@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 import subprocess
+from .schema import SourceSyntaxError
 
 COMPILER_VERSION = '5.9.3'
 
@@ -20,4 +21,6 @@ def extract(sources, max_lines=65, options=None):
     output = json.loads(result.stdout)
     if output['compilerVersion'] != COMPILER_VERSION:
         raise ValueError('Unexpected TypeScript compiler version; run npm ci')
+    if output.get('syntaxErrors'):
+        raise SourceSyntaxError(output['syntaxErrors'])
     return output['units']

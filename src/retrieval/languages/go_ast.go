@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"go/ast"
 	"go/parser"
+	"go/scanner"
 	"go/token"
 	"os"
 	"path"
@@ -74,10 +75,17 @@ func run() error {
 	objects := map[*ast.Object]Target{}
 	functions := map[string][]Target{}
 	line := func(p token.Pos) int { return fset.PositionFor(p, false).Line }
+	diagnostics := []map[string]any{}
 	for _, src := range input.Files {
 		text := strings.ReplaceAll(strings.ReplaceAll(src.Text, "\r\n", "\n"), "\r", "\n")
 		tree, err := parser.ParseFile(fset, src.Path, text, parser.ParseComments|parser.AllErrors)
 		if err != nil {
+			if syntax, ok := err.(scanner.ErrorList); ok && len(syntax) > 0 {
+				pos := syntax[0].Pos
+				diagnostics = append(diagnostics, map[string]any{"path": src.Path, "language": "go",
+					"errorType": "SyntaxError", "line": pos.Line, "column": pos.Column})
+				continue
+			}
 			return err
 		}
 		trees[src.Path] = tree
@@ -92,6 +100,9 @@ func run() error {
 				functions[key] = append(functions[key], t)
 			}
 		}
+	}
+	if len(diagnostics) > 0 {
+		return json.NewEncoder(os.Stdout).Encode(map[string]any{"compilerVersion": runtime.Version(), "syntaxErrors": diagnostics})
 	}
 	var typed TypeEvidence
 	if input.Options.Mode == "types" {

@@ -45,10 +45,16 @@ export function extract(files, maxLines = 65, settings = {}) {
   const program = ts.createProgram([...texts.keys()], options, host);
   const errors = program.getSyntacticDiagnostics();
   if (errors.length) {
-    throw new Error(errors.slice(0, 5).map(d => {
-      const line = d.file.getLineAndCharacterOfPosition(d.start ?? 0).line + 1;
-      return `${path.posix.relative(ROOT, d.file.fileName)}:${line}: ${ts.flattenDiagnosticMessageText(d.messageText, ' ')}`;
-    }).join('\n'));
+    if (errors.some(d => !d.file)) throw new Error('TypeScript syntax diagnostic is missing a source file');
+    const diagnostics = new Map();
+    for (const d of errors) {
+      const name = path.posix.relative(ROOT, d.file.fileName);
+      const position = d.file.getLineAndCharacterOfPosition(d.start ?? 0);
+      if (!diagnostics.has(name)) diagnostics.set(name, {path:name,
+        language:/\.(?:jsx?|mjs|cjs)$/i.test(name) ? 'javascript' : 'typescript',
+        errorType:'SyntaxError', line:position.line + 1, column:position.character + 1});
+    }
+    return {compilerVersion:ts.version, units:[], syntaxErrors:[...diagnostics.values()]};
   }
   const checker = program.getTypeChecker();
   const units = [], records = new Map(), nodeEntries = new Map();

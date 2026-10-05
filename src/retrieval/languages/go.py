@@ -11,7 +11,7 @@ import subprocess
 import sys
 import tempfile
 
-from .schema import physical_lines
+from .schema import physical_lines, SourceSyntaxError
 
 
 @lru_cache(maxsize=8)
@@ -81,6 +81,8 @@ def parse(sources, options):
 def extract(sources, max_lines=65, options=None):
     options = settings(options)
     parsed = parse(sources, options)
+    if parsed.get('syntaxErrors'):
+        raise SourceSyntaxError(parsed['syntaxErrors'])
     units, records, targets = [], {}, defaultdict(list)
     source_by_path = {source.path: source for source in sources}
     for file in parsed['files']:

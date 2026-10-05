@@ -88,7 +88,7 @@ class LanguageAdaptersTest(unittest.TestCase):
         self.assertEqual(self.targets(units, 'start', 'calls'), {'b::run'})
         self.assertTrue(all(units[r['target']]['language'] == u['language'] for u in units for r in u['relations']))
 
-    def test_hash_paths_and_supported_language_syntax_fail_explicitly(self):
+    def test_hash_paths_and_invalid_options_fail_but_syntax_degrades(self):
         with tempfile.TemporaryDirectory() as directory:
             p = Path(directory)/'a.py'; p.write_text('def f(): pass\n')
             with self.assertRaisesRegex(ValueError, 'Source changed'):
@@ -98,8 +98,9 @@ class LanguageAdaptersTest(unittest.TestCase):
             (Path(directory)/'a.go').write_text('package main\n')
             with self.assertRaisesRegex(ValueError, 'Source changed'):
                 source_units(directory, [{'path': 'a.go', 'sha256': 'bad'}])
-        with self.assertRaisesRegex(ValueError, 'TypeScript adapter failed'):
-            self.extract({'broken.ts': 'export function broken( {\n'})
+        broken = self.extract({'broken.ts': 'export function broken( {\n'})
+        self.assertEqual(broken[0]['language'], 'text')
+        self.assertEqual(broken[0]['parseDiagnostic']['language'], 'typescript')
         with self.assertRaisesRegex(ValueError, 'options'):
             self.extract({'a.ts': 'const a = 1;\n'}, options={'typescript': {'plugins': []}})
 

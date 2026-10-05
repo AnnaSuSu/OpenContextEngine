@@ -71,10 +71,14 @@ class JavaScriptGoTest(unittest.TestCase):
         self.assertTrue(all(any(r['kind'] == 'same_symbol' for r in u['relations']) for u in body))
         self.assertTrue(all(u['end']-u['start'] < 8 for u in units))
 
-    def test_javascript_and_go_syntax_errors_do_not_silently_fallback(self):
+    def test_javascript_and_go_syntax_errors_fallback_with_diagnostics(self):
         for name, text in [('bad.js', 'export function {'), ('bad.go', 'package p\nfunc {')]:
-            with self.subTest(name=name), self.assertRaisesRegex(ValueError, 'adapter failed'):
-                self.extract({name: text})
+            with self.subTest(name=name):
+                units = self.extract({name: text})
+                self.assertEqual(units[0]['language'], 'text')
+                self.assertEqual(units[0]['parseDiagnostic']['path'], name)
+                self.assertEqual(units[0]['parseDiagnostic']['errorType'], 'SyntaxError')
+                self.assertTrue(all(not u['relations'] for u in units))
 
     def test_go_and_js_fingerprints_include_parser_sources(self):
         manifest = adapter_manifest([{'path': 'a.go'}, {'path': 'b.js'}])

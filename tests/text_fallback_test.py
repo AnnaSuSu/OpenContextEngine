@@ -55,6 +55,41 @@ class TextFallbackTest(unittest.TestCase):
                 with self.assertRaisesRegex(RuntimeError, 'parser unavailable'):
                     source_units(directory, files)
 
+    def test_js_ts_go_fallback_removes_stale_edges_and_repairs_like_a_clean_build(self):
+        for extension, options in [('js', {}), ('ts', {}), ('go', {}), ('go', {'go': {'mode': 'types'}})]:
+            with self.subTest(extension=extension, options=options), tempfile.TemporaryDirectory() as directory:
+                root, cache = Path(directory), {}
+                library, main, template = [f'{name}.{extension}' for name in ['lib', 'main', 'template']]
+                if extension == 'go':
+                    good = 'package p\nfunc save() int { return 1 }\n'
+                    caller = 'package p\nfunc run() int { return save() }\n'
+                    bad = 'package p\nfunc save(\n'
+                else:
+                    good = 'export function save() { return 1; }\n'
+                    caller = 'import {save} from "./lib.js";\nexport function run() { return save(); }\n'
+                    bad = 'export function save(\n'
+                sources = {library: good, main: caller, template: bad}
+                report = {}
+                units = source_units(root, self.write(root, sources), language_options=options, report=report, cache=cache)
+                self.assertEqual(report['degradedFiles'], 1)
+                self.assertEqual(report['parseDiagnostics'][0]['path'], template)
+                self.assertTrue(any(units[r['target']]['path'] == library
+                                    for u in units if u['path'] == main for r in u['relations']))
+                sources[library] = bad
+                broken = source_units(root, self.write(root, sources), language_options=options, report=report, cache=cache)
+                self.assertEqual(report['degradedFiles'], 2)
+                self.assertFalse(any(broken[r['target']]['path'] in {library, template}
+                                     for u in broken for r in u['relations']))
+                sources[library] = good.replace('return 1', 'return 2')
+                sources.pop(template)
+                (root/template).unlink()
+                files = self.write(root, sources)
+                repaired = source_units(root, files, language_options=options, report=report, cache=cache)
+                self.assertEqual(report['degradedFiles'], 0)
+                self.assertEqual(repaired, source_units(root, files, language_options=options))
+                self.assertTrue(any(repaired[r['target']]['path'] == library
+                                    for u in repaired if u['path'] == main for r in u['relations']))
+
     def test_fallback_implementation_is_in_structural_cache_identity(self):
         manifest = adapter_manifest([{'path': 'only.py'}])
         self.assertIn('text.py', manifest['sourceSha256'])
