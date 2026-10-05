@@ -265,7 +265,7 @@ class EvidenceEngine(Engine):
         while choose(candidates):
             pass
         context = self.render_selection(selected)
-        tokens = len(self.encoding.encode(context))
+        tokens = len(self.encoding.encode_ordinary(context))
         if tokens > budget:
             raise ValueError('Evidence packing exceeded token budget')
         return context, {'version': VERSION, 'elapsedMs': round((time.monotonic() - started) * 1000),

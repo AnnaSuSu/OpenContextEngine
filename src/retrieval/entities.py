@@ -175,7 +175,7 @@ class EntityEngine(Engine):
         assembled, expanded_scores, provenance = self.complete(candidates,scores,dense)
         raw,selected = self.pack_entities(assembled,expanded_scores,dense,unit_dense,budget)
         finished = time.monotonic()
-        return raw,{'version':VERSION,'elapsedMs':round((finished-start)*1000),'tokens':len(self.encoding.encode(raw)),
+        return raw,{'version':VERSION,'elapsedMs':round((finished-start)*1000),'tokens':len(self.encoding.encode_ordinary(raw)),
             'queryCache':False,'modelRequests':{'embedding':1,'rerank':1},'candidateCount':len(candidates),
             'expandedCount':len(provenance),'assembledCount':len(assembled),'policy':POLICY,'plan':plan,
             'timingMs':{'embedding':round((embedded-start)*1000),'recall':round((recalled-embedded)*1000),

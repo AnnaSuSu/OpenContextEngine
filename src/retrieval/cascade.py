@@ -130,7 +130,7 @@ class CascadeEngine(Engine):
         raw, selected = self.pack(retained, scores, affinity, budget)
         finished = time.monotonic()
         return raw, {'version': VERSION, 'elapsedMs': round((finished-start)*1000),
-            'tokens': len(self.encoding.encode(raw)), 'candidateCount': candidate_count,
+            'tokens': len(self.encoding.encode_ordinary(raw)), 'candidateCount': candidate_count,
             'rerankedCount': len(retained), 'expandedCount': len(expanded),
             'modelRequests': {'embedding': 1, 'rerank': 1}, 'queryCache': False,
             'timingMs': {'embedding': round((embedded_at-start)*1000), 'recall': round((recalled_at-embedded_at)*1000),

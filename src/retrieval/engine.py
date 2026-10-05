@@ -56,7 +56,7 @@ class Engine:
         for u in units:
             for target in u['edges']:
                 self.incoming[target].append(u['id'])
-        self.costs = [len(self.encoding.encode(self.render(u))) + 2 for u in units]
+        self.costs = [len(self.encoding.encode_ordinary(self.render(u))) + 2 for u in units]
 
     @staticmethod
     def render(u):
@@ -153,7 +153,7 @@ class Engine:
             trace.append({'id': uid, 'overall': overall.get(uid, 0), 'facets': values.tolist(),
                           'tokens': self.costs[uid], 'gain': gain, 'graphExpanded': uid in expanded})
         raw = '\n'.join(self.render(self.units[uid]) for uid in selected)
-        return raw, {'elapsedMs': round((time.monotonic()-start)*1000), 'tokens': len(self.encoding.encode(raw)),
+        return raw, {'elapsedMs': round((time.monotonic()-start)*1000), 'tokens': len(self.encoding.encode_ordinary(raw)),
             'candidateCount': len(candidates), 'rerankedCount': len(retained), 'expandedCount': len(expanded),
             'selected': trace, 'plan': plan}
 

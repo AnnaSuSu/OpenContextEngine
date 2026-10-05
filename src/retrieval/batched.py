@@ -209,7 +209,7 @@ class BatchedEngine(Engine):
                     'selectionAnchor':uid,'contextOnly':item not in retained})
         raw = '\n'.join(self.render(self.units[uid]) for uid in selected)
         end = time.monotonic()
-        return raw,{'version':getattr(self, 'version', VERSION),'elapsedMs':round((end-start)*1000),'tokens':len(self.encoding.encode(raw)),
+        return raw,{'version':getattr(self, 'version', VERSION),'elapsedMs':round((end-start)*1000),'tokens':len(self.encoding.encode_ordinary(raw)),
             'candidateCount':len(candidates),'rerankedCount':len(retained),'expandedCount':len(expanded),
             'retention':retention,
             'modelRequests':{'embedding':1,'rerank':sum(w['requests'] for w in waves)},
