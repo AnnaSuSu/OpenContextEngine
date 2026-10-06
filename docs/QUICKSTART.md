@@ -32,7 +32,7 @@ open-context-engine setup --python "C:\Program Files\Python312\python.exe"
 
 Use native absolute project paths such as `C:\Users\you\project` in MCP calls. Generated MCP JSON escapes backslashes automatically.
 
-For internal builds, maintainers can create an archive with `npm pack` and install it with `npm install -g /path/to/open-context-engine-0.1.3.tgz`. See the [release checklist](https://github.com/AnnaSuSu/OpenContextEngine/blob/main/docs/RELEASING.md).
+For internal builds, maintainers can create an archive with `npm pack` and install it with `npm install -g /path/to/open-context-engine-0.1.4.tgz`. See the [release checklist](https://github.com/AnnaSuSu/OpenContextEngine/blob/main/docs/RELEASING.md).
 
 The CLI and package are named `open-context-engine`. The previous `opencontextengine` command remains an alias. Existing configuration and cache directories keep their paths, so saved keys and indexes are reused.
 
@@ -122,7 +122,7 @@ Use your client's equivalent configuration format. Configuration and dependency 
 
 Without `--root`, the server uses **automatic workspace mode**. Your agent supplies the absolute project directory in `directory_path` on each tool call. No indexing starts until a project is requested; first access starts a repository worker and background indexing. Later calls reuse it, including calls from other MCP processes under the same local user. One MCP session can search multiple projects, each with an independent worker and persistent index.
 
-Compatible clients share one worker per index directory. Closing a client releases only its lease; a worker exits after all leases expire or are released, no searches remain in flight, and it has been idle for 30 seconds. Clients renew their leases automatically, and reconnect if the worker exits.
+Version **0.1.4** and later automatically share one worker per index directory across compatible clients. Closing a client releases only its lease; a worker exits after all leases expire or are released, no searches remain in flight, and it has been idle for 30 seconds. Clients renew their leases automatically, and reconnect if the worker exits.
 
 The server does not infer your editor's project from its own launch directory. Its tool instructions tell the agent to use the project path supplied by the host, or inspect the current project directory. Missing, relative, or invalid paths return an error. Symbolic links to the same directory share a worker. Supply the same project root consistently, rather than a different subdirectory on each call.
 

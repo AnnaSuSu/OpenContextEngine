@@ -37,7 +37,7 @@ Measured with the optional batch rerank API. 40 source-derived tasks, each asked
 
 Requires **macOS, Linux, or Windows**, Node.js 22.14+, Python 3.10+, Git, and configured embedding/reranking services. Go repositories also need Go 1.22+.
 
-Native Windows support is available in version **0.1.3** and later. Run the installation commands in PowerShell.
+Native Windows support is available in version **0.1.3** and later. Run the installation commands in PowerShell. Version **0.1.4** adds automatic worker sharing across MCP sessions to prevent index-lock conflicts.
 
 Install from npm, then expand your client's guide. Model settings are shared across clients on the same machine.
 
