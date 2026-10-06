@@ -115,7 +115,7 @@ class EvidenceEngine(Engine):
             blocks.append('')
         return '\n'.join(blocks)
 
-    def search(self, plan, budget=4000):
+    def search(self, plan, budget=8000):
         started = time.monotonic()
         declarations = bool(re.search(r'\b(interface|type alias|schema)\b|类型定义|接口类型', plan['intent'], re.I))
         def substance(uid):

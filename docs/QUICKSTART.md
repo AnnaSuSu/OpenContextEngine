@@ -136,7 +136,7 @@ To pin the server to one project instead, append `"--root", "/absolute/path/to/y
 
 | Tool | Purpose |
 | --- | --- |
-| `search_code` | Pass `directory_path` and describe the behavior in `query`. Returns source paths, line numbers, and relevant code; default budget: 4,000 tokens. |
+| `search_code` | Pass `directory_path` and describe the behavior in `query`. Returns source paths, line numbers, and relevant code; default budget: 8,000 tokens. Pass `budget: 4000` for a smaller response. |
 | `index_status` | Pass `directory_path` to inspect indexing progress, active generation, vector reuse, and the latest update error. First access also starts that project's index. |
 
 ### Client setup notes

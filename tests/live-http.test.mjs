@@ -85,3 +85,38 @@ test('A concurrent search can queue longer than five seconds behind model retrie
     assert.match(b.context, /queued_result/);
     assert.ok(b.queueMs >= 5000, b.queueMs);
   });
+
+test('Default HTTP, client and MCP budgets return 8k evidence while explicit 4k remains supported',
+  {skip:!python,timeout:20000}, async t => {
+    const {root,config} = await fixture(t);
+    const source = Array.from({length:32},(_,i) => `def persist_${i}():\n`
+      + Array.from({length:35},(_,j) => `    value_${j} = "record_${i}_${j}"\n`).join('')
+      + '    return value_34\n').join('\n');
+    await writeFile(join(root,'records.py'),source);
+    const defaultClient = await search('Find record persistence implementations',{config,freshnessWaitMs:5000});
+    const explicit8k = await search('Find record persistence implementations',{config,budget:8000,freshnessWaitMs:5000});
+    const explicit4k = await search('Find record persistence implementations',{config,budget:4000,freshnessWaitMs:5000});
+    assert.equal(defaultClient.context,explicit8k.context);
+    assert.ok(defaultClient.tokens>4000 && defaultClient.tokens<=8000,defaultClient.tokens);
+    assert.ok(explicit4k.tokens<=4000,explicit4k.tokens);
+    const raw = await fetch(config.baseUrl+'/search',{method:'POST',
+      headers:{authorization:`Bearer ${config.apiKey}`,'content-type':'application/json'},
+      body:JSON.stringify({query:'Find record persistence implementations',freshnessWaitMs:5000})});
+    assert.equal(raw.status,200);
+    assert.equal((await raw.json()).context,explicit8k.context);
+    const {Client} = await import('@modelcontextprotocol/sdk/client/index.js');
+    const {InMemoryTransport} = await import('@modelcontextprotocol/sdk/inMemory.js');
+    const {createMcpServer} = await import('../src/mcp.mjs');
+    const server=createMcpServer(config);
+    const client=new Client({name:'default-budget-test',version:'1.0.0'});
+    const [a,b]=InMemoryTransport.createLinkedPair();
+    try {
+      await server.connect(b);await client.connect(a);
+      const result=await client.callTool({name:'search_code',arguments:{query:'Find record persistence implementations',freshnessWaitMs:5000}});
+      assert.ok(!result.isError,JSON.stringify(result));
+      assert.equal(result.structuredContent.context,explicit8k.context);
+      const smaller=await client.callTool({name:'search_code',arguments:{query:'Find record persistence implementations',budget:4000,freshnessWaitMs:5000}});
+      assert.ok(!smaller.isError,JSON.stringify(smaller));
+      assert.equal(smaller.structuredContent.context,explicit4k.context);
+    } finally {await client.close();await server.close();}
+  });

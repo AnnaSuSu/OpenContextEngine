@@ -2,7 +2,7 @@
 
 OpenContextEngine uses the official TypeScript MCP SDK's stdio transport and provides two tools:
 
-- `search_code(directory_path, query, budget=4000, freshnessWaitMs=30000)`: search the specified repository's current source and return file paths, original line numbers, evidence snippets, and the index version.
+- `search_code(directory_path, query, budget=8000, freshnessWaitMs=30000)`: search the specified repository's current source and return file paths, original line numbers, evidence snippets, and the index version.
 - `index_status(directory_path)`: check index readiness, changed-file counts, embedding reuse, and the most recent update error.
 
 The implementation uses the [official SDK's stdio and tool registration interfaces](https://ts.sdk.modelcontextprotocol.io/server).

@@ -105,7 +105,7 @@ def serve(config):
                 body = json.loads(self.rfile.read(length))
                 if not isinstance(body,dict) or set(body)-{'query','budget','trace','freshnessWaitMs'}:
                     raise ValueError('Unknown fields')
-                query,budget = body.get('query'),body.get('budget',4000)
+                query,budget = body.get('query'),body.get('budget',8000)
                 wait_ms = body.get('freshnessWaitMs', 30000)
                 if type(wait_ms) is not int or not 0 <= wait_ms <= 120000:
                     raise ValueError('Invalid freshness wait')

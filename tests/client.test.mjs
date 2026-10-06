@@ -40,15 +40,17 @@ test('Retrieval client permits SSH loopback or HTTPS, rejects credentials and cl
 test('Client sends the unchanged query once, rejects redirects and malformed worker output',async()=>{
   const original=globalThis.fetch;
   const config={baseUrl:'http://127.0.0.1:45005',apiKey:'test-only'};
-  let calls=0;
+  let calls=0;const budgets=[];
   try{
     globalThis.fetch=async(url,options)=>{
-      calls++;assert.equal(url,config.baseUrl+'/search');assert.equal(options.redirect,'error');
+      calls++;budgets.push(JSON.parse(options.body).budget);assert.equal(url,config.baseUrl+'/search');assert.equal(options.redirect,'error');
       assert.equal(JSON.parse(options.body).query,'保存后，在哪里处理失败？');
       return new Response(JSON.stringify({context:'source',retrievalMs:12,queryCache:false}));
     };
     const response=await search('保存后，在哪里处理失败？',{config});
     assert.equal(calls,1);assert.equal(response.queryCache,false);assert.ok(response.clientElapsedMs>=0);
+    await search('保存后，在哪里处理失败？',{config,budget:4000});
+    assert.deepEqual(budgets,[8000,4000]);
     globalThis.fetch=async()=>new Response(JSON.stringify({context:'source'}));
     await assert.rejects(()=>search('query',{config}),/Invalid retrieval response/);
     globalThis.fetch=async()=>new Response(JSON.stringify({error:'Retrieval queue is full; retry later'}),{status:429});

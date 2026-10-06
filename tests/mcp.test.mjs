@@ -30,6 +30,7 @@ test('Official MCP stdio client initializes, discovers tools and retrieves updat
     const tools = (await client.listTools()).tools;
     assert.deepEqual(tools.map(tool => tool.name).sort(),['index_status','search_code']);
     assert.equal(tools[1].annotations.readOnlyHint,true);
+    assert.equal(tools.find(tool => tool.name==='search_code').inputSchema.properties.budget.default,8000);
     let result = await client.callTool({name:'search_code',arguments:{query:'find persist',freshnessWaitMs:5000}});
     assert.ok(!result.isError);
     assert.match(result.content[0].text,/original/);

@@ -26,7 +26,7 @@ export function createMcpServer(config, {resolveConfig, automatic = false} = {})
     description:'Find code implementing a task or behavior in a repository. Returns source evidence under a token budget. '
       + workspaceInstructions
       + 'Uses saved working-tree content, including uncommitted changes; rejects stale results when synchronization fails.',
-    inputSchema:{directory_path:directoryPath,query:z.string().trim().min(1).max(8192),budget:z.number().int().min(256).max(8000).default(4000),
+    inputSchema:{directory_path:directoryPath,query:z.string().trim().min(1).max(8192),budget:z.number().int().min(256).max(8000).default(8000),
       freshnessWaitMs:z.number().int().min(0).max(120000).default(30000)},
     annotations,
   }, async ({directory_path,query,budget,freshnessWaitMs}, extra) => {
