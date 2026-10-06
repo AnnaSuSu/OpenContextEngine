@@ -25,7 +25,7 @@ test('npm package contains the runtime and excludes credentials, caches, benchma
   assert.ok(pack.files.find(file => file.path === 'bin/opencontextengine.mjs').mode & 0o111);
   const metadata = JSON.parse(await readFile('package.json'));
   assert.equal(metadata.name,'open-context-engine');
-  assert.equal(pack.filename,'open-context-engine-0.1.5.tgz');
+  assert.equal(pack.filename,'open-context-engine-0.1.6.tgz');
   assert.equal(metadata.bin['open-context-engine'],'bin/opencontextengine.mjs');
   assert.equal(metadata.bin.opencontextengine,'bin/opencontextengine.mjs');
   assert.notEqual(metadata.private,true);
@@ -44,7 +44,7 @@ test('CLI help, version, and generated MCP configuration work outside the source
   const help = await execute(process.execPath,[bin,'--help'],options);
   assert.match(help.stdout,/open-context-engine setup/);
   const version = await execute(process.execPath,[bin,'--version'],options);
-  assert.match(version.stdout,/^0\.1\.5\n$/);
+  assert.match(version.stdout,/^0\.1\.6\n$/);
   const config = await execute(process.execPath,[bin,'mcp-config'],options);
   const server = JSON.parse(config.stdout).mcpServers['open-context-engine'];
   assert.equal(server.command,process.execPath);
