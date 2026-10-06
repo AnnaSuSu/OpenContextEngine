@@ -39,13 +39,13 @@ export function serviceConfig({root, state, port = 0} = {}, environment = proces
   };
 }
 
-export function startService(settings, {log = line => process.stderr.write(line + '\n')} = {}) {
+export function startService(settings, {log = line => process.stderr.write(line + '\n'), startupMs = 15000} = {}) {
   const {python, config} = settings;
   const child = spawn(python, [resolve(projectRoot, 'scripts/retrieval-server.py')], {
     cwd: projectRoot, env: {...process.env, ...settings.workerEnv,
       PATH:dirname(process.execPath)+delimiter+(process.env.PATH || ''),
       PYTHONUTF8:'1', PYTHONIOENCODING:'utf-8', OPENBLAS_NUM_THREADS:'2', OMP_NUM_THREADS:'2'},
-    stdio:['pipe', 'pipe', 'pipe'],
+    stdio:['pipe', 'pipe', 'pipe'], detached:Boolean(config.shared), windowsHide:true,
   });
   const lines = createInterface({input: child.stdout});
   const errors = createInterface({input: child.stderr});
@@ -53,14 +53,26 @@ export function startService(settings, {log = line => process.stderr.write(line 
   child.stdin.on('error', () => {}); // Spawn/exit handlers report early failures.
   child.stdin.end(JSON.stringify(config) + '\n');
   const ready = new Promise((resolveReady, reject) => {
-    const timer = setTimeout(() => {child.kill(); reject(new Error('Retrieval worker startup timed out'));}, 15000);
+    const timer = setTimeout(() => {child.kill(); reject(new Error('Retrieval worker startup timed out'));}, startupMs);
     child.once('error', error => {clearTimeout(timer); reject(error);});
     child.once('exit', code => {clearTimeout(timer); reject(new Error(`Retrieval worker exited (${code})`));});
     lines.on('line', line => {
       try {
         const value = JSON.parse(line);
+        if (value.startupError) {
+          clearTimeout(timer);
+          const error = new Error(`Retrieval worker failed to start: ${value.startupError.message}`);
+          error.code = value.startupError.code;
+          reject(error);
+          return;
+        }
         if (value.listening) {
           clearTimeout(timer);
+          if (config.shared) {
+            lines.close(); errors.close();
+            child.stdout.destroy(); child.stderr.destroy();
+            child.unref();
+          }
           resolveReady({baseUrl:value.listening, apiKey:config.serviceKey});
           return;
         }

@@ -11,7 +11,7 @@ export const python = process.env.OCE_PYTHON || ['.venv',
   .map(path => venvPython(resolve(path))).find(existsSync);
 
 // A deterministic protocol fixture, not a local model or retrieval quality test.
-export async function fixture(t) {
+export async function fixture(t, {beforeCleanup = async () => {}} = {}) {
   const dir = await mkdtemp(join(tmpdir(), 'opencontextengine 中文 '));
   const root = join(dir,'repo');
   await mkdir(root);
@@ -48,6 +48,7 @@ export async function fixture(t) {
   const logs = [];
   const worker = startService(settings, {log:line => logs.push(line)});
   t.after(async () => {
+    await beforeCleanup({dir});
     await worker.close();
     models.closeAllConnections();
     await new Promise(resolveClose => models.close(resolveClose));

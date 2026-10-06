@@ -12,13 +12,17 @@ export function clientConfig(environment=process.env) {
 
 export async function search(query,{budget=4000,trace=false,freshnessWaitMs=30000,config=clientConfig(),signal}={}) {
   const started=performance.now();
-  const timeout = AbortSignal.timeout(freshnessWaitMs + 30000);
+  const timeout = AbortSignal.timeout(freshnessWaitMs + 60000);
   const response=await fetch(`${config.baseUrl}/search`,{method:'POST',redirect:'error',signal:signal ? AbortSignal.any([signal,timeout]) : timeout,
     headers:{'content-type':'application/json',authorization:`Bearer ${config.apiKey}`},body:JSON.stringify({query,budget,trace,freshnessWaitMs})});
   if (!response.ok) {
     if (response.status === 503) {
       const body = await response.json();
       throw new Error(`Index unavailable: ${body.error || 'update pending'}`);
+    }
+    if (response.status === 429) {
+      const body = await response.json();
+      throw new Error(`Retrieval busy: ${body.error || 'retry later'}`);
     }
     throw new Error(`Retrieval HTTP ${response.status}`);
   }

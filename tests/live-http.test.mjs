@@ -65,3 +65,23 @@ test('Managed workers can parse JavaScript when the desktop client PATH does not
     const result = await search('find persist',{config:service.config,freshnessWaitMs:5000});
     assert.match(result.context,/desktop-path-ready/);
   });
+
+test('A concurrent search can queue longer than five seconds behind model retrieval',
+  {skip:!python, timeout:20000}, async t => {
+    const {root,config,hooks} = await fixture(t);
+    await writeFile(join(root, 'main.py'), 'def persist():\n    return "queued_result"\n');
+    let entered;
+    const started = new Promise(resolve => {entered = resolve;});
+    hooks.rerank = async () => {
+      hooks.rerank = null;
+      entered();
+      await new Promise(resolve => setTimeout(resolve, 5500));
+    };
+    const first = search('find persist', {config, freshnessWaitMs:5000});
+    await started;
+    const second = search('find persist', {config, freshnessWaitMs:5000});
+    const [a, b] = await Promise.all([first, second]);
+    assert.match(a.context, /queued_result/);
+    assert.match(b.context, /queued_result/);
+    assert.ok(b.queueMs >= 5000, b.queueMs);
+  });

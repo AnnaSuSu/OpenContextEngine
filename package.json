@@ -43,6 +43,7 @@
     "src/environment.mjs",
     "src/client.mjs",
     "src/service.mjs",
+    "src/shared-service.mjs",
     "src/workspaces.mjs",
     "src/mcp.mjs",
     "src/runtime.mjs",

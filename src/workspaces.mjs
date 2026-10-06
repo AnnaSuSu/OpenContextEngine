@@ -1,7 +1,8 @@
 import { realpathSync, statSync } from 'node:fs';
 import { isAbsolute, resolve, join } from 'node:path';
 import { createHash } from 'node:crypto';
-import { serviceConfig, startService } from './service.mjs';
+import { serviceConfig } from './service.mjs';
+import { startSharedService } from './shared-service.mjs';
 
 function directory(path) {
   const canonical = realpathSync.native(path);
@@ -9,8 +10,8 @@ function directory(path) {
   return canonical;
 }
 
-// Each canonical repository owns one worker, including while it is starting.
-export function createWorkspaceManager({root, state} = {}, {configure = serviceConfig, start = startService} = {}) {
+// Each manager holds one lease per canonical repository, including while connecting.
+export function createWorkspaceManager({root, state} = {}, {configure = serviceConfig, start = startSharedService} = {}) {
   const fixedRoot = root ? directory(resolve(root)) : undefined;
   const workers = new Map();
   let closing = false, closed;
@@ -35,13 +36,14 @@ export function createWorkspaceManager({root, state} = {}, {configure = serviceC
       entry = {worker};
       workers.set(repository, entry);
       const remove = () => {if (workers.get(repository) === entry) workers.delete(repository);};
-      worker.child.once('exit', remove);
+      worker.child?.once('exit', remove);
       entry.ready = worker.ready.catch(async error => {
         try {await worker.close();} finally {remove();}
         throw error;
       });
     }
-    return entry.ready;
+    await entry.ready;
+    return entry.worker.get ? entry.worker.get() : entry.ready;
   }
 
   function close() {

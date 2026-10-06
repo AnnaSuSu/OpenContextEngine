@@ -120,7 +120,9 @@ If your client already has `open-context-engine` on `PATH`, this shorter equival
 
 Use your client's equivalent configuration format. Configuration and dependency errors go to stderr; MCP stdout is reserved for protocol messages.
 
-Without `--root`, the server uses **automatic workspace mode**. Your agent supplies the absolute project directory in `directory_path` on each tool call. No indexing starts until a project is requested; first access starts a repository worker and background indexing. Later calls reuse it. One MCP session can search multiple projects, each with an independent worker and persistent index. Workers stay active until the client disconnects, when all are stopped.
+Without `--root`, the server uses **automatic workspace mode**. Your agent supplies the absolute project directory in `directory_path` on each tool call. No indexing starts until a project is requested; first access starts a repository worker and background indexing. Later calls reuse it, including calls from other MCP processes under the same local user. One MCP session can search multiple projects, each with an independent worker and persistent index.
+
+Compatible clients share one worker per index directory. Closing a client releases only its lease; a worker exits after all leases expire or are released, no searches remain in flight, and it has been idle for 30 seconds. Clients renew their leases automatically, and reconnect if the worker exits.
 
 The server does not infer your editor's project from its own launch directory. Its tool instructions tell the agent to use the project path supplied by the host, or inspect the current project directory. Missing, relative, or invalid paths return an error. Symbolic links to the same directory share a worker. Supply the same project root consistently, rather than a different subdirectory on each call.
 
@@ -174,7 +176,13 @@ Search actively checks source hashes before retrieval and again before returning
 
 Python, JavaScript, TypeScript, and Go files with syntax errors (including unfilled templates) are indexed as plain text with their original paths and line numbers. Healthy files keep their structural analysis; no structural relations are inferred for degraded files. The index remains `ready`, while `index_status` reports `generation.degradedFiles` and `generation.parseDiagnostics` (path, language, error type, line, column, and fallback mode). Search responses include a degraded-file count and MCP displays a short notice. Diagnostics persist across restarts and disappear when the file is repaired or deleted. Model, toolchain, storage, and source-integrity failures still fail explicitly; stale source is never substituted.
 
-State is stored in `~/.cache/opencontextengine/<repository-path-hash>/`. Override it with `--state /outside/repository/index`: automatic mode creates a separate path-hash subdirectory for each project; fixed `--root` mode uses that exact state directory. Existing installations automatically reuse their previous cache location. One worker may write to a state directory at a time. Stop that worker and remove the directory to delete stored source and embeddings.
+State is stored in `~/.cache/opencontextengine/<repository-path-hash>/`. Override it with `--state /outside/repository/index`: automatic mode creates a separate path-hash subdirectory for each project; fixed `--root` mode uses that exact state directory. Existing installations automatically reuse their previous cache location. One worker may write to a state directory at a time. Stop the worker and remove the directory to delete stored source and embeddings.
+
+Automatic mode discovers the writer through an authenticated loopback handshake; concurrent starts keep the existing writer lock intact. Its `worker.json` connection record contains a local access token and is restricted to the current user (POSIX file permissions or a Windows file ACL). Do not share this file.
+
+Configuration and runtime compatibility include model credentials, endpoints, language options, and worker source. Incompatible clients receive an explicit error instead of silently adopting another configuration; close the existing clients before changing settings, or select a separate `--state` directory. An older or manually started worker cannot be adopted automatically: use `--connect` or stop its owning clients before switching to automatic sharing.
+
+Searches are serialized with a bounded queue of 16 active/waiting requests and a 30-second queue wait; saturation returns a retryable busy error.
 
 When model weights change under the same name, increment `OCE_EMBEDDING_REVISION`. A different provider, model name, or dimension count also invalidates vector reuse. Other models need separate compatibility and quality validation.
 

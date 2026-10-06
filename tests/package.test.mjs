@@ -13,7 +13,7 @@ test('npm package contains the runtime and excludes credentials, caches, benchma
   const result = await execute('npm',['pack','--dry-run','--json','--ignore-scripts','--cache',cache]);
   const [pack] = JSON.parse(result.stdout), files = new Set(pack.files.map(file => file.path));
   for (const path of ['LICENSE','README.md','README.zh-CN.md','bin/opencontextengine.mjs','src/config.mjs','src/runtime.mjs','src/setup.mjs',
-    'src/mcp.mjs','src/workspaces.mjs','src/eval/remote-models.mjs','scripts/mcp-opencontextengine.mjs',
+    'src/mcp.mjs','src/workspaces.mjs','src/shared-service.mjs','src/retrieval/shared_worker.py','src/eval/remote-models.mjs','scripts/mcp-opencontextengine.mjs',
     'scripts/retrieval-server.py','src/retrieval/languages/typescript.mjs','src/retrieval/languages/go_ast.go',
     'src/retrieval/languages/go_types.go','src/retrieval/reranker.py','src/retrieval/writer_lock.py',
     'requirements.txt']) assert.ok(files.has(path),path);

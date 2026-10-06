@@ -15,11 +15,15 @@ else:
         fcntl.flock(file, fcntl.LOCK_EX | fcntl.LOCK_NB)
 
 
+class WriterBusy(ValueError):
+    pass
+
+
 def acquire_writer_lock(path):
     file = path.open('a+b')
     try:
         lock(file)
     except OSError:
         file.close()
-        raise ValueError('This index directory already has a running writer') from None
+        raise WriterBusy(f'This index directory already has a running writer: {path}') from None
     return file

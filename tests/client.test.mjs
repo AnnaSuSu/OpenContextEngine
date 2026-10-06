@@ -51,5 +51,7 @@ test('Client sends the unchanged query once, rejects redirects and malformed wor
     assert.equal(calls,1);assert.equal(response.queryCache,false);assert.ok(response.clientElapsedMs>=0);
     globalThis.fetch=async()=>new Response(JSON.stringify({context:'source'}));
     await assert.rejects(()=>search('query',{config}),/Invalid retrieval response/);
+    globalThis.fetch=async()=>new Response(JSON.stringify({error:'Retrieval queue is full; retry later'}),{status:429});
+    await assert.rejects(()=>search('query',{config}),/Retrieval busy: Retrieval queue is full; retry later/);
   }finally{globalThis.fetch=original;}
 });

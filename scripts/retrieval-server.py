@@ -1,7 +1,9 @@
 """Authenticated, persistent retrieval worker; model inference stays remote."""
 import hashlib
+import errno
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import os
 from pathlib import Path
 import re
 import secrets
@@ -17,6 +19,8 @@ sys.path.insert(0, str(ROOT / 'src' / 'retrieval'))
 from evidence import EvidenceEngine, VERSION
 from planning import plan_query
 from live import LiveIndex, IndexUnavailable
+from writer_lock import WriterBusy
+from shared_worker import SharedWorker
 
 
 class LoopbackHTTPServer(ThreadingHTTPServer):
@@ -30,6 +34,7 @@ class LoopbackHTTPServer(ThreadingHTTPServer):
 def serve(config):
     initialized = time.monotonic()
     live = LiveIndex(config).start() if config.get('root') else None
+    shared = SharedWorker(config) if config.get('shared') and live else None
     state = Path(config['state'])
     if live:
         index, retrieval = None, None
@@ -52,6 +57,7 @@ def serve(config):
         with urlopen(model_base+'/healthz',timeout=10) as response:
             health['reranker'] = json.load(response)
     lock = threading.Lock()
+    slots = threading.BoundedSemaphore(16)
 
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, *args):
@@ -75,6 +81,19 @@ def serve(config):
             self.reply(404,{'error':'Not found'})
 
         def do_POST(self):
+            if shared and self.path in ('/lease', '/release'):
+                if not secrets.compare_digest(self.headers.get('Authorization', ''), 'Bearer ' + config['serviceKey']):
+                    return self.reply(401, {'error': 'Unauthorized'})
+                try:
+                    length = int(self.headers.get('Content-Length', '0'))
+                    if not 1 <= length <= 4096:
+                        raise ValueError('Invalid body size')
+                    body = json.loads(self.rfile.read(length))
+                    if not isinstance(body, dict):
+                        raise ValueError('Invalid lease')
+                except (ValueError, TypeError):
+                    return self.reply(422, {'error': 'Invalid lease request'})
+                return self.reply(*shared.lease(body, release=self.path == '/release'))
             if self.path!='/search':
                 return self.reply(404,{'error':'Not found'})
             if not secrets.compare_digest(self.headers.get('Authorization',''), 'Bearer '+config['serviceKey']):
@@ -95,8 +114,16 @@ def serve(config):
             except (ValueError,TypeError):
                 return self.reply(422,{'error':'Expected query text and a token budget between 256 and 8000'})
             start = time.monotonic()
-            if not lock.acquire(timeout=5):
-                return self.reply(429,{'error':'Retrieval worker busy'})
+            if not slots.acquire(blocking=False):
+                return self.reply(429, {'error': 'Retrieval queue is full; retry later'})
+            if shared and not shared.enter():
+                slots.release()
+                return self.reply(503, {'error': 'Worker is stopping'})
+            if not lock.acquire(timeout=30):
+                slots.release()
+                if shared:
+                    shared.leave()
+                return self.reply(429, {'error': 'Retrieval queue wait exceeded 30 seconds; retry later'})
             try:
                 queued = round((time.monotonic()-start)*1000)
                 generation = live.current(wait_ms/1000) if live else None
@@ -123,18 +150,43 @@ def serve(config):
                 self.reply(502,{'error':'Retrieval or model request failed'})
             finally:
                 lock.release()
+                slots.release()
+                if shared:
+                    shared.leave()
 
     server = LoopbackHTTPServer(('127.0.0.1',config.get('port',23505)),Handler)
     server.daemon_threads = True
-    print(json.dumps({'listening':f'http://127.0.0.1:{server.server_port}',
-                      'health':{'status':'running','mode':'live'} if live else health}),flush=True)
+    if shared:
+        shared.publish(server.server_port)
+        shared.monitor(server)
+    try:
+        print(json.dumps({'listening':f'http://127.0.0.1:{server.server_port}',
+                          'health':{'status':'running','mode':'live'} if live else health}),flush=True)
+    except OSError as error:
+        # Another client may already have attached through discovery when the
+        # launcher disappears. Its closed startup pipe must not kill that writer.
+        if not shared or error.errno not in (errno.EPIPE, errno.EINVAL):
+            raise
+    if shared:
+        # Shared workers outlive their launching MCP process and its stdio pipes.
+        sys.stdout = open(os.devnull, 'w')
+        sys.stderr = open(os.devnull, 'w')
     try:
         server.serve_forever()
     finally:
         server.server_close()
+        if shared:
+            shared.close()
         if live:
             live.close()
 
 
 if __name__ == '__main__':
-    serve(json.loads(sys.stdin.readline()))
+    try:
+        serve(json.loads(sys.stdin.readline()))
+    except Exception as error:
+        code = 'INDEX_LOCKED' if isinstance(error, WriterBusy) else 'STARTUP_FAILED'
+        # Only known-safe diagnostics cross the startup protocol; never serialize config or keys.
+        message = str(error) if isinstance(error, WriterBusy) else type(error).__name__
+        print(json.dumps({'startupError': {'code': code, 'message': message}}), flush=True)
+        sys.exit(1)
