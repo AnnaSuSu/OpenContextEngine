@@ -9,6 +9,78 @@ import { createMcpServer } from '../src/mcp.mjs';
 import { createWorkspaceManager } from '../src/workspaces.mjs';
 import { startService } from '../src/service.mjs';
 import { fixture, python } from './helpers/live-service.mjs';
+import { createServer } from 'node:http';
+
+async function pendingClient(t, respond) {
+  const requests = [];
+  const http = createServer(async (request, response) => {
+    let data = '';
+    for await (const chunk of request) data += chunk;
+    requests.push(JSON.parse(data));
+    const [status, body] = respond(requests.length);
+    response.writeHead(status,{'content-type':'application/json'}).end(JSON.stringify(body));
+  });
+  await new Promise(resolve => http.listen(0,'127.0.0.1',resolve));
+  const server = createMcpServer({baseUrl:`http://127.0.0.1:${http.address().port}`,apiKey:'test-only'});
+  const client = new Client({name:'pending-test',version:'1.0.0'});
+  const [a,b] = InMemoryTransport.createLinkedPair();
+  t.after(async () => {
+    await client.close(); await server.close();
+    http.closeAllConnections();
+    await new Promise(resolve => http.close(resolve));
+  });
+  await server.connect(b); await client.connect(a);
+  return {client,requests};
+}
+
+const pendingResponse = {code:'INDEX_UPDATING',error:'Index is updating',retryable:true,
+  index:{mode:'live',status:'updating',progress:{stage:'embedding',completedDocuments:64,totalDocuments:100}}};
+
+test('MCP retries pending synchronization once and returns recovered source', async t => {
+  const {client,requests} = await pendingClient(t, attempt => attempt === 1 ? [503,pendingResponse]
+    : [200,{context:'fresh source',retrievalMs:1,index:{mode:'live'}}]);
+  const result = await client.callTool({name:'search_code',arguments:{query:'find source'}});
+  assert.ok(!result.isError);
+  assert.equal(result.structuredContent.context,'fresh source');
+  assert.deepEqual(requests.map(r => r.freshnessWaitMs),[30000,10000]);
+});
+
+test('MCP exhausts one retry with a non-error updating status, never empty search results', async t => {
+  const {client,requests} = await pendingClient(t, () => [503,pendingResponse]);
+  const result = await client.callTool({name:'search_code',arguments:{query:'find source',freshnessWaitMs:50}});
+  assert.equal(result.isError,false);
+  assert.equal(result.structuredContent.status,'updating');
+  assert.equal(result.structuredContent.retryable,true);
+  assert.equal(result.structuredContent.context,undefined);
+  assert.match(result.content[0].text,/64\/100/);
+  assert.match(result.content[0].text,/search has not run yet/);
+  assert.deepEqual(requests.map(r => r.freshnessWaitMs),[50,50]);
+});
+
+test('MCP zero wait returns pending immediately without retry', async t => {
+  const {client,requests} = await pendingClient(t, () => [503,pendingResponse]);
+  const result = await client.callTool({name:'search_code',arguments:{query:'find source',freshnessWaitMs:0}});
+  assert.equal(result.isError,false);
+  assert.equal(requests.length,1);
+});
+
+test('MCP preserves genuine index failures and never retries them', async t => {
+  const {client,requests} = await pendingClient(t, () => [503,
+    {code:'INDEX_UNAVAILABLE',error:'Index update failed: HTTPError',index:{status:'failed'}}]);
+  const result = await client.callTool({name:'search_code',arguments:{query:'find source'}});
+  assert.equal(result.isError,true);
+  assert.match(result.content[0].text,/Index update failed: HTTPError/);
+  assert.equal(requests.length,1);
+});
+
+test('MCP surfaces an indexing failure that occurs during the retry', async t => {
+  const {client,requests} = await pendingClient(t, attempt => attempt === 1 ? [503,pendingResponse]
+    : [503,{code:'INDEX_UNAVAILABLE',error:'Index update failed: HTTPError',index:{status:'failed'}}]);
+  const result = await client.callTool({name:'search_code',arguments:{query:'find source'}});
+  assert.equal(result.isError,true);
+  assert.match(result.content[0].text,/Index update failed: HTTPError/);
+  assert.equal(requests.length,2);
+});
 
 async function connect(t, config, legacy=false) {
   const transport = new StdioClientTransport({command:process.execPath,

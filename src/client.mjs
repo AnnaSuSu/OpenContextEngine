@@ -18,7 +18,9 @@ export async function search(query,{budget=8000,trace=false,freshnessWaitMs=3000
   if (!response.ok) {
     if (response.status === 503) {
       const body = await response.json();
-      throw new Error(`Index unavailable: ${body.error || 'update pending'}`);
+      throw Object.assign(new Error(`Index unavailable: ${body.error || 'update pending'}`), {
+        code:body.code, index:body.index,
+      });
     }
     if (response.status === 429) {
       const body = await response.json();

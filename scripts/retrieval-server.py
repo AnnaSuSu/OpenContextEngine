@@ -144,7 +144,8 @@ def serve(config):
                     response['diagnostics'] = debug
                 self.reply(200,response)
             except IndexUnavailable as error:
-                self.reply(503,{'error':str(error),'index':live.status()})
+                self.reply(503,{'error':str(error),'code':error.code,
+                               'retryable':error.code == 'INDEX_UPDATING','index':live.status()})
             except Exception as error:
                 print(json.dumps({'event':'search-failed','type':type(error).__name__}),flush=True)
                 self.reply(502,{'error':'Retrieval or model request failed'})

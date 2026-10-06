@@ -210,12 +210,33 @@ class LiveTests(unittest.TestCase):
     def test_pending_wait_and_failed_embedding_are_explicit(self):
         self.write('a.txt','one\n')
         manager = self.manager()
-        with self.assertRaises(IndexUnavailable):
+        with self.assertRaises(IndexUnavailable) as pending:
             manager.current(.05)
+        self.assertEqual(pending.exception.code, 'INDEX_UPDATING')
         manager.embed = lambda *args, **kwargs: {'data':[]}
         with self.assertRaisesRegex(ValueError, 'indices'):
             self.build(manager)
         self.assertFalse((manager.state/'current.json').exists())
+
+    def test_embedding_progress_counts_completed_batches_and_excludes_cached_documents(self):
+        for i in range(5):
+            self.write(f'{i}.txt', f'document {i}\n')
+        manager = self.manager(embeddingBatchSize=2)
+        observations = []
+        def embed(*args, **kwargs):
+            observations.append(manager.status()['progress'])
+            return self.embed(*args, **kwargs)
+        manager.embed = embed
+        self.build(manager)
+        self.assertEqual(observations, [
+            {'stage': 'embedding', 'completedDocuments': n, 'totalDocuments': 5}
+            for n in [0, 2, 4]])
+        self.assertEqual(manager.status()['progress']['stage'], 'finalizing')
+        observations.clear()
+        self.write('0.txt', 'changed document\n')
+        self.build(manager)
+        self.assertEqual(observations, [
+            {'stage': 'embedding', 'completedDocuments': 0, 'totalDocuments': 1}])
 
     def test_atomic_publish_failure_keeps_previous_disk_and_memory_version(self):
         self.write('a.txt','before\n')

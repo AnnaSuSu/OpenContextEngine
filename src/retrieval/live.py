@@ -28,6 +28,10 @@ def digest(value):
 class IndexUnavailable(Exception):
     """The requested working tree has no complete, current searchable generation."""
 
+    def __init__(self, message, *, code='INDEX_UNAVAILABLE'):
+        super().__init__(message)
+        self.code = code
+
 
 class SourceChanged(Exception):
     pass
@@ -73,6 +77,7 @@ class LiveIndex:
         self.generation = None
         self.error = None
         self.phase = 'starting'
+        self.progress = None
         self.parse_cache = {}
         self.state.mkdir(parents=True, exist_ok=True, mode=0o700)
         self.lock_file = acquire_writer_lock(self.state/'writer.lock')
@@ -109,7 +114,12 @@ class LiveIndex:
         with self.condition:
             return {'status': self.phase, 'mode': 'live', 'root': str(self.root),
                     'generation': self.generation.info if self.generation else None,
-                    'error': self.error, 'pollSeconds': self.poll}
+                    'error': self.error, 'pollSeconds': self.poll,
+                    'progress': dict(self.progress) if self.progress else None}
+
+    def _progress(self, stage, **counts):
+        with self.condition:
+            self.progress = {'stage': stage, **counts}
 
     def current(self, timeout=30):
         deadline = time.monotonic() + timeout
@@ -125,7 +135,7 @@ class LiveIndex:
                     raise IndexUnavailable('Index update failed: ' + self.error['type'])
                 remaining = deadline - time.monotonic()
                 if remaining <= 0:
-                    raise IndexUnavailable('Index update pending; retry after synchronization')
+                    raise IndexUnavailable('Index is updating; search has not run yet', code='INDEX_UPDATING')
                 self.condition.wait(min(remaining, self.poll))
         raise IndexUnavailable('Index is stopping')
 
@@ -167,6 +177,7 @@ class LiveIndex:
 
     def _build(self, snapshot, identity):
         start = time.monotonic()
+        self._progress('parsing', files=len(snapshot['files']))
         report = {}
         units = source_units(self.root, snapshot['files'], language_options=self.options,
                              cache=self.parse_cache, report=report)
@@ -184,6 +195,7 @@ class LiveIndex:
                         continue
                 missing[key] = text
             entries = list(missing.items())
+            self._progress('embedding', completedDocuments=0, totalDocuments=len(entries))
             for offset in range(0, len(entries), self.batch_size):
                 if self.stop_event.is_set():
                     raise SourceChanged()
@@ -201,6 +213,8 @@ class LiveIndex:
                     vectors[key] = vector
                     db.execute('INSERT OR REPLACE INTO vectors VALUES (?, ?)', (key, vector.tobytes()))
                 db.commit()  # Reuse successful batches even after a concurrent edit.
+                self._progress('embedding', completedDocuments=offset+len(batch), totalDocuments=len(entries))
+        self._progress('finalizing')
         matrix = np.asarray([vectors[key] for key in keys], dtype=np.float32).reshape(len(keys), self.dimensions)
         engine = self._engine(units, matrix)
         if self.stop_event.is_set() or self.scan() != snapshot:
@@ -243,6 +257,7 @@ class LiveIndex:
                     if self.generation and self.generation.identity == identity:
                         with self.condition:
                             self.phase, self.error = 'ready', None
+                            self.progress = None
                         self.stop_event.wait(self.poll)
                         continue
                     if failed_identity == identity and time.monotonic() < retry_at:
@@ -250,6 +265,7 @@ class LiveIndex:
                         continue
                     with self.condition:
                         self.phase, self.error = 'updating', None
+                        self.progress = {'stage': 'checking', 'files': len(snapshot['files'])}
                     if self.stop_event.wait(self.debounce):
                         break
                     if self.scan() != snapshot:
@@ -259,9 +275,11 @@ class LiveIndex:
                         raise SourceChanged()
                     with self.condition:
                         self.generation, self.phase, self.error = generation, 'ready', None
+                        self.progress = None
                         failed_identity = None
                         self.condition.notify_all()
                 except SourceChanged:
+                    self._progress('source_changed')
                     continue
                 except Exception as error:
                     failed_identity, retry_at = identity, time.monotonic() + max(2, self.poll)

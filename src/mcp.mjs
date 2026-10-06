@@ -2,6 +2,24 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { search, indexStatus } from './client.mjs';
 
+function updatingResult(error) {
+  const progress = error.index?.progress;
+  let detail = '';
+  if (progress?.stage === 'embedding') {
+    detail = ` Embedding documents: ${progress.completedDocuments}/${progress.totalDocuments} completed for this update.`;
+  } else if (progress?.stage === 'parsing') {
+    detail = ` Parsing ${progress.files} files.`;
+  } else if (progress?.stage === 'finalizing') {
+    detail = ' Finalizing the searchable index.';
+  } else if (progress?.stage === 'source_changed') {
+    detail = ' Saved files changed during indexing; synchronizing the latest version.';
+  }
+  return {isError:false,
+    content:[{type:'text',text:'Index is updating; search has not run yet.' + detail
+      + ' Background synchronization continues. Check index_status for this project and retry search_code once ready.'}],
+    structuredContent:{status:'updating',code:'INDEX_UPDATING',retryable:true,index:error.index}};
+}
+
 export function createMcpServer(config, {resolveConfig, automatic = false} = {}) {
   const workspaceInstructions = automatic
     ? 'Pass directory_path as the absolute directory of the project the user is working on with every tool call. '
@@ -17,7 +35,7 @@ export function createMcpServer(config, {resolveConfig, automatic = false} = {})
   const directoryPath = automatic ? pathSchema : pathSchema.optional();
   const server = new McpServer({name:'open-context-engine',version:'0.1.5'}, {
     instructions:workspaceInstructions + 'Search for source evidence. Results include source paths and line numbers. '
-      + 'Search waits for saved file changes to be indexed. If an update is pending or fails, inspect index_status and retry after it completes. '
+      + 'Search waits for saved file changes and retries a pending update once. A status of updating means search has not run; inspect index_status and retry once ready. '
       + 'Read target files again before editing, because code may change after a search.',
   });
   const annotations = {readOnlyHint:true,destructiveHint:false,idempotentHint:true,openWorldHint:false};
@@ -27,17 +45,26 @@ export function createMcpServer(config, {resolveConfig, automatic = false} = {})
       + workspaceInstructions
       + 'Uses saved working-tree content, including uncommitted changes; rejects stale results when synchronization fails.',
     inputSchema:{directory_path:directoryPath,query:z.string().trim().min(1).max(8192),budget:z.number().int().min(256).max(8000).default(8000),
-      freshnessWaitMs:z.number().int().min(0).max(120000).default(30000)},
+      freshnessWaitMs:z.number().int().min(0).max(120000).default(30000)
+        .describe('Initial synchronization wait. Pending updates are retried once for up to 10 additional seconds; 0 disables waiting and retry.')},
     annotations,
   }, async ({directory_path,query,budget,freshnessWaitMs}, extra) => {
     try {
       const selected = await selectConfig(directory_path);
-      const result = await search(query,{budget,freshnessWaitMs,config:selected,signal:extra.signal});
+      let result;
+      try {
+        result = await search(query,{budget,freshnessWaitMs,config:selected,signal:extra.signal});
+      } catch (error) {
+        extra.signal.throwIfAborted();
+        if (error.code !== 'INDEX_UPDATING' || freshnessWaitMs === 0) throw error;
+        result = await search(query,{budget,freshnessWaitMs:Math.min(freshnessWaitMs,10000),config:selected,signal:extra.signal});
+      }
       if (result.index?.mode !== 'live') throw new Error('This service uses a frozen index; connect to a service started with --root');
       const warning = result.index.degradedFiles
         ? `Note: ${result.index.degradedFiles} file(s) indexed as plain text after syntax errors; inspect index_status for paths and locations.\n\n` : '';
       return {content:[{type:'text',text:warning + (result.context || 'No matching source context.')}],structuredContent:result};
     } catch (error) {
+      if (error.code === 'INDEX_UPDATING') return updatingResult(error);
       return {isError:true,content:[{type:'text',text:error.message}]};
     }
   });

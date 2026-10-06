@@ -52,6 +52,28 @@ test('Live HTTP refuses results if source changes during model retrieval',
     assert.match((await search('find save',{config,freshnessWaitMs:5000})).context,/after/);
   });
 
+test('Pending HTTP search reports typed progress and recovers after embedding completes',
+  {skip:!python,timeout:15000}, async t => {
+    const {root,config,hooks} = await fixture(t);
+    let entered, release;
+    const started = new Promise(resolve => {entered = resolve;});
+    const blocked = new Promise(resolve => {release = resolve;});
+    hooks.embedding = async () => {entered(); await blocked;};
+    try {
+      await writeFile(join(root,'pending.txt'),'indexing progress evidence\n');
+      await started;
+      await assert.rejects(search('find evidence',{config,freshnessWaitMs:0}), error => {
+        assert.equal(error.code,'INDEX_UPDATING');
+        assert.equal(error.index.status,'updating');
+        assert.deepEqual(error.index.progress,{stage:'embedding',completedDocuments:0,totalDocuments:1});
+        return true;
+      });
+    } finally {hooks.embedding = null; release();}
+    const result = await search('find evidence',{config,freshnessWaitMs:5000});
+    assert.match(result.context,/indexing progress evidence/);
+    assert.equal((await indexStatus({config})).progress,null);
+  });
+
 test('Managed workers can parse JavaScript when the desktop client PATH does not contain Node',
   {skip:!python,timeout:15000}, async t => {
     const original = process.env.PATH;
