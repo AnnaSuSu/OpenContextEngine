@@ -29,7 +29,7 @@ function runtimeIdentity() {
 }
 
 // A handle owns a renewable lease, never the lifetime of the shared child process.
-export function startSharedService(settings, {startupMs = 15000, leaseSeconds = 15, idleSeconds = 30} = {}) {
+export function startSharedService(settings, {startupMs = 15000, leaseSeconds = 15, idleSeconds = 30, start = startService} = {}) {
   const runtime = runtimeIdentity();
   let configured, connection, pending, timer, closed = false, closePromise;
   const leaseId = randomUUID();
@@ -99,11 +99,14 @@ export function startSharedService(settings, {startupMs = 15000, leaseSeconds = 
       if (performance.now() >= nextSpawn) {
         if (runtimeIdentity() !== runtime) throw new Error('Worker runtime changed on disk; restart this MCP client');
         const key = randomBytes(32).toString('hex');
-        const worker = startService({...settings, config:{...configured.config, port:0, serviceKey:key,
+        const worker = start({...settings, config:{...configured.config, port:0, serviceKey:key,
           shared:{fingerprint:fingerprint(key), leaseSeconds, idleSeconds}}}, {log:() => {}, startupMs:Math.max(1, deadline - performance.now())});
         try {await worker.ready;}
         catch (error) {
           await worker.close();
+          // A retry near the overall deadline may have too little time to import
+          // Python. Preserve the writer conflict already established by an earlier attempt.
+          if (error.code === 'STARTUP_TIMEOUT' && lastBusy) break;
           if (error.code !== 'INDEX_LOCKED') throw error;
           lastBusy = error;
         }

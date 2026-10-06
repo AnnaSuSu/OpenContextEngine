@@ -123,12 +123,30 @@ test('A shared writer survives its launcher closing the startup pipe before read
   });
 
 test('An older private worker retains its lock and gets an actionable error instead of being killed',
-  {skip:!python, timeout:10000}, async t => {
+  {skip:!python, timeout:30000}, async t => {
     const {settings, worker} = await sharedFixture(t);
-    const handle = shared(t, settings, {startupMs:1500});
+    const handle = shared(t, settings);
     await assert.rejects(handle.ready, /running writer.*older or manually started worker/);
     assert.equal(worker.child.exitCode, null);
     assert.equal(worker.child.signalCode, null);
+  });
+
+test('A late retry timeout preserves the previously identified writer conflict',
+  {skip:!python, timeout:10000}, async t => {
+    const {dir, settings} = await sharedFixture(t);
+    let attempts = 0, closed = 0;
+    const handle = shared(t, {...settings, config:{...settings.config, state:join(dir, 'retry-timeout')}}, {
+      startupMs:5000,
+      start:() => {
+        const first = attempts++ === 0;
+        const error = Object.assign(new Error(first ? 'This index directory already has a running writer' : 'Retrieval worker startup timed out'),
+          {code:first ? 'INDEX_LOCKED' : 'STARTUP_TIMEOUT'});
+        return {ready:Promise.reject(error), close:async () => {closed++;}};
+      },
+    });
+    await assert.rejects(handle.ready, /running writer.*older or manually started worker/);
+    assert.equal(attempts, 2);
+    assert.equal(closed, 2);
   });
 
 async function mcp(t, dir, state, modelUrl, overrides = {}) {

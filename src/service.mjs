@@ -53,7 +53,10 @@ export function startService(settings, {log = line => process.stderr.write(line 
   child.stdin.on('error', () => {}); // Spawn/exit handlers report early failures.
   child.stdin.end(JSON.stringify(config) + '\n');
   const ready = new Promise((resolveReady, reject) => {
-    const timer = setTimeout(() => {child.kill(); reject(new Error('Retrieval worker startup timed out'));}, startupMs);
+    const timer = setTimeout(() => {
+      child.kill();
+      reject(Object.assign(new Error('Retrieval worker startup timed out'), {code:'STARTUP_TIMEOUT'}));
+    }, startupMs);
     child.once('error', error => {clearTimeout(timer); reject(error);});
     child.once('exit', code => {clearTimeout(timer); reject(new Error(`Retrieval worker exited (${code})`));});
     lines.on('line', line => {
