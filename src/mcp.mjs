@@ -33,7 +33,7 @@ export function createMcpServer(config, {resolveConfig, automatic = false} = {})
   }
   const pathSchema = z.string().min(1).describe('Absolute path to the project directory. Required in automatic workspace mode.');
   const directoryPath = automatic ? pathSchema : pathSchema.optional();
-  const server = new McpServer({name:'open-context-engine',version:'0.1.6'}, {
+  const server = new McpServer({name:'open-context-engine',version:'0.1.7'}, {
     instructions:workspaceInstructions + 'Search for source evidence. Results include source paths and line numbers. '
       + 'Search waits for saved file changes and retries a pending update once. A status of updating means search has not run; inspect index_status and retry once ready. '
       + 'Read target files again before editing, because code may change after a search.',
