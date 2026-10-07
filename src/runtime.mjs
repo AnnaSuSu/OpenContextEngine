@@ -1,7 +1,8 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { readFile, mkdir, mkdtemp, writeFile, rm } from 'node:fs/promises';
-import { join, dirname, relative, isAbsolute } from 'node:path';
+import { existsSync, readFileSync } from 'node:fs';
+import { join, dirname, relative, isAbsolute, basename, resolve, delimiter } from 'node:path';
 import { createHash } from 'node:crypto';
 import { configDirectory, projectRoot } from './config.mjs';
 
@@ -12,8 +13,34 @@ export function defaultPython(platform = process.platform) {
 export function venvPython(directory, platform = process.platform) {
   return platform === 'win32' ? join(directory,'Scripts','python.exe') : join(directory,'bin','python');
 }
+export function pythonInvocation(command, env = process.env, platform = process.platform) {
+  const unchanged = {command, env};
+  if (platform !== 'win32' || !/^python(?:w)?(?:\.exe)?$/i.test(basename(command))) return unchanged;
+  let executable = command;
+  if (basename(command) === command) {
+    const path = Object.entries(env).find(([key]) => key.toLowerCase() === 'path')?.[1] || '';
+    const filename = /\.exe$/i.test(command) ? command : command + '.exe';
+    executable = [process.cwd(), ...path.split(delimiter)].map(dir => resolve(dir, filename)).find(existsSync);
+  }
+  if (!executable || !existsSync(executable)) return unchanged;
+  executable = resolve(executable);
+  const directory = dirname(executable);
+  const config = [join(directory, 'pyvenv.cfg'), join(dirname(directory), 'pyvenv.cfg')].find(existsSync);
+  if (!config) return unchanged;
+  const home = /^home\s*=\s*(.+)$/im.exec(readFileSync(config, 'utf8'))?.[1].trim();
+  if (!home || !isAbsolute(home)) return unchanged;
+  const base = join(home, basename(executable));
+  if (!existsSync(base) || base.toLowerCase() === executable.toLowerCase()) return unchanged;
+  // CPython's Windows venv redirector respawns with creationflags=0, losing
+  // window suppression. Use the same base interpreter and venv marker directly.
+  return {command:base, env:{...env, __PYVENV_LAUNCHER__:executable}};
+}
 export async function run(command, args, options = {}) {
-  try {return await exec(command,args,{timeout:600000,maxBuffer:4*1024*1024,...options});}
+  try {
+    const invocation = pythonInvocation(command, options.env ?? process.env);
+    return await exec(invocation.command,args,{timeout:600000,maxBuffer:4*1024*1024,windowsHide:true,
+      ...options,env:invocation.env});
+  }
   catch (error) {
     // Do not echo pip output: configured package indexes may contain credentials.
     throw new Error(`${command} failed (${error.code || 'unknown'}). Check the executable, network, and Python venv/pip support.`);

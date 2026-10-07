@@ -7,7 +7,7 @@ import os
 import re
 from pathlib import Path
 import shutil
-import subprocess
+from background_process import run_background
 import sys
 import tempfile
 
@@ -16,7 +16,7 @@ from .schema import physical_lines, SourceSyntaxError
 
 @lru_cache(maxsize=8)
 def toolchain(binary):
-    result = subprocess.run([binary, 'version'], capture_output=True, text=True, check=True, timeout=10)
+    result = run_background([binary, 'version'], capture_output=True, text=True, check=True, timeout=10)
     return result.stdout.strip()
 
 
@@ -65,12 +65,12 @@ def parse(sources, options):
             env = {**os.environ, 'GOENV': 'off', 'GOWORK': 'off', 'GOTOOLCHAIN': 'local',
                    'GOPROXY': 'off', 'GO111MODULE': 'off', 'CGO_ENABLED': '0', 'GOFLAGS': '',
                    'GOCACHE': str(cache/'build')}
-            built = subprocess.run([binary, 'build', '-o', str(target), str(source), str(semantic)],
+            built = run_background([binary, 'build', '-o', str(target), str(source), str(semantic)],
                                    env=env, capture_output=True, encoding='utf-8', timeout=120)
             if built.returncode:
                 raise RuntimeError('Go parser build failed: '+built.stderr[:2000])
             os.replace(target, executable)
-    result = subprocess.run([str(executable)], input=json.dumps({'options': options, 'files': [
+    result = run_background([str(executable)], input=json.dumps({'options': options, 'files': [
         {'path': source.path, 'text': source.text} for source in sources]}),
         encoding='utf-8', capture_output=True, timeout=120)
     if result.returncode:

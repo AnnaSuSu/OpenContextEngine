@@ -1,7 +1,7 @@
 """Bridge to the pinned TypeScript compiler; reads source, never executes it."""
 import json
 from pathlib import Path
-import subprocess
+from background_process import run_background
 from .schema import SourceSyntaxError
 
 COMPILER_VERSION = '5.9.3'
@@ -11,7 +11,7 @@ def extract(sources, max_lines=65, options=None):
     payload = {'files': [{'path': source.path, 'text': source.text} for source in sources],
                'maxLines': max_lines, 'options': options or {}}
     try:
-        result = subprocess.run(['node', str(Path(__file__).with_suffix('.mjs'))],
+        result = run_background(['node', str(Path(__file__).with_suffix('.mjs'))],
                                 input=json.dumps(payload), encoding='utf-8', capture_output=True,
                                 timeout=120, check=False)
     except FileNotFoundError as error:

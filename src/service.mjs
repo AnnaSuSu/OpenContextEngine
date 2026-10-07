@@ -5,7 +5,7 @@ import { homedir } from 'node:os';
 import { resolve, dirname, delimiter } from 'node:path';
 import { createInterface } from 'node:readline';
 import { projectRoot, loadEnvironment } from './config.mjs';
-import { defaultPython, venvPython } from './runtime.mjs';
+import { defaultPython, venvPython, pythonInvocation } from './runtime.mjs';
 import { embeddingTransportConfig, remoteRerankerConfig, rerankerExecutionTransport } from './eval/remote-models.mjs';
 
 export function serviceConfig({root, state, port = 0} = {}, environment = process.env) {
@@ -41,10 +41,13 @@ export function serviceConfig({root, state, port = 0} = {}, environment = proces
 
 export function startService(settings, {log = line => process.stderr.write(line + '\n'), startupMs = 15000} = {}) {
   const {python, config} = settings;
-  const child = spawn(python, [resolve(projectRoot, 'scripts/retrieval-server.py')], {
-    cwd: projectRoot, env: {...process.env, ...settings.workerEnv,
+  const invocation = pythonInvocation(python, {...process.env, ...settings.workerEnv,
       PATH:dirname(process.execPath)+delimiter+(process.env.PATH || ''),
-      PYTHONUTF8:'1', PYTHONIOENCODING:'utf-8', OPENBLAS_NUM_THREADS:'2', OMP_NUM_THREADS:'2'},
+      PYTHONUTF8:'1', PYTHONIOENCODING:'utf-8', OPENBLAS_NUM_THREADS:'2', OMP_NUM_THREADS:'2'});
+  const child = spawn(invocation.command, [resolve(projectRoot, 'scripts/retrieval-server.py')], {
+    cwd: projectRoot, env: invocation.env,
+    // Keep shared workers out of libuv's Windows kill-on-parent-exit job.
+    // Their own helper processes must also suppress console creation.
     stdio:['pipe', 'pipe', 'pipe'], detached:Boolean(config.shared), windowsHide:true,
   });
   const lines = createInterface({input: child.stdout});

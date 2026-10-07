@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 import secrets
 import re
-import subprocess
+from background_process import run_background
 import sys
 import threading
 import time
@@ -16,13 +16,13 @@ def restrict_permissions(path):
     if sys.platform == 'win32':
         # os.open(mode=0o600) does not set a Windows DACL. Resolve the current
         # user's SID (independent of localized account names) and remove inheritance.
-        result = subprocess.run(['whoami', '/user', '/fo', 'csv', '/nh'],
+        result = run_background(['whoami', '/user', '/fo', 'csv', '/nh'],
                                 capture_output=True, check=True, timeout=5)
         match = re.search(rb'S-1-[0-9-]+', result.stdout)
         if not match:
             raise PermissionError('Cannot determine current Windows user SID')
         sid = match.group().decode('ascii')
-        subprocess.run(['icacls', str(path), '/inheritance:r', '/grant:r', '*' + sid + ':F'],
+        run_background(['icacls', str(path), '/inheritance:r', '/grant:r', '*' + sid + ':F'],
                        capture_output=True, check=True, timeout=5)
 
 

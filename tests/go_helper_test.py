@@ -17,6 +17,7 @@ class GoHelperTests(unittest.TestCase):
         calls = []
         def run(command, **kwargs):
             calls.append(command)
+            self.assertTrue(kwargs['creationflags'] & 0x08000000)
             self.assertEqual(kwargs['encoding'],'utf-8')
             if command[1:2] == ['build']:
                 target = Path(command[command.index('-o')+1])
@@ -31,7 +32,9 @@ class GoHelperTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix='oce go 中文 ') as directory:
             with patch.object(go,'compiler',return_value=('fake-go','go1.22 windows/amd64')), \
                     patch.object(go.tempfile,'gettempdir',return_value=directory), \
-                    patch.object(go.sys,'platform','win32'), patch.object(go.subprocess,'run',side_effect=run):
+                    patch.object(go.sys,'platform','win32'), \
+                    patch('background_process.subprocess.CREATE_NO_WINDOW', 0x08000000, create=True), \
+                    patch('background_process.subprocess.run',side_effect=run):
                 sources = [SourceFile('目录/main.go','package main\n','test')]
                 for _ in range(2):
                     self.assertEqual(go.parse(sources,go.settings())['note'],'中文')

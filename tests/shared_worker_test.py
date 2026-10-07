@@ -67,7 +67,7 @@ class SharedWorkerTests(unittest.TestCase):
             successor.close()
 
     def test_windows_discovery_acl_uses_the_current_user_sid(self):
-        with patch('shared_worker.sys.platform', 'win32'), patch('shared_worker.subprocess.run') as run:
+        with patch('shared_worker.sys.platform', 'win32'), patch('shared_worker.run_background') as run:
             run.return_value.stdout = b'"COMPUTER\\user","S-1-5-21-123-456-789-1001"\r\n'
             restrict_permissions('worker.tmp')
             self.assertEqual(run.call_args.args[0], ['icacls', 'worker.tmp', '/inheritance:r', '/grant:r',

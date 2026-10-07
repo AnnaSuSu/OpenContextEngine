@@ -2,14 +2,36 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mkdtemp, rm, mkdir, writeFile, readFile, stat, readdir } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
-import { join, dirname } from 'node:path';
+import { join, dirname, delimiter } from 'node:path';
 import { loadEnvironment, readUserConfig, saveUserConfig } from '../src/config.mjs';
-import { ensureRuntime, defaultPython, venvPython } from '../src/runtime.mjs';
+import { ensureRuntime, defaultPython, venvPython, pythonInvocation } from '../src/runtime.mjs';
 import { setup, validateModels } from '../src/setup.mjs';
 
 const models = {EMBEDDING_BASE_URL:'https://embedding.example/v1',EMBEDDING_API_KEY:'embedding-test-secret',
   EMBEDDING_MODEL:'embedding-test',OCE_EMBEDDING_DIMENSIONS:'1024',RERANK_BASE_URL:'https://rerank.example/v1',
   RERANK_API_KEY:'rerank-test-secret',RERANK_MODEL:'rerank-test'};
+
+test('Windows venv launch bypasses the redirector while preserving its interpreter and environment', async t => {
+  const {dir} = await temporary(t);
+  const base = join(dir, 'base Python 中文'), venv = join(dir, 'venv 中文');
+  await mkdir(base); await mkdir(join(venv, 'Scripts'), {recursive:true});
+  const launcher = join(venv, 'Scripts', 'python.exe'), executable = join(base, 'python.exe');
+  await writeFile(launcher, 'fixture'); await writeFile(executable, 'fixture');
+  await writeFile(join(venv, 'pyvenv.cfg'), `home = ${base}\r\ninclude-system-site-packages = false\r\n`);
+  const env = {Path:join(venv, 'Scripts') + delimiter + base, KEEP:'value'};
+  for (const command of [launcher, 'python', 'python.exe']) {
+    assert.deepEqual(pythonInvocation(command, env, 'win32'),
+      {command:executable, env:{...env, __PYVENV_LAUNCHER__:launcher}});
+  }
+  assert.ok(!('__PYVENV_LAUNCHER__' in env));
+  for (const platform of ['darwin', 'linux']) {
+    assert.deepEqual(pythonInvocation(launcher, env, platform), {command:launcher, env});
+  }
+  assert.deepEqual(pythonInvocation(executable, env, 'win32'), {command:executable, env});
+  assert.deepEqual(pythonInvocation('git', env, 'win32'), {command:'git', env});
+  await rm(executable);
+  assert.deepEqual(pythonInvocation(launcher, env, 'win32'), {command:launcher, env});
+});
 
 test('Provider embedding batch size is validated and preserved in shared config', async t => {
   const {environment} = await temporary(t);

@@ -10,6 +10,23 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 import { fixture, python } from './helpers/live-service.mjs';
 import { startSharedService } from '../src/shared-service.mjs';
 import { search } from '../src/client.mjs';
+import { run, venvPython } from '../src/runtime.mjs';
+
+async function assertNoWindowsConsole(pid) {
+  if (process.platform !== 'win32') return;
+  // Inspect the running worker itself, not just the launch options. AttachConsole
+  // returns ERROR_INVALID_HANDLE (6) when the target has no console.
+  const {stdout} = await run(python, ['-c', [
+    'import ctypes, json, sys',
+    'kernel = ctypes.WinDLL("kernel32", use_last_error=True)',
+    'kernel.FreeConsole()',
+    'attached = bool(kernel.AttachConsole(int(sys.argv[1])))',
+    'error = ctypes.get_last_error()',
+    'kernel.FreeConsole()',
+    'print(json.dumps({"attached": attached, "error": error}))',
+  ].join('\n'), String(pid)], {timeout:10000});
+  assert.deepEqual(JSON.parse(stdout), {attached:false, error:6});
+}
 
 const cleanups = new WeakMap();
 async function sharedFixture(t) {
@@ -51,6 +68,11 @@ function shared(t, settings, options = {}) {
 test('Shared workers arbitrate concurrent starts, validate compatibility, survive detach and recover from crashes',
   {skip:!python, timeout:30000}, async t => {
     const {dir, root, settings} = await sharedFixture(t);
+    if (process.platform === 'win32') {
+      const venv = join(dir, 'worker venv 中文');
+      await run(python, ['-m', 'venv', '--without-pip', '--system-site-packages', venv], {timeout:10000});
+      settings.python = venvPython(venv);
+    }
     const state = join(dir, 'shared');
     settings.config = {...settings.config, state};
     await writeFile(join(root, 'lib.py'), 'def persist():\n    return "shared_result"\n');
@@ -58,6 +80,7 @@ test('Shared workers arbitrate concurrent starts, validate compatibility, surviv
     const [a, b] = await Promise.all([first.ready, second.ready]);
     assert.deepEqual(a, b);
     const original = await record(state);
+    await assertNoWindowsConsole(original.pid);
     if (process.platform !== 'win32') assert.equal((await stat(join(state, 'worker.json'))).mode & 0o777, 0o600);
     assert.match((await search('find persist', {config:a, freshnessWaitMs:5000})).context, /shared_result/);
     for (const difference of [{embeddingKey:'different-credential'}, {languageOptions:{go:{mode:'types'}}}, {root:dir}]) {
@@ -188,6 +211,7 @@ test('Independent automatic MCP processes share one writer across projects and s
     assert.match(different.content[0].text, /second_project/);
     assert.doesNotMatch(different.content[0].text, /first_project/);
     const before = await record(paths[0]), otherRecord = await record(paths[1]);
+    await assertNoWindowsConsole(before.pid);
     assert.notEqual(before.pid, otherRecord.pid);
     // Kill both original MCPs separately, attaching a survivor before each exit. This
     // necessarily covers the original launcher's abrupt exit, regardless of who won the race.
@@ -200,6 +224,7 @@ test('Independent automatic MCP processes share one writer across projects and s
     assert.ok(!after.isError, JSON.stringify(after));
     assert.match(after.content[0].text, /after_client_exit/);
     assert.equal((await record(paths[0])).instanceId, before.instanceId);
+    await assertNoWindowsConsole(before.pid);
     process.kill(before.pid, 'SIGKILL');
     const recovered = await query(c.client, root);
     assert.ok(!recovered.isError, JSON.stringify(recovered));

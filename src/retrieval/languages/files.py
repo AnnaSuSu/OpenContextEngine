@@ -3,7 +3,7 @@ import hashlib
 import os
 from pathlib import Path, PurePosixPath
 import re
-import subprocess
+from background_process import run_background
 
 MAX_BYTES = 1024 * 1024
 SKIP_DIRS = frozenset({'.git', '.hg', '.svn', 'node_modules', 'vendor', '.venv', 'venv',
@@ -53,11 +53,11 @@ def discover_snapshot(root):
     root = Path(root).resolve()
     if not root.is_dir():
         raise ValueError('Source root must be a directory')
-    git = subprocess.run(['git', '-C', str(root), 'rev-parse', '--is-inside-work-tree'],
+    git = run_background(['git', '-C', str(root), 'rev-parse', '--is-inside-work-tree'],
                          capture_output=True, text=True)
     excluded, files = [], []
     if git.returncode == 0 and git.stdout.strip() == 'true':
-        result = subprocess.run(['git', '-C', str(root), 'ls-files', '-c', '-o',
+        result = run_background(['git', '-C', str(root), 'ls-files', '-c', '-o',
                                  '--exclude-standard', '-z'], capture_output=True, check=True)
         names = sorted(set(os.fsdecode(name) for name in result.stdout.split(b'\0') if name))
         discovery = 'git-tracked-and-unignored'
