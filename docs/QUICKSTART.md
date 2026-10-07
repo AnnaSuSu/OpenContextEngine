@@ -32,7 +32,7 @@ open-context-engine setup --python "C:\Program Files\Python312\python.exe"
 
 Use native absolute project paths such as `C:\Users\you\project` in MCP calls. Generated MCP JSON escapes backslashes automatically.
 
-For internal builds, maintainers can create an archive with `npm pack` and install it with `npm install -g /path/to/open-context-engine-0.1.7.tgz`. See the [release checklist](https://github.com/AnnaSuSu/OpenContextEngine/blob/main/docs/RELEASING.md).
+For internal builds, maintainers can create an archive with `npm pack` and install it with `npm install -g /path/to/open-context-engine-0.1.8.tgz`. See the [release checklist](https://github.com/AnnaSuSu/OpenContextEngine/blob/main/docs/RELEASING.md).
 
 The CLI and package are named `open-context-engine`. The previous `opencontextengine` command remains an alias. Existing configuration and cache directories keep their paths, so saved keys and indexes are reused.
 
