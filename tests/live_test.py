@@ -1,5 +1,9 @@
 from pathlib import Path
+from contextlib import closing
 import subprocess
+import sqlite3
+import threading
+import numpy as np
 import sys
 import tempfile
 import time
@@ -79,7 +83,7 @@ class LiveTests(unittest.TestCase):
         built = self.build(manager)
         self.assertEqual(sizes, [20, 20, 3])
         manager.close()
-        restored = self.manager(embeddingBatchSize=10)
+        restored = self.manager(embeddingBatchSize=10, embeddingConcurrency=2)
         self.assertEqual(restored.identity(restored.scan()), built.identity)
         self.assertEqual(self.build(restored).info['embeddedDocuments'], 0)
 
@@ -87,6 +91,118 @@ class LiveTests(unittest.TestCase):
         for value in [0, 65, True, 1.5, '20', None]:
             with self.subTest(value=value), self.assertRaisesRegex(ValueError, 'batch size'):
                 self.manager(embeddingBatchSize=value)
+
+    def test_invalid_embedding_concurrency(self):
+        for value in [0, 9, True, 1.5, '2', None]:
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, 'concurrency'):
+                self.manager(embeddingConcurrency=value)
+
+    def test_concurrent_batches_are_bounded_and_out_of_order_vectors_match_documents(self):
+        for i in range(7):
+            self.write(f'{i}.txt', f'number={i}\n')
+        manager = self.manager(embeddingBatchSize=2, embeddingConcurrency=2, embeddingDimensions=1)
+        first_pair = threading.Barrier(2)
+        committed = threading.Event()
+        lock = threading.Lock()
+        active = peak = started = 0
+        observations = []
+        original_progress = manager._progress
+        def progress(stage, **values):
+            original_progress(stage, **values)
+            if stage == 'embedding':
+                observations.append(values['completedDocuments'])
+                if values['completedDocuments']:
+                    committed.set()
+        manager._progress = progress
+        def embed(url, body, key, timeout):
+            nonlocal active, peak, started
+            with lock:
+                active += 1
+                peak = max(peak, active)
+                started += 1
+                order = started
+            try:
+                if order <= 2:
+                    first_pair.wait(5)
+                numbers = [int(text.rsplit('number=', 1)[1]) for text in body['input']]
+                if 0 in numbers:
+                    self.assertTrue(committed.wait(5), 'later batch should commit before the first finishes')
+                return {'data': [{'index': i, 'embedding': [n]} for i, n in reversed(list(enumerate(numbers)))]}
+            finally:
+                with lock:
+                    active -= 1
+        manager.embed = embed
+        built = self.build(manager)
+        self.assertEqual(peak, 2)
+        self.assertEqual(observations, sorted(observations))
+        self.assertEqual(observations[-1], 7)
+        matrix = np.load(next(manager.state.glob('generation-*'))/'vectors.npy')
+        self.assertEqual(matrix[:, 0].tolist(), [int(unit['text'].split('number=')[1]) for unit in built.engine])
+
+    def test_concurrent_failure_drains_successes_and_retry_only_requests_uncached_documents(self):
+        for invalid in [False, True]:
+            with self.subTest(invalid_response=invalid):
+                for i in range(2):
+                    self.write(f'{i}.txt', f'number={i} variant={invalid}\n')
+                manager = self.manager(embeddingBatchSize=1, embeddingConcurrency=2,
+                                       state=str(self.base/f'failure-{invalid}'))
+                barrier = threading.Barrier(2)
+                release = threading.Event()
+                failed = threading.Event()
+                calls, errors = [], []
+                def embed(url, body, key, timeout):
+                    text = body['input'][0]
+                    calls.append(text)
+                    barrier.wait(5)
+                    if 'number=0' in text:
+                        failed.set()
+                        if invalid:
+                            return {'data': []}
+                        raise RuntimeError('provider unavailable')
+                    self.assertTrue(release.wait(5))
+                    return self.embed(url, body, key, timeout)
+                manager.embed = embed
+                def build():
+                    try:
+                        self.build(manager)
+                    except Exception as error:
+                        errors.append(error)
+                thread = threading.Thread(target=build)
+                thread.start()
+                try:
+                    self.assertTrue(failed.wait(5))
+                finally:
+                    release.set()
+                    thread.join(5)
+                self.assertFalse(thread.is_alive())
+                self.assertEqual(len(calls), 2)
+                self.assertIsInstance(errors[0], ValueError if invalid else RuntimeError)
+                self.assertFalse((manager.state/'current.json').exists())
+                manager.embed = self.embed
+                self.calls.clear()
+                self.assertEqual(self.build(manager).info['embeddedDocuments'], 1)
+                self.assertFalse(any('number=1' in text for text in self.calls))
+                manager.close()
+
+    def test_stop_during_concurrent_embedding_drains_cache_without_publishing_or_submitting_more(self):
+        for i in range(5):
+            self.write(f'{i}.txt', f'document {i}\n')
+        manager = self.manager(embeddingBatchSize=1, embeddingConcurrency=2)
+        barrier = threading.Barrier(2)
+        def embed(*args, **kwargs):
+            barrier.wait(5)
+            manager.stop_event.set()
+            return self.embed(*args, **kwargs)
+        manager.embed = embed
+        with self.assertRaises(SourceChanged):
+            self.build(manager)
+        self.assertEqual(len(self.calls), 2)
+        self.assertFalse((manager.state/'current.json').exists())
+        with closing(sqlite3.connect(manager.state/'embeddings.sqlite')) as db:
+            self.assertEqual(db.execute('SELECT count(*) FROM vectors').fetchone()[0], 2)
+        manager.stop_event.clear()
+        manager.embed = self.embed
+        self.assertEqual(self.build(manager).info['embeddedDocuments'], 3)
 
     def test_cross_file_relations_refresh_and_units_equal_full_build(self):
         self.write('lib.py','def save():\n    pass\n')

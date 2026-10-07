@@ -15,6 +15,8 @@ export function validateModels(env) {
   if (!Number.isInteger(dimensions) || dimensions < 1) throw new Error('Embedding dimensions must be a positive integer');
   const batchSize = Number(env.OCE_EMBEDDING_BATCH_SIZE ?? 64);
   if (!Number.isInteger(batchSize) || batchSize < 1 || batchSize > 64) throw new Error('Embedding batch size must be an integer from 1 to 64');
+  const concurrency = Number(env.OCE_EMBEDDING_CONCURRENCY ?? 1);
+  if (!Number.isInteger(concurrency) || concurrency < 1 || concurrency > 8) throw new Error('Embedding concurrency must be an integer from 1 to 8');
 }
 
 export function terminalPrompt(input = process.stdin, output = process.stderr) {

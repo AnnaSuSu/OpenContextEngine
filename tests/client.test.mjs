@@ -20,10 +20,13 @@ test('Retrieval client permits SSH loopback or HTTPS, rejects credentials and cl
       EMBEDDING_BASE_URL:'https://embedding.example/v1',EMBEDDING_SSH_TUNNEL_URL:'',
       RERANK_BASE_URL:'https://reranker.example/v1',RERANK_REMOTE_RUNTIME_URL:'',
       RERANK_MODEL:'test',RERANK_API_KEY:'test-only',
+      OCE_EMBEDDING_BATCH_SIZE:'64',OCE_EMBEDDING_CONCURRENCY:'2',
       OCE_RERANK_API:'rerank',OCE_RERANK_CONCURRENCY:'3',OCE_RERANK_MAX_DOCUMENTS:'64',
       [prefix+'PYTHON']:'/test/python',[prefix+'GO_BINARY']:'/test/go',
       [prefix+'API_KEY']:'configuration-test-only',[prefix+'POLL_SECONDS']:'2',
     });
+    assert.equal(settings.config.embeddingBatchSize,64);
+    assert.equal(settings.config.embeddingConcurrency,2);
     assert.equal(settings.python,'/test/python');
     assert.equal(settings.workerEnv.OCE_GO_BINARY,'/test/go');
     assert.equal(settings.config.serviceKey,'configuration-test-only');

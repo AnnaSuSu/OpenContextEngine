@@ -1,5 +1,6 @@
 """Single-workspace index: durable vector reuse and atomic searchable generations."""
 from collections import Counter
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from contextlib import closing
 from dataclasses import dataclass
 import hashlib
@@ -71,6 +72,9 @@ class LiveIndex:
         self.batch_size = config.get('embeddingBatchSize', 64)
         if type(self.batch_size) is not int or not 1 <= self.batch_size <= 64:
             raise ValueError('Embedding batch size must be an integer from 1 to 64')
+        self.embedding_concurrency = config.get('embeddingConcurrency', 1)
+        if type(self.embedding_concurrency) is not int or not 1 <= self.embedding_concurrency <= 8:
+            raise ValueError('Embedding concurrency must be an integer from 1 to 8')
         self.embed, self.engine_factory = embed, engine_factory
         self.condition = threading.Condition()
         self.stop_event = threading.Event()
@@ -175,6 +179,60 @@ class LiveIndex:
         except (OSError, ValueError, KeyError):
             return None
 
+    def _embed_batch(self, batch):
+        result = self.embed(self.config['embeddingUrl']+'/embeddings',
+            {'model': self.embedding['model'], 'input': [text for _, text in batch]},
+            self.config.get('embeddingKey', 'local-only'), timeout=60)
+        rows = sorted(result['data'], key=lambda row: row['index'])
+        if [row['index'] for row in rows] != list(range(len(batch))):
+            raise ValueError('Invalid embedding response indices')
+        matrix = np.asarray([row['embedding'] for row in rows], dtype=np.float32)
+        if matrix.shape != (len(batch), self.dimensions) or not np.isfinite(matrix).all():
+            raise ValueError('Invalid embedding vectors')
+        return matrix
+
+    def _embed_missing(self, entries, db, vectors):
+        batches = iter(entries[offset:offset+self.batch_size]
+                       for offset in range(0, len(entries), self.batch_size))
+        pending, completed, failure = {}, 0, None
+        with ThreadPoolExecutor(max_workers=self.embedding_concurrency,
+                                thread_name_prefix='index-embedding') as executor:
+            while True:
+                # Bound submitted work, not just the number of running threads.
+                if self.stop_event.is_set() and failure is None:
+                    failure = SourceChanged()
+                while failure is None and len(pending) < self.embedding_concurrency:
+                    batch = next(batches, None)
+                    if batch is None:
+                        break
+                    pending[executor.submit(self._embed_batch, batch)] = batch
+                if not pending:
+                    break
+                done, _ = wait(pending, return_when=FIRST_COMPLETED)
+                for future in done:
+                    batch = pending.pop(future)
+                    if future.cancelled():
+                        continue
+                    try:
+                        matrix = future.result()
+                    except Exception as error:
+                        if failure is None:
+                            failure = error
+                        continue
+                    # Only the coordinator writes SQLite and updates progress.
+                    for (key, _), vector in zip(batch, matrix):
+                        vectors[key] = vector
+                        db.execute('INSERT OR REPLACE INTO vectors VALUES (?, ?)', (key, vector.tobytes()))
+                    db.commit()
+                    completed += len(batch)
+                    self._progress('embedding', completedDocuments=completed, totalDocuments=len(entries))
+                if failure is not None or self.stop_event.is_set():
+                    # Drain running calls so their successful results survive a retry.
+                    for future in pending:
+                        future.cancel()
+        if failure is not None:
+            raise failure
+
     def _build(self, snapshot, identity):
         start = time.monotonic()
         self._progress('parsing', files=len(snapshot['files']))
@@ -196,24 +254,7 @@ class LiveIndex:
                 missing[key] = text
             entries = list(missing.items())
             self._progress('embedding', completedDocuments=0, totalDocuments=len(entries))
-            for offset in range(0, len(entries), self.batch_size):
-                if self.stop_event.is_set():
-                    raise SourceChanged()
-                batch = entries[offset:offset+self.batch_size]
-                result = self.embed(self.config['embeddingUrl']+'/embeddings',
-                    {'model': self.embedding['model'], 'input': [text for _, text in batch]},
-                    self.config.get('embeddingKey', 'local-only'), timeout=60)
-                rows = sorted(result['data'], key=lambda row: row['index'])
-                if [row['index'] for row in rows] != list(range(len(batch))):
-                    raise ValueError('Invalid embedding response indices')
-                matrix = np.asarray([row['embedding'] for row in rows], dtype=np.float32)
-                if matrix.shape != (len(batch), self.dimensions) or not np.isfinite(matrix).all():
-                    raise ValueError('Invalid embedding vectors')
-                for (key, _), vector in zip(batch, matrix):
-                    vectors[key] = vector
-                    db.execute('INSERT OR REPLACE INTO vectors VALUES (?, ?)', (key, vector.tobytes()))
-                db.commit()  # Reuse successful batches even after a concurrent edit.
-                self._progress('embedding', completedDocuments=offset+len(batch), totalDocuments=len(entries))
+            self._embed_missing(entries, db, vectors)
         self._progress('finalizing')
         matrix = np.asarray([vectors[key] for key in keys], dtype=np.float32).reshape(len(keys), self.dimensions)
         engine = self._engine(units, matrix)

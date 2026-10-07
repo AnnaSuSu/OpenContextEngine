@@ -43,6 +43,19 @@ test('Provider embedding batch size is validated and preserved in shared config'
     assert.throws(() => validateModels({...models,OCE_EMBEDDING_BATCH_SIZE:value}),/batch size/);
   }
 });
+test('Embedding concurrency defaults to serial and validates saved settings', async t => {
+  const {environment} = await temporary(t);
+  assert.doesNotThrow(() => validateModels(models));
+  for (const value of ['1','2','8']) {
+    const configured = {...models,OCE_EMBEDDING_CONCURRENCY:value};
+    assert.doesNotThrow(() => validateModels(configured));
+    saveUserConfig(configured,environment);
+    assert.equal(readUserConfig(environment).OCE_EMBEDDING_CONCURRENCY,value);
+  }
+  for (const value of ['0','9','NaN','1.5','']) {
+    assert.throws(() => validateModels({...models,OCE_EMBEDDING_CONCURRENCY:value}),/concurrency/);
+  }
+});
 async function temporary(t) {
   const dir = await mkdtemp(join(tmpdir(),'oce-setup-'));
   t.after(() => rm(dir,{recursive:true,force:true}));
