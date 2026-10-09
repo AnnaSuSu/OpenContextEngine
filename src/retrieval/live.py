@@ -16,6 +16,7 @@ import uuid
 import numpy as np
 
 from engine import document, post
+from cancellation import check, submit
 from languages import adapter_manifest, source_units
 from languages.files import discover_snapshot
 from evidence import EvidenceEngine
@@ -143,6 +144,7 @@ class LiveIndex:
     def current(self, timeout=30):
         deadline = time.monotonic() + timeout
         while not self.stop_event.is_set():
+            check()
             with self.condition:
                 self.last_activity = time.monotonic()
             self.wake_event.set()
@@ -158,10 +160,11 @@ class LiveIndex:
                 remaining = deadline - time.monotonic()
                 if remaining <= 0:
                     raise IndexUnavailable('Index is updating; search has not run yet', code='INDEX_UPDATING')
-                self.condition.wait(min(remaining, self.poll))
+                self.condition.wait(min(remaining, self.poll, .1))
         raise IndexUnavailable('Index is stopping')
 
     def verify(self, generation):
+        check()
         try:
             current = self.identity(self.scan(fresh=True)) == generation.identity
         except (OSError, ValueError):
@@ -223,7 +226,7 @@ class LiveIndex:
                     batch = next(batches, None)
                     if batch is None:
                         break
-                    pending[executor.submit(self._embed_batch, batch)] = batch
+                    pending[submit(executor, self._embed_batch, batch)] = batch
                 if not pending:
                     break
                 done, _ = wait(pending, return_when=FIRST_COMPLETED)

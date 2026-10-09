@@ -14,7 +14,7 @@ export async function search(query,{budget=8000,trace=false,freshnessWaitMs=3000
   const started=performance.now();
   const timeout = AbortSignal.timeout(freshnessWaitMs + 60000);
   const response=await fetch(`${config.baseUrl}/search`,{method:'POST',redirect:'error',signal:signal ? AbortSignal.any([signal,timeout]) : timeout,
-    headers:{'content-type':'application/json',authorization:`Bearer ${config.apiKey}`},body:JSON.stringify({query,budget,trace,freshnessWaitMs})});
+    headers:{'content-type':'application/json',authorization:`Bearer ${config.apiKey}`},body:JSON.stringify({query,budget,trace,freshnessWaitMs,requestTimeoutMs:freshnessWaitMs+60000})});
   if (!response.ok) {
     if (response.status === 503) {
       const body = await response.json();

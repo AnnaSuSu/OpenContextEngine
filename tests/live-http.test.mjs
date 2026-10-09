@@ -142,3 +142,26 @@ test('Default HTTP, client and MCP budgets return 8k evidence while explicit 4k 
       assert.equal(smaller.structuredContent.context,explicit4k.context);
     } finally {await client.close();await server.close();}
   });
+
+test('Cancelled model calls release the search queue without starting later rerank work',
+  {skip:!python,timeout:10000}, async t => {
+    const {root,config,hooks} = await fixture(t);
+    await writeFile(join(root,'main.py'),'def save():\n    return "latest"\n');
+    await search('find save',{config,freshnessWaitMs:5000});
+    let entered, release, reranks = 0;
+    const started = new Promise(resolve => {entered=resolve;});
+    const blocked = new Promise(resolve => {release=resolve;});
+    hooks.embedding = async body => {
+      if (body.input.some(text => text.includes('cancel_probe'))) {entered(); await blocked;}
+    };
+    hooks.rerank = async body => {if ((body.query || '').includes('cancel_probe')) reranks++;};
+    const controller = new AbortController();
+    const pending = search('find save cancel_probe',{config,signal:controller.signal});
+    const cancelled = assert.rejects(pending,/abort/i);
+    try {
+      await started; controller.abort(); await cancelled;
+      const next = await search('find save next_probe',{config,signal:AbortSignal.timeout(2000)});
+      assert.match(next.context,/latest/);
+      assert.equal(reranks,0);
+    } finally {release();}
+  });

@@ -5,6 +5,7 @@ keeps independent recall channels, scores actual subquestions, and selects
 implementation evidence before supporting tests when that is what was asked.
 """
 from collections import defaultdict
+from cancellation import check
 import math
 import re
 import time
@@ -116,6 +117,7 @@ class EvidenceEngine(Engine):
         return '\n'.join(blocks)
 
     def search(self, plan, budget=8000):
+        check()
         started = time.monotonic()
         declarations = bool(re.search(r'\b(interface|type alias|schema)\b|类型定义|接口类型', plan['intent'], re.I))
         def substance(uid):
@@ -138,6 +140,7 @@ class EvidenceEngine(Engine):
         dense = self.vectors @ matrix.T
         candidates, recall = set(), []
         for col, query in enumerate(queries):
+            check()
             channels = []
             for scores in (dense[:, col], self.lexical(query)):
                 order = np.argsort(-scores, kind='stable')
@@ -153,6 +156,7 @@ class EvidenceEngine(Engine):
         scores, waves = {}, []
 
         def score(ids):
+            check()
             ids = sorted(ids)
             pairs = [(q, j) for q in range(len(queries)) for j, uid in enumerate(ids) if (q, uid) not in scores]
             if not pairs:
@@ -228,6 +232,7 @@ class EvidenceEngine(Engine):
         symbol_counts = defaultdict(int)
 
         def choose(ids, q=None, phase='fill', limit=None):
+            check()
             nonlocal spent
             choices = []
             for uid in ids:

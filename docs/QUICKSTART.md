@@ -228,3 +228,5 @@ First-time setup requires network access to npm/PyPI and tokenizer data. If Pyth
 For issues, include the CLI version, operating system, client name, and the error message. Keep API keys and private source code out of reports.
 
 [Benchmark & test report](BENCHMARKS.md) · [Detailed update design](LIVE_INDEX.md) · [MCP implementation](../src/mcp.mjs)
+
+Search cancellation propagates from the MCP client through the HTTP queue and model connections. A disconnected client stops subsequent retrieval work and releases its queue slot. Requests also carry an overall deadline (at most 180 seconds); background indexing is shared work and is not cancelled by a single search disconnecting.

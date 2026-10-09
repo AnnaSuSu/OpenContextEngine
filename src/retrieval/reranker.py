@@ -6,6 +6,7 @@ documents, never their relevance-sorted position in a provider response.
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 import math
+from cancellation import check, submit
 
 
 def bounded_integer(value, name, maximum):
@@ -61,6 +62,7 @@ def rerank_pairs(config, queries, documents, pairs, post):
             for ids in [list(group)] for start in range(0, len(ids), limit)]
 
     def request(job):
+        check()
         q, ids = job
         inputs = {'query': queries[q], 'documents': [documents[d] for d in ids]}
         body = ({'model': config['model'], 'input': inputs, 'parameters': {'top_n': len(ids)}}
@@ -77,7 +79,7 @@ def rerank_pairs(config, queries, documents, pairs, post):
         responses = [request(jobs[0])]
     else:
         with ThreadPoolExecutor(max_workers=min(concurrency, len(jobs))) as pool:
-            responses = list(pool.map(request, jobs))
+            responses = [future.result() for future in [submit(pool, request, job) for job in jobs]]
     scores = {pair: score for mapping, _ in responses for pair, score in mapping.items()}
     def total(section, key):
         values = [data[section].get(key) if isinstance(data.get(section), dict) else None

@@ -20,6 +20,7 @@ from evidence import EvidenceEngine, VERSION
 from planning import plan_query
 from live import LiveIndex, IndexUnavailable
 from writer_lock import WriterBusy
+from cancellation import RequestScope, Cancelled, check
 from shared_worker import SharedWorker
 
 
@@ -103,10 +104,13 @@ def serve(config):
                 if not 1<=length<=32768:
                     raise ValueError('Invalid body size')
                 body = json.loads(self.rfile.read(length))
-                if not isinstance(body,dict) or set(body)-{'query','budget','trace','freshnessWaitMs'}:
+                if not isinstance(body,dict) or set(body)-{'query','budget','trace','freshnessWaitMs','requestTimeoutMs'}:
                     raise ValueError('Unknown fields')
                 query,budget = body.get('query'),body.get('budget',8000)
                 wait_ms = body.get('freshnessWaitMs', 30000)
+                request_ms = body.get('requestTimeoutMs', 180000)
+                if type(request_ms) is not int or not 1 <= request_ms <= 180000:
+                    raise ValueError('Invalid request deadline')
                 if type(wait_ms) is not int or not 0 <= wait_ms <= 120000:
                     raise ValueError('Invalid freshness wait')
                 if not isinstance(query,str) or not query.strip() or len(query)>8192 or type(budget) is not int or not 256<=budget<=8000 or type(body.get('trace',False)) is not bool:
@@ -119,12 +123,16 @@ def serve(config):
             if shared and not shared.enter():
                 slots.release()
                 return self.reply(503, {'error': 'Worker is stopping'})
-            if not lock.acquire(timeout=30):
-                slots.release()
-                if shared:
-                    shared.leave()
-                return self.reply(429, {'error': 'Retrieval queue wait exceeded 30 seconds; retry later'})
+            acquired = False
+            scope = RequestScope(request_ms/1000, self.connection)
+            scope.__enter__()
             try:
+                while not acquired:
+                    check()
+                    acquired = lock.acquire(timeout=.05)
+                    if not acquired and time.monotonic()-start >= 30:
+                        return self.reply(429, {'error': 'Retrieval queue wait exceeded 30 seconds; retry later'})
+                check()
                 queued = round((time.monotonic()-start)*1000)
                 generation = live.current(wait_ms/1000) if live else None
                 engine = generation.engine if live else retrieval
@@ -132,6 +140,7 @@ def serve(config):
                     raw,debug = '', {'tokens':0,'elapsedMs':0}
                 else:
                     raw,debug = engine.search(plan_query(query),budget=budget)
+                check()
                 if live:
                     live.verify(generation)
                 response = {'context':raw,'tokens':debug['tokens'],'engine':VERSION,
@@ -143,6 +152,14 @@ def serve(config):
                 if body.get('trace'):
                     response['diagnostics'] = debug
                 self.reply(200,response)
+            except Cancelled:
+                if time.monotonic() >= scope.deadline:
+                    try:
+                        self.reply(504, {'error': 'Request deadline exceeded'})
+                    except OSError:
+                        pass
+            except (BrokenPipeError, ConnectionResetError):
+                pass
             except IndexUnavailable as error:
                 self.reply(503,{'error':str(error),'code':error.code,
                                'retryable':error.code == 'INDEX_UPDATING','index':live.status()})
@@ -150,7 +167,9 @@ def serve(config):
                 print(json.dumps({'event':'search-failed','type':type(error).__name__}),flush=True)
                 self.reply(502,{'error':'Retrieval or model request failed'})
             finally:
-                lock.release()
+                scope.__exit__(None, None, None)
+                if acquired:
+                    lock.release()
                 slots.release()
                 if shared:
                     shared.leave()

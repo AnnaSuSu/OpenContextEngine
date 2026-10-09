@@ -1,5 +1,6 @@
 """Shared file eligibility for discovery and explicitly supplied snapshots."""
 import hashlib
+from cancellation import check
 import os
 from pathlib import Path, PurePosixPath
 import re
@@ -76,6 +77,7 @@ def discover_snapshot(root, *, cache=None):
         discovery = 'directory-walk'
     next_cache = {}
     for name in names:
+        check()
         path = root/name
         reason = path_exclusion(name)
         if path.is_symlink() or not path.resolve().is_relative_to(root):
