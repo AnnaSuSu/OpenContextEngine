@@ -17,6 +17,7 @@ LOCKFILES = frozenset({'package-lock.json', 'pnpm-lock.yaml', 'yarn.lock', 'poet
                        'uv.lock', 'Cargo.lock', 'go.sum'})
 GENERATED = re.compile(r'(?im)^\s*(?://|#|/\*|\*)\s*(?:code generated\b[^\n]*do not edit|'
                        r'(?:this file (?:is|was) |@)?(?:auto[- ]?)?generated\b[^\n]*do not edit)')
+BINARY_CONTROL = re.compile(rb'[\x00-\x08\x0b\x0e-\x1f]')
 
 
 def path_exclusion(name):
@@ -37,7 +38,7 @@ def read_text(path):
     raw = path.read_bytes()
     if len(raw) > MAX_BYTES:
         return None, None, 'file-too-large'
-    if any(byte < 32 and byte not in (9, 10, 12, 13) for byte in raw):
+    if BINARY_CONTROL.search(raw):
         return raw, None, 'binary-content'
     try:
         text = raw.decode('utf-8-sig')
@@ -48,7 +49,7 @@ def read_text(path):
     return raw, text, None
 
 
-def discover_snapshot(root):
+def discover_snapshot(root, *, cache=None):
     """Use Git's ignore rules when available, otherwise a bounded directory walk."""
     root = Path(root).resolve()
     if not root.is_dir():
@@ -73,6 +74,7 @@ def discover_snapshot(root):
             names.extend((Path(directory)/name).relative_to(root).as_posix() for name in entries)
         names.sort()
         discovery = 'directory-walk'
+    next_cache = {}
     for name in names:
         path = root/name
         reason = path_exclusion(name)
@@ -81,10 +83,27 @@ def discover_snapshot(root):
         elif not path.is_file():
             reason = 'not-a-regular-file'
         if not reason:
-            raw, _, reason = read_text(path)
+            def signature():
+                info = path.stat()
+                return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+            before = signature() if cache is not None else None
+            cached = cache.get(name) if cache is not None else None
+            if cached is not None and cached[0] == before:
+                _, entry, reason = cached
+            else:
+                raw, _, reason = read_text(path)
+                entry = None if reason else {'path': name, 'bytes': len(raw),
+                                             'sha256': hashlib.sha256(raw).hexdigest()}
+            # Do not retain bytes read across an edit. Publication and queries
+            # additionally use uncached scans, independent of stat metadata.
+            if cache is not None and before == signature():
+                next_cache[name] = (before, entry, reason)
         if reason:
             excluded.append({'path': name, 'reason': reason})
         else:
-            files.append({'path': name, 'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()})
+            files.append(entry)
+    if cache is not None:
+        cache.clear()
+        cache.update(next_cache)
     return {'schemaVersion': 1, 'scope': 'eligible UTF-8 text; structural adapters where available',
             'discovery': discovery, 'files': files, 'excluded': sorted(excluded, key=lambda item: item['path'])}

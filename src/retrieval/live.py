@@ -58,8 +58,11 @@ class LiveIndex:
         self.options = config.get('languageOptions', {})
         self.poll = float(config.get('pollSeconds', 1))
         self.debounce = float(config.get('debounceSeconds', .3))
+        self.idle_seconds = float(config.get('scanIdleSeconds', 60))
         if not .05 <= self.poll <= 60 or not 0 <= self.debounce <= 10:
             raise ValueError('Invalid live index polling or debounce interval')
+        if not .05 <= self.idle_seconds <= 3600:
+            raise ValueError('Invalid live index scan idle interval')
         self.embedding = {'provider': config['embeddingIdentity'],
                           'model': config.get('embeddingModel', 'Qwen3-Embedding-4B'),
                           'dimensions': config.get('embeddingDimensions', 1024),
@@ -78,6 +81,11 @@ class LiveIndex:
         self.embed, self.engine_factory = embed, engine_factory
         self.condition = threading.Condition()
         self.stop_event = threading.Event()
+        self.wake_event = threading.Event()
+        self.last_activity = time.monotonic()
+        self.background_paused = False
+        self.scan_lock = threading.Lock()
+        self.scan_cache = {}
         self.generation = None
         self.error = None
         self.phase = 'starting'
@@ -87,8 +95,13 @@ class LiveIndex:
         self.lock_file = acquire_writer_lock(self.state/'writer.lock')
         self.thread = threading.Thread(target=self._run, name='repository-index', daemon=True)
 
-    def scan(self):
-        snapshot = discover_snapshot(self.root)
+    def scan(self, *, fresh=False):
+        with self.scan_lock:
+            if fresh:
+                # A strict read may find edits with preserved stat metadata.
+                # Let the background builder observe them on its next scan too.
+                self.scan_cache.clear()
+            snapshot = discover_snapshot(self.root, cache=None if fresh else self.scan_cache)
         # Ignore diagnostic exclusions and mtime: identities bind actual inputs.
         snapshot = {'files': [{'path': f['path'], 'sha256': f['sha256']} for f in snapshot['files']],
                     'languageOptions': self.options}
@@ -105,6 +118,7 @@ class LiveIndex:
 
     def close(self):
         self.stop_event.set()
+        self.wake_event.set()
         with self.condition:
             self.condition.notify_all()
         if self.thread.is_alive():
@@ -119,6 +133,7 @@ class LiveIndex:
             return {'status': self.phase, 'mode': 'live', 'root': str(self.root),
                     'generation': self.generation.info if self.generation else None,
                     'error': self.error, 'pollSeconds': self.poll,
+                    'backgroundPaused': self.background_paused,
                     'progress': dict(self.progress) if self.progress else None}
 
     def _progress(self, stage, **counts):
@@ -128,8 +143,11 @@ class LiveIndex:
     def current(self, timeout=30):
         deadline = time.monotonic() + timeout
         while not self.stop_event.is_set():
+            with self.condition:
+                self.last_activity = time.monotonic()
+            self.wake_event.set()
             try:
-                target = self.identity(self.scan())
+                target = self.identity(self.scan(fresh=True))
             except (OSError, ValueError) as error:
                 raise IndexUnavailable('Cannot read current source: ' + type(error).__name__) from None
             with self.condition:
@@ -145,7 +163,7 @@ class LiveIndex:
 
     def verify(self, generation):
         try:
-            current = self.identity(self.scan()) == generation.identity
+            current = self.identity(self.scan(fresh=True)) == generation.identity
         except (OSError, ValueError):
             current = False
         if not current:
@@ -258,7 +276,7 @@ class LiveIndex:
         self._progress('finalizing')
         matrix = np.asarray([vectors[key] for key in keys], dtype=np.float32).reshape(len(keys), self.dimensions)
         engine = self._engine(units, matrix)
-        if self.stop_event.is_set() or self.scan() != snapshot:
+        if self.stop_event.is_set() or self.scan(fresh=True) != snapshot:
             raise SourceChanged()
         previous = {f['path']: f['sha256'] for f in self.generation.snapshot['files']} if self.generation else {}
         now = {f['path']: f['sha256'] for f in snapshot['files']}
@@ -291,15 +309,30 @@ class LiveIndex:
         failed_identity, retry_at = None, 0
         try:
             while not self.stop_event.is_set():
+                self.wake_event.clear()
+                if self.stop_event.is_set():
+                    break
+                with self.condition:
+                    self.background_paused = time.monotonic() - self.last_activity >= self.idle_seconds
+                if self.background_paused:
+                    # MCP lease renewals and status reads are not search activity.
+                    # Keep the generation available without repeatedly reading disk.
+                    self.wake_event.wait()
+                    continue
                 identity = None
                 try:
+                    scan_started = time.monotonic()
                     snapshot = self.scan()
                     identity = self.identity(snapshot)
                     if self.generation and self.generation.identity == identity:
                         with self.condition:
                             self.phase, self.error = 'ready', None
                             self.progress = None
-                        self.stop_event.wait(self.poll)
+                        # Large trees must not consume a core between requests.
+                        # Aim for at most 5% background scan duty, and pause at idle.
+                        delay = max(self.poll, (time.monotonic() - scan_started) * 19)
+                        remaining = max(0, self.idle_seconds - (time.monotonic() - self.last_activity))
+                        self.wake_event.wait(min(delay, remaining))
                         continue
                     if failed_identity == identity and time.monotonic() < retry_at:
                         self.stop_event.wait(self.poll)
@@ -312,7 +345,7 @@ class LiveIndex:
                     if self.scan() != snapshot:
                         continue
                     generation = self._restore(snapshot, identity) or self._build(snapshot, identity)
-                    if self.scan() != snapshot:
+                    if self.scan(fresh=True) != snapshot:
                         raise SourceChanged()
                     with self.condition:
                         self.generation, self.phase, self.error = generation, 'ready', None

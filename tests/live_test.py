@@ -13,6 +13,7 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'src/retrieval'))
 from live import LiveIndex, IndexUnavailable, SourceChanged
 from languages import source_units
+from languages import files
 
 
 class LiveTests(unittest.TestCase):
@@ -50,6 +51,70 @@ class LiveTests(unittest.TestCase):
         generation = manager._build(snapshot, manager.identity(snapshot))
         manager.generation = generation
         return generation
+
+    def wait_paused(self, manager):
+        deadline = time.monotonic() + 5
+        while not manager.status()['backgroundPaused'] and time.monotonic() < deadline:
+            time.sleep(.01)
+        self.assertTrue(manager.status()['backgroundPaused'])
+
+    def test_idle_stops_scanning_and_search_wakes_and_refreshes(self):
+        self.write('a.txt', 'before\n')
+        manager = self.manager(scanIdleSeconds=.1).start()
+        first = manager.current(5)
+        self.wait_paused(manager)
+        with patch('live.discover_snapshot', wraps=files.discover_snapshot) as scan:
+            self.write('a.txt', 'after\n')
+            # Polling status, as MCP does, must not restart background scans.
+            for _ in range(5):
+                self.assertTrue(manager.status()['backgroundPaused'])
+                time.sleep(.03)
+            self.assertEqual(scan.call_count, 0)
+            second = manager.current(5)
+            self.assertNotEqual(first.identity, second.identity)
+            self.assertEqual(second.engine[0]['text'], 'after')
+        self.wait_paused(manager)
+        manager.close()
+        self.assertFalse(manager.thread.is_alive())
+        self.assertTrue(manager.lock_file.closed)
+
+    def test_freshness_checks_do_not_trust_the_background_hash_cache(self):
+        self.write('a.txt', 'before\n')
+        manager = self.manager()
+        first = self.build(manager)
+        self.write('a.txt', 'after!\n')
+        manager.scan()
+        signature, _, reason = manager.scan_cache['a.txt']
+        manager.scan_cache['a.txt'] = (signature, {
+            'path': 'a.txt', 'bytes': 7, 'sha256': first.snapshot['files'][0]['sha256']}, reason)
+        self.assertEqual(manager.identity(manager.scan()), first.identity)
+        with self.assertRaises(IndexUnavailable):
+            manager.current(0)
+        with self.assertRaises(IndexUnavailable):
+            manager.verify(first)
+        manager.start()
+        self.assertEqual(manager.current(5).engine[0]['text'], 'after!')
+
+    def test_idle_failure_does_not_retry_forever_and_new_search_retries(self):
+        self.write('a.txt', 'source\n')
+        manager = self.manager(scanIdleSeconds=.1)
+        manager.embed = lambda *a, **kw: (_ for _ in ()).throw(RuntimeError('offline'))
+        manager.start()
+        with self.assertRaises(IndexUnavailable):
+            manager.current(5)
+        self.wait_paused(manager)
+        manager.embed = self.embed
+        # The existing error remains explicit until its retry backoff expires.
+        time.sleep(2)
+        try:
+            manager.current(0)
+        except IndexUnavailable:
+            pass
+        deadline = time.monotonic()+5
+        while manager.generation is None and time.monotonic() < deadline:
+            time.sleep(.01)
+        self.assertIsNotNone(manager.generation)
+        self.assertEqual(manager.current(5).engine[0]['text'], 'source')
 
     def test_edit_delete_rename_and_line_shift_reuse(self):
         self.write('a.py','def one():\n    return 1\n\ndef two():\n    return 2\n')

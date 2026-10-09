@@ -21,6 +21,7 @@ test('Retrieval client permits SSH loopback or HTTPS, rejects credentials and cl
       RERANK_BASE_URL:'https://reranker.example/v1',RERANK_REMOTE_RUNTIME_URL:'',
       RERANK_MODEL:'test',RERANK_API_KEY:'test-only',
       OCE_EMBEDDING_BATCH_SIZE:'64',OCE_EMBEDDING_CONCURRENCY:'2',
+      OCE_SCAN_IDLE_SECONDS:'45',
       OCE_RERANK_API:'rerank',OCE_RERANK_CONCURRENCY:'3',OCE_RERANK_MAX_DOCUMENTS:'64',
       [prefix+'PYTHON']:'/test/python',[prefix+'GO_BINARY']:'/test/go',
       [prefix+'API_KEY']:'configuration-test-only',[prefix+'POLL_SECONDS']:'2',
@@ -31,6 +32,7 @@ test('Retrieval client permits SSH loopback or HTTPS, rejects credentials and cl
     assert.equal(settings.workerEnv.OCE_GO_BINARY,'/test/go');
     assert.equal(settings.config.serviceKey,'configuration-test-only');
     assert.equal(settings.config.pollSeconds,2);
+    assert.equal(settings.config.scanIdleSeconds,45);
     assert.equal(settings.config.reranker.api,'rerank');
     assert.equal(settings.config.reranker.concurrency,3);
     assert.equal(settings.config.reranker.maxDocuments,64);
