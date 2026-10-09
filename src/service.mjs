@@ -36,6 +36,10 @@ export function serviceConfig({root, state, port = 0} = {}, environment = proces
     reranker: {...reranker, baseUrl: runtime.requestBaseUrl},
     languageOptions: env.OCE_LANGUAGE_OPTIONS ? JSON.parse(env.OCE_LANGUAGE_OPTIONS) : {},
     pollSeconds: Number(env.OCE_POLL_SECONDS || 1),
+    unloadIdleSeconds: Number(env.OCE_UNLOAD_IDLE_SECONDS || 120),
+    maxResidentWorkers: Number(env.OCE_MAX_RESIDENT_WORKERS || 3),
+    maxConcurrentBuilds: Number(env.OCE_MAX_CONCURRENT_BUILDS || 1),
+    resourceDirectory: env.OCE_RESOURCE_DIRECTORY || (state ? resolve(dirname(resolve(state)), '.resources') : resolve(homedir(), '.cache/opencontextengine/resources')),
     scanIdleSeconds: Number(env.OCE_SCAN_IDLE_SECONDS || 60),
     debounceSeconds: Number(env.OCE_DEBOUNCE_SECONDS || .3)},
   };

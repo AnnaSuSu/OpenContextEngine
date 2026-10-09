@@ -116,6 +116,22 @@ class LiveTests(unittest.TestCase):
         self.assertIsNotNone(manager.generation)
         self.assertEqual(manager.current(5).engine[0]['text'], 'source')
 
+    def test_idle_unloads_generation_and_releases_shared_resident_capacity(self):
+        self.write('a.txt', 'saved source\n')
+        first = self.manager(scanIdleSeconds=.05, unloadIdleSeconds=.2, maxResidentWorkers=1).start()
+        first.current(5)
+        other = self.base/'other'
+        other.mkdir()
+        (other/'b.txt').write_text('second project\n')
+        second = self.manager(root=str(other), state=str(self.base/'second'),
+                              maxResidentWorkers=1).start()
+        self.assertEqual(second.current(5).engine[0]['text'], 'second project')
+        self.assertIsNone(first.generation)
+        self.assertEqual(first.status()['status'], 'sleeping')
+        self.assertEqual(first.parse_cache, {})
+        second.close()
+        self.assertEqual(first.current(5).engine[0]['text'], 'saved source')
+
     def test_edit_delete_rename_and_line_shift_reuse(self):
         self.write('a.py','def one():\n    return 1\n\ndef two():\n    return 2\n')
         self.write('b.txt','stable text\n')

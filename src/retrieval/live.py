@@ -16,7 +16,8 @@ import uuid
 import numpy as np
 
 from engine import document, post
-from cancellation import check, submit
+from cancellation import check, submit, RequestScope, Cancelled
+from resources import acquire_slot, build_slot
 from languages import adapter_manifest, source_units
 from languages.files import discover_snapshot
 from evidence import EvidenceEngine
@@ -60,6 +61,13 @@ class LiveIndex:
         self.poll = float(config.get('pollSeconds', 1))
         self.debounce = float(config.get('debounceSeconds', .3))
         self.idle_seconds = float(config.get('scanIdleSeconds', 60))
+        self.unload_seconds = float(config.get('unloadIdleSeconds', 120))
+        self.resource_directory = Path(config.get('resourceDirectory', self.state.parent/'.resources'))
+        self.resident_slot = None
+        self.max_resident = int(config.get('maxResidentWorkers', 3))
+        self.max_builds = int(config.get('maxConcurrentBuilds', 1))
+        if not 1 <= self.max_resident <= 32 or not 1 <= self.max_builds <= 8 or not .05 <= self.unload_seconds <= 3600:
+            raise ValueError('Invalid resource limits')
         if not .05 <= self.poll <= 60 or not 0 <= self.debounce <= 10:
             raise ValueError('Invalid live index polling or debounce interval')
         if not .05 <= self.idle_seconds <= 3600:
@@ -320,7 +328,19 @@ class LiveIndex:
                 if self.background_paused:
                     # MCP lease renewals and status reads are not search activity.
                     # Keep the generation available without repeatedly reading disk.
-                    self.wake_event.wait()
+                    remaining = self.unload_seconds-(time.monotonic()-self.last_activity)
+                    if remaining <= 0:
+                        with self.condition:
+                            self.generation = None
+                            self.parse_cache.clear()
+                            self.scan_cache.clear()
+                            self.phase = 'sleeping'
+                        if self.resident_slot:
+                            self.resident_slot.close()
+                            self.resident_slot = None
+                        self.wake_event.wait()
+                    else:
+                        self.wake_event.wait(remaining)
                     continue
                 identity = None
                 try:
@@ -347,7 +367,12 @@ class LiveIndex:
                         break
                     if self.scan() != snapshot:
                         continue
-                    generation = self._restore(snapshot, identity) or self._build(snapshot, identity)
+                    if self.resident_slot is None:
+                        self._progress('waiting_for_capacity')
+                        self.resident_slot = acquire_slot(self.resource_directory, 'resident', self.max_resident, self.stop_event)
+                    with build_slot(self.resource_directory, self.max_builds, self.stop_event), RequestScope(
+                            timeout=3600, stop=self.stop_event):
+                        generation = self._restore(snapshot, identity) or self._build(snapshot, identity)
                     if self.scan(fresh=True) != snapshot:
                         raise SourceChanged()
                     with self.condition:
@@ -355,6 +380,11 @@ class LiveIndex:
                         self.progress = None
                         failed_identity = None
                         self.condition.notify_all()
+                except Cancelled:
+                    if self.stop_event.is_set():
+                        break
+                    self._progress('cancelled')
+                    self.stop_event.wait(self.poll)
                 except SourceChanged:
                     self._progress('source_changed')
                     continue
@@ -366,4 +396,6 @@ class LiveIndex:
                         self.condition.notify_all()
                     self.stop_event.wait(self.poll)
         finally:
+            if self.resident_slot:
+                self.resident_slot.close()
             self.lock_file.close()

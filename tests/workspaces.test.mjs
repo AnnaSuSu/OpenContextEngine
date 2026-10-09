@@ -13,6 +13,7 @@ async function setup(t, options = {}) {
   const started = [];
   const manager = createWorkspaceManager(options.fixed ? {root:first,state:join(dir,'fixed-state')}
     : {state:join(dir,'states')}, {
+    idleMs:options.idleMs ?? 120000, maxWorkspaces:options.maxWorkspaces ?? 3,
     configure: value => value,
     start: settings => {
       const child = new EventEmitter();
@@ -83,4 +84,16 @@ test('Exited workers are restarted and closing also stops a pending startup', as
   assert.equal(started[1].closes,1);
   ready({baseUrl:'fixture'});
   await pending;
+});
+
+
+test('Unused workspace handles release leases and capacity evicts the least recent project', async t => {
+  const {manager,started,first,second} = await setup(t,{idleMs:40,maxWorkspaces:1});
+  await manager.get(first);
+  await manager.get(second);
+  assert.equal(started[0].closes,1);
+  await new Promise(resolve=>setTimeout(resolve,120));
+  assert.equal(started[1].closes,1);
+  await manager.get(first);
+  assert.equal(started.length,3);
 });
