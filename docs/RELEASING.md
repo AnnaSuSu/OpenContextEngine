@@ -1,6 +1,6 @@
 # Publishing OpenContextEngine to npm
 
-Package: `open-context-engine`. Release example: `0.1.8`. License: MIT.
+Package: `open-context-engine`. Release example: `0.1.9`. License: MIT.
 Preparing an archive does not publish it or change GitHub repository visibility.
 
 ## Prepare and verify
@@ -13,7 +13,7 @@ Preparing an archive does not publish it or change GitHub repository visibility.
 ```sh
 mkdir -p .pilot-state/npm-release
 node scripts/pack-release.mjs .pilot-state/npm-release
-npm publish .pilot-state/npm-release/open-context-engine-0.1.8.tgz --dry-run --access public --registry https://registry.npmjs.org/
+npm publish .pilot-state/npm-release/open-context-engine-0.1.9.tgz --dry-run --access public --registry https://registry.npmjs.org/
 ```
 
 5. Confirm the archive contains `LICENSE` and runtime files, and excludes credentials, `.env`, `.npmrc`, caches, test fixtures, model weights, and evaluation datasets.
@@ -35,10 +35,10 @@ An E404 means no public package is visible; it does not reserve the name. Comple
 Only after approval, publish the verified archive:
 
 ```sh
-npm publish .pilot-state/npm-release/open-context-engine-0.1.8.tgz --access public --registry https://registry.npmjs.org/
-npm view open-context-engine@0.1.8 version dist.integrity --registry https://registry.npmjs.org/
+npm publish .pilot-state/npm-release/open-context-engine-0.1.9.tgz --access public --registry https://registry.npmjs.org/
+npm view open-context-engine@0.1.9 version dist.integrity --registry https://registry.npmjs.org/
 ```
 
-Compare the registry integrity with the packed artifact, then verify a clean `npm install -g open-context-engine@0.1.8`. Check the README on the npm package page as well; correcting it later requires publishing a new version. Git pushes, repository visibility, and release tags are separate actions.
+Compare the registry integrity with the packed artifact, then verify a clean `npm install -g open-context-engine@0.1.9`. Check the README on the npm package page as well; correcting it later requires publishing a new version. Git pushes, repository visibility, and release tags are separate actions.
 
 [Official npm publishing guide](https://docs.npmjs.com/creating-and-publishing-unscoped-public-packages/)

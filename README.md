@@ -39,6 +39,8 @@ Requires **macOS, Linux, or Windows**, Node.js 22.14+, Python 3.10+, Git, and co
 
 Native Windows support is available in version **0.1.3** and later. Run the installation commands in PowerShell. Version **0.1.4** adds automatic worker sharing across MCP sessions to prevent index-lock conflicts. Version **0.1.5** raises the default retrieval output budget to 8,000 tokens; pass `budget: 4000` when a smaller response is sufficient. Version **0.1.6** reports pending indexing as progress, retries once, and keeps actual indexing failures explicit. Version **0.1.7** prevents Windows console popups from background workers and their helper processes. Version **0.1.8** adds configurable embedding request concurrency for indexing (`OCE_EMBEDDING_CONCURRENCY`, default 1), with bounded requests and reusable results after failures.
 
+Version **0.1.9** reduces idle CPU and memory use, reuses unchanged source and immutable vector shards, propagates cancellation to model calls and parser helpers, and bounds workspace, indexing, and cache resources.
+
 Install from npm, then expand your client's guide. Model settings are shared across clients on the same machine.
 
 <details open>
