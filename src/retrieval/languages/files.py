@@ -2,6 +2,8 @@
 import hashlib
 from cancellation import check
 import os
+import stat
+import fnmatch
 from pathlib import Path, PurePosixPath
 import re
 from background_process import run_background
@@ -50,7 +52,7 @@ def read_text(path):
     return raw, text, None
 
 
-def discover_snapshot(root, *, cache=None):
+def discover_snapshot(root, *, cache=None, limits=None, exclude=()):
     """Use Git's ignore rules when available, otherwise a bounded directory walk."""
     root = Path(root).resolve()
     if not root.is_dir():
@@ -75,20 +77,37 @@ def discover_snapshot(root, *, cache=None):
             names.extend((Path(directory)/name).relative_to(root).as_posix() for name in entries)
         names.sort()
         discovery = 'directory-walk'
-    next_cache = {}
+    limits = limits or {}
+    max_files, max_bytes = limits.get('files', 50000), limits.get('bytes', 256*1024*1024)
+    if len(names) > limits.get('candidates', 250000):
+        raise ValueError('Source candidate limit exceeded; narrow the repository root or exclusions')
+    next_cache, parents = {}, {root: True}
+    total_bytes = 0
+    def safe_parent(path):
+        if path not in parents:
+            parents[path] = path.is_relative_to(root) and safe_parent(path.parent) and not path.is_symlink()
+        return parents[path]
     for name in names:
         check()
         path = root/name
         reason = path_exclusion(name)
-        if path.is_symlink() or not path.resolve().is_relative_to(root):
+        if any(fnmatch.fnmatchcase(name, pattern) for pattern in exclude):
+            reason = 'configured-exclusion'
+        if not safe_parent(path.parent):
             reason = 'symlink'
-        elif not path.is_file():
+        try:
+            info = path.lstat()
+        except FileNotFoundError:
+            excluded.append({'path': name, 'reason': 'not-a-regular-file'})
+            continue
+        if stat.S_ISLNK(info.st_mode):
+            reason = 'symlink'
+        elif not stat.S_ISREG(info.st_mode):
             reason = 'not-a-regular-file'
         if not reason:
-            def signature():
-                info = path.stat()
+            def signature(info):
                 return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
-            before = signature() if cache is not None else None
+            before = signature(info) if cache is not None else None
             cached = cache.get(name) if cache is not None else None
             if cached is not None and cached[0] == before:
                 _, entry, reason = cached
@@ -98,12 +117,15 @@ def discover_snapshot(root, *, cache=None):
                                              'sha256': hashlib.sha256(raw).hexdigest()}
             # Do not retain bytes read across an edit. Publication and queries
             # additionally use uncached scans, independent of stat metadata.
-            if cache is not None and before == signature():
+            if cache is not None and before == signature(path.stat()):
                 next_cache[name] = (before, entry, reason)
         if reason:
             excluded.append({'path': name, 'reason': reason})
         else:
             files.append(entry)
+            total_bytes += entry['bytes']
+            if len(files) > max_files or total_bytes > max_bytes:
+                raise ValueError('Source size limit exceeded; narrow the repository root or configure exclusions')
     if cache is not None:
         cache.clear()
         cache.update(next_cache)

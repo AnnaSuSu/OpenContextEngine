@@ -8,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import sys
 import sqlite3
 import threading
 import time
@@ -95,6 +96,16 @@ class LiveIndex:
         self.background_paused = False
         self.scan_lock = threading.Lock()
         self.scan_cache = {}
+        self.source_cache = {}
+        self.feature_cache = {}
+        self.last_full_scan = 0
+        self.strict_freshness = config.get('strictFreshness', sys.platform == 'win32')
+        self.limits = {'files': config.get('maxFiles', 50000), 'bytes': config.get('maxSourceBytes', 256*1024*1024)}
+        self.exclude = config.get('exclude', [])
+        if not isinstance(self.exclude, list) or any(not isinstance(p, str) for p in self.exclude):
+            raise ValueError('Exclusions must be a list of glob patterns')
+        if any(type(v) is not int or v < 1 for v in self.limits.values()):
+            raise ValueError('Invalid source limits')
         self.generation = None
         self.error = None
         self.phase = 'starting'
@@ -106,11 +117,12 @@ class LiveIndex:
 
     def scan(self, *, fresh=False):
         with self.scan_lock:
-            if fresh:
-                # A strict read may find edits with preserved stat metadata.
-                # Let the background builder observe them on its next scan too.
+            full = (fresh and self.strict_freshness) or time.monotonic()-self.last_full_scan >= 60
+            if full:
                 self.scan_cache.clear()
-            snapshot = discover_snapshot(self.root, cache=None if fresh else self.scan_cache)
+            snapshot = discover_snapshot(self.root, cache=self.scan_cache, limits=self.limits, exclude=self.exclude)
+            if full:
+                self.last_full_scan = time.monotonic()
         # Ignore diagnostic exclusions and mtime: identities bind actual inputs.
         snapshot = {'files': [{'path': f['path'], 'sha256': f['sha256']} for f in snapshot['files']],
                     'languageOptions': self.options}
@@ -151,24 +163,36 @@ class LiveIndex:
 
     def current(self, timeout=30):
         deadline = time.monotonic() + timeout
+        target, waited = None, False
         while not self.stop_event.is_set():
             check()
             with self.condition:
                 self.last_activity = time.monotonic()
-            self.wake_event.set()
-            try:
-                target = self.identity(self.scan(fresh=True))
-            except (OSError, ValueError) as error:
-                raise IndexUnavailable('Cannot read current source: ' + type(error).__name__) from None
+            if target is None:
+                try:
+                    target = self.identity(self.scan(fresh=True))
+                except (OSError, ValueError) as error:
+                    raise IndexUnavailable('Cannot read current source: ' + str(error)) from None
+                self.wake_event.set()
             with self.condition:
-                if self.generation and self.generation.identity == target:
-                    return self.generation
-                if self.error and self.error['identity'] == target:
+                generation = self.generation
+                if generation and generation.identity == target:
+                    if not waited:
+                        return generation
+                elif self.error and self.error['identity'] == target:
                     raise IndexUnavailable('Index update failed: ' + self.error['type'])
-                remaining = deadline - time.monotonic()
-                if remaining <= 0:
-                    raise IndexUnavailable('Index is updating; search has not run yet', code='INDEX_UPDATING')
-                self.condition.wait(min(remaining, self.poll, .1))
+                else:
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise IndexUnavailable('Index is updating; search has not run yet', code='INDEX_UPDATING')
+                    self.condition.wait(min(remaining, .1))
+                    waited = True
+                    # Recheck only when a different generation is published, not on every timer tick.
+                    if self.generation and self.generation is not generation:
+                        target = None
+                    continue
+            target = None
+            waited = False
         raise IndexUnavailable('Index is stopping')
 
     def verify(self, generation):
@@ -185,7 +209,7 @@ class LiveIndex:
             return None
         return self.engine_factory(units, vectors, self.config['embeddingUrl'],
                                    self.config['reranker'], self.config.get('embeddingKey', 'local-only'),
-                                   embedding_model=self.embedding['model'])
+                                   embedding_model=self.embedding['model'], feature_cache=self.feature_cache)
 
     def _restore(self, snapshot, identity):
         pointer = self.state/'current.json'
@@ -267,7 +291,7 @@ class LiveIndex:
         self._progress('parsing', files=len(snapshot['files']))
         report = {}
         units = source_units(self.root, snapshot['files'], language_options=self.options,
-                             cache=self.parse_cache, report=report)
+                             cache=self.parse_cache, sources_cache=self.source_cache, report=report)
         documents = [document(unit) for unit in units]
         keys = [digest([self.embedding, text]) for text in documents]
         vectors, missing = {}, {}
@@ -333,6 +357,8 @@ class LiveIndex:
                         with self.condition:
                             self.generation = None
                             self.parse_cache.clear()
+                            self.source_cache.clear()
+                            self.feature_cache.clear()
                             self.scan_cache.clear()
                             self.phase = 'sleeping'
                         if self.resident_slot:

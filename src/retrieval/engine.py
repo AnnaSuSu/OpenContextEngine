@@ -73,16 +73,24 @@ def document(u, limit=2200):
 
 
 class Engine:
-    def __init__(self, units, vectors, embed_url, reranker, embedding_key='local-only', embedding_model='Qwen3-Embedding-4B'):
+    def __init__(self, units, vectors, embed_url, reranker, embedding_key='local-only', embedding_model='Qwen3-Embedding-4B', feature_cache=None):
         self.units, self.vectors = units, vectors
         self.embed_url, self.reranker = embed_url, reranker
         self.embedding_key = embedding_key
         self.embedding_model = embedding_model
         self.encoding = tiktoken.get_encoding('cl100k_base')
         self.postings = defaultdict(list)
-        lengths = []
+        lengths, costs, next_features = [], [], {}
         for u in units:
-            counts = Counter(terms((u['path'] + ' ' + u['name'] + ' ') * 3 + u['text']))
+            rendered = self.render(u)
+            key = hashlib.sha256((u['name']+'\n'+rendered).encode()).hexdigest()
+            feature = feature_cache.get(key) if feature_cache is not None else None
+            if feature is None:
+                feature = (Counter(terms((u['path'] + ' ' + u['name'] + ' ') * 3 + u['text'])),
+                           len(self.encoding.encode_ordinary(rendered))+2)
+            counts, cost = feature
+            next_features[key] = feature
+            costs.append(cost)
             lengths.append(sum(counts.values()))
             for term, frequency in counts.items():
                 self.postings[term].append((u['id'], frequency))
@@ -92,7 +100,10 @@ class Engine:
         for u in units:
             for target in u['edges']:
                 self.incoming[target].append(u['id'])
-        self.costs = [len(self.encoding.encode_ordinary(self.render(u))) + 2 for u in units]
+        self.costs = costs
+        if feature_cache is not None:
+            feature_cache.clear()
+            feature_cache.update(next_features)
 
     @staticmethod
     def render(u):

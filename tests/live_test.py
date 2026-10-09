@@ -80,7 +80,7 @@ class LiveTests(unittest.TestCase):
 
     def test_freshness_checks_do_not_trust_the_background_hash_cache(self):
         self.write('a.txt', 'before\n')
-        manager = self.manager()
+        manager = self.manager(strictFreshness=True)
         first = self.build(manager)
         self.write('a.txt', 'after!\n')
         manager.scan()
@@ -131,6 +131,28 @@ class LiveTests(unittest.TestCase):
         self.assertEqual(first.parse_cache, {})
         second.close()
         self.assertEqual(first.current(5).engine[0]['text'], 'saved source')
+
+    def test_single_file_edit_reuses_other_sources_and_parser_fingerprint(self):
+        for i in range(1000):
+            self.write(f'{i}.txt', f'source {i}\n')
+        manager = self.manager()
+        self.build(manager)
+        self.write('0.txt', 'changed\n')
+        import languages
+        with patch('languages.read_text', wraps=languages.read_text) as reads, patch(
+                'languages.adapter_manifest', wraps=languages.adapter_manifest) as manifests:
+            second = self.build(manager)
+        self.assertEqual(reads.call_count, 1)
+        self.assertEqual(manifests.call_count, 1)
+        self.assertEqual(second.info['embeddedDocuments'], 1)
+
+    def test_pending_query_checks_source_once_instead_of_polling_the_tree(self):
+        self.write('a.txt', 'waiting\n')
+        manager = self.manager()
+        with patch('live.discover_snapshot', wraps=files.discover_snapshot) as scans:
+            with self.assertRaises(IndexUnavailable):
+                manager.current(.2)
+        self.assertEqual(scans.call_count, 1)
 
     def test_edit_delete_rename_and_line_shift_reuse(self):
         self.write('a.py','def one():\n    return 1\n\ndef two():\n    return 2\n')
