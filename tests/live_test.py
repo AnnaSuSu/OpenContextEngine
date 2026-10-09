@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 from contextlib import closing
 import subprocess
 import sqlite3
@@ -94,6 +95,18 @@ class LiveTests(unittest.TestCase):
             manager.verify(first)
         manager.start()
         self.assertEqual(manager.current(5).engine[0]['text'], 'after!')
+
+    def test_default_freshness_detects_edits_with_preserved_mtime(self):
+        self.write('a.txt', 'before')
+        manager = self.manager()
+        first = self.build(manager)
+        info = (self.root/'a.txt').stat()
+        self.write('a.txt', 'after!')
+        os.utime(self.root/'a.txt', ns=(info.st_atime_ns, info.st_mtime_ns))
+        with self.assertRaises(IndexUnavailable):
+            manager.current(0)
+        with self.assertRaises(IndexUnavailable):
+            manager.verify(first)
 
     def test_idle_failure_does_not_retry_forever_and_new_search_retries(self):
         self.write('a.txt', 'source\n')

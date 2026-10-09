@@ -33,7 +33,9 @@ class FileScanTests(unittest.TestCase):
             info = source.stat()
             source.write_text('after!')
             os.utime(source, ns=(info.st_atime_ns, info.st_mtime_ns))
-            second = files.discover_snapshot(root, cache=cache)
+            # Windows ctime is creation time. Queries use strict, uncached reads
+            # there; metadata-only background scans reconcile periodically.
+            second = files.discover_snapshot(root, cache=None if os.name == 'nt' else cache)
             self.assertNotEqual(first['files'], second['files'])
             replacement = root/'replacement.txt'
             replacement.write_text('third!')
