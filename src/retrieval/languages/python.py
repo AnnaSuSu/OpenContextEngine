@@ -4,6 +4,7 @@ Name-resolved calls/inheritance remain heuristic (shadowing/dynamic dispatch are
 not fully resolved); confidence is a provenance category, not a probability.
 """
 import ast
+from cancellation import check
 import re
 from collections import defaultdict
 from .schema import SourceSyntaxError
@@ -16,6 +17,7 @@ def extract(sources, max_lines=65, options=None):
     diagnostics = []
     scoped_calls = {}
     for source in sources:
+        check()
         path, text = source.path, source.text
         lines = text.splitlines()
         module = path.removesuffix('.py').replace('/', '.')

@@ -1,5 +1,6 @@
 """Language-neutral source units. Relations describe static evidence, not runtime proof."""
 from dataclasses import dataclass
+from cancellation import check
 import math
 from typing import TypedDict
 
@@ -60,6 +61,7 @@ def validate_units(units, sources):
                           else source.text.splitlines()) for source in sources}
     covered = {path: set() for path in lines}
     for expected, unit in enumerate(units):
+        check()
         if unit['id'] != expected or unit['path'] not in lines:
             raise ValueError('Invalid unit ID or source path')
         source = lines[unit['path']]

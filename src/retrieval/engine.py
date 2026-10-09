@@ -82,6 +82,7 @@ class Engine:
         self.postings = defaultdict(list)
         lengths, costs, next_features = [], [], {}
         for u in units:
+            check()
             rendered = self.render(u)
             key = hashlib.sha256((u['name']+'\n'+rendered).encode()).hexdigest()
             feature = feature_cache.get(key) if feature_cache is not None else None
@@ -98,6 +99,7 @@ class Engine:
         self.average_length = max(1, self.lengths.mean())
         self.incoming = defaultdict(list)
         for u in units:
+            check()
             for target in u['edges']:
                 self.incoming[target].append(u['id'])
         self.costs = costs
@@ -115,6 +117,7 @@ class Engine:
     def lexical(self, query):
         scores = np.zeros(len(self.units))
         for term in set(terms(query)):
+            check()
             matches = self.postings.get(term, [])
             if not matches:
                 continue

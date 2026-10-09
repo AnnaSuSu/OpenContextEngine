@@ -109,6 +109,8 @@ class LiveIndex:
         if any(type(v) is not int or v < 1 for v in self.limits.values()):
             raise ValueError('Invalid source limits')
         self.generation = None
+        self.saved_info = None
+        self.building = False
         self.error = None
         self.phase = 'starting'
         self.progress = None
@@ -161,7 +163,7 @@ class LiveIndex:
     def status(self):
         with self.condition:
             return {'status': self.phase, 'mode': 'live', 'root': str(self.root),
-                    'generation': self.generation.info if self.generation else None,
+                    'generation': self.generation.info if self.generation else self.saved_info,
                     'error': self.error, 'pollSeconds': self.poll,
                     'backgroundPaused': self.background_paused,
                     'progress': dict(self.progress) if self.progress else None}
@@ -365,7 +367,7 @@ class LiveIndex:
         # Search retains its own immutable in-memory generation.
         for old in self.state.glob('generation-*'):
             if old != folder and old.is_dir():
-                shutil.rmtree(old)
+                shutil.rmtree(old, ignore_errors=True)
         # Only published generations may trigger reclamation. In-flight engines
         # pin their vector shards; source units are already owned in memory.
         try:
@@ -433,11 +435,16 @@ class LiveIndex:
                         self.resident_slot = acquire_slot(self.resource_directory, 'resident', self.max_resident, self.stop_event)
                     with build_slot(self.resource_directory, self.max_builds, self.stop_event), RequestScope(
                             timeout=3600, stop=self.stop_event):
-                        generation = self._restore(snapshot, identity) or self._build(snapshot, identity)
+                        self.building = True
+                        try:
+                            generation = self._restore(snapshot, identity) or self._build(snapshot, identity)
+                        finally:
+                            self.building = False
                     if self.scan(fresh=True) != snapshot:
                         raise SourceChanged()
                     with self.condition:
                         self.generation, self.phase, self.error = generation, 'ready', None
+                        self.saved_info = generation.info
                         generation = None  # Do not keep an unloaded engine alive in this loop frame.
                         self.progress = None
                         failed_identity, failures = None, 0

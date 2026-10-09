@@ -97,9 +97,11 @@ class SharedWorker:
                 self.stopping = True
             return self.stopping
 
-    def monitor(self, server):
+    def monitor(self, server, busy=lambda: False):
         def run():
             while not self.finished.wait(min(1, self.idle / 2)):
+                if busy():
+                    continue
                 if self.should_stop():
                     server.shutdown()
                     return

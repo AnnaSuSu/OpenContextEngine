@@ -38,6 +38,8 @@ class RequestScope:
 
     def cancel(self):
         with self.lock:
+            if self.cancelled.is_set():
+                return
             self.cancelled.set()
             callbacks = list(self.callbacks)
         for callback in callbacks:
@@ -48,7 +50,11 @@ class RequestScope:
 
     def register(self, callback):
         with self.lock:
-            self.callbacks.add(callback)
+            cancelled = self.cancelled.is_set()
+            if not cancelled:
+                self.callbacks.add(callback)
+        if cancelled:
+            callback()
         self.check()
         def unregister():
             with self.lock:

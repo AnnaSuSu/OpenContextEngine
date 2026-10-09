@@ -1,6 +1,7 @@
 """Snapshot-bound language adapters; downstream retrieval consumes only CodeUnit."""
 from collections import defaultdict
 from copy import deepcopy
+from cancellation import check
 import hashlib
 import json
 from pathlib import Path, PurePosixPath
@@ -77,6 +78,7 @@ def source_units(root, files, max_lines=65, language_options=None, report=None, 
     manifest = adapter_manifest(files, options)  # Compute runtime identity once per update.
     next_sources = {}
     for file in files:
+        check()
         name = file['path']
         path = PurePosixPath(name)
         if (path.is_absolute() or '..' in path.parts or '\\' in name or str(path) != name
@@ -121,6 +123,7 @@ def source_units(root, files, max_lines=65, language_options=None, report=None, 
         batches = [[source] for source in subset] if cache is not None and language == 'text' else [subset]
         units = []
         for batch in batches:
+            check()
             key = (language, batch[0].path if language == 'text' else '')
             fingerprint = (hashlib.sha256(json.dumps([
                 [(s.path, s.sha256) for s in batch], max_lines, settings,

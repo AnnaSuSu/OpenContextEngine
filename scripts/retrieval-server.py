@@ -184,7 +184,7 @@ def serve(config):
     server.daemon_threads = True
     if shared:
         shared.publish(server.server_port)
-        shared.monitor(server)
+        shared.monitor(server, busy=lambda: live.building)
     try:
         print(json.dumps({'listening':f'http://127.0.0.1:{server.server_port}',
                           'health':{'status':'running','mode':'live'} if live else health}),flush=True)

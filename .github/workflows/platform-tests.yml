@@ -60,4 +60,4 @@ jobs:
           OCE_PYTHON: python
         run: node --test tests/setup.test.mjs tests/remote-models.test.mjs tests/platform.test.mjs tests/workspaces.test.mjs tests/live-http.test.mjs tests/mcp.test.mjs tests/shared-service.test.mjs
       - name: File locks, live indexing, JavaScript, and Go regression tests
-        run: python -m unittest background_process_test http_server_test shared_worker_test writer_lock_test go_helper_test file_scan_test storage_test live_test js_go_test go_types_test reranker_test text_fallback_test
+        run: python -m unittest cancellation_test background_process_test http_server_test shared_worker_test writer_lock_test go_helper_test file_scan_test storage_test live_test js_go_test go_types_test reranker_test text_fallback_test

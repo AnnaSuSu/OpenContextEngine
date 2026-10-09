@@ -62,6 +62,8 @@ class VectorStore:
         self.state, self.dimensions, self.budget = state, dimensions, budget
         self.directory = state/'vector-shards'
         self.directory.mkdir(exist_ok=True)
+        for temporary in self.directory.glob('*.tmp'):
+            temporary.unlink(missing_ok=True)
         self.pins = weakref.WeakSet()
         self.validated = {}
 
@@ -144,6 +146,7 @@ class VectorStore:
                 db.execute('DELETE FROM vectors WHERE key IN (SELECT key FROM vector_locations WHERE shard=?)',(name,))
                 db.execute('DELETE FROM vector_locations WHERE shard=?',(name,))
                 shard_path(self.directory,name).unlink(missing_ok=True)
+                self.validated.pop(name, None)
                 total -= sizes.get(name,0)
             if total > self.budget and legacy:
                 # Legacy entries have no recency information. Current vectors have
@@ -151,6 +154,7 @@ class VectorStore:
                 db.execute("DELETE FROM vectors WHERE length(value)>0")
             for name in sizes.keys()-known-protected:
                 shard_path(self.directory,name).unlink(missing_ok=True)
+                self.validated.pop(name, None)
             db.commit()
             # Reclaim legacy blob pages once migration leaves a mostly empty DB.
             pages = db.execute('PRAGMA page_count').fetchone()[0]
@@ -163,6 +167,8 @@ class UnitStore:
     def __init__(self, state):
         self.directory = state/'unit-shards'
         self.directory.mkdir(exist_ok=True)
+        for temporary in self.directory.glob('*.tmp'):
+            temporary.unlink(missing_ok=True)
 
     def save(self, units):
         keys = [fingerprint([u['path'],u['start'],u['end'],u['symbol'],u['text']]) for u in units]

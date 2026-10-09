@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import sys
 import tempfile
+import threading
 import unittest
 from unittest.mock import patch
 
@@ -11,6 +12,22 @@ from shared_worker import SharedWorker, restrict_permissions
 
 
 class SharedWorkerTests(unittest.TestCase):
+    def test_admitted_build_finishes_before_idle_worker_shutdown(self):
+        with tempfile.TemporaryDirectory() as directory:
+            worker = self.worker(directory)
+            worker.idle = .04
+            building = threading.Event()
+            building.set()
+            stopped = threading.Event()
+            server = type('Server', (), {'shutdown': lambda _: stopped.set()})()
+            try:
+                worker.monitor(server, busy=building.is_set)
+                self.assertFalse(stopped.wait(.15))
+                building.clear()
+                self.assertTrue(stopped.wait(1))
+            finally:
+                worker.close()
+
     def worker(self, directory):
         return SharedWorker({'state': directory, 'serviceKey': 'test-key',
                              'shared': {'fingerprint': 'test-fingerprint', 'leaseSeconds': 15, 'idleSeconds': 30}})
