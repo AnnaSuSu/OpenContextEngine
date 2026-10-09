@@ -116,6 +116,39 @@ class LiveTests(unittest.TestCase):
         self.assertIsNotNone(manager.generation)
         self.assertEqual(manager.current(5).engine[0]['text'], 'source')
 
+    def test_scan_failure_backoff_does_not_rescan_the_tree(self):
+        manager = self.manager(scanIdleSeconds=10)
+        with patch.object(manager, 'scan', side_effect=ValueError('Source size limit')) as scan:
+            manager.start()
+            deadline = time.monotonic()+2
+            while manager.status()['status'] != 'failed' and time.monotonic()<deadline:
+                time.sleep(.01)
+            self.assertEqual(manager.status()['status'], 'failed')
+            time.sleep(.2)
+            self.assertEqual(scan.call_count, 1)
+            manager.close()
+
+    def test_source_race_releases_unpublished_generation_when_idle(self):
+        import weakref
+        self.write('a.txt', 'source\n')
+        manager = self.manager(scanIdleSeconds=.05, unloadIdleSeconds=.1)
+        original = manager._build
+        observed = []
+        def raced_build(snapshot, identity):
+            generation = original(snapshot, identity)
+            observed.append(weakref.ref(generation))
+            self.write('a.txt', 'changed during publication\n')
+            manager.last_activity = time.monotonic()-1
+            return generation
+        with patch.object(manager, '_build', side_effect=raced_build):
+            manager.start()
+            deadline = time.monotonic()+5
+            while manager.status()['status'] != 'sleeping' and time.monotonic()<deadline:
+                time.sleep(.01)
+            self.assertEqual(manager.status()['status'], 'sleeping')
+            self.assertTrue(observed)
+            self.assertIsNone(observed[0]())
+
     def test_idle_unloads_generation_and_releases_shared_resident_capacity(self):
         self.write('a.txt', 'saved source\n')
         first = self.manager(scanIdleSeconds=.05, unloadIdleSeconds=.2, maxResidentWorkers=1).start()

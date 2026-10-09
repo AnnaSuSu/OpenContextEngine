@@ -392,6 +392,8 @@ class LiveIndex:
                     remaining = self.unload_seconds-(time.monotonic()-self.last_activity)
                     if remaining <= 0:
                         with self.condition:
+                            if self.active_queries or time.monotonic()-self.last_activity < self.unload_seconds:
+                                continue
                             self.generation = None
                             self.parse_cache.clear()
                             self.source_cache.clear()
@@ -404,6 +406,9 @@ class LiveIndex:
                         self.wake_event.wait()
                     else:
                         self.wake_event.wait(remaining)
+                    continue
+                if time.monotonic() < retry_at:
+                    self.stop_event.wait(min(self.poll, retry_at-time.monotonic()))
                     continue
                 identity = None
                 try:
@@ -419,9 +424,6 @@ class LiveIndex:
                         delay = max(self.poll, (time.monotonic() - scan_started) * 19)
                         remaining = max(0, self.idle_seconds - (time.monotonic() - self.last_activity))
                         self.wake_event.wait(min(delay, remaining))
-                        continue
-                    if failed_identity == identity and time.monotonic() < retry_at:
-                        self.stop_event.wait(self.poll)
                         continue
                     with self.condition:
                         self.phase, self.error = 'updating', None
@@ -467,6 +469,8 @@ class LiveIndex:
                                       'message': str(error) if isinstance(error, ValueError) else type(error).__name__}
                         self.condition.notify_all()
                     self.stop_event.wait(self.poll)
+                finally:
+                    generation = None  # Also release unpublished generations after source races.
         finally:
             if self.resident_slot:
                 self.resident_slot.close()
