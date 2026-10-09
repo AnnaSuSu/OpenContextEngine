@@ -19,6 +19,7 @@ import numpy as np
 from engine import document, post
 from cancellation import check, submit, RequestScope, Cancelled
 from resources import acquire_slot, build_slot
+from storage import VectorStore, UnitStore
 from languages import adapter_manifest, source_units
 from languages.files import discover_snapshot
 from evidence import EvidenceEngine
@@ -94,6 +95,7 @@ class LiveIndex:
         self.wake_event = threading.Event()
         self.last_activity = time.monotonic()
         self.background_paused = False
+        self.active_queries = 0
         self.scan_lock = threading.Lock()
         self.scan_cache = {}
         self.source_cache = {}
@@ -112,7 +114,14 @@ class LiveIndex:
         self.progress = None
         self.parse_cache = {}
         self.state.mkdir(parents=True, exist_ok=True, mode=0o700)
+        self.max_units = int(config.get('maxUnits', 200000))
+        self.max_vector_bytes = int(config.get('maxVectorBytes', 2*1024**3))
+        self.cache_bytes = int(config.get('vectorCacheBytes', 4*1024**3))
+        if min(self.max_units, self.max_vector_bytes, self.cache_bytes) < 1 or self.cache_bytes < self.max_vector_bytes:
+            raise ValueError('Invalid vector resource budgets')
         self.lock_file = acquire_writer_lock(self.state/'writer.lock')
+        self.vector_store = VectorStore(self.state, self.dimensions, self.cache_bytes)
+        self.unit_store = UnitStore(self.state)
         self.thread = threading.Thread(target=self._run, name='repository-index', daemon=True)
 
     def scan(self, *, fresh=False):
@@ -156,6 +165,17 @@ class LiveIndex:
                     'error': self.error, 'pollSeconds': self.poll,
                     'backgroundPaused': self.background_paused,
                     'progress': dict(self.progress) if self.progress else None}
+
+    def enter_query(self):
+        with self.condition:
+            self.active_queries += 1
+            self.last_activity = time.monotonic()
+        self.wake_event.set()
+
+    def leave_query(self):
+        with self.condition:
+            self.active_queries -= 1
+            self.last_activity = time.monotonic()
 
     def _progress(self, stage, **counts):
         with self.condition:
@@ -224,10 +244,24 @@ class LiveIndex:
             info = json.loads((folder/'metadata.json').read_text())
             if info['identity'] != identity:
                 return None
-            units = json.loads((folder/'units.json').read_text())
-            vectors = np.load(folder/'vectors.npy', allow_pickle=False)
-            if vectors.shape != (len(units), self.dimensions) or not np.isfinite(vectors).all():
+            if (folder/'unit-shards.json').exists():
+                units = self.unit_store.load(json.loads((folder/'unit-shards.json').read_text()))
+                vectors = self.vector_store.matrix(json.loads((folder/'vector-refs.json').read_text()))
+                vectors.validate()
+            else:
+                # Old generations remain readable; the next update migrates cached vectors.
+                units = json.loads((folder/'units.json').read_text())
+                vectors = np.load(folder/'vectors.npy', mmap_mode='r', allow_pickle=False)
+                if vectors.shape != (len(units), self.dimensions):
+                    return None
+                for offset in range(0,len(vectors),64):
+                    check()
+                    if not np.isfinite(vectors[offset:offset+64]).all():
+                        return None
+            if vectors.shape != (len(units), self.dimensions):
                 return None
+            if len(units) > self.max_units or len(units)*self.dimensions*4 > self.max_vector_bytes:
+                raise ValueError('Saved index exceeds configured resource limits')
             return Generation(identity, snapshot, info, self._engine(units, vectors))
         except (OSError, ValueError, KeyError):
             return None
@@ -273,10 +307,7 @@ class LiveIndex:
                             failure = error
                         continue
                     # Only the coordinator writes SQLite and updates progress.
-                    for (key, _), vector in zip(batch, matrix):
-                        vectors[key] = vector
-                        db.execute('INSERT OR REPLACE INTO vectors VALUES (?, ?)', (key, vector.tobytes()))
-                    db.commit()
+                    vectors.update(self.vector_store.put(db, [key for key,_ in batch], matrix))
                     completed += len(batch)
                     self._progress('embedding', completedDocuments=completed, totalDocuments=len(entries))
                 if failure is not None or self.stop_event.is_set():
@@ -294,22 +325,18 @@ class LiveIndex:
                              cache=self.parse_cache, sources_cache=self.source_cache, report=report)
         documents = [document(unit) for unit in units]
         keys = [digest([self.embedding, text]) for text in documents]
-        vectors, missing = {}, {}
-        with closing(sqlite3.connect(self.state/'embeddings.sqlite')) as db:
-            db.execute('CREATE TABLE IF NOT EXISTS vectors (key TEXT PRIMARY KEY, value BLOB NOT NULL)')
-            for key, text in zip(keys, documents):
-                row = db.execute('SELECT value FROM vectors WHERE key=?', (key,)).fetchone()
-                if row:
-                    value = np.frombuffer(row[0], dtype=np.float32)
-                    if value.shape == (self.dimensions,) and np.isfinite(value).all():
-                        vectors[key] = value
-                        continue
-                missing[key] = text
+        if len(units) > self.max_units or len(units)*self.dimensions*4 > self.max_vector_bytes:
+            raise ValueError('Index unit or vector size limit exceeded; narrow the indexed scope')
+        missing = {}
+        with closing(self.vector_store.open()) as db:
+            vectors = self.vector_store.lookup(db, keys)
+            missing = {key:text for key,text in zip(keys,documents) if key not in vectors}
             entries = list(missing.items())
             self._progress('embedding', completedDocuments=0, totalDocuments=len(entries))
             self._embed_missing(entries, db, vectors)
         self._progress('finalizing')
-        matrix = np.asarray([vectors[key] for key in keys], dtype=np.float32).reshape(len(keys), self.dimensions)
+        references = [vectors[key] for key in keys]
+        matrix = self.vector_store.matrix(references)
         engine = self._engine(units, matrix)
         if self.stop_event.is_set() or self.scan(fresh=True) != snapshot:
             raise SourceChanged()
@@ -325,8 +352,9 @@ class LiveIndex:
         folder = self.state/('generation-'+uuid.uuid4().hex)
         folder.mkdir(mode=0o700)
         try:
-            (folder/'units.json').write_text(json.dumps(units))
-            np.save(folder/'vectors.npy', matrix)
+            unit_references = self.unit_store.save(units)
+            (folder/'unit-shards.json').write_text(json.dumps(unit_references))
+            (folder/'vector-refs.json').write_text(json.dumps(references))
             (folder/'metadata.json').write_text(json.dumps(info))
             pointer = self.state/'current.tmp'
             pointer.write_text(json.dumps({'directory': folder.name}))
@@ -338,17 +366,24 @@ class LiveIndex:
         for old in self.state.glob('generation-*'):
             if old != folder and old.is_dir():
                 shutil.rmtree(old)
+        # Only published generations may trigger reclamation. In-flight engines
+        # pin their vector shards; source units are already owned in memory.
+        try:
+            self.vector_store.collect(references)
+            self.unit_store.collect(unit_references)
+        except (OSError, sqlite3.Error):
+            pass  # A cleanup failure must not invalidate an atomic publication.
         return Generation(identity, snapshot, info, engine)
 
     def _run(self):
-        failed_identity, retry_at = None, 0
+        failed_identity, retry_at, failures = None, 0, 0
         try:
             while not self.stop_event.is_set():
                 self.wake_event.clear()
                 if self.stop_event.is_set():
                     break
                 with self.condition:
-                    self.background_paused = time.monotonic() - self.last_activity >= self.idle_seconds
+                    self.background_paused = not self.active_queries and time.monotonic() - self.last_activity >= self.idle_seconds
                 if self.background_paused:
                     # MCP lease renewals and status reads are not search activity.
                     # Keep the generation available without repeatedly reading disk.
@@ -403,8 +438,9 @@ class LiveIndex:
                         raise SourceChanged()
                     with self.condition:
                         self.generation, self.phase, self.error = generation, 'ready', None
+                        generation = None  # Do not keep an unloaded engine alive in this loop frame.
                         self.progress = None
-                        failed_identity = None
+                        failed_identity, failures = None, 0
                         self.condition.notify_all()
                 except Cancelled:
                     if self.stop_event.is_set():
@@ -415,10 +451,13 @@ class LiveIndex:
                     self._progress('source_changed')
                     continue
                 except Exception as error:
-                    failed_identity, retry_at = identity, time.monotonic() + max(2, self.poll)
+                    failures = failures+1 if failed_identity == identity else 1
+                    backoff = min(60, max(2, self.poll)*2**min(failures-1,5))
+                    failed_identity, retry_at = identity, time.monotonic() + backoff
                     with self.condition:
                         self.phase = 'failed'
-                        self.error = {'identity': identity, 'type': type(error).__name__}
+                        self.error = {'identity': identity, 'type': type(error).__name__, 'retryAfterSeconds': backoff,
+                                      'message': str(error) if isinstance(error, ValueError) else type(error).__name__}
                         self.condition.notify_all()
                     self.stop_event.wait(self.poll)
         finally:

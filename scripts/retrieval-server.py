@@ -124,6 +124,7 @@ def serve(config):
                 slots.release()
                 return self.reply(503, {'error': 'Worker is stopping'})
             acquired = False
+            using_index = False
             scope = RequestScope(request_ms/1000, self.connection)
             scope.__enter__()
             try:
@@ -133,6 +134,9 @@ def serve(config):
                     if not acquired and time.monotonic()-start >= 30:
                         return self.reply(429, {'error': 'Retrieval queue wait exceeded 30 seconds; retry later'})
                 check()
+                if live:
+                    live.enter_query()
+                    using_index = True
                 queued = round((time.monotonic()-start)*1000)
                 generation = live.current(wait_ms/1000) if live else None
                 engine = generation.engine if live else retrieval
@@ -168,6 +172,8 @@ def serve(config):
                 self.reply(502,{'error':'Retrieval or model request failed'})
             finally:
                 scope.__exit__(None, None, None)
+                if using_index:
+                    live.leave_query()
                 if acquired:
                     lock.release()
                 slots.release()

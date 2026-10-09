@@ -119,7 +119,8 @@ class LiveTests(unittest.TestCase):
     def test_idle_unloads_generation_and_releases_shared_resident_capacity(self):
         self.write('a.txt', 'saved source\n')
         first = self.manager(scanIdleSeconds=.05, unloadIdleSeconds=.2, maxResidentWorkers=1).start()
-        first.current(5)
+        import weakref
+        observed = weakref.ref(first.current(5))
         other = self.base/'other'
         other.mkdir()
         (other/'b.txt').write_text('second project\n')
@@ -128,6 +129,7 @@ class LiveTests(unittest.TestCase):
         self.assertEqual(second.current(5).engine[0]['text'], 'second project')
         self.assertIsNone(first.generation)
         self.assertEqual(first.status()['status'], 'sleeping')
+        self.assertIsNone(observed())
         self.assertEqual(first.parse_cache, {})
         second.close()
         self.assertEqual(first.current(5).engine[0]['text'], 'saved source')
@@ -153,6 +155,30 @@ class LiveTests(unittest.TestCase):
             with self.assertRaises(IndexUnavailable):
                 manager.current(.2)
         self.assertEqual(scans.call_count, 1)
+
+    def test_one_file_edit_writes_one_new_vector_shard_and_keeps_other_shards(self):
+        for i in range(130):
+            self.write(f'{i}.txt', f'source {i}\n')
+        manager = self.manager()
+        self.build(manager)
+        before = {p.name:p.stat().st_mtime_ns for p in (manager.state/'vector-shards').glob('*.npy')}
+        self.write('0.txt', 'changed\n')
+        self.build(manager)
+        after = {p.name:p.stat().st_mtime_ns for p in (manager.state/'vector-shards').glob('*.npy')}
+        self.assertEqual(len(after.keys()-before.keys()),1)
+        self.assertTrue(all(after[name]==mtime for name,mtime in before.items()))
+        self.assertFalse(list(manager.state.glob('generation-*/vectors.npy')))
+
+    def test_resource_limits_fail_explicitly_before_publishing(self):
+        self.write('a.txt','source\n')
+        self.write('b.txt','source\n')
+        with self.assertRaisesRegex(ValueError,'Source size limit'):
+            self.manager(maxFiles=1).scan()
+        manager=self.manager(state=str(self.base/'limited'), maxUnits=1)
+        with self.assertRaisesRegex(ValueError,'Index unit'):
+            self.build(manager)
+        self.assertFalse((manager.state/'current.json').exists())
+        self.assertEqual(self.calls,[])
 
     def test_edit_delete_rename_and_line_shift_reuse(self):
         self.write('a.py','def one():\n    return 1\n\ndef two():\n    return 2\n')
@@ -239,8 +265,9 @@ class LiveTests(unittest.TestCase):
         self.assertEqual(peak, 2)
         self.assertEqual(observations, sorted(observations))
         self.assertEqual(observations[-1], 7)
-        matrix = np.load(next(manager.state.glob('generation-*'))/'vectors.npy')
-        self.assertEqual(matrix[:, 0].tolist(), [int(unit['text'].split('number=')[1]) for unit in built.engine])
+        import json
+        matrix = manager.vector_store.matrix(json.loads((next(manager.state.glob('generation-*'))/'vector-refs.json').read_text()))
+        self.assertEqual((matrix @ np.ones((1,1),dtype=np.float32))[:, 0].tolist(), [int(unit['text'].split('number=')[1]) for unit in built.engine])
 
     def test_concurrent_failure_drains_successes_and_retry_only_requests_uncached_documents(self):
         for invalid in [False, True]:
