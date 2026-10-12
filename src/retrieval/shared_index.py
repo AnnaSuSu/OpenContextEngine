@@ -9,7 +9,7 @@ import uuid
 from cancellation import check
 from resources import BuildSlot
 from storage import VectorStore, fingerprint
-from writer_lock import acquire_writer_lock, WriterBusy
+from writer_lock import acquire_writer_lock, remove_lock_file, WriterBusy
 
 
 class SharedVectorStore(VectorStore):
@@ -46,9 +46,9 @@ class SharedVectorStore(VectorStore):
         try:
             yield protect
         finally:
-            path.unlink(missing_ok=True)
             handle.close()
-            path.with_suffix('.lock').unlink(missing_ok=True)
+            remove_lock_file(path)
+            remove_lock_file(path.with_suffix('.lock'))
 
     def open(self):
         db = super().open()
@@ -114,7 +114,7 @@ class SharedVectorStore(VectorStore):
             else:
                 path.unlink(missing_ok=True)
                 probe.close()
-                path.with_suffix('.lock').unlink(missing_ok=True)
+                remove_lock_file(path.with_suffix('.lock'))
         for path in self.manifests.glob('*.json'):
             check()
             try:

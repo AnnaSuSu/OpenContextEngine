@@ -3,7 +3,7 @@ from contextlib import contextmanager
 from pathlib import Path
 import time
 import uuid
-from writer_lock import acquire_writer_lock, WriterBusy
+from writer_lock import acquire_writer_lock, remove_lock_file, WriterBusy
 from cancellation import check, Cancelled
 
 
@@ -40,7 +40,7 @@ class BuildSlot:
                 # A killed or cancelled process cannot retain priority forever.
                 path.unlink(missing_ok=True)
                 probe.close()
-                path.with_suffix('.lock').unlink(missing_ok=True)
+                remove_lock_file(path.with_suffix('.lock'))
         return waiting
 
     def has_updates(self):
@@ -71,7 +71,7 @@ class BuildSlot:
         finally:
             request.unlink(missing_ok=True)
             ticket.close()
-            request.with_suffix('.lock').unlink(missing_ok=True)
+            remove_lock_file(request.with_suffix('.lock'))
 
     def release(self):
         if self.handle:

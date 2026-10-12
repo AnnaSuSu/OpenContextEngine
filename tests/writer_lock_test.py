@@ -4,6 +4,7 @@ import runpy
 import subprocess
 import sys
 import tempfile
+import threading
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
@@ -11,9 +12,23 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]/'src/retrieval'
 sys.path.insert(0, str(ROOT))
 from writer_lock import acquire_writer_lock
+from resources import BuildSlot
 
 
 class WriterLockTests(unittest.TestCase):
+    def test_busy_windows_probe_cleanup_cannot_leak_build_capacity(self):
+        original = Path.unlink
+        def busy_lock(path, **kwargs):
+            if path.suffix == '.lock':
+                raise PermissionError('Windows probe still has the file open')
+            return original(path, **kwargs)
+        with tempfile.TemporaryDirectory() as directory:
+            with patch.object(Path, 'unlink', busy_lock):
+                with BuildSlot(directory, 1, threading.Event()):
+                    pass
+                # Releasing a ticket must not throw before its slot can close.
+                with BuildSlot(directory, 1, threading.Event(), update=True):
+                    pass
     def test_competing_process_is_rejected_and_close_releases_lock(self):
         code = ('from pathlib import Path; import sys; '
                 f'sys.path.insert(0, {str(ROOT)!r}); '

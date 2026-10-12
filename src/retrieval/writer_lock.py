@@ -19,6 +19,14 @@ class WriterBusy(ValueError):
     pass
 
 
+def remove_lock_file(path):
+    """A Windows liveness probe may still have this closed lock file open."""
+    try:
+        path.unlink(missing_ok=True)
+    except PermissionError:
+        pass  # An unused file is harmless; its process lock has been released.
+
+
 def acquire_writer_lock(path):
     file = path.open('a+b')
     try:
