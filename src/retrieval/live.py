@@ -136,7 +136,7 @@ class LiveIndex:
         self.unit_store = UnitStore(self.state, text_store=self.vector_store if shared else None)
         self.thread = threading.Thread(target=self._run, name='repository-index', daemon=True)
 
-    def scan(self, *, fresh=False):
+    def scan_details(self, *, fresh=False):
         with self.scan_lock:
             full = (fresh and self.strict_freshness) or time.monotonic()-self.last_full_scan >= 60
             if full:
@@ -144,6 +144,10 @@ class LiveIndex:
             snapshot = discover_snapshot(self.root, cache=self.scan_cache, limits=self.limits, exclude=self.exclude)
             if full:
                 self.last_full_scan = time.monotonic()
+        return snapshot
+
+    def scan(self, *, fresh=False):
+        snapshot = self.scan_details(fresh=fresh)
         # Ignore diagnostic exclusions and mtime: identities bind actual inputs.
         snapshot = {'files': [{'path': f['path'], 'sha256': f['sha256']} for f in snapshot['files']],
                     'languageOptions': self.options}
@@ -178,6 +182,10 @@ class LiveIndex:
                     'error': self.error, 'pollSeconds': self.poll,
                     'backgroundPaused': self.background_paused,
                     'progress': dict(self.progress) if self.progress else None}
+
+    def coverage(self, path, *, limit=50, cursor=None):
+        from coverage_status import inspect_coverage
+        return inspect_coverage(self, path, limit=limit, cursor=cursor)
 
     def enter_query(self):
         with self.condition:

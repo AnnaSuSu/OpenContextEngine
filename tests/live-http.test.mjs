@@ -88,6 +88,35 @@ test('Live HTTP search synchronizes saved files and rejects unauthorized/invalid
     assert.equal(empty.index.degradedFiles,0);
   });
 
+test('Coverage HTTP reports indexed and excluded paths, pages inventory and validates requests',
+  {skip:!python,timeout:15000}, async t => {
+    const {root,config,hooks} = await fixture(t);
+    await writeFile(join(root,'a.txt'),'indexed source\n');
+    await writeFile(join(root,'b.txt'),'second source\n');
+    await writeFile(join(root,'.env'),'secret-must-not-appear-in-coverage');
+    await search('source',{config,freshnessWaitMs:5000});
+    const calls = [];
+    hooks.embedding = async body => {calls.push(body);};
+    const indexed = await indexStatus({config,path:'a.txt'});
+    assert.equal(indexed.coverage.synchronized,true);
+    assert.deepEqual(indexed.coverage.entries,[{path:'a.txt',status:'indexed'}]);
+    const excluded = await indexStatus({config,path:'.env'});
+    assert.deepEqual(excluded.coverage.entries,[{path:'.env',status:'excluded',reason:'local-environment'}]);
+    assert.doesNotMatch(JSON.stringify(excluded),/secret-must-not-appear/);
+    const first = (await indexStatus({config,path:'.',limit:1})).coverage;
+    const second = (await indexStatus({config,path:'.',limit:1,cursor:first.nextCursor})).coverage;
+    assert.notEqual(first.entries[0].path,second.entries[0].path);
+    assert.equal(calls.length,0);
+    assert.equal((await indexStatus({config})).coverage,undefined);
+    for (const query of ['path=../outside','path=/absolute','path=a&path=b','path=.&limit=0','limit=1','path=.&cursor=bad','unknown=1']) {
+      const response = await fetch(config.baseUrl+'/status?'+query,{headers:{authorization:`Bearer ${config.apiKey}`}});
+      assert.equal(response.status,422,query);
+    }
+    await assert.rejects(indexStatus({config,path:'../outside'}),/relative path/);
+    await assert.rejects(indexStatus({config:{...config,apiKey:'wrong'},path:'.env'}),/401/);
+    await assert.rejects(indexStatus({config,limit:1}),/requires path/);
+  });
+
 test('Live HTTP refuses results if source changes during model retrieval',
   {skip:!python,timeout:15000}, async t => {
     const {root,config,hooks} = await fixture(t);

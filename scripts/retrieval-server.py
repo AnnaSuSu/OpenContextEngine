@@ -21,6 +21,7 @@ from planning import plan_query
 from live import LiveIndex, IndexUnavailable
 from writer_lock import WriterBusy
 from cancellation import RequestScope, Cancelled, check
+from urllib.parse import urlsplit, parse_qs
 from shared_worker import SharedWorker
 
 
@@ -75,10 +76,29 @@ def serve(config):
         def do_GET(self):
             if self.path == '/healthz':
                 return self.reply(200, {'status':'running','engine':VERSION,'mode':'live'} if live else health)
-            if self.path == '/status':
+            if urlsplit(self.path).path == '/status':
                 if not secrets.compare_digest(self.headers.get('Authorization',''), 'Bearer '+config['serviceKey']):
                     return self.reply(401, {'error':'Unauthorized'})
-                return self.reply(200, live.status() if live else {'status':'ready','mode':'frozen','generation':index})
+                try:
+                    params = parse_qs(urlsplit(self.path).query, keep_blank_values=True, max_num_fields=3)
+                    if set(params)-{'path', 'limit', 'cursor'} or any(len(values) != 1 for values in params.values()):
+                        raise ValueError('Unknown or repeated status parameters')
+                    if params and 'path' not in params:
+                        raise ValueError('Coverage pagination requires path')
+                    result = live.status() if live else {'status':'ready','mode':'frozen','generation':index}
+                    if 'path' in params:
+                        if not live:
+                            raise ValueError('Coverage checks require a live workspace index')
+                        with RequestScope(timeout=30, connection=self.connection):
+                            result['coverage'] = live.coverage(params['path'][0],
+                                limit=int(params.get('limit', ['50'])[0]), cursor=params.get('cursor', [None])[0])
+                    return self.reply(200, result)
+                except ValueError as error:
+                    return self.reply(422, {'error': str(error)})
+                except Cancelled:
+                    return self.reply(503, {'error': 'Coverage check cancelled or timed out'})
+                except (OSError, KeyError, TypeError):
+                    return self.reply(503, {'error': 'Coverage inventory unavailable; retry later'})
             self.reply(404,{'error':'Not found'})
 
         def do_POST(self):

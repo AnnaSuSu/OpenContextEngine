@@ -73,12 +73,17 @@ export function createMcpServer(config, {resolveConfig, automatic = false} = {})
     title:'Repository index status',
     description:'Inspect repository synchronization, current generation, embedding reuse and last update error. '
       + workspaceInstructions
-      + 'Status is the latest background observation; search_code actively checks source freshness.',
-    inputSchema:{directory_path:directoryPath},annotations,
-  }, async ({directory_path},extra) => {
+      + 'Without path, status is the latest background observation. Set path to a workspace-relative file or directory ("." for the whole workspace) '
+      + 'to check current coverage: indexed, pending, excluded with a reason, deleted or not_found. Coverage checks do not wake idle indexing. '
+      + 'Use nextCursor for another page; if coverage changes, restart without cursor. search_code actively synchronizes source freshness.',
+    inputSchema:{directory_path:directoryPath,
+      path:z.string().min(1).max(4096).optional().describe('Workspace-relative file or directory to inspect; use "." to list coverage.'),
+      limit:z.number().int().min(1).max(200).optional().describe('Coverage entries per page; defaults to 50.'),
+      cursor:z.string().max(80).optional().describe('nextCursor from the previous coverage page.')},annotations,
+  }, async ({directory_path,path,limit,cursor},extra) => {
     try {
       const selected = await selectConfig(directory_path);
-      const result = await indexStatus({config:selected,signal:extra.signal});
+      const result = await indexStatus({config:selected,signal:extra.signal,path,limit,cursor});
       return {content:[{type:'text',text:JSON.stringify(result)}],structuredContent:result};
     } catch (error) {
       return {isError:true,content:[{type:'text',text:error.message}]};

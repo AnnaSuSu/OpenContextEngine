@@ -23,7 +23,7 @@ It indexes your working directory and follows saved changes. Given a natural-lan
 - **Search beyond exact words.** Describe a behavior; retrieve its implementation and connected code across files.
 - **Understand code structure.** Python, TypeScript, JavaScript, and Go adapters, plus text fallback for other languages, configuration, and scripts.
 - **Stay current as you edit.** Saved changes, file deletions, and branch switches sync automatically. Unchanged embeddings are reused; incomplete updates never replace a complete index.
-- **Work across projects through MCP.** Your agent supplies the project path; indexes start on demand and are reused. `search_code` retrieves evidence; `index_status` reports synchronization.
+- **Work across projects through MCP.** Your agent supplies the project path; indexes start on demand and are reused. `search_code` retrieves evidence; `index_status` reports synchronization and explains file coverage when given a relative `path`.
 
 ## Measured results
 

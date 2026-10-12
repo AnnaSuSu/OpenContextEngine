@@ -115,6 +115,13 @@ test('Official MCP stdio client initializes, discovers tools and retrieves updat
     const status = await client.callTool({name:'index_status',arguments:{}});
     assert.equal(status.structuredContent.root,await realpath(root));
     assert.equal(status.structuredContent.status,'ready');
+    const coverage = await client.callTool({name:'index_status',arguments:{path:'lib.py',limit:1}});
+    assert.ok(!coverage.isError);
+    assert.deepEqual(coverage.structuredContent.coverage.entries,[{path:'lib.py',status:'indexed'}]);
+    const missing = await client.callTool({name:'index_status',arguments:{path:'missing.py'}});
+    assert.equal(missing.structuredContent.coverage.entries[0].status,'not_found');
+    const escaped = await client.callTool({name:'index_status',arguments:{path:'../outside'}});
+    assert.equal(escaped.isError,true);
     await writeFile(join(root,'lib.py'),'def unfinished(\n');
     const fallback = await client.callTool({name:'search_code',arguments:{query:'find unfinished',freshnessWaitMs:5000}});
     assert.ok(!fallback.isError);

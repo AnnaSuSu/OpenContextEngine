@@ -33,11 +33,19 @@ export async function search(query,{budget=8000,trace=false,freshnessWaitMs=3000
   return {...result,clientElapsedMs:Math.round(performance.now()-started)};
 }
 
-export async function indexStatus({config=clientConfig(),signal}={}) {
-  const timeout = AbortSignal.timeout(10000);
-  const response = await fetch(`${config.baseUrl}/status`, {redirect:'error',
+export async function indexStatus({config=clientConfig(),signal,path,limit,cursor}={}) {
+  if (path === undefined && (limit !== undefined || cursor !== undefined)) throw new Error('Coverage pagination requires path');
+  const url = new URL(`${config.baseUrl}/status`);
+  if (path !== undefined) url.searchParams.set('path',path);
+  if (limit !== undefined) url.searchParams.set('limit',String(limit));
+  if (cursor !== undefined) url.searchParams.set('cursor',cursor);
+  const timeout = AbortSignal.timeout(path === undefined ? 10000 : 30000);
+  const response = await fetch(url.href, {redirect:'error',
     signal:signal ? AbortSignal.any([signal,timeout]) : timeout,
     headers:{authorization:`Bearer ${config.apiKey}`}});
-  if (!response.ok) throw new Error(`Retrieval HTTP ${response.status}`);
+  if (!response.ok) {
+    if (response.status === 422) throw new Error(`Invalid coverage request: ${(await response.json()).error}`);
+    throw new Error(`Retrieval HTTP ${response.status}`);
+  }
   return response.json();
 }

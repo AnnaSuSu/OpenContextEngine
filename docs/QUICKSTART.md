@@ -147,7 +147,28 @@ To pin the server to one project instead, append `"--root", "/absolute/path/to/y
 | Tool | Purpose |
 | --- | --- |
 | `search_code` | Pass `directory_path` and describe the behavior in `query`. Returns source paths, line numbers, and relevant code; default budget: 8,000 tokens. Pass `budget: 4000` for a smaller response. |
-| `index_status` | Pass `directory_path` to inspect indexing progress, active generation, vector reuse, and the latest update error. First access also starts that project's index. |
+| `index_status` | Pass `directory_path` to inspect indexing progress, active generation, vector reuse, and the latest update error. Add a relative `path` to inspect file or directory coverage. First access also starts that project's index. |
+
+### Index coverage
+
+Check a file with `index_status`:
+
+```json
+{"directory_path":"/absolute/path/to/your-repository","path":"src/session.py"}
+```
+
+Use `"path":"src"` to list a directory or `"path":"."` for the workspace. Coverage returns at most 50 entries by default; set `limit` from 1 to 200 and pass the returned `nextCursor` as `cursor` for another page. If saved source or the published generation changes, restart pagination without a cursor.
+
+| Entry status | Meaning |
+| --- | --- |
+| `indexed` | The published index contains this file's current saved content under the current index configuration. |
+| `pending` | The file is eligible, but its current content or index configuration has not been published yet. |
+| `excluded` | The file or directory is outside indexing eligibility. `reason` explains Git ignores, configured exclusions, dependencies/build output, local environment files, symlinks, binary/non-UTF-8 content, size limits, or generated files. |
+| `deleted` | A file in the published inventory has been removed and awaits reconciliation. |
+| `not_found` | The requested file is absent from both the current tree and the published inventory. |
+| `unknown` | A previous disk index has no readable file manifest. Coverage is available after its next successful synchronization. |
+
+`coverage.synchronized` describes the entire workspace. A file can be `indexed` while another file still needs an update. `summary` counts inventory entries; an excluded directory represents its subtree. Git-ignored trees are not expanded in directory listings; request an ignored path explicitly to see `git-ignored`. Coverage returns paths and reasons, never source content, and performs no parsing or model requests. It checks saved files without waking idle synchronization. Omit `path` for the usual lightweight status observation. The authenticated HTTP equivalent is `GET /status?path=src/session.py` (with optional `limit` and `cursor`).
 
 ### Client setup notes
 
