@@ -25,6 +25,7 @@ export function createMcpServer(config, {resolveConfig, automatic = false} = {})
     ? 'Pass directory_path as the absolute directory of the project the user is working on with every tool call. '
       + 'Use the workspace path supplied by your host or inspect the current project directory; do not guess it. '
       + 'A new project is indexed on first access. The same server can search multiple projects independently. '
+      + 'Overlapping projects reuse cached code text and embeddings while keeping their own search scope. '
     : 'This server searches one configured repository. ';
   async function selectConfig(directoryPath) {
     if (resolveConfig) return resolveConfig(directoryPath);

@@ -5,16 +5,59 @@ import json
 import sqlite3
 import sys
 import tempfile
+import threading
 import unittest
 import numpy as np
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'src/retrieval'))
 from storage import VectorStore, UnitStore
+from shared_index import SharedVectorStore
 from languages import source_units
 from languages.files import discover_snapshot
 
 
 class StorageTests(unittest.TestCase):
+    def test_shared_collection_keeps_other_workspace_data_and_reclaims_removed_manifests(self):
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory)
+            states = [base/'one', base/'two']
+            for state in states:
+                state.mkdir()
+                (state/'current.json').write_text('{}')
+            stores = [SharedVectorStore(base/'shared', 2, 1, state, threading.Event()) for state in states]
+            refs = []
+            for i, store in enumerate(stores):
+                with store.build_guard(), closing(store.open()) as db:
+                    ref = store.put(db, [str(i)], np.array([[i, i+1]], dtype=np.float32))[str(i)]
+                    store.save_texts([f'source {i}'])
+                    store.retain([ref], prepare=True)
+                    store.collect([ref])
+                    refs.append(ref)
+            # No in-process matrix pins protect the first workspace.
+            stores[0].matrix([refs[0]]).validate()
+            self.assertEqual(stores[0].load_texts([stores[0].text_key('source 0')]),
+                             {stores[0].text_key('source 0'): 'source 0'})
+            (states[0]/'current.json').unlink()
+            with stores[1].build_guard():
+                stores[1].collect([refs[1]])
+            self.assertFalse((stores[0].directory/refs[0][0]).exists())
+            self.assertTrue((stores[1].directory/refs[1][0]).exists())
+            with closing(stores[1].open()) as db:
+                self.assertEqual(db.execute('SELECT text FROM source_texts').fetchall(), [('source 1',)])
+
+    def test_shared_collection_rejects_unreadable_manifests_before_deleting_vectors(self):
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory)
+            workspace = base/'workspace'
+            workspace.mkdir()
+            (workspace/'current.json').write_text('{}')
+            store = SharedVectorStore(base/'shared', 2, 1, workspace, threading.Event())
+            with store.build_guard(), closing(store.open()) as db:
+                ref = store.put(db, ['a'], np.array([[1, 2]], dtype=np.float32))['a']
+                (store.manifests/'broken.json').write_text('{broken')
+                with self.assertRaises(OSError):
+                    store.collect([])
+                self.assertTrue((store.directory/ref[0]).exists())
     def test_vector_shards_reuse_rows_pin_old_queries_and_collect_only_unreferenced_data(self):
         with tempfile.TemporaryDirectory() as directory:
             store=VectorStore(Path(directory),2,160)

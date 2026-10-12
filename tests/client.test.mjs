@@ -4,7 +4,7 @@ import {clientConfig,search} from '../src/client.mjs';
 import {serviceConfig} from '../src/service.mjs';
 import {mkdtempSync, rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
-import {join} from 'node:path';
+import {join,dirname,resolve} from 'node:path';
 
 test('Retrieval client permits SSH loopback or HTTPS, rejects credentials and cleartext public endpoints',t=>{
   const configHome=mkdtempSync(join(tmpdir(),'oce-client-config-'));
@@ -33,6 +33,7 @@ test('Retrieval client permits SSH loopback or HTTPS, rejects credentials and cl
     assert.equal(settings.config.serviceKey,'configuration-test-only');
     assert.equal(settings.config.pollSeconds,2);
     assert.equal(settings.config.scanIdleSeconds,45);
+    assert.equal(settings.config.sharedIndexDirectory,join(dirname(resolve('/tmp/opencontextengine-config-test')),'.shared-index'));
     assert.equal(settings.config.reranker.api,'rerank');
     assert.equal(settings.config.reranker.concurrency,3);
     assert.equal(settings.config.reranker.maxDocuments,64);

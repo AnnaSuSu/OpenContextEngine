@@ -42,6 +42,7 @@ export async function fixture(t, {beforeCleanup = async () => {}} = {}) {
   await new Promise(resolveListen => models.listen(0,'127.0.0.1',resolveListen));
   const modelUrl = `http://127.0.0.1:${models.address().port}/v1`;
   const settings = {python,config:{root,state:join(dir,'state'),port:0,
+    sharedIndexDirectory:join(dir,'shared-index'),
     serviceKey:'test-only-at-least-24-characters',embeddingUrl:modelUrl,
     embeddingIdentity:'https://test-model.invalid/v1',embeddingKey:'test-only',
     reranker:{baseUrl:modelUrl,model:'fixture',apiKey:'test-only'},pollSeconds:.05,debounceSeconds:0}};

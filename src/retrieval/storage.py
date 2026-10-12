@@ -58,12 +58,13 @@ class VectorMatrix:
 
 
 class VectorStore:
-    def __init__(self, state, dimensions, budget):
+    def __init__(self, state, dimensions, budget, *, cleanup=True):
         self.state, self.dimensions, self.budget = state, dimensions, budget
         self.directory = state/'vector-shards'
         self.directory.mkdir(exist_ok=True)
-        for temporary in self.directory.glob('*.tmp'):
-            temporary.unlink(missing_ok=True)
+        if cleanup:
+            for temporary in self.directory.glob('*.tmp'):
+                temporary.unlink(missing_ok=True)
         self.pins = weakref.WeakSet()
         self.validated = {}
 
@@ -90,8 +91,15 @@ class VectorStore:
 
     def lookup(self, db, keys):
         wanted = set(keys)
-        result = {key:[name,row] for key,name,row in db.execute(
-            'SELECT key, shard, row FROM vector_locations WHERE dimensions=?', (self.dimensions,)) if key in wanted}
+        result = {}
+        ordered = sorted(wanted)
+        for offset in range(0, len(ordered), 500):
+            check()
+            batch = ordered[offset:offset+500]
+            placeholders = ','.join('?' for _ in batch)
+            result.update({key:[name,row] for key,name,row in db.execute(
+                f'SELECT key, shard, row FROM vector_locations WHERE dimensions=? AND key IN ({placeholders})',
+                (self.dimensions, *batch))})
         valid, by_shard = set(), defaultdict(list)
         for name,row in result.values():
             by_shard[name].append(row)
@@ -164,13 +172,16 @@ class VectorStore:
 
 
 class UnitStore:
-    def __init__(self, state):
+    def __init__(self, state, *, text_store=None):
+        self.text_store = text_store
+        self.text_keys = []
         self.directory = state/'unit-shards'
         self.directory.mkdir(exist_ok=True)
         for temporary in self.directory.glob('*.tmp'):
             temporary.unlink(missing_ok=True)
 
     def save(self, units):
+        self.text_keys = self.text_store.save_texts([u['text'] for u in units]) if self.text_store else []
         keys = [fingerprint([u['path'],u['start'],u['end'],u['symbol'],u['text']]) for u in units]
         buckets = defaultdict(list)
         records = {}
@@ -183,13 +194,16 @@ class UnitStore:
             records[identity] = (unit,key,relations)
         references = []
         for bucket,identities in sorted(buckets.items()):
-            name = fingerprint(identities)+'.json'
+            name = fingerprint(['shared-text-v1', identities] if self.text_store else identities)+'.json'
             path = self.directory/name
             if not path.exists():
                 data = []
                 for identity in identities:
                     unit,key,relations = records[identity]
-                    data.append({**unit,'id':key,'relations':relations,'edges':[]})
+                    record = {**unit,'id':key,'relations':relations,'edges':[]}
+                    if self.text_store:
+                        record['textRef'] = self.text_store.text_key(record.pop('text'))
+                    data.append(record)
                 temporary = path.with_suffix('.tmp')
                 temporary.write_text(json.dumps(data,ensure_ascii=False))
                 temporary.replace(path)
@@ -202,6 +216,14 @@ class UnitStore:
             if not isinstance(name,str) or len(name)!=69 or not name.endswith('.json') or any(c not in '0123456789abcdef' for c in name[:-5]):
                 raise ValueError('Invalid source shard')
             units.extend(json.loads((self.directory/name).read_text()))
+        text_keys = [u['textRef'] for u in units if 'textRef' in u]
+        if text_keys:
+            if self.text_store is None:
+                raise ValueError('Shared source text store is required')
+            texts = self.text_store.load_texts(text_keys)
+            for unit in units:
+                if 'textRef' in unit:
+                    unit['text'] = texts[unit.pop('textRef')]
         units.sort(key=lambda u:(u['path'],u['start']))
         remap = {u['id']:i for i,u in enumerate(units)}
         if len(remap)!=len(units):

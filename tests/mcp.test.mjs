@@ -222,3 +222,48 @@ test('Automatic MCP routes concurrent projects, reuses workers and keeps saved c
     }
     assert.ok(workers.every(worker => worker.child.exitCode !== null || worker.child.signalCode !== null));
   });
+
+test('Parent and child MCP workspaces share indexed data across workers and keep search paths local',
+  {skip:!python,timeout:25000}, async t => {
+    const {dir,settings,hooks} = await fixture(t);
+    const parent = join(dir,'projects'), b = join(parent,'B'), c = join(parent,'C');
+    await mkdir(b,{recursive:true}); await mkdir(c);
+    await writeFile(join(b,'lib.py'),'def persist():\n    return "B_only"\n');
+    await writeFile(join(c,'lib.py'),'def persist():\n    return "C_only"\n');
+    await writeFile(join(parent,'main.py'),'def persist():\n    return "parent_only"\n');
+    const indexedDocuments = [];
+    hooks.embedding = body => {indexedDocuments.push(...body.input.filter(text => text.startsWith('Path: ')));};
+    const workers = [];
+    const workspaces = createWorkspaceManager({state:join(dir,'workspaces')},{
+      configure: ({root,state}) => ({...settings,config:{...settings.config,root,state,maxResidentWorkers:4,maxConcurrentBuilds:2}}),
+      start: config => {const worker = startService(config,{log:()=>{}});workers.push(worker);return worker;},
+    });
+    const server = createMcpServer(undefined,{resolveConfig:workspaces.get,automatic:true});
+    const client = new Client({name:'shared-data-test',version:'1.0.0'});
+    const [a,z] = InMemoryTransport.createLinkedPair();
+    try {
+      await server.connect(z);await client.connect(a);
+      const query = path => client.callTool({name:'search_code',arguments:{directory_path:path,query:'find persist',freshnessWaitMs:5000}});
+      const results = await Promise.all([query(b),query(c)]);
+      for (const result of results) assert.ok(!result.isError,JSON.stringify(result));
+      assert.match(results[0].content[0].text,/Path: lib.py/);
+      assert.doesNotMatch(results[0].content[0].text,/C_only|parent_only/);
+      assert.doesNotMatch(results[1].content[0].text,/B_only|parent_only/);
+      const combined = await query(parent);
+      assert.ok(!combined.isError,JSON.stringify(combined));
+      assert.match(combined.content[0].text,/Path: B\/lib.py/);
+      assert.match(combined.content[0].text,/Path: C\/lib.py/);
+      assert.match(combined.content[0].text,/parent_only/);
+      assert.equal(indexedDocuments.length,3);
+      const status = (await client.callTool({name:'index_status',arguments:{directory_path:parent}})).structuredContent;
+      assert.equal(status.generation.embeddedDocuments,1);
+      assert.equal(status.generation.reusedUnits,2);
+      assert.equal(status.generation.sharedIndex,true);
+      await writeFile(join(b,'lib.py'),'def persist():\n    return "B_updated"\n');
+      assert.match((await query(b)).content[0].text,/B_updated/);
+      assert.match((await query(parent)).content[0].text,/B_updated/);
+      assert.equal(indexedDocuments.length,4);
+    } finally {
+      await client.close();await server.close();await workspaces.close();
+    }
+  });

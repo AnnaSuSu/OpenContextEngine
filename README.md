@@ -150,6 +150,8 @@ Your agent supplies the current project's absolute path as `directory_path`. To 
 
 [Model configuration, troubleshooting, and update behavior →](docs/QUICKSTART.md)
 
+Parent and child workspaces share cached code text and embeddings. Each workspace keeps its own file scope and search paths; indexing a parent reuses matching child data and embeds only uncached documents. See [overlapping workspace behavior](docs/QUICKSTART.md#3-add-the-mcp-server) for cache configuration and the one-time migration from older indexes.
+
 ## Explore
 
 [Benchmark report](https://github.com/AnnaSuSu/OpenContextEngine/blob/main/docs/BENCHMARKS.md) · [Raw evaluations](https://github.com/AnnaSuSu/OpenContextEngine/tree/main/docs/eval/results) · [Retrieval engine](https://github.com/AnnaSuSu/OpenContextEngine/tree/main/src/retrieval)

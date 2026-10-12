@@ -20,6 +20,7 @@ from engine import document, post
 from cancellation import check, submit, RequestScope, Cancelled
 from resources import acquire_slot, build_slot
 from storage import VectorStore, UnitStore
+from shared_index import SharedVectorStore
 from languages import adapter_manifest, source_units
 from languages.files import discover_snapshot
 from evidence import EvidenceEngine
@@ -122,8 +123,17 @@ class LiveIndex:
         if min(self.max_units, self.max_vector_bytes, self.cache_bytes) < 1 or self.cache_bytes < self.max_vector_bytes:
             raise ValueError('Invalid vector resource budgets')
         self.lock_file = acquire_writer_lock(self.state/'writer.lock')
-        self.vector_store = VectorStore(self.state, self.dimensions, self.cache_bytes)
-        self.unit_store = UnitStore(self.state)
+        shared = config.get('sharedIndexDirectory')
+        self.shared = bool(shared)
+        if shared:
+            directory = Path(shared).resolve()/digest(self.embedding)
+            if directory.is_relative_to(self.root):
+                self.lock_file.close()
+                raise ValueError('Shared index data must be outside the repository root')
+            self.vector_store = SharedVectorStore(directory, self.dimensions, self.cache_bytes, self.state, self.stop_event)
+        else:
+            self.vector_store = VectorStore(self.state, self.dimensions, self.cache_bytes)
+        self.unit_store = UnitStore(self.state, text_store=self.vector_store if shared else None)
         self.thread = threading.Thread(target=self._run, name='repository-index', daemon=True)
 
     def scan(self, *, fresh=False):
@@ -140,7 +150,8 @@ class LiveIndex:
         return snapshot
 
     def identity(self, snapshot):
-        return digest({'schema': 'live-index-v1', 'root': str(self.root), 'snapshot': snapshot,
+        return digest({'schema': 'shared-live-index-v1' if self.shared else 'live-index-v1',
+                       'root': str(self.root), 'snapshot': snapshot,
                        'adapters': adapter_manifest(snapshot['files'], self.options),
                        'embedding': self.embedding})
 
@@ -320,12 +331,22 @@ class LiveIndex:
             raise failure
 
     def _build(self, snapshot, identity):
+        if self.shared:
+            self._progress('waiting_for_shared_cache')
+            with self.vector_store.build_guard():
+                return self._build_generation(snapshot, identity)
+        return self._build_generation(snapshot, identity)
+
+    def _build_generation(self, snapshot, identity):
         start = time.monotonic()
         self._progress('parsing', files=len(snapshot['files']))
         report = {}
         units = source_units(self.root, snapshot['files'], language_options=self.options,
                              cache=self.parse_cache, sources_cache=self.source_cache, report=report)
-        documents = [document(unit) for unit in units]
+        # The same physical file has one embedding identity at every workspace
+        # root. Returned paths and structural graph identities remain local.
+        documents = [document({**unit, 'path': (self.root/unit['path']).resolve().as_posix()})
+                     if self.shared else document(unit) for unit in units]
         keys = [digest([self.embedding, text]) for text in documents]
         if len(units) > self.max_units or len(units)*self.dimensions*4 > self.max_vector_bytes:
             raise ValueError('Index unit or vector size limit exceeded; narrow the indexed scope')
@@ -351,6 +372,8 @@ class LiveIndex:
                 'languageUnits': dict(Counter(unit['language'] for unit in units)),
                 'degradedFiles': report['degradedFiles'], 'parseDiagnostics': report['parseDiagnostics'],
                 'indexingMs': round((time.monotonic()-start)*1000), 'completedAt': time.time()}
+        if self.shared:
+            info['sharedIndex'] = True
         folder = self.state/('generation-'+uuid.uuid4().hex)
         folder.mkdir(mode=0o700)
         try:
@@ -358,6 +381,13 @@ class LiveIndex:
             (folder/'unit-shards.json').write_text(json.dumps(unit_references))
             (folder/'vector-refs.json').write_text(json.dumps(references))
             (folder/'metadata.json').write_text(json.dumps(info))
+            (folder/'files.json').write_text(json.dumps([
+                {**file, 'sourceId': digest([(self.root/file['path']).resolve().as_posix(), file['sha256']])}
+                for file in snapshot['files']]))
+            if self.shared:
+                # Register before publication while preserving the old manifest
+                # in case publishing the new generation fails.
+                self.vector_store.retain(references, prepare=True)
             pointer = self.state/'current.tmp'
             pointer.write_text(json.dumps({'directory': folder.name}))
             os.replace(pointer, self.state/'current.json')

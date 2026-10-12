@@ -150,6 +150,8 @@ Claude 会通过 `directory_path` 传入项目的绝对路径。首次请求会�
 
 [模型配置、问题排查和索引更新机制 →](docs/QUICKSTART.md)
 
+父子工作区共享代码文本和向量缓存，各自保留文件范围与搜索路径。子项目已有的数据会被父目录复用，只为尚未缓存的片段计算向量。缓存配置与旧索引首次迁移说明见[使用指南](docs/QUICKSTART.md)。
+
 ## 进一步了解
 
 [评测报告](https://github.com/AnnaSuSu/OpenContextEngine/blob/main/docs/BENCHMARKS.md) · [原始评测数据](https://github.com/AnnaSuSu/OpenContextEngine/tree/main/docs/eval/results) · [检索引擎源码](https://github.com/AnnaSuSu/OpenContextEngine/tree/main/src/retrieval)

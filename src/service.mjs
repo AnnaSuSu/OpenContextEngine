@@ -39,6 +39,8 @@ export function serviceConfig({root, state, port = 0} = {}, environment = proces
     maxUnits: Number(env.OCE_MAX_UNITS || 200000),
     maxVectorBytes: Number(env.OCE_MAX_VECTOR_BYTES || 2147483648),
     vectorCacheBytes: Number(env.OCE_VECTOR_CACHE_BYTES || 4294967296),
+    sharedIndexDirectory: env.OCE_SHARED_INDEX_DIRECTORY || (state
+      ? resolve(dirname(resolve(state)), '.shared-index') : resolve(homedir(), '.cache/opencontextengine/shared-index')),
     maxFiles: Number(env.OCE_MAX_FILES || 50000),
     maxSourceBytes: Number(env.OCE_MAX_SOURCE_BYTES || 268435456),
     exclude: env.OCE_EXCLUDE ? JSON.parse(env.OCE_EXCLUDE) : [],

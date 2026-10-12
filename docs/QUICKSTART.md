@@ -126,7 +126,13 @@ Without `--root`, the server uses **automatic workspace mode**. Your agent suppl
 
 Version **0.1.4** and later automatically share one worker per index directory across compatible clients. Closing a client releases only its lease; a worker exits after all leases expire or are released, no searches remain in flight, and it has been idle for 30 seconds. Clients renew their leases automatically, and reconnect if the worker exits.
 
-The server does not infer your editor's project from its own launch directory. Its tool instructions tell the agent to use the project path supplied by the host, or inspect the current project directory. Missing, relative, or invalid paths return an error. Symbolic links to the same directory share a worker. Supply the same project root consistently, rather than a different subdirectory on each call.
+The server does not infer your editor's project from its own launch directory. Its tool instructions tell the agent to use the project path supplied by the host, or inspect the current project directory. Missing, relative, or invalid paths return an error. Symbolic links to the same directory share a worker.
+
+Overlapping workspaces share immutable code text and embedding data while maintaining their own file manifests, structural graphs, and search paths. If child projects B and C have already been indexed, indexing their parent A reuses their matching vectors and embeds only the remaining or changed documents. This also works when A is indexed first. Each search scores only the units in its requested workspace; unrelated workspace units are not searched. Structural parsing remains workspace-specific so cross-file relationships reflect the full requested scope.
+
+Shared data lives in `~/.cache/opencontextengine/shared-index`, with separate pools for embedding provider, model, dimensions, and revision. Explicit state locations use `.shared-index` under their state parent; set `OCE_SHARED_INDEX_DIRECTORY` to share data across custom locations. File identities use canonical physical paths and content hashes; embedding documents use canonical physical paths so a file has the same vector identity under parent and child roots. Returned paths remain relative to the requested workspace. A cross-process writer lock covers cache lookup and embedding, preventing concurrent workspaces from embedding the same missing document twice. Workspace manifests protect shared data during cache reclamation, including disk restoration and previous generations still used by searches.
+
+Existing indexes remain on disk. Enabling shared data changes embedding document paths, so the first synchronization builds the canonical-path vectors once; subsequent overlapping workspaces reuse them. `index_status` reports `generation.sharedIndex`, `embeddedDocuments`, and `reusedUnits` to show whether new model work was required.
 
 Example tool arguments (sent by your agent):
 

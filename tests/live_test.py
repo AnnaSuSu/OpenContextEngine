@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import json
 from contextlib import closing
 import subprocess
 import sqlite3
@@ -52,6 +53,152 @@ class LiveTests(unittest.TestCase):
         generation = manager._build(snapshot, manager.identity(snapshot))
         manager.generation = generation
         return generation
+
+    def test_shared_children_are_reused_when_parent_indexes_remaining_files(self):
+        shared = str(self.base/'shared-data')
+        children = []
+        for name in ['B', 'C']:
+            child = self.root/name
+            child.mkdir()
+            (child/'lib.py').write_text(f'def save():\n    return "{name}"\n')
+            manager = self.manager(root=str(child), state=str(self.base/name), sharedIndexDirectory=shared)
+            children.append((manager, self.build(manager)))
+        self.write('root.txt', 'parent-only source\n')
+        parent = self.manager(sharedIndexDirectory=shared)
+        generation = self.build(parent)
+        self.assertEqual(generation.info['embeddedDocuments'], 1)
+        self.assertEqual(generation.info['reusedUnits'], 2)
+        self.assertEqual(len(self.calls), 3)
+        self.assertEqual([u['path'] for u in generation.engine], ['B/lib.py', 'C/lib.py', 'root.txt'])
+        self.assertTrue(generation.info['sharedIndex'])
+        parent_files = json.loads((next(parent.state.glob('generation-*'))/'files.json').read_text())
+        for manager, child_generation in children:
+            child_files = json.loads((next(manager.state.glob('generation-*'))/'files.json').read_text())
+            name = manager.root.name+'/lib.py'
+            self.assertEqual(child_files[0]['sourceId'], next(f['sourceId'] for f in parent_files if f['path'] == name))
+            restored = manager._restore(manager.scan(), child_generation.identity)
+            self.assertEqual(restored.engine[0]['path'], 'lib.py')
+            self.assertEqual(restored.engine, child_generation.engine)
+        for path in (parent.state/'unit-shards').glob('*.json'):
+            for unit in json.loads(path.read_text()):
+                self.assertNotIn('text', unit)
+                self.assertIn('textRef', unit)
+        with closing(parent.vector_store.open()) as db:
+            self.assertEqual(db.execute('SELECT count(*) FROM vector_locations').fetchone()[0], 3)
+            self.assertEqual(db.execute('SELECT count(*) FROM source_texts').fetchone()[0], 3)
+
+    def test_shared_parent_reuses_child_vectors_in_both_directions_and_updates_once(self):
+        child = self.root/'B'
+        child.mkdir()
+        (child/'lib.py').write_text('def save():\n    return "before"\n')
+        shared = str(self.base/'shared-data')
+        parent = self.manager(sharedIndexDirectory=shared)
+        self.build(parent)
+        nested = self.manager(root=str(child), state=str(self.base/'nested'), sharedIndexDirectory=shared)
+        first = self.build(nested)
+        self.assertEqual(first.info['embeddedDocuments'], 0)
+        self.assertEqual(first.engine[0]['path'], 'lib.py')
+        (child/'lib.py').write_text('def save():\n    return "after"\n')
+        self.assertEqual(self.build(nested).info['embeddedDocuments'], 1)
+        changed = self.build(parent)
+        self.assertEqual(changed.info['embeddedDocuments'], 0)
+        self.assertIn('after', changed.engine[0]['text'])
+        self.assertEqual(len(self.calls), 2)
+        with self.assertRaises(IndexUnavailable):
+            nested.verify(first)
+        (child/'lib.py').unlink()
+        self.assertEqual(self.build(parent).engine, None)
+        self.assertEqual(self.build(nested).engine, None)
+        self.assertEqual(len(self.calls), 2)
+
+    def test_shared_vectors_do_not_reuse_other_provider_revisions(self):
+        self.write('a.txt', 'revision-sensitive source\n')
+        shared = str(self.base/'shared-data')
+        first = self.manager(sharedIndexDirectory=shared)
+        second = self.manager(state=str(self.base/'second'), sharedIndexDirectory=shared, embeddingRevision='2')
+        self.build(first)
+        self.assertEqual(self.build(second).info['embeddedDocuments'], 1)
+        self.assertNotEqual(first.vector_store.state, second.vector_store.state)
+
+    def test_shared_workspaces_respect_independent_file_exclusions(self):
+        child = self.root/'B'
+        child.mkdir()
+        (child/'a.txt').write_text('child-only source\n')
+        self.write('root.txt', 'parent-only source\n')
+        shared = str(self.base/'shared-data')
+        nested = self.manager(root=str(child), state=str(self.base/'child'), sharedIndexDirectory=shared)
+        self.build(nested)
+        parent = self.manager(sharedIndexDirectory=shared, exclude=['B/**'])
+        generation = self.build(parent)
+        self.assertEqual([u['path'] for u in generation.engine], ['root.txt'])
+        self.assertEqual(generation.info['embeddedDocuments'], 1)
+        self.assertEqual(nested.generation.engine[0]['path'], 'a.txt')
+
+    def test_local_index_migrates_to_shared_text_and_restores_without_new_model_work(self):
+        self.write('a.txt', 'source for migration\n')
+        local = self.manager()
+        old = self.build(local)
+        local.close()
+        shared = self.manager(sharedIndexDirectory=str(self.base/'shared-data'))
+        self.assertNotEqual(shared.identity(shared.scan()), old.identity)
+        self.assertIsNone(shared._restore(shared.scan(), shared.identity(shared.scan())))
+        migrated = self.build(shared)
+        self.assertEqual(migrated.info['embeddedDocuments'], 1)
+        restored = shared._restore(shared.scan(), migrated.identity)
+        self.assertEqual(restored.engine, migrated.engine)
+        self.assertEqual(len(self.calls), 2)
+        self.assertTrue(all('text' not in u for path in (shared.state/'unit-shards').glob('*.json')
+                            for u in json.loads(path.read_text())))
+
+    def test_shared_parent_and_child_concurrent_builds_embed_a_file_once(self):
+        child = self.root/'B'
+        child.mkdir()
+        (child/'a.txt').write_text('concurrent source\n')
+        shared = str(self.base/'shared-data')
+        first = self.manager(root=str(child), state=str(self.base/'child'), sharedIndexDirectory=shared)
+        second = self.manager(sharedIndexDirectory=shared)
+        entered, release = threading.Event(), threading.Event()
+        errors = []
+        def embed(*args, **kwargs):
+            entered.set()
+            if not release.wait(5):
+                raise RuntimeError('Test embedding gate timed out')
+            return self.embed(*args, **kwargs)
+        first.embed = second.embed = embed
+        def build(manager):
+            try:
+                self.build(manager)
+            except Exception as error:
+                errors.append(error)
+        threads = [threading.Thread(target=build, args=(manager,)) for manager in [first, second]]
+        try:
+            threads[0].start()
+            self.assertTrue(entered.wait(5))
+            threads[1].start()
+        finally:
+            release.set()
+            for thread in threads:
+                if thread.ident:
+                    thread.join(5)
+        self.assertFalse(any(thread.is_alive() for thread in threads))
+        self.assertEqual(errors, [])
+        self.assertEqual(len(self.calls), 1)
+        self.assertEqual(second.generation.info['embeddedDocuments'], 0)
+
+    def test_shared_cache_preserves_workspace_specific_cross_file_relations(self):
+        child = self.root/'B'
+        child.mkdir()
+        (child/'lib.py').write_text('def save():\n    return 1\n')
+        shared = str(self.base/'shared-data')
+        nested = self.manager(root=str(child), state=str(self.base/'child'), sharedIndexDirectory=shared)
+        self.build(nested)
+        self.write('main.py', 'from B.lib import save\ndef run():\n    return save()\n')
+        parent = self.manager(sharedIndexDirectory=shared)
+        generation = self.build(parent)
+        run = next(u for u in generation.engine if u['name'] == 'run')
+        self.assertTrue(any(r['kind'] == 'calls' and generation.engine[r['target']]['path'] == 'B/lib.py'
+                            for r in run['relations']))
+        self.assertEqual(generation.info['reusedUnits'], 1)
 
     def wait_paused(self, manager):
         deadline = time.monotonic() + 5
