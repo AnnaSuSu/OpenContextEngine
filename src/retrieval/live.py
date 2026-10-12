@@ -291,20 +291,30 @@ class LiveIndex:
             raise ValueError('Invalid embedding vectors')
         return matrix
 
-    def _embed_missing(self, entries, db, vectors):
+    def _embed_missing(self, entries, db, vectors, *, waiting_update=None, checkpoint=None):
         batches = iter(entries[offset:offset+self.batch_size]
                        for offset in range(0, len(entries), self.batch_size))
-        pending, completed, failure = {}, 0, None
+        pending, completed, failure, embedded = {}, 0, None, set()
         with ThreadPoolExecutor(max_workers=self.embedding_concurrency,
                                 thread_name_prefix='index-embedding') as executor:
             while True:
                 # Bound submitted work, not just the number of running threads.
                 if self.stop_event.is_set() and failure is None:
                     failure = SourceChanged()
-                while failure is None and len(pending) < self.embedding_concurrency:
+                yielding = failure is None and waiting_update is not None and waiting_update()
+                if yielding and not pending:
+                    checkpoint(vectors)
+                    yielding = False
+                while failure is None and not yielding and len(pending) < self.embedding_concurrency:
                     batch = next(batches, None)
                     if batch is None:
                         break
+                    # Another workspace may have filled these keys while we yielded.
+                    if checkpoint is not None:
+                        vectors.update(self.vector_store.lookup(db, [key for key, text in batch]))
+                        batch = [(key, text) for key, text in batch if key not in vectors]
+                        if not batch:
+                            continue
                     pending[submit(executor, self._embed_batch, batch)] = batch
                 if not pending:
                     break
@@ -321,6 +331,7 @@ class LiveIndex:
                         continue
                     # Only the coordinator writes SQLite and updates progress.
                     vectors.update(self.vector_store.put(db, [key for key,_ in batch], matrix))
+                    embedded.update(key for key, text in batch)
                     completed += len(batch)
                     self._progress('embedding', completedDocuments=completed, totalDocuments=len(entries))
                 if failure is not None or self.stop_event.is_set():
@@ -329,15 +340,33 @@ class LiveIndex:
                         future.cancel()
         if failure is not None:
             raise failure
+        return embedded
 
-    def _build(self, snapshot, identity):
+    def _build(self, snapshot, identity, admission=None):
         if self.shared:
             self._progress('waiting_for_shared_cache')
-            with self.vector_store.build_guard():
-                return self._build_generation(snapshot, identity)
-        return self._build_generation(snapshot, identity)
+            update = admission.update if admission else False
+            with self.vector_store.build_pin() as protect, self.vector_store.build_guard(update=update) as cache_slot:
+                def waiting_update():
+                    return cache_slot.has_updates() or (admission is not None and admission.has_updates())
+                def checkpoint(vectors):
+                    protect(vectors.values())
+                    self._progress('yielding_to_updates')
+                    cache_slot.release()
+                    if admission is not None:
+                        admission.release()
+                        admission.acquire()
+                    cache_slot.acquire()
+                return self._build_generation(snapshot, identity, waiting_update=waiting_update, checkpoint=checkpoint)
+        def checkpoint(vectors):
+            self._progress('yielding_to_updates')
+            admission.release()
+            admission.acquire()
+        return self._build_generation(snapshot, identity,
+            waiting_update=admission.has_updates if admission else None,
+            checkpoint=checkpoint if admission else None)
 
-    def _build_generation(self, snapshot, identity):
+    def _build_generation(self, snapshot, identity, *, waiting_update=None, checkpoint=None):
         start = time.monotonic()
         self._progress('parsing', files=len(snapshot['files']))
         report = {}
@@ -356,7 +385,7 @@ class LiveIndex:
             missing = {key:text for key,text in zip(keys,documents) if key not in vectors}
             entries = list(missing.items())
             self._progress('embedding', completedDocuments=0, totalDocuments=len(entries))
-            self._embed_missing(entries, db, vectors)
+            embedded = self._embed_missing(entries, db, vectors, waiting_update=waiting_update, checkpoint=checkpoint)
         self._progress('finalizing')
         references = [vectors[key] for key in keys]
         matrix = self.vector_store.matrix(references)
@@ -366,7 +395,7 @@ class LiveIndex:
         previous = {f['path']: f['sha256'] for f in self.generation.snapshot['files']} if self.generation else {}
         now = {f['path']: f['sha256'] for f in snapshot['files']}
         info = {'identity': identity, 'files': len(now), 'units': len(units),
-                'embeddedDocuments': len(missing), 'reusedUnits': sum(key not in missing for key in keys),
+                'embeddedDocuments': len(embedded), 'reusedUnits': sum(key not in embedded for key in keys),
                 'changedFiles': sum(previous.get(path) != sha for path, sha in now.items()),
                 'deletedFiles': len(previous.keys() - now.keys()), 'embedding': self.embedding,
                 'languageUnits': dict(Counter(unit['language'] for unit in units)),
@@ -465,11 +494,12 @@ class LiveIndex:
                     if self.resident_slot is None:
                         self._progress('waiting_for_capacity')
                         self.resident_slot = acquire_slot(self.resource_directory, 'resident', self.max_resident, self.stop_event)
-                    with build_slot(self.resource_directory, self.max_builds, self.stop_event), RequestScope(
+                    update = self.generation is not None or (self.state/'current.json').is_file()
+                    with build_slot(self.resource_directory, self.max_builds, self.stop_event, update=update) as admission, RequestScope(
                             timeout=3600, stop=self.stop_event):
                         self.building = True
                         try:
-                            generation = self._restore(snapshot, identity) or self._build(snapshot, identity)
+                            generation = self._restore(snapshot, identity) or self._build(snapshot, identity, admission)
                         finally:
                             self.building = False
                     if self.scan(fresh=True) != snapshot:

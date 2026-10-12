@@ -16,6 +16,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'src/retrieval'))
 from live import LiveIndex, IndexUnavailable, SourceChanged
 from languages import source_units
 from languages import files
+from resources import BuildSlot
+from cancellation import Cancelled
 
 
 class LiveTests(unittest.TestCase):
@@ -53,6 +55,94 @@ class LiveTests(unittest.TestCase):
         generation = manager._build(snapshot, manager.identity(snapshot))
         manager.generation = generation
         return generation
+
+    def test_daily_update_preempts_bulk_and_reuses_vectors_after_yield(self):
+        self._daily_update_preempts_bulk(1)
+
+    def test_daily_update_also_preempts_the_shared_writer_with_multiple_build_slots(self):
+        self._daily_update_preempts_bulk(2)
+
+    def _daily_update_preempts_bulk(self, capacity):
+        child = self.root/'z'
+        child.mkdir()
+        (child/'lib.txt').write_text('before\n')
+        shared = str(self.base/'shared')
+        daily = self.manager(root=str(child), state=str(self.base/'daily'),
+                             sharedIndexDirectory=shared, embeddingBatchSize=1, maxConcurrentBuilds=capacity)
+        self.build(daily)
+        for name in ['a', 'b', 'c']:
+            self.write(name+'.txt', name+' source\n')
+        (child/'lib.txt').write_text('after\n')
+        bulk = self.manager(sharedIndexDirectory=shared, embeddingBatchSize=1, maxConcurrentBuilds=capacity)
+        # Force reclamation while bulk has only an unpublished partial index.
+        daily.vector_store.budget = bulk.vector_store.budget = 1
+        entered, release, resumed, finish = [threading.Event() for _ in range(4)]
+        def slow(url, body, key, timeout):
+            if 'a source' in body['input'][0]:
+                entered.set()
+                self.assertTrue(release.wait(5))
+            elif 'b source' in body['input'][0]:
+                resumed.set()
+                self.assertTrue(finish.wait(5))
+            return self.embed(url, body, key, timeout)
+        bulk.embed = slow
+        bulk.start()
+        try:
+            self.assertTrue(entered.wait(5))
+            daily.start()
+            deadline = time.monotonic()+5
+            queue = bulk.resource_directory/'build-queue' if capacity == 1 else bulk.vector_store.state/'writer-queue'
+            while not list(queue.glob('0-*.request')) and time.monotonic() < deadline:
+                time.sleep(.01)
+            self.assertTrue(list(queue.glob('0-*.request')))
+            release.set()
+            self.assertEqual(daily.current(5).engine[0]['text'], 'after')
+            self.assertTrue(resumed.wait(5))
+            self.assertIsNone(bulk.generation)
+            finish.set()
+            generation = bulk.current(5)
+            self.assertEqual(generation.info['embeddedDocuments'], 3)
+            self.assertEqual(generation.info['reusedUnits'], 1)
+            self.assertEqual(len(self.calls), 5)  # initial + update + three bulk files
+            bulk.vector_store.matrix(json.loads((bulk.state/json.loads(
+                (bulk.state/'current.json').read_text())['directory']/'vector-refs.json').read_text())).validate()
+        finally:
+            release.set()
+            finish.set()
+
+    def test_cancelled_and_crashed_priority_waiters_do_not_block_bulk(self):
+        directory = self.base/'resources'
+        stop = threading.Event()
+        with BuildSlot(directory, 1, stop) as held:
+            cancelled = threading.Event()
+            def waiter():
+                try:
+                    with BuildSlot(directory, 1, cancelled, update=True):
+                        self.fail('Cancelled waiter acquired capacity')
+                except Cancelled:
+                    pass
+            thread = threading.Thread(target=waiter)
+            thread.start()
+            deadline = time.monotonic()+5
+            while not held.has_updates() and time.monotonic() < deadline:
+                time.sleep(.01)
+            self.assertTrue(held.has_updates())
+            cancelled.set()
+            thread.join(5)
+            self.assertFalse(thread.is_alive())
+            self.assertFalse(held.has_updates())
+            # A real process dies without deleting its ticket or closing the lock.
+            script = ('from pathlib import Path; import os, sys; '
+                      'sys.path.insert(0, sys.argv[1]); from writer_lock import acquire_writer_lock; '
+                      'p=Path(sys.argv[2]); h=acquire_writer_lock(p.with_suffix(".lock")); '
+                      'p.touch(); os._exit(0)')
+            request = held.queue/'0-crashed.request'
+            subprocess.run([sys.executable, '-c', script, str(Path(__file__).resolve().parents[1]/'src/retrieval'),
+                            str(request)], check=True)
+            self.assertFalse(held.has_updates())
+            self.assertFalse(request.exists())
+        with BuildSlot(directory, 1, stop):
+            pass
 
     def test_shared_children_are_reused_when_parent_indexes_remaining_files(self):
         shared = str(self.base/'shared-data')
@@ -294,8 +384,8 @@ class LiveTests(unittest.TestCase):
         manager = self.manager(scanIdleSeconds=.05, unloadIdleSeconds=.1)
         original = manager._build
         observed = []
-        def raced_build(snapshot, identity):
-            generation = original(snapshot, identity)
+        def raced_build(snapshot, identity, admission=None):
+            generation = original(snapshot, identity, admission)
             observed.append(weakref.ref(generation))
             self.write('a.txt', 'changed during publication\n')
             manager.last_activity = time.monotonic()-1

@@ -1,10 +1,58 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { writeFile, rm } from 'node:fs/promises';
+import { writeFile, rm, mkdir, readdir } from 'node:fs/promises';
 import { join, delimiter, dirname, resolve } from 'node:path';
 import { search, indexStatus } from '../src/client.mjs';
 import { fixture, python } from './helpers/live-service.mjs';
 import { startService } from '../src/service.mjs';
+
+test('Separate worker processes finish a daily update before resuming a first-time build',
+  {skip:!python,timeout:15000}, async t => {
+    const {root,config,hooks,settings,dir} = await fixture(t);
+    await writeFile(join(root,'daily.txt'),'daily before\n');
+    await search('daily',{config,freshnessWaitMs:5000});
+    const bulkRoot = join(dir,'bulk');
+    await mkdir(bulkRoot);
+    for (const name of ['a','b','c']) await writeFile(join(bulkRoot,name+'.txt'),name+' bulk\n');
+    let entered, release, resumed, finish;
+    const started = new Promise(resolve => {entered=resolve;});
+    const blocked = new Promise(resolve => {release=resolve;});
+    const continued = new Promise(resolve => {resumed=resolve;});
+    const finishBulk = new Promise(resolve => {finish=resolve;});
+    const inputs = [];
+    hooks.embedding = async body => {
+      inputs.push(...body.input.filter(text => !text.startsWith('Instruct:')));
+      if (body.input.some(text => text.includes('a bulk'))) {entered(); await blocked;}
+      if (body.input.some(text => text.includes('b bulk'))) {resumed(); await finishBulk;}
+    };
+    const worker = startService({...settings,config:{...settings.config,root:bulkRoot,
+      state:join(dir,'bulk-state'),embeddingBatchSize:1}}, {log:()=>{}});
+    try {
+      const bulkConfig = await worker.ready;
+      await started;
+      await writeFile(join(root,'daily.txt'),'daily after\n');
+      const update = search('daily',{config,freshnessWaitMs:5000});
+      const deadline = Date.now()+5000;
+      let waiting = false;
+      while (Date.now()<deadline) {
+        waiting = (await readdir(join(dir,'.resources','build-queue'))).some(name => name.startsWith('0-') && name.endsWith('.request'));
+        if (waiting) break;
+        await new Promise(resolve => setTimeout(resolve,10));
+      }
+      assert.equal(waiting,true);
+      release();
+      assert.match((await update).context,/daily after/);
+      await continued;
+      assert.equal((await indexStatus({config:bulkConfig})).status,'updating');
+      finish();
+      const result = await search('bulk',{config:bulkConfig,freshnessWaitMs:5000});
+      assert.match(result.context,/c bulk/);
+      assert.equal(inputs.length,4);
+    } finally {
+      release(); finish(); hooks.embedding=null;
+      await worker.close();
+    }
+  });
 
 test('A missing worker executable fails startup and closes without hanging', {timeout:2000}, async () => {
   const worker = startService({python:'/nonexistent/opencontextengine/python',config:{}},{log:()=>{}});

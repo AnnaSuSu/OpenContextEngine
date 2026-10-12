@@ -4,10 +4,12 @@ import hashlib
 import json
 from pathlib import Path
 import time
+import uuid
 
 from cancellation import check
-from resources import acquire_slot
+from resources import BuildSlot
 from storage import VectorStore, fingerprint
+from writer_lock import acquire_writer_lock, WriterBusy
 
 
 class SharedVectorStore(VectorStore):
@@ -22,16 +24,31 @@ class SharedVectorStore(VectorStore):
         self.text_keys = []
 
     @contextmanager
-    def build_guard(self):
+    def build_guard(self, *, update=False):
         # Lookup, embedding, registration and reclamation form one operation.
         # Concurrent workspaces cannot both embed the same missing document.
-        handle = acquire_slot(self.state, 'writer', 1, self.stop)
-        try:
+        with BuildSlot(self.state, 1, self.stop, update=update, name='writer') as slot:
             for temporary in self.directory.glob('*.tmp'):
                 temporary.unlink(missing_ok=True)
-            yield
+            yield slot
+
+    @contextmanager
+    def build_pin(self):
+        """Protect unfinished vectors while their build yields to another worker."""
+        directory = self.state/'build-pins'
+        directory.mkdir(exist_ok=True, mode=0o700)
+        path = directory/(uuid.uuid4().hex+'.json')
+        handle = acquire_writer_lock(path.with_suffix('.lock'))
+        def protect(references):
+            temporary = path.with_suffix('.tmp')
+            temporary.write_text(json.dumps(sorted({name for name, row in references})))
+            temporary.replace(path)
+        try:
+            yield protect
         finally:
+            path.unlink(missing_ok=True)
             handle.close()
+            path.with_suffix('.lock').unlink(missing_ok=True)
 
     def open(self):
         db = super().open()
@@ -83,6 +100,21 @@ class SharedVectorStore(VectorStore):
         # local matrix pins also protect searches on previous generations.
         self.retain(references)
         vectors, texts = set(), set()
+        for path in (self.state/'build-pins').glob('*.json'):
+            try:
+                probe = acquire_writer_lock(path.with_suffix('.lock'))
+            except WriterBusy:
+                try:
+                    pins = json.loads(path.read_text())
+                except ValueError:
+                    raise OSError('Cannot verify unfinished build references') from None
+                if not isinstance(pins, list) or any(not isinstance(name, str) for name in pins):
+                    raise OSError('Cannot verify unfinished build references')
+                vectors.update(pins)
+            else:
+                path.unlink(missing_ok=True)
+                probe.close()
+                path.with_suffix('.lock').unlink(missing_ok=True)
         for path in self.manifests.glob('*.json'):
             check()
             try:

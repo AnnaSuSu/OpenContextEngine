@@ -134,6 +134,8 @@ Shared data lives in `~/.cache/opencontextengine/shared-index`, with separate po
 
 Existing indexes remain on disk. Enabling shared data changes embedding document paths, so the first synchronization builds the canonical-path vectors once; subsequent overlapping workspaces reuse them. `index_status` reports `generation.sharedIndex`, `embeddedDocuments`, and `reusedUnits` to show whether new model work was required.
 
+Updates to workspaces with a published index have priority over first-time builds, both at the global build limit and the shared-cache writer lock. A first-time build drains its current embedding requests before yielding, then resumes from cached vectors after the waiting updates. Requests already running and parsing/finalization are allowed to finish; this does not interrupt a model call. `progress.stage: "yielding_to_updates"` identifies a paused build. Process-backed queue tickets disappear on cancellation or are reclaimed after a crash. Unpublished vector shards stay protected from cache reclamation while a build yields.
+
 Example tool arguments (sent by your agent):
 
 ```json
