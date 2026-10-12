@@ -41,6 +41,8 @@ Native Windows support is available in version **0.1.3** and later. Run the inst
 
 Version **0.1.9** reduces idle CPU and memory use, reuses unchanged source and immutable vector shards, propagates cancellation to model calls and parser helpers, and bounds workspace, indexing, and cache resources.
 
+Version **0.1.10** shares immutable code text and embeddings across overlapping workspaces, prioritizes updates to existing indexes over first-time builds, and adds file and directory coverage checks to `index_status`. Parent and child workspaces keep their own search scope. The first synchronization of an existing index builds canonical-path vectors once; later overlapping workspaces reuse them. [Coverage and shared-cache settings →](docs/QUICKSTART.md#index-coverage)
+
 Install from npm, then expand your client's guide. Model settings are shared across clients on the same machine.
 
 <details open>
